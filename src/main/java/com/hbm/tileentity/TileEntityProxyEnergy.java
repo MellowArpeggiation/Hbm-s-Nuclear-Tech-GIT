@@ -1,23 +1,24 @@
 package com.hbm.tileentity;
 
-import api.hbm.energymk2.IEnergyReceiverMK2;
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 //can be used as a soruce too since the core TE handles that anyway
-public class TileEntityProxyEnergy extends TileEntityProxyBase implements IEnergyReceiverMK2 {
+public class TileEntityProxyEnergy extends TileEntityProxyBase implements IEnergyUser {
 	
-	public boolean canUpdate() {
-		return false;
-	}
+    public boolean canUpdate()
+    {
+        return false;
+    }
 
 	@Override
 	public void setPower(long i) {
 		
 		TileEntity te = getTE();
 		
-		if(te instanceof IEnergyReceiverMK2) {
-			((IEnergyReceiverMK2)te).setPower(i);
+		if(te instanceof IEnergyUser) {
+			((IEnergyUser)te).setPower(i);
 		}
 	}
 
@@ -26,8 +27,8 @@ public class TileEntityProxyEnergy extends TileEntityProxyBase implements IEnerg
 		
 		TileEntity te = getTE();
 		
-		if(te instanceof IEnergyReceiverMK2) {
-			return ((IEnergyReceiverMK2)te).getPower();
+		if(te instanceof IEnergyUser) {
+			return ((IEnergyUser)te).getPower();
 		}
 		
 		return 0;
@@ -38,8 +39,8 @@ public class TileEntityProxyEnergy extends TileEntityProxyBase implements IEnerg
 		
 		TileEntity te = getTE();
 		
-		if(te instanceof IEnergyReceiverMK2) {
-			return ((IEnergyReceiverMK2)te).getMaxPower();
+		if(te instanceof IEnergyUser) {
+			return ((IEnergyUser)te).getMaxPower();
 		}
 		
 		return 0;
@@ -48,8 +49,8 @@ public class TileEntityProxyEnergy extends TileEntityProxyBase implements IEnerg
 	@Override
 	public long transferPower(long power) {
 		
-		if(getTE() instanceof IEnergyReceiverMK2) {
-			return ((IEnergyReceiverMK2)getTE()).transferPower(power);
+		if(getTE() instanceof IEnergyUser) {
+			return ((IEnergyUser)getTE()).transferPower(power);
 		}
 		
 		return 0;
@@ -59,8 +60,8 @@ public class TileEntityProxyEnergy extends TileEntityProxyBase implements IEnerg
 	public boolean canConnect(ForgeDirection dir) {
 		
 		TileEntity te = getTE();
-		if(te instanceof IEnergyReceiverMK2) {
-			return ((IEnergyReceiverMK2)te).canConnect(dir); //for some reason two consecutive getTE calls return different things?
+		if(te instanceof IEnergyUser) {
+			return ((IEnergyUser)te).canConnect(dir); //for some reason two consecutive getTE calls return different things?
 		}
 		
 		return false;

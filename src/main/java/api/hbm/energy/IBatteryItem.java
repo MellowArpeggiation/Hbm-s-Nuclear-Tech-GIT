@@ -1,4 +1,4 @@
-package api.hbm.energymk2;
+package api.hbm.energy;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

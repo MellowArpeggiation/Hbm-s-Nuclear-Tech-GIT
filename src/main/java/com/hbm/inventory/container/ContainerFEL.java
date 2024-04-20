@@ -48,7 +48,7 @@ public class ContainerFEL extends Container {
 				}
 			} else {
 				
-				if(rStack.getItem() instanceof api.hbm.energymk2.IBatteryItem || rStack.getItem() == ModItems.battery_creative) {
+				if(rStack.getItem() instanceof api.hbm.energy.IBatteryItem || rStack.getItem() == ModItems.battery_creative) {
 					if(!this.mergeItemStack(stack, 0, 1, false)) return null;
 				} else {
 					if(!this.mergeItemStack(stack, 1, 2, false)) return null;

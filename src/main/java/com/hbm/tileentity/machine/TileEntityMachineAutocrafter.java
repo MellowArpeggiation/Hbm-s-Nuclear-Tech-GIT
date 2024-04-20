@@ -10,7 +10,7 @@ import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.ItemStackUtil;
 
-import api.hbm.energymk2.IEnergyReceiverMK2;
+import api.hbm.energy.IEnergyUser;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiScreen;
@@ -23,9 +23,8 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityMachineAutocrafter extends TileEntityMachineBase implements IEnergyReceiverMK2, IGUIProvider {
+public class TileEntityMachineAutocrafter extends TileEntityMachineBase implements IEnergyUser, IGUIProvider {
 
 	public static final String MODE_EXACT = "exact";
 	public static final String MODE_WILDCARD = "wildcard";
@@ -147,7 +146,7 @@ public class TileEntityMachineAutocrafter extends TileEntityMachineBase implemen
 		if(!worldObj.isRemote) {
 			
 			this.power = Library.chargeTEFromItems(slots, 20, power, maxPower);
-			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) this.trySubscribe(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
+			this.updateStandardConnections(worldObj, this);
 			
 			if(!this.recipes.isEmpty() && this.power >= this.consumption) {
 				IRecipe recipe = this.recipes.get(recipeIndex);

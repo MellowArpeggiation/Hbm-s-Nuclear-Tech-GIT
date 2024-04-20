@@ -2,15 +2,15 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.tileentity.TileEntityLoadedBase;
 
-import api.hbm.energymk2.IEnergyReceiverMK2;
+import api.hbm.energy.IEnergyUser;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityMachineDetector extends TileEntityLoadedBase implements IEnergyReceiverMK2 {
+public class TileEntityMachineDetector extends TileEntityLoadedBase implements IEnergyUser {
 	
 	long power;
 
 	@Override
-	public void updateEntity() {
+    public void updateEntity() {
 		
 		if(!worldObj.isRemote) {
 			
@@ -56,4 +56,5 @@ public class TileEntityMachineDetector extends TileEntityLoadedBase implements I
 	public ConnectionPriority getPriority() {
 		return ConnectionPriority.HIGH;
 	}
+
 }

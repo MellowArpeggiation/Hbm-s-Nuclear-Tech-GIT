@@ -1,5 +1,6 @@
 package com.hbm.blocks.network;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,6 @@ import com.hbm.tileentity.network.TileEntityCableBaseNT;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
 
-import api.hbm.energymk2.PowerNetMK2;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
@@ -100,6 +100,7 @@ public class BlockCableGauge extends BlockContainer implements IBlockMultiPass, 
 
 	public static class TileEntityCableGauge extends TileEntityCableBaseNT implements INBTPacketReceiver {
 
+		private BigInteger lastMeasurement = BigInteger.valueOf(10);
 		private long deltaTick = 0;
 		private long deltaSecond = 0;
 		private long deltaLastSecond = 0;
@@ -110,16 +111,20 @@ public class BlockCableGauge extends BlockContainer implements IBlockMultiPass, 
 
 			if(!worldObj.isRemote) {
 				
-				if(this.node != null && this.node.net != null) {
+				if(network != null) {
+					BigInteger total = network.getTotalTransfer();
+					BigInteger delta = total.subtract(this.lastMeasurement);
+					this.lastMeasurement = total;
 					
-					PowerNetMK2 net = this.node.net;
-					
-					this.deltaTick = net.energyTracker;
-					if(worldObj.getTotalWorldTime() % 20 == 0) {
-						this.deltaLastSecond = this.deltaSecond;
-						this.deltaSecond = 0;
-					}
-					this.deltaSecond += deltaTick;
+					try {
+						this.deltaTick = delta.longValueExact();
+						if(worldObj.getTotalWorldTime() % 20 == 0) {
+							this.deltaLastSecond = this.deltaSecond;
+							this.deltaSecond = 0;
+						}
+						this.deltaSecond += deltaTick;
+						
+					} catch(Exception ex) { }
 				}
 				
 				NBTTagCompound data = new NBTTagCompound();

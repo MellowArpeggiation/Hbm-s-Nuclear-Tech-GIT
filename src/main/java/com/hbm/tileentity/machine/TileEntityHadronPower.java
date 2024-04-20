@@ -4,12 +4,12 @@ import com.hbm.blocks.machine.BlockHadronPower;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.TileEntityLoadedBase;
 
-import api.hbm.energymk2.IEnergyReceiverMK2;
+import api.hbm.energy.IEnergyUser;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityHadronPower extends TileEntityLoadedBase implements IEnergyReceiverMK2, INBTPacketReceiver {
+public class TileEntityHadronPower extends TileEntityLoadedBase implements IEnergyUser, INBTPacketReceiver {
 
 	public long power;
 

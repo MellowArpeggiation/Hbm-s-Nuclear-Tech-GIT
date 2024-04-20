@@ -7,6 +7,8 @@ import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
+import api.hbm.energy.IEnergyUser;
+import api.hbm.fluid.IFluidStandardReceiver;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
@@ -14,7 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityLaunchPad extends TileEntityLaunchPadBase {
+public class TileEntityLaunchPad extends TileEntityLaunchPadBase implements IEnergyUser, IFluidStandardReceiver {
 
 	@Override public boolean isReadyForLaunch() { return delay <= 0; }
 	@Override public double getLaunchOffset() { return 1D; }

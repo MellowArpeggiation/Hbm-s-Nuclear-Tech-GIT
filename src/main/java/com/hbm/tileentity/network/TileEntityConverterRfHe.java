@@ -3,11 +3,11 @@ package com.hbm.tileentity.network;
 import com.hbm.interfaces.Untested;
 import com.hbm.tileentity.TileEntityLoadedBase;
 
-import api.hbm.energymk2.IEnergyProviderMK2;
+import api.hbm.energy.IEnergyGenerator;
 import cofh.api.energy.IEnergyHandler;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityConverterRfHe extends TileEntityLoadedBase implements IEnergyProviderMK2, IEnergyHandler {
+public class TileEntityConverterRfHe extends TileEntityLoadedBase implements IEnergyGenerator, IEnergyHandler {
 
 	@Override
 	public void setPower(long power) {
@@ -48,7 +48,7 @@ public class TileEntityConverterRfHe extends TileEntityLoadedBase implements IEn
 		subBuffer = capacity;
 		
 		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-			this.tryProvide(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
+			this.sendPower(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
 		}
 		
 		recursionBrake = false;

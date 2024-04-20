@@ -4,7 +4,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.util.fauxpointtwelve.BlockPos;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
-import api.hbm.energymk2.Nodespace.PowerNode;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
@@ -38,18 +37,6 @@ public class TileEntityPylonMedium extends TileEntityPylonBase {
 	@Override
 	public boolean canConnect(ForgeDirection dir) {
 		return this.hasTransformer() ? ForgeDirection.getOrientation(this.getBlockMetadata() - 10).getOpposite() == dir : false;
-	}
-
-	@Override
-	public PowerNode createNode() {
-		TileEntity tile = (TileEntity) this;
-		PowerNode node = new PowerNode(new BlockPos(tile.xCoord, tile.yCoord, tile.zCoord)).setConnections(new DirPos(xCoord, yCoord, zCoord, ForgeDirection.UNKNOWN));
-		for(int[] pos : this.connected) node.addConnection(new DirPos(pos[0], pos[1], pos[2], ForgeDirection.UNKNOWN));
-		if(this.hasTransformer()) {
-			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10).getOpposite();
-			node.addConnection(new DirPos(xCoord + dir.offsetX, yCoord, zCoord + dir.offsetZ, dir));
-		}
-		return node;
 	}
 	
 	public boolean hasTransformer() {

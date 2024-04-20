@@ -2,7 +2,7 @@ package com.hbm.tileentity;
 
 import com.hbm.sound.AudioWrapper;
 
-import api.hbm.tile.ILoadedTile;
+import api.hbm.energy.ILoadedTile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 

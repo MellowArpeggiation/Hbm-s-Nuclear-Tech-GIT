@@ -1,4 +1,4 @@
-package api.hbm.tile;
+package api.hbm.energy;
 
 public interface ILoadedTile {
 	

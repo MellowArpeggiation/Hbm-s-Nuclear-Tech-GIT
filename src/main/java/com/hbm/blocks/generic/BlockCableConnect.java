@@ -2,7 +2,7 @@ package com.hbm.blocks.generic;
 
 import com.hbm.blocks.BlockBase;
 
-import api.hbm.energymk2.IEnergyConnectorBlock;
+import api.hbm.energy.IEnergyConnectorBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
