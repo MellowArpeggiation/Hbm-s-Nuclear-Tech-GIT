@@ -5,8 +5,10 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
+import com.hbm.render.util.RenderMiscEffects;
 import com.hbm.tileentity.machine.TileEntityMachineCrystallizer;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
@@ -35,6 +37,14 @@ public class RenderCrystallizer extends TileEntitySpecialRenderer implements IIt
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.crystallizer_tex);
 		ResourceManager.crystallizer.renderPart("Body");
+		
+		if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			RenderMiscEffects.enableAORendering();
+			bindTexture(ResourceManager.crystallizer_ao_tex);
+			ResourceManager.crystallizer.renderPart("Body");
+			RenderMiscEffects.disableAORendering();
+			bindTexture(ResourceManager.crystallizer_tex);
+		}
 
 		GL11.glPushMatrix();
 		GL11.glRotatef(crys.prevAngle + (crys.angle - crys.prevAngle) * inter, 0, 1, 0);

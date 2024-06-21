@@ -440,6 +440,7 @@ public class ResourceManager {
 	public static final ResourceLocation heater_oven_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/heating_oven.png");
 	public static final ResourceLocation ashpit_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/ashpit.png");
 	public static final ResourceLocation heater_oilburner_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/oilburner.png");
+	public static final ResourceLocation heater_oilburner_ao_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/oilburner_ao.png");
 	public static final ResourceLocation heater_electric_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/electric_heater.png");
 	public static final ResourceLocation heater_heatex_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/heater_heatex.png");
 	
@@ -450,8 +451,10 @@ public class ResourceManager {
 	public static final ResourceLocation sawmill_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/sawmill.png");
 	public static final ResourceLocation crucible_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/crucible_heat.png");
 	public static final ResourceLocation boiler_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/boiler.png");
+	public static final ResourceLocation boiler_ao_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/boiler_ao.png");
 	public static final ResourceLocation boiler_industrial_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/industrial_boiler.png");
 	public static final ResourceLocation hephaestus_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/hephaestus.png");
+	public static final ResourceLocation hephaestus_ao_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/hephaestus_ao.png");
 
 	//Strand Caster
 	public static final ResourceLocation strand_caster_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/strand_caster.png");
@@ -476,9 +479,11 @@ public class ResourceManager {
 	public static final ResourceLocation catalytic_reformer_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/catalytic_reformer.png");
 	public static final ResourceLocation hydrotreater_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/hydrotreater.png");
 	public static final ResourceLocation liquefactor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/liquefactor.png");
+	public static final ResourceLocation liquefactor_ao_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/liquefactor_ao.png");
 	public static final ResourceLocation solidifier_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/solidifier.png");
 	public static final ResourceLocation compressor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/compressor.png");
 	public static final ResourceLocation coker_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/coker.png");
+	public static final ResourceLocation coker_ao_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/coker_ao.png");
 	
 	//Flare Stack
 	public static final ResourceLocation oilflare_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/flare_stack.png");
@@ -586,6 +591,7 @@ public class ResourceManager {
 	public static final ResourceLocation drill_body_tex = new ResourceLocation(RefStrings.MODID, "textures/models/mining_drill.png");
 	public static final ResourceLocation drill_bolt_tex = new ResourceLocation(RefStrings.MODID, "textures/models/textureIGenRotor.png");
 	public static final ResourceLocation mining_drill_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/mining_drill.png");
+	public static final ResourceLocation mining_drill_ao_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/mining_drill_ao.png");
 
 	//Laser Miner
 	public static final ResourceLocation mining_laser_base_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/mining_laser_base.png");
@@ -594,6 +600,7 @@ public class ResourceManager {
 	
 	//Crystallizer
 	public static final ResourceLocation crystallizer_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/acidizer.png");
+	public static final ResourceLocation crystallizer_ao_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/acidizer_ao.png");
 	
 	//Cyclotron
 	public static final ResourceLocation cyclotron_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/cyclotron.png");
@@ -765,6 +772,7 @@ public class ResourceManager {
 	
 	//ZIRNOX
 	public static final ResourceLocation zirnox_tex = new ResourceLocation(RefStrings.MODID, "textures/models/zirnox.png");
+	public static final ResourceLocation zirnox_ao_tex = new ResourceLocation(RefStrings.MODID, "textures/models/zirnox_ao.png");
 	public static final ResourceLocation zirnox_destroyed_tex = new ResourceLocation(RefStrings.MODID, "textures/models/zirnox_destroyed.png");
 	
 	//Electricity

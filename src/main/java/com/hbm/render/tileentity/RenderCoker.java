@@ -5,7 +5,9 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
+import com.hbm.render.util.RenderMiscEffects;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -23,6 +25,14 @@ public class RenderCoker extends TileEntitySpecialRenderer implements IItemRende
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.coker_tex);
 		ResourceManager.coker.renderAll();
+
+		if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			RenderMiscEffects.enableAORendering();
+			bindTexture(ResourceManager.coker_ao_tex);
+			ResourceManager.coker.renderAll();
+			RenderMiscEffects.disableAORendering();
+		}
+
 		GL11.glShadeModel(GL11.GL_FLAT);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		

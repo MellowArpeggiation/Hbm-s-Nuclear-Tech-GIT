@@ -7,7 +7,6 @@ import com.hbm.main.ResourceManager;
 import com.hbm.render.util.RenderMiscEffects;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 

@@ -7,8 +7,10 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
+import com.hbm.render.util.RenderMiscEffects;
 import com.hbm.tileentity.machine.TileEntityMachineExcavator;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
@@ -70,6 +72,13 @@ public class RenderExcavator extends TileEntitySpecialRenderer implements IItemR
 			ext -= 2;
 		}
 		GL11.glPopMatrix();
+
+		if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			RenderMiscEffects.enableAORendering();
+			bindTexture(ResourceManager.mining_drill_ao_tex);
+			ResourceManager.mining_drill.renderPart("Main");
+			RenderMiscEffects.disableAORendering();
+		}
 		
 		GL11.glShadeModel(GL11.GL_FLAT);
 		

@@ -3,8 +3,10 @@ package com.hbm.render.tileentity;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
+import com.hbm.render.util.RenderMiscEffects;
 import com.hbm.tileentity.machine.oil.TileEntityMachineLiquefactor;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -24,6 +26,13 @@ public class RenderLiquefactor extends TileEntitySpecialRenderer {
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.liquefactor_tex);
 		ResourceManager.liquefactor.renderPart("Main");
+
+		if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			RenderMiscEffects.enableAORendering();
+			bindTexture(ResourceManager.liquefactor_ao_tex);
+			ResourceManager.liquefactor.renderPart("Main");
+			RenderMiscEffects.disableAORendering();
+		}
 		
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);

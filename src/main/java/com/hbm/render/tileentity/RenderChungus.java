@@ -47,7 +47,7 @@ public class RenderChungus extends TileEntitySpecialRenderer {
 		
 		GL11.glPushMatrix();
 		GL11.glTranslated(0, 0, 4.5);
-		GL11.glRotatef(15 - (turbine.tanks[0].getTankType().ordinal() - 2) * 10, 1, 0, 0);
+		GL11.glRotatef(15 - (turbine.tanks[0].getTankType().getID() - 2) * 10, 1, 0, 0);
 		GL11.glTranslated(0, 0, -4.5);
 		ResourceManager.chungus.renderPart("Lever");
 		GL11.glPopMatrix();
