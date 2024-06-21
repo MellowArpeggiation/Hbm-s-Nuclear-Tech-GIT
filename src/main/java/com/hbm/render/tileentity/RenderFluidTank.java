@@ -1,5 +1,7 @@
 package com.hbm.render.tileentity;
 
+import javax.annotation.Resource;
+
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
@@ -11,9 +13,11 @@ import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
 import com.hbm.render.util.DiamondPronter;
+import com.hbm.render.util.RenderMiscEffects;
 import com.hbm.tileentity.IPersistentNBT;
 import com.hbm.tileentity.machine.storage.TileEntityMachineFluidTank;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
@@ -48,6 +52,13 @@ public class RenderFluidTank extends TileEntitySpecialRenderer implements IItemR
 			ResourceManager.fluidtank.renderPart("Frame");
 			bindTexture(new ResourceLocation(RefStrings.MODID, getTextureFromType(tank.tank.getTankType())));
 			ResourceManager.fluidtank.renderPart("Tank");
+
+			if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+				RenderMiscEffects.enableAORendering();
+				bindTexture(ResourceManager.tank_ao_tex);
+				ResourceManager.fluidtank.renderPart("Tank");
+				RenderMiscEffects.disableAORendering();
+			}
 		} else {
 			ResourceManager.fluidtank_exploded.renderPart("Frame");
 			bindTexture(ResourceManager.tank_inner_tex);
