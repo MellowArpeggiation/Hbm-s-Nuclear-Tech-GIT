@@ -66,4 +66,25 @@ public class RenderMiscEffects {
 	public static void renderClassicGlint(World world, float interpol, IModelCustom model, String part) {
 		renderClassicGlint(world, interpol, model, part, 0.5F, 0.25F, 0.8F, 20.0F, 1F/3F);
     }
+
+    // Disables the lightmap and prepares for rendering a grayscale texture as an AO overlay
+    public static void enableAORendering() {
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_LIGHT0);
+        GL11.glDisable(GL11.GL_LIGHT1);
+
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_ZERO, GL11.GL_SRC_COLOR);
+        Minecraft.getMinecraft().entityRenderer.disableLightmap(0);
+    }
+
+    // Make sure to set everything back to normal!
+    public static void disableAORendering() {
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_LIGHT0);
+        GL11.glEnable(GL11.GL_LIGHT1);
+
+        Minecraft.getMinecraft().entityRenderer.enableLightmap(0);
+        GL11.glDisable(GL11.GL_BLEND);
+    }
 }

@@ -11,9 +11,11 @@ import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
 import com.hbm.render.util.DiamondPronter;
+import com.hbm.render.util.RenderMiscEffects;
 import com.hbm.tileentity.IPersistentNBT;
 import com.hbm.tileentity.machine.storage.TileEntityMachineFluidTank;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
@@ -48,6 +50,13 @@ public class RenderFluidTank extends TileEntitySpecialRenderer implements IItemR
 			ResourceManager.fluidtank.renderPart("Frame");
 			bindTexture(new ResourceLocation(RefStrings.MODID, getTextureFromType(tank.tank.getTankType())));
 			ResourceManager.fluidtank.renderPart("Tank");
+
+			if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+				RenderMiscEffects.enableAORendering();
+				bindTexture(ResourceManager.tank_ao_tex);
+				ResourceManager.fluidtank.renderPart("Tank");
+				RenderMiscEffects.disableAORendering();
+			}
 		} else {
 			ResourceManager.fluidtank_exploded.renderPart("Frame");
 			bindTexture(ResourceManager.tank_inner_tex);
@@ -119,7 +128,7 @@ public class RenderFluidTank extends TileEntitySpecialRenderer implements IItemR
 				GL11.glShadeModel(GL11.GL_SMOOTH);
 				GL11.glDisable(GL11.GL_CULL_FACE);
 				
-				FluidTank tank = new FluidTank(Fluids.NONE, 0, 0);
+				FluidTank tank = new FluidTank(Fluids.NONE, 0);
 				boolean exploded = false;
 				if(item.hasTagCompound() && item.getTagCompound().hasKey(IPersistentNBT.NBT_PERSISTENT_KEY)) {
 					tank.readFromNBT(item.getTagCompound().getCompoundTag(IPersistentNBT.NBT_PERSISTENT_KEY), "tank");

@@ -5,8 +5,10 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
+import com.hbm.render.util.RenderMiscEffects;
 import com.hbm.tileentity.machine.TileEntityMachineHephaestus;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
@@ -25,6 +27,14 @@ public class RenderHephaestus extends TileEntitySpecialRenderer implements IItem
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.hephaestus_tex);
 		ResourceManager.hephaestus.renderPart("Main");
+
+		if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			RenderMiscEffects.enableAORendering();
+			bindTexture(ResourceManager.hephaestus_ao_tex);
+			ResourceManager.hephaestus.renderPart("Main");
+			RenderMiscEffects.disableAORendering();
+			bindTexture(ResourceManager.hephaestus_tex);
+		}
 		
 		TileEntityMachineHephaestus geo = (TileEntityMachineHephaestus) tile;
 		float movement = geo.prevRot + (geo.rot - geo.prevRot) * interp;
@@ -32,10 +42,23 @@ public class RenderHephaestus extends TileEntitySpecialRenderer implements IItem
 		GL11.glPushMatrix();
 		GL11.glRotatef(movement, 0, 1, 0);
 		
+		GL11.glPushMatrix();
 		for(int i = 0; i < 3; i++) {
 			ResourceManager.hephaestus.renderPart("Rotor");
 			GL11.glRotated(120, 0, 1, 0);
 		}
+		GL11.glPopMatrix();
+
+		if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			RenderMiscEffects.enableAORendering();
+			bindTexture(ResourceManager.hephaestus_ao_tex);
+			for(int i = 0; i < 3; i++) {
+				ResourceManager.hephaestus.renderPart("Rotor");
+				GL11.glRotated(120, 0, 1, 0);
+			}
+			RenderMiscEffects.disableAORendering();
+		}
+
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glShadeModel(GL11.GL_FLAT);
 		GL11.glPopMatrix();

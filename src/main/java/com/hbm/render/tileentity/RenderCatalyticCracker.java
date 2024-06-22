@@ -4,7 +4,9 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.util.RenderMiscEffects;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -36,6 +38,14 @@ public class RenderCatalyticCracker extends TileEntitySpecialRenderer {
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.cracking_tower_tex);
 		ResourceManager.cracking_tower.renderAll();
+
+		if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			RenderMiscEffects.enableAORendering();
+			bindTexture(ResourceManager.cracking_tower_ao_tex);
+			ResourceManager.cracking_tower.renderAll();
+			RenderMiscEffects.disableAORendering();
+		}
+
 		GL11.glShadeModel(GL11.GL_FLAT);
 
 		GL11.glEnable(GL11.GL_CULL_FACE);

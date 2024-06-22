@@ -6,8 +6,10 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
+import com.hbm.render.util.RenderMiscEffects;
 import com.hbm.tileentity.machine.TileEntityHeatBoiler;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,6 +44,13 @@ public class RenderBoiler extends TileEntitySpecialRenderer implements IItemRend
 			
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			ResourceManager.boiler.renderAll();
+		
+			if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+				RenderMiscEffects.enableAORendering();
+				bindTexture(ResourceManager.boiler_ao_tex);
+				ResourceManager.boiler.renderAll();
+				RenderMiscEffects.disableAORendering();
+			}
 		} else {
 			GL11.glDisable(GL11.GL_CULL_FACE);
 			ResourceManager.boiler_burst.renderAll();

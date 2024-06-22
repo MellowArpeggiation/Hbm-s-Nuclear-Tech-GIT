@@ -3,7 +3,9 @@ package com.hbm.render.tileentity;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
+import com.hbm.render.util.RenderMiscEffects;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -29,6 +31,13 @@ public class RenderZirnox extends TileEntitySpecialRenderer {
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.zirnox_tex);
 		ResourceManager.zirnox.renderAll();
+		
+		if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			RenderMiscEffects.enableAORendering();
+			bindTexture(ResourceManager.zirnox_ao_tex);
+			ResourceManager.zirnox.renderAll();
+			RenderMiscEffects.disableAORendering();
+		}
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glShadeModel(GL11.GL_FLAT);
