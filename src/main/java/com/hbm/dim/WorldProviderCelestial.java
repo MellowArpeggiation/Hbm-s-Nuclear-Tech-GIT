@@ -9,6 +9,7 @@ import com.hbm.inventory.fluid.Fluids;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -31,6 +32,10 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		return Blocks.stone;
 	}
 
+	public boolean hasLife() {
+		return false;
+	}
+
 	@Override
 	public void updateWeather() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
@@ -50,6 +55,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Vec3 getFogColor(float x, float y) {
+
 		if(CelestialBody.hasTrait(worldObj, CBT_SUNEXPLODED.class)) return Vec3.createVectorHelper(0, 0, 0);
 
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
@@ -93,7 +99,12 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		color.xCoord *= pressureFactor;
 		color.yCoord *= pressureFactor;
 		color.zCoord *= pressureFactor;
-
+		if(Minecraft.getMinecraft().renderViewEntity.posY > 300) {
+			double curvature = MathHelper.clamp_float((800.0F - (float)Minecraft.getMinecraft().renderViewEntity.posY) / 500.0F, 0.0F, 1.0F);
+			color.xCoord *= curvature;
+			color.zCoord *= curvature;
+			color.yCoord *= curvature;
+		}
 		return color;
 	}
 
@@ -315,7 +326,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	public float getCloudHeight() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 
-		if(atmosphere == null || atmosphere.getPressure() < 0.5F) return -100;
+		if(atmosphere == null || atmosphere.getPressure() < 0.5F) return -99999;
 		
 		return super.getCloudHeight();
 	}

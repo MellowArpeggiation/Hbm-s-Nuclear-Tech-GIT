@@ -7,11 +7,11 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.dim.GenCrater;
 import com.hbm.main.MainRegistry;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
@@ -45,7 +45,7 @@ public class WorldGeneratorDres implements IWorldGenerator {
 				if(rand.nextInt(50) == 0)
 					r = 50;
 
-				new CraterDres().generate(world, x, z, r, r * 0.35D);
+				new GenCrater(ModBlocks.dres_rock).generate(world, x, z, r, r * 0.35D);
 
 				if(GeneralConfig.enableDebugMode)
 					MainRegistry.logger.info("[Debug] Successfully spawned crater at " + x + " " + z);

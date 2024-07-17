@@ -2,6 +2,8 @@ package com.hbm.render.util;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.handler.RocketStruct;
+import com.hbm.handler.RocketStruct.RocketStage;
 import com.hbm.items.weapon.ItemCustomMissilePart.PartType;
 
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -36,6 +38,76 @@ public class MissilePronter {
 			
 			tex.bindTexture(missile.warhead.texture);
 			missile.warhead.model.renderAll();
+		}
+
+		GL11.glPopMatrix();
+	}
+
+	public static void prontRocket(RocketStruct rocket, TextureManager tex) {
+		prontRocket(rocket, tex, true);
+	}
+
+	// Attaches a set of stages together
+	public static void prontRocket(RocketStruct rocket, TextureManager tex, boolean isDeployed) {
+		GL11.glPushMatrix();
+
+		for(RocketStage stage : rocket.stages) {
+			int stack = stage.getStack();
+			int cluster = stage.getCluster();
+
+			if(isDeployed && stage.thruster != null && stage.fins != null && stage.fins.height > stage.thruster.height) {
+				GL11.glTranslated(0, stage.fins.height - stage.thruster.height, 0);
+			}
+			
+			for(int c = 0; c < cluster; c++) {
+				GL11.glPushMatrix();
+				{
+
+					if(c > 0) {
+						float spin = (float)c / (float)(cluster - 1);
+						GL11.glRotatef(360.0F * spin, 0, 1, 0);
+
+						if(stage.fuselage != null) {
+							GL11.glTranslated(stage.fuselage.part.bottom.radius, 0, 0);
+						} else if(stage.thruster != null) {
+							GL11.glTranslated(stage.thruster.part.top.radius, 0, 0);
+						}
+					}
+
+					if(stage.thruster != null) {
+						tex.bindTexture(stage.thruster.texture);
+						stage.thruster.getModel(isDeployed).renderAll();
+						GL11.glTranslated(0, stage.thruster.height, 0);
+					}
+		
+					if(stage.fuselage != null) {
+						if(stage.fins != null) {
+							tex.bindTexture(stage.fins.texture);
+							stage.fins.getModel(isDeployed).renderAll();
+						}
+					
+						for(int s = 0; s < stack; s++) {
+							tex.bindTexture(stage.fuselage.texture);
+							stage.fuselage.getModel(isDeployed).renderAll();
+							GL11.glTranslated(0, stage.fuselage.height, 0);
+						}
+					}
+
+				}
+				GL11.glPopMatrix();
+			}
+
+			
+			if(stage.thruster != null) GL11.glTranslated(0, stage.thruster.height, 0);
+			if(stage.fuselage != null) GL11.glTranslated(0, stage.fuselage.height * stack, 0);
+
+			// Only the bottom-most stage can be deployed
+			isDeployed = false;
+		}
+
+		if(rocket.capsule != null) {
+			tex.bindTexture(rocket.capsule.texture);
+			rocket.capsule.model.renderAll();
 		}
 
 		GL11.glPopMatrix();

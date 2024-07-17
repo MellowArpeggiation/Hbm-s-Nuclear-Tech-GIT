@@ -3,6 +3,8 @@ package com.hbm.items.weapon;
 import java.util.HashMap;
 import java.util.List;
 
+import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.special.ItemLootCrate;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -19,16 +21,16 @@ public class ItemCustomMissilePart extends Item {
 	public PartSize bottom;
 	public Rarity rarity;
 	public float health;
+	public int mass = 0;
 	private String title;
 	private String author;
 	private String witty;
 	
 	public ItemCustomMissilePart() {
-		this.setMaxStackSize(1);
 		this.setCreativeTab(MainRegistry.missileTab);
 	}
 	
-	public static HashMap<Integer, ItemCustomMissilePart> parts = new HashMap();
+	public static HashMap<Integer, ItemCustomMissilePart> parts = new HashMap<>();
 	
 	/**
 	 * == Chips ==
@@ -58,23 +60,34 @@ public class ItemCustomMissilePart extends Item {
 		WARHEAD,
 		FUSELAGE,
 		FINS,
-		THRUSTER
+		THRUSTER,
 	}
 	
 	public enum PartSize {
-		
 		//for chips
 		ANY,
 		//for missile tips and thrusters
 		NONE,
 		//regular sizes, 1.0m, 1.5m and 2.0m
-		SIZE_10,
-		SIZE_15,
-		SIZE_20
+		SIZE_10(1.0),
+		SIZE_15(1.5),
+		SIZE_20(2.0),
+		// Space-grade
+		SIZE_25(2.5),
+		SIZE_30(3.0);
+
+		PartSize() {
+			this.radius = 0;
+		}
+
+		PartSize(double radius) {
+			this.radius = radius;
+		}
+
+		public double radius;
 	}
 	
 	public enum WarheadType {
-		
 		HE,
 		INC,
 		BUSTER,
@@ -87,18 +100,19 @@ public class ItemCustomMissilePart extends Item {
 		TAINT,
 		CLOUD,
 		TURBINE,
-		APOLLO
+		APOLLO,
 	}
 	
 	public enum FuelType {
-		
+		ANY, // Used by space-grade fuselages
 		KEROSENE,
 		SOLID,
 		HYDROGEN,
 		XENON,
 		BALEFIRE,
 		HYDRAZINE,
-		METHALOX
+		METHALOX,
+		KEROLOX, // oxygen rather than peroxide
 	}
 	
 	public enum Rarity {
@@ -129,12 +143,13 @@ public class ItemCustomMissilePart extends Item {
 		return this;
 	}
 	
-	public ItemCustomMissilePart makeWarhead(WarheadType type, float punch, float weight, PartSize size) {
+	public ItemCustomMissilePart makeWarhead(WarheadType type, float punch, int mass, PartSize size) {
 
 		this.type = PartType.WARHEAD;
 		this.top = PartSize.NONE;
 		this.bottom = size;
-		this.attributes = new Object[] { type, punch, weight };
+		this.mass = mass;
+		this.attributes = new Object[] { type, punch };
 		setTextureName(RefStrings.MODID + ":mp_warhead");
 		
 		parts.put(this.hashCode(), this);
@@ -142,11 +157,12 @@ public class ItemCustomMissilePart extends Item {
 		return this;
 	}
 	
-	public ItemCustomMissilePart makeFuselage(FuelType type, float fuel, PartSize top, PartSize bottom) {
+	public ItemCustomMissilePart makeFuselage(FuelType type, int fuel, int mass, PartSize top, PartSize bottom) {
 
 		this.type = PartType.FUSELAGE;
 		this.top = top;
 		this.bottom = bottom;
+		this.mass = mass;
 		attributes = new Object[] { type, fuel };
 		setTextureName(RefStrings.MODID + ":mp_fuselage");
 		
@@ -168,12 +184,13 @@ public class ItemCustomMissilePart extends Item {
 		return this;
 	}
 	
-	public ItemCustomMissilePart makeThruster(FuelType type, float consumption, float lift, PartSize size, int weight) {
+	public ItemCustomMissilePart makeThruster(FuelType type, float consumption, float lift, PartSize size, int thrust, int mass) {
 
 		this.type = PartType.THRUSTER;
 		this.top = size;
 		this.bottom = PartSize.NONE;
-		this.attributes = new Object[] { type, consumption, lift, weight};
+		this.mass = mass;
+		this.attributes = new Object[] { type, consumption, lift, thrust};
 		setTextureName(RefStrings.MODID + ":mp_thruster");
 		
 		parts.put(this.hashCode(), this);
@@ -181,6 +198,7 @@ public class ItemCustomMissilePart extends Item {
 		return this;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool)
 	{
@@ -195,15 +213,16 @@ public class ItemCustomMissilePart extends Item {
 				break;
 			case WARHEAD:
 				list.add(EnumChatFormatting.BOLD + "Size: " + EnumChatFormatting.GRAY + getSize(bottom));
-				list.add(EnumChatFormatting.BOLD + "Type: " + EnumChatFormatting.GRAY + getWarhead((WarheadType)attributes[0]));
+				list.add(EnumChatFormatting.BOLD + "Type: " + EnumChatFormatting.GRAY + getWarhead());
 				list.add(EnumChatFormatting.BOLD + "Strength: " + EnumChatFormatting.GRAY + (Float)attributes[1]);
-				list.add(EnumChatFormatting.BOLD + "Weight: " + EnumChatFormatting.GRAY + (Float)attributes[2] + "t");
+				list.add(EnumChatFormatting.BOLD + "Mass: " + EnumChatFormatting.GRAY + mass + "kg");
 				break;
 			case FUSELAGE:
 				list.add(EnumChatFormatting.BOLD + "Top size: " + EnumChatFormatting.GRAY + getSize(top));
 				list.add(EnumChatFormatting.BOLD + "Bottom size: " + EnumChatFormatting.GRAY + getSize(bottom));
-				list.add(EnumChatFormatting.BOLD + "Fuel type: " + EnumChatFormatting.GRAY + getFuel((FuelType)attributes[0]));
-				list.add(EnumChatFormatting.BOLD + "Fuel amount: " + EnumChatFormatting.GRAY + (Float)attributes[1] + "l");
+				list.add(EnumChatFormatting.BOLD + "Fuel type: " + EnumChatFormatting.GRAY + getFuelName());
+				list.add(EnumChatFormatting.BOLD + "Fuel amount: " + EnumChatFormatting.GRAY + getTankSize() + "mB");
+				list.add(EnumChatFormatting.BOLD + "Mass: " + EnumChatFormatting.GRAY + mass + "kg");
 				break;
 			case FINS:
 				list.add(EnumChatFormatting.BOLD + "Size: " + EnumChatFormatting.GRAY + getSize(top));
@@ -211,10 +230,11 @@ public class ItemCustomMissilePart extends Item {
 				break;
 			case THRUSTER:
 				list.add(EnumChatFormatting.BOLD + "Size: " + EnumChatFormatting.GRAY + getSize(top));
-				list.add(EnumChatFormatting.BOLD + "Fuel type: " + EnumChatFormatting.GRAY + getFuel((FuelType)attributes[0]));
-				list.add(EnumChatFormatting.BOLD + "Fuel consumption: " + EnumChatFormatting.GRAY + (Float)attributes[1] + "l/tick");
+				list.add(EnumChatFormatting.BOLD + "Fuel type: " + EnumChatFormatting.GRAY + getFuelName());
+				list.add(EnumChatFormatting.BOLD + "Fuel consumption: " + EnumChatFormatting.GRAY + (Float)attributes[1] + "mB/tick");
 				list.add(EnumChatFormatting.BOLD + "Max. payload: " + EnumChatFormatting.GRAY + (Float)attributes[2] + "t");
-				list.add(EnumChatFormatting.BOLD + "Weight " + EnumChatFormatting.GRAY + (Integer)attributes[3] + "kg"); //will fix one day
+				list.add(EnumChatFormatting.BOLD + "Thrust " + EnumChatFormatting.GRAY + (Integer)attributes[3] + "N");
+				list.add(EnumChatFormatting.BOLD + "Mass: " + EnumChatFormatting.GRAY + mass + "kg");
 				break;
 			}
 		} catch(Exception ex) {
@@ -243,14 +263,19 @@ public class ItemCustomMissilePart extends Item {
 			return "1.5m";
 		case SIZE_20:
 			return "2.0m";
+		case SIZE_25:
+			return "2.5m";
+		case SIZE_30:
+			return "3.0m";
 		default:
 			return "None";
 		}
 	}
 	
-	public String getWarhead(WarheadType type) {
+	public String getWarhead() {
+		if(!(attributes[0] instanceof WarheadType)) return EnumChatFormatting.BOLD + "N/A";
 		
-		switch(type) {
+		switch((WarheadType)attributes[0]) {
 		case HE:
 			return EnumChatFormatting.YELLOW + "HE";
 		case INC:
@@ -282,11 +307,16 @@ public class ItemCustomMissilePart extends Item {
 		}
 	}
 	
-	public String getFuel(FuelType type) {
-		
-		switch(type) {
+	public String getFuelName() {
+		if(!(attributes[0] instanceof FuelType)) return EnumChatFormatting.BOLD + "N/A";
+
+		switch((FuelType)attributes[0]) {
+		case ANY:
+			return EnumChatFormatting.GRAY + "Any Liquid Fuel";
 		case KEROSENE:
 			return EnumChatFormatting.LIGHT_PURPLE + "Kerosene / Peroxide";
+		case KEROLOX:
+			return EnumChatFormatting.LIGHT_PURPLE + "Kerosene / Oxygen";
 		case SOLID:
 			return EnumChatFormatting.GOLD + "Solid Fuel";
 		case HYDROGEN:
@@ -301,6 +331,49 @@ public class ItemCustomMissilePart extends Item {
 			return EnumChatFormatting.BOLD + "N/A";
 		}
 	}
+
+	public FluidType getFuel() {
+		if(!(attributes[0] instanceof FuelType)) return null;
+
+		switch((FuelType)attributes[0]) {
+		case KEROSENE:
+			return Fluids.KEROSENE;
+		case KEROLOX:
+			return Fluids.KEROSENE;
+		case HYDROGEN:
+			return Fluids.HYDROGEN;
+		case XENON:
+			return Fluids.XENON;
+		case BALEFIRE:
+			return Fluids.BALEFIRE;
+		case HYDRAZINE:
+			return Fluids.HYDRAZINE;
+		case SOLID:
+			return Fluids.NONE; // Requires non-fluid fuel
+		default:
+			return null;
+		}
+	}
+
+	public FluidType getOxidizer() {
+		if(!(attributes[0] instanceof FuelType)) return null;
+
+		switch((FuelType)attributes[0]) {
+		case KEROLOX:
+		case HYDROGEN:
+			return Fluids.OXYGEN;
+		case KEROSENE:
+		case BALEFIRE:
+			return Fluids.PEROXIDE;
+		default:
+			return null;
+		}
+	}
+
+	public int getTankSize() {
+		if(!(attributes[1] instanceof Integer)) return 0;
+		return (Integer) attributes[1];
+	}
 	
 	//am i retarded?
 	/* yes */
@@ -313,6 +386,7 @@ public class ItemCustomMissilePart extends Item {
 		part.health = this.health;
 		part.attributes = this.attributes;
 		part.health = this.health;
+		part.mass = this.mass;
 		part.setTextureName(this.iconString);
 		
 		return part;

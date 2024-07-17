@@ -105,9 +105,18 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		Vec3 skyColor = world.getSkyColor(mc.renderViewEntity, partialTicks);
+
 		float skyR = (float) skyColor.xCoord;
 		float skyG = (float) skyColor.yCoord;
 		float skyB = (float) skyColor.zCoord;
+
+		// Diminish sky colour when leaving the atmosphere
+		if(mc.renderViewEntity.posY > 300) {
+			double curvature = MathHelper.clamp_float((800.0F - (float)mc.renderViewEntity.posY) / 500.0F, 0.0F, 1.0F);
+			skyR *= curvature;
+			skyG *= curvature;
+			skyB *= curvature;
+		}
 
 		if(mc.gameSettings.anaglyph) {
 			float[] anaglyphColor = applyAnaglyph(skyR, skyG, skyB);
@@ -186,6 +195,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
+
 		
 		GL11.glPushMatrix();
 		{
@@ -201,9 +211,10 @@ public class SkyProviderCelestial extends IRenderHandler {
 				// BLACK HOLE SUN
 				// WON'T YOU COME
 				// AND WASH AWAY THE RAIN
-				
+
 				Shader shader = SolarSystem.kerbol.shader;
-				double shaderSize = sunSize * SolarSystem.kerbol.shaderScale; 
+				double shaderSize = sunSize * SolarSystem.kerbol.shaderScale;
+
 				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 				shader.use();
@@ -356,6 +367,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 				}
 				GL11.glPopMatrix();
 			}
+			
 
 			GL11.glEnable(GL11.GL_BLEND);
 
@@ -390,6 +402,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 			}
 			GL11.glPopMatrix();
 
+
 			if(visibility > 0.2F) {
 				// JEFF BOZOS WOULD LIKE TO KNOW YOUR LOCATION
 				// ... to send you a pakedge :)))
@@ -403,16 +416,14 @@ public class SkyProviderCelestial extends IRenderHandler {
 				}
 			}
 
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-			GL11.glEnable(GL11.GL_FOG);
-
 		}
 		GL11.glPopMatrix();
 
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glEnable(GL11.GL_FOG);
+			
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor3f(0.0F, 0.0F, 0.0F);
 		double heightAboveHorizon = mc.thePlayer.getPosition(partialTicks).yCoord - world.getHorizon();
@@ -467,6 +478,41 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 			GL11.glTranslatef(0.0F, -((float) (heightAboveHorizon - 16.0D)), 0.0F);
 			GL11.glCallList(glSkyList2);
+
+		}
+		GL11.glPopMatrix();
+		
+		double pp = mc.renderViewEntity.posY;
+		double sc = 1 / (pp / 1000);
+		GL11.glPushMatrix();
+		{
+
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL11.glDisable(GL11.GL_FOG);
+			GL11.glEnable(GL11.GL_BLEND);
+
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+			float sunBrightness = world.getSunBrightness(partialTicks);
+	
+			GL11.glColor4f(sunBrightness, sunBrightness, sunBrightness, ((float)pp - 200.0F) / 300.0F);
+			mc.renderEngine.bindTexture(body.texture);
+			GL11.glRotated(180, 1, 0, 0);
+			
+			tessellator.startDrawingQuads();
+			tessellator.addVertexWithUV(-115 * sc, 100.0D, -115 * sc, 0.0D, 0.0D);
+			tessellator.addVertexWithUV(115 * sc, 100.0D, -115 * sc, 1.0D, 0.0D);
+			tessellator.addVertexWithUV(115 * sc, 100.0D, 115 * sc, 1.0D, 1.0D);
+			tessellator.addVertexWithUV(-115 * sc, 100.0D, 115 * sc, 0.0D, 1.0D);
+			tessellator.draw();
+
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GL11.glEnable(GL11.GL_FOG);
+			GL11.glDisable(GL11.GL_BLEND);
+
+			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
 
 		}
 		GL11.glPopMatrix();

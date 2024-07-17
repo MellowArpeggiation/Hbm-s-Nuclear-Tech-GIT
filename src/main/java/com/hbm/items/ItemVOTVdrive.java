@@ -3,6 +3,8 @@ package com.hbm.items;
 import java.util.List;
 
 import com.hbm.dim.SolarSystem;
+import com.hbm.entity.missile.EntityRideableRocket;
+import com.hbm.entity.missile.EntityRideableRocket.RocketState;
 import com.hbm.lib.RefStrings;
 
 import cpw.mods.fml.relauncher.Side;
@@ -11,6 +13,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -26,29 +29,30 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 		this.canRepair = false;
 	}
 
-    @Override
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
         super.addInformation(stack, player, list, bool);
+		
+		Destination destination = getDestination(stack);
 
-		int metadata = stack.getItemDamage();
-		SolarSystem.Body destinationType = SolarSystem.Body.values()[metadata];
-
-		if(destinationType == SolarSystem.Body.BLANK) {
+		if(destination.body == SolarSystem.Body.BLANK) {
 			list.add("Destination: DRIVE IS BLANK");
 			return;
 		}
 
-		int processingLevel = destinationType.getProcessingLevel();
+		int processingLevel = destination.body.getProcessingLevel();
 
-		list.add("Destination: " + destinationType);
+		list.add("Destination: " + destination.body.name);
 
-		if (!isProcessed(stack)) {
+		if (!getProcessed(stack)) {
 			// Display processing level info if not processed
-			list.add("Process Requirement: Level " + processingLevel);
-			list.add(EnumChatFormatting.GOLD + "Needs Processing!");
+			list.add("Process requirement: Level " + processingLevel);
+			list.add(EnumChatFormatting.GOLD + "Needs processing!");
 		} else {
 			// Display destination info if processed
 			list.add(EnumChatFormatting.GREEN + "Processed!");
+			list.add("Target coordinates: " + destination.x + ", " + destination.z);
 		}
     }
 
@@ -81,12 +85,25 @@ public class ItemVOTVdrive extends ItemEnumMulti {
         return baseIcon;
     }
 
-	public SolarSystem.Body getDestination(ItemStack stack) {
-		int metadata = stack.getItemDamage();
-		return SolarSystem.Body.values()[metadata];
+	public Destination getDestination(ItemStack stack) {
+		if(!stack.hasTagCompound())
+			stack.stackTagCompound = new NBTTagCompound();
+
+		SolarSystem.Body body = SolarSystem.Body.values()[stack.getItemDamage()];
+		int x = stack.stackTagCompound.getInteger("x");
+		int z = stack.stackTagCompound.getInteger("z");
+		return new Destination(body, x, z);
 	}
 
-	public static boolean isProcessed(ItemStack stack) {
+	public void setCoordinates(ItemStack stack, int x, int z) {
+		if(!stack.hasTagCompound())
+			stack.stackTagCompound = new NBTTagCompound();
+
+		stack.stackTagCompound.setInteger("x", x);
+		stack.stackTagCompound.setInteger("z", z);
+	}
+
+	public static boolean getProcessed(ItemStack stack) {
 		if(!stack.hasTagCompound())
 			stack.stackTagCompound = new NBTTagCompound();
 		
@@ -102,12 +119,75 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-        // Now you can work with destinationType
-		if(!isProcessed(stack)) {
+		if(player.isUsingItem())
+			return stack;
+
+		boolean isProcessed = getProcessed(stack);
+		boolean onDestination = world.provider.dimensionId == getDestination(stack).body.getDimensionId();
+
+		// If we're on the body (or in creative), immediately process
+		if(!isProcessed && (player.capabilities.isCreativeMode || onDestination)) {
+			isProcessed = true;
 			setProcessed(stack, true);
 		}
+
+		ItemStack newStack = stack;
+
+		if(isProcessed && player.ridingEntity != null && player.ridingEntity instanceof EntityRideableRocket) {
+			EntityRideableRocket rocket = (EntityRideableRocket) player.ridingEntity;
+
+			if(rocket.getRocket().stages.size() > 0 && (rocket.getState() == RocketState.LANDED || rocket.getState() == RocketState.AWAITING)) {
+				// Replace our held stack with the rocket drive and place our held drive into the rocket
+				if(rocket.navDrive != null) {
+					newStack = rocket.navDrive;
+				} else {
+					newStack.stackSize = 0;
+				}
+	
+				rocket.navDrive = stack;
+	
+				if(!world.isRemote) {
+					if(onDestination) {
+						rocket.setState(RocketState.LANDED);
+					} else {
+						rocket.setState(RocketState.AWAITING);
+					}
+				}
+
+				world.playSoundEffect(player.posX, player.posY, player.posZ, "hbm:item.upgradePlug", 1.0F, 1.0F);
+			}
+		}
     
-        return stack;
+        return newStack;
     }
+
+	
+    @Override
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float fx, float fy, float fz) {
+		boolean onDestination = world.provider.dimensionId == getDestination(stack).body.getDimensionId();
+		if(!onDestination)
+			return false;
+
+		setCoordinates(stack, x, z);
+
+		if(!world.isRemote)
+			player.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.ITALIC + "Set landing coordinates to: " + x + ", " + z));
+
+		return true;
+	}
+
+	public class Destination {
+
+		public int x;
+		public int z;
+		public SolarSystem.Body body;
+
+		public Destination(SolarSystem.Body body, int x, int z) {
+			this.body = body;
+			this.x = x;
+			this.z = z;
+		}
+
+	}
 
 }

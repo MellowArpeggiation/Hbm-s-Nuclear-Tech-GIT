@@ -1,6 +1,7 @@
 package com.hbm.dim;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,9 @@ import com.hbm.inventory.fluid.FluidType;
 import com.hbm.render.shader.Shader;
 import com.hbm.util.AstronomyUtil;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -52,7 +56,9 @@ public class CelestialBody {
 	public String stoneTexture = "stone";
 	public SolarSystem.Body type;
 
+	@SideOnly(Side.CLIENT)
 	public Shader shader;
+
 	public float shaderScale = 1; // If the shader renders the item within the quad (not filling it entirely), scale it up from the true size
 	public boolean skipShader = false;
 
@@ -73,7 +79,12 @@ public class CelestialBody {
 	}
 
 
-
+    public static Collection<CelestialBody> getAllBodies() {
+        return nameToBodyMap.values();
+    }
+    public static Collection<CelestialBody> getLandableBodies() {
+        return dimToBodyMap.values();
+    }
 	// Chainables for construction
 
 	public CelestialBody withMassRadius(float kg, float km) {
@@ -139,7 +150,10 @@ public class CelestialBody {
 		return withShader(fragmentShader, 1);
 	}
 	
+	
 	public CelestialBody withShader(ResourceLocation fragmentShader, float scale) {
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) return this;
+
 		shader = new Shader(fragmentShader);
 		shaderScale = scale;
 		return this;
@@ -151,6 +165,7 @@ public class CelestialBody {
 		return this;
 	}
 
+	
 	// /Chainables
 
 
@@ -336,6 +351,14 @@ public class CelestialBody {
 		return getBody(world).getTrait(trait);
 	}
 
+	public static boolean hasDefaultTrait(World world, Class<? extends CelestialBodyTrait> trait) {
+		return getBody(world).hasDefaultTrait(trait);
+	}
+	
+	public static <T extends CelestialBodyTrait> T getDefaultTrait(World world, Class<? extends T> trait) {
+		return getBody(world).getDefaultTrait(trait);
+	}
+
 	// /Statics
 
 
@@ -407,6 +430,15 @@ public class CelestialBody {
 			return traits;
 			
 		return this.traits;
+	}
+
+	public boolean hasDefaultTrait(Class<? extends CelestialBodyTrait> trait) {
+		return traits.containsKey(trait);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends CelestialBodyTrait> T getDefaultTrait(Class<? extends T> trait) {
+		return (T) traits.get(trait);
 	}
 
 }

@@ -20,12 +20,14 @@ import com.hbm.config.MobConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.dim.DebugTeleporter;
 import com.hbm.dim.WorldGeneratorCelestial;
 import com.hbm.dim.WorldProviderCelestial;
 import com.hbm.dim.WorldTypeTeleport;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityDuck;
+import com.hbm.entity.missile.EntityRideableRocket;
 import com.hbm.entity.mob.EntityCreeperNuclear;
 import com.hbm.entity.mob.EntityQuackos;
 import com.hbm.entity.mob.EntityCreeperTainted;
@@ -42,6 +44,7 @@ import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.EntityEffectHandler;
 import com.hbm.hazard.HazardRegistry;
 import com.hbm.hazard.HazardSystem;
+import com.hbm.hazard.type.HazardTypeNeutron;
 import com.hbm.interfaces.IBomb;
 import com.hbm.handler.HTTPHandler;
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
@@ -90,6 +93,7 @@ import com.hbm.world.generator.TimedGenerator;
 import api.hbm.energymk2.Nodespace;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -116,7 +120,6 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.event.ClickEvent;
@@ -164,6 +167,7 @@ import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
@@ -237,25 +241,6 @@ public class ModEventHandler {
 			
 			if(!player.inventory.hasItem(ModItems.beta))
 				player.inventory.addItemStackToInventory(new ItemStack(ModItems.beta));
-		}
-	}
-	
-	@SubscribeEvent
-	public void StopSpawninginSpace(EntityJoinWorldEvent event) {
-		
-		if(!(event.entity instanceof EntityPlayer) && event.entity instanceof EntityLivingBase) {
-			EntityLivingBase living = (EntityLivingBase) event.entity;
-			if(event.world.provider.dimensionId == 16) {
-				if( event.entity.ticksExisted < 20 && !(event.entity instanceof EntityWaterMob) && !living.isChild()) {
-					event.setCanceled(true);
-				}
-			}
-			if(event.entity instanceof EntityWaterMob && event.entity.ticksExisted < 20) {
-				Random rand = new Random();
-				if(rand.nextInt(9) != 0) {
-					event.setCanceled(true);
-				}
-			}
 		}
 	}
 
@@ -549,7 +534,7 @@ public class ModEventHandler {
 	public void onBucketUse(FillBucketEvent event) {
 		if(event.world.isRemote) return;
 		if(event.target.typeOfHit != MovingObjectType.BLOCK) return;
-
+		
 		if(event.current != null && event.current.getItem() == Items.water_bucket) {
 			ForgeDirection dir = ForgeDirection.getOrientation(event.target.sideHit);
 			CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(event.world, event.target.blockX + dir.offsetX, event.target.blockY + dir.offsetY, event.target.blockZ + dir.offsetZ);
@@ -678,12 +663,30 @@ public class ModEventHandler {
 				
 				/**
 				 *  REMOVE THIS V V V
+				 * except the entity dismounting part, it literally can NOT be done elsewhere
 				 */
 				for(Object e : oList) {
 					if(e instanceof EntityLivingBase) {
 						
 						//effect for radiation
 						EntityLivingBase entity = (EntityLivingBase) e;
+
+			        	if(entity instanceof EntityPlayer) {
+			        		EntityPlayer player = (EntityPlayer) entity;
+
+							int randSlot = rand.nextInt(player.inventory.mainInventory.length);
+							HazardTypeNeutron.decay(player.inventory.getStackInSlot(randSlot), 0.999916F);
+
+							// handle dismount events, or our players will splat upon leaving tall rockets
+							if(player.ridingEntity != null && player.ridingEntity instanceof EntityRideableRocket && player.isSneaking()) {
+								Entity ridingEntity = player.ridingEntity;
+								float prevHeight = ridingEntity.height;
+								ridingEntity.height = 1.0F;
+								player.mountEntity(null);
+								player.setSneaking(false);
+								ridingEntity.height = prevHeight;
+							}
+			        	}
 						
 						if(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode)
 							continue;
@@ -793,23 +796,6 @@ public class ModEventHandler {
 				        	if(entity instanceof EntityPlayer)
 				        		((EntityPlayer)entity).triggerAchievement(MainRegistry.achRadPoison);
 						}
-						
-			        	if(entity instanceof EntityPlayer)
-			        	{
-			        		EntityPlayer player = (EntityPlayer) entity;
-							int randSlot = rand.nextInt(player.inventory.mainInventory.length);
-							ItemStack stack2 = player.inventory.getStackInSlot(randSlot);
-							if(stack2!=null)
-							{
-								if(stack2.hasTagCompound())
-								{
-									float activation = stack2.stackTagCompound.getFloat("ntmNeutron");
-									if(activation<1e-5)
-										stack2.stackTagCompound.removeTag("ntmNeutron");
-									stack2.stackTagCompound.setFloat("ntmNeutron",activation*0.999916f);		
-								}	
-							}
-			        	}
 					}
 					
 					if(e instanceof EntityItem) {
@@ -826,6 +812,8 @@ public class ModEventHandler {
 			
 			if(event.phase == Phase.END) {
 				EntityRailCarBase.updateMotion(event.world);
+
+				DebugTeleporter.runQueuedTeleport();
 			}
 
 			// Tick our per celestial body timer
@@ -1174,8 +1162,35 @@ public class ModEventHandler {
 	
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-		
+
 		EntityPlayer player = event.player;
+		if(player.posY > 300 && player.posY <1000) {
+			Vec3 vec = Vec3.createVectorHelper(3 * rand.nextDouble(), 0, 0);
+			CBT_Atmosphere thatmosphere = CelestialBody.getTrait(player.worldObj, CBT_Atmosphere.class);
+
+
+			if(thatmosphere != null)
+			if(!player.isRiding()) {
+                if (!player.worldObj.isRemote) {
+                	if(player.motionX > 1 || player.motionY > 1 || player.motionZ > 1) {
+					ParticleUtil.spawnGasFlame(player.worldObj, player.posX - 1+ vec.xCoord, player.posY + vec.yCoord, player.posZ + vec.zCoord, 0, 0, 0);
+                	}
+                	if(player.motionX < -1 || player.motionY < -1 || player.motionZ < -1) {
+					ParticleUtil.spawnGasFlame(player.worldObj, player.posX - 1+ vec.xCoord, player.posY + vec.yCoord, player.posZ + vec.zCoord, 0, 0, 0);
+                }
+               
+            }
+            	else {
+                	if(player.motionX > 1 || player.motionY > 1 || player.motionZ > 1) {
+    					ParticleUtil.spawnGasFlame(player.worldObj, player.posX - 1+ vec.xCoord, player.posY + vec.yCoord, player.posZ + vec.zCoord, 0, 0, 0);
+                    	}
+                    	if(player.motionX < -1 || player.motionY < -1 || player.motionZ < -1) {
+    					ParticleUtil.spawnGasFlame(player.worldObj, player.posX - 1+ vec.xCoord, player.posY + vec.yCoord, player.posZ + vec.zCoord, 0, 0, 0);
+                    }
+            	}
+		}
+
+		}
 		if(player.isPotionActive(HbmPotion.slippery.id) && !player.capabilities.isFlying) {
 		    if (player.onGround) {
 		        double slipperiness = 0.6; 
@@ -1343,38 +1358,15 @@ public class ModEventHandler {
 			
 			/// PU RADIATION END ///
 			
-			/*if(player instanceof EntityPlayerMP) {
-
-				int x = (int) Math.floor(player.posX);
-				int y = (int) Math.floor(player.posY - 0.01);
-				int z = (int) Math.floor(player.posZ);
-				
-				if(player.worldObj.getTileEntity(x, y, z) instanceof IEnergyConductor) {
-					PacketDispatcher.wrapper.sendTo(new PlayerInformPacket(((IEnergyConductor) player.worldObj.getTileEntity(x, y, z)).getPowerNet() + ""), (EntityPlayerMP) player);
-				}
-			}*/
-			for(int i = 0; i < player.inventory.mainInventory.length; i++)
-			{
+			for(int i = 0; i < player.inventory.mainInventory.length; i++) {
 				ItemStack stack2 = player.inventory.getStackInSlot(i);
-				
-				//if(rand.nextInt(100) == 0) {
-					//stack2 = player.inventory.armorItemInSlot(rand.nextInt(4));
-				//}
-				
-				//only affect unstackables (e.g. tools and armor) so that the NBT tag's stack restrictions isn't noticeable
-				
 				
 				//oh yeah remind me...
 				if(stack2 != null) {
-						if(stack2.hasTagCompound() && HazardSystem.getHazardLevelFromStack(stack2, HazardRegistry.RADIATION)==0)
-						{
-							float activation = stack2.stackTagCompound.getFloat("ntmNeutron");
-							//System.out.println("activation: "+activation);
-							ContaminationUtil.contaminate(player, HazardType.RADIATION, ContaminationType.CREATIVE, activation/20);
-						}
-						
-						
-					//}
+					if(stack2.hasTagCompound() && HazardSystem.getHazardLevelFromStack(stack2, HazardRegistry.RADIATION) == 0) {
+						float activation = stack2.stackTagCompound.getFloat(HazardTypeNeutron.NEUTRON_KEY);
+						ContaminationUtil.contaminate(player, HazardType.RADIATION, ContaminationType.CREATIVE, activation / 20);
+					}
 				}
 			}
 			/// NEW ITEM SYS START ///
@@ -1425,9 +1417,34 @@ public class ModEventHandler {
 				ParticleUtil.spawnJesusFlame(player.worldObj, player.posX + vec.xCoord, player.posY + 1 + vec.yCoord, player.posZ + vec.zCoord);
 
 			}
+
 		}
 	}
 	
+	@SubscribeEvent
+	public void preventOrganicSpawn(DecorateBiomeEvent.Decorate event) {
+		// In space, no one can hear you shroom
+		if(!(event.world.provider instanceof WorldProviderCelestial)) return;
+
+		WorldProviderCelestial celestial = (WorldProviderCelestial) event.world.provider;
+		if(celestial.hasLife()) return; // Except on Laythe
+
+		switch(event.type) {
+		case BIG_SHROOM:
+		case CACTUS:
+		case DEAD_BUSH:
+		case LILYPAD:
+		case FLOWERS:
+		case GRASS:
+		case PUMPKIN:
+		case REED:
+		case SHROOM:
+		case TREE:
+			event.setResult(Result.DENY);
+		default:
+		}
+	}
+
 	@SubscribeEvent
 	public void onServerTick(TickEvent.ServerTickEvent event) {
 		

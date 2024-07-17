@@ -84,7 +84,7 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ISid
 
 	@Override
 	public int getInventoryStackLimit() {
-		return 64;
+		return 1;
 	}
 
 	@Override
@@ -225,7 +225,7 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ISid
 			ItemCustomMissilePart thruster = (ItemCustomMissilePart)slots[4].getItem();
 
 			if(part.type == PartType.WARHEAD && fuselage.type == PartType.FUSELAGE && thruster.type == PartType.THRUSTER) {
-				float weight = (Float)part.attributes[2];
+				float weight = (float)part.mass * 0.001F;
 				float thrust = (Float)thruster.attributes[2];
 				
 				if(part.bottom == fuselage.top && weight <= thrust)
