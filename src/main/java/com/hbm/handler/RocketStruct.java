@@ -8,7 +8,6 @@ import java.util.Map;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.inventory.fluid.FluidType;
-import com.hbm.inventory.fluid.trait.FT_Rocket;
 import com.hbm.items.weapon.ItemCustomMissilePart;
 import com.hbm.items.weapon.ItemCustomMissilePart.FuelType;
 import com.hbm.items.weapon.ItemCustomMissilePart.PartType;
@@ -186,13 +185,10 @@ public class RocketStruct {
 		if(stage.fuselage == null || stage.thruster == null) return -1;
 		
 		int rocketMass = getLaunchMass(stageNum);
-		FT_Rocket trait = stage.thruster.part.getFuel().getTrait(FT_Rocket.class);
-		if(trait == null) return -1;
+		int thrust = stage.thruster.part.getThrust() * stage.thrusterCount;
+		int isp = stage.thruster.part.getISP();
 
-		long isp = trait.getISP();
-		long thrust = trait.getThrust() * stage.thrusterCount;
-
-		return SolarSystem.getCostBetween(from, to, rocketMass, (int)thrust, (int)isp);
+		return SolarSystem.getCostBetween(from, to, rocketMass, thrust, isp);
 	}
 
 	// Gets the dry mass of the active stage + the wet mass of the stages above it

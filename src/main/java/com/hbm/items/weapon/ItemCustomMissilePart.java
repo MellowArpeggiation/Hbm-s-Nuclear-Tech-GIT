@@ -319,6 +319,8 @@ public class ItemCustomMissilePart extends Item {
 			return EnumChatFormatting.GRAY + "Any Liquid Fuel";
 		case KEROSENE:
 			return EnumChatFormatting.LIGHT_PURPLE + "Kerosene / Peroxide";
+		case METHALOX:
+			return EnumChatFormatting.YELLOW + "Natural Gas / Oxygen";
 		case KEROLOX:
 			return EnumChatFormatting.LIGHT_PURPLE + "Kerosene / Oxygen";
 		case SOLID:
@@ -344,6 +346,8 @@ public class ItemCustomMissilePart extends Item {
 			return Fluids.KEROSENE;
 		case KEROLOX:
 			return Fluids.KEROSENE;
+		case METHALOX:
+			return Fluids.GAS;
 		case HYDROGEN:
 			return Fluids.HYDROGEN;
 		case XENON:
@@ -365,6 +369,7 @@ public class ItemCustomMissilePart extends Item {
 		switch((FuelType)attributes[0]) {
 		case KEROLOX:
 		case HYDROGEN:
+		case METHALOX:
 			return Fluids.OXYGEN;
 		case KEROSENE:
 		case BALEFIRE:
@@ -374,7 +379,20 @@ public class ItemCustomMissilePart extends Item {
 		}
 	}
 
+	public int getThrust() {
+		if(type != PartType.THRUSTER) return 0;
+		if(attributes[3] == null || !(attributes[3] instanceof Integer)) return 0;
+		return (Integer) attributes[3];
+	}
+
+	public int getISP() {
+		if(type != PartType.THRUSTER) return 0;
+		if(attributes[4] == null || !(attributes[4] instanceof Integer)) return 0;
+		return (Integer) attributes[4];
+	}
+
 	public int getTankSize() {
+		if(type != PartType.FUSELAGE) return 0;
 		if(!(attributes[1] instanceof Integer)) return 0;
 		return (Integer) attributes[1];
 	}
