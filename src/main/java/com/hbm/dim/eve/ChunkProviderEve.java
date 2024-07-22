@@ -5,8 +5,9 @@ import com.hbm.dim.ChunkProviderCelestial;
 
 import net.minecraft.world.World;
 
-public class ChunkProviderEve extends ChunkProviderCelestial {
 
+public class ChunkProviderEve extends ChunkProviderCelestial {
+	
     public ChunkProviderEve(World world, long seed, boolean hasMapFeatures) {
         super(world, seed, hasMapFeatures);
 
@@ -16,4 +17,11 @@ public class ChunkProviderEve extends ChunkProviderCelestial {
         declamp = false;
     }
 
+	@Override
+	public BlockMetaBuffer getChunkPrimer(int x, int z) {
+		BlockMetaBuffer buffer = super.getChunkPrimer(x, z);
+
+		// how many times do I gotta say BEEEEG
+		return buffer;
+	}
 }
