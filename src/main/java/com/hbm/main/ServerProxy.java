@@ -85,7 +85,10 @@ public class ServerProxy {
 	public boolean getImpact(World world) {
 		return TomSaveData.forWorld(world).impact;
 	}
-	
+	public int getCTime(World world) {
+		return ModEventHandler.chargetime;
+	}
+
 	public void playSoundClient(double x, double y, double z, String sound, float volume, float pitch) { }
 	
 	public String getLanguageCode() { return "en_US"; }
