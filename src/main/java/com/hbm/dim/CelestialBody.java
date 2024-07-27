@@ -19,6 +19,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 
 public class CelestialBody {
@@ -315,6 +317,11 @@ public class CelestialBody {
 		return body != null ? body : dimToBodyMap.get(0);
 	}
 
+	// bit of a dumb one but the other function is already used widely
+	public static CelestialBody getBodyOrNull(int id) {
+		return dimToBodyMap.get(id);
+	}
+
 	public static CelestialBody getBody(World world) {
 		return getBody(world.provider.dimensionId);
 	}
@@ -439,6 +446,24 @@ public class CelestialBody {
 	@SuppressWarnings("unchecked")
 	public <T extends CelestialBodyTrait> T getDefaultTrait(Class<? extends T> trait) {
 		return (T) traits.get(trait);
+	}
+
+	
+	// Loads in the heightmap data for a given chunk
+	public int[] getHeightmap(int chunkX, int chunkZ) {
+		WorldServer world = DimensionManager.getWorld(dimensionId);
+
+		// Dimension isn't already loaded, try loading it now
+		if(world == null) {
+			DimensionManager.initDimension(dimensionId);
+			world = DimensionManager.getWorld(dimensionId);
+
+			if(world == null) return null;
+		}
+		
+		// Load OR generate the desired chunk
+		Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
+		return chunk.heightMap;
 	}
 
 }
