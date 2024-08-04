@@ -16,10 +16,8 @@ import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockAshes;
 import com.hbm.config.GeneralConfig;
-import com.hbm.config.SpaceConfig;
 import com.hbm.dim.SkyProviderCelestial;
 import com.hbm.dim.WorldProviderCelestial;
-import com.hbm.dim.eve.WorldProviderEve;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.entity.train.EntityRailCarRidable;
@@ -96,6 +94,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -106,6 +105,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -139,10 +139,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldProviderEnd;
 import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.IRenderHandler;
-import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
@@ -684,16 +682,24 @@ public class ModEventHandlerClient {
 	}
 
 	private static final ResourceLocation MUSIC_LOCATION = new ResourceLocation("hbm:music.game.space");
+	private ISound currentSong;
 
 	@SubscribeEvent
 	public void onPlayMusic(PlaySoundEvent17 event) {
 		ResourceLocation r = event.sound.getPositionedSoundLocation();
 		if(!r.toString().equals("minecraft:music.game.creative") && !r.toString().equals("minecraft:music.game")) return;
 
+		// Prevent songs playing over the top of each other
+		if(Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(currentSong)) {
+			event.setResult(Result.DENY);
+			event.result = null;
+			return;
+		}
+
 		// Replace the sound if we're not on Earth
 		WorldProvider provider = Minecraft.getMinecraft().theWorld.provider;
 		if(provider instanceof WorldProviderCelestial && provider.dimensionId != 0) {
-			event.result = PositionedSoundRecord.func_147673_a(MUSIC_LOCATION);
+			event.result = currentSong = PositionedSoundRecord.func_147673_a(MUSIC_LOCATION);
 		}
 	}
 
@@ -1114,21 +1120,6 @@ public class ModEventHandlerClient {
 				for(int i = 1; i < 4; i++) if(player.stepHeight == i + discriminator) player.stepHeight = defaultStepSize;
 			}
 		}
-		if(event.phase == Phase.START) {
-			int chargetime = ImpactWorldHandler.getCTimeForClient(mc.theWorld);
-			if(mc.theWorld.provider instanceof WorldProviderEve) {
-		        if (chargetime >= 800) {
-		            flashd = 0;
-		        } else if (chargetime >= 100) {
-		            if (flashd <= 1) {
-		                mc.thePlayer.playSound("hbm:misc.rumble", 10F, 1F);
-		            }
-		            flashd += 0.1f;
-		            flashd = Math.min(100.0f, flashd + 0.1f * (100.0f - flashd) * 0.15f);
-		        }
-
-			}
-		}
 	}
 	
 	public static ItemStack getMouseOverStack() {
@@ -1439,8 +1430,7 @@ public class ModEventHandlerClient {
 			GL11.glEnable(GL11.GL_LIGHTING);
 		}
 	}
-	//public int chargetime;
-	public static float flashd;
+	
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
 		

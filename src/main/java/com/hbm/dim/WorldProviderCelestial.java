@@ -8,11 +8,13 @@ import com.hbm.inventory.fluid.Fluids;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -40,6 +42,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		return 3;
 	}
 
+	// Runs every tick, use it to decrement timers and run effects
 	@Override
 	public void updateWeather() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
@@ -55,6 +58,41 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		this.worldObj.rainingStrength = 0.0F;
 		this.worldObj.thunderingStrength = 0.0F;
 	}
+
+	// Can be overridden to provide fog changing events based on weather
+	public float fogDensity() {
+		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
+		if(atmosphere == null) return 0;
+
+		float pressure = (float)atmosphere.getPressure();
+
+		if(pressure <= 2F) return 0;
+
+		return pressure * pressure * 0.002F;
+	}
+
+	/**
+	 * Read/write for weather data and anything else you wanna store that is per planet and not for every body
+	 * the serialization function synchronizes weather data to the player
+	 * 
+	 * also we don't need to mark the WorldSavedData as dirty because the world time is updated every tick and marks it as such
+	 */
+	public void writeToNBT(NBTTagCompound nbt) {
+
+	}
+
+	public void readFromNBT(NBTTagCompound nbt) {
+
+	}
+
+	public void serialize(ByteBuf buf) {
+		buf.writeLong(getWorldTime());
+	}
+
+	public void deserialize(ByteBuf buf) {
+		setWorldTime(buf.readLong());
+	}
+
 
 	/**
 	 * Override to modify the lightmap, return true if the lightmap is actually modified
@@ -311,9 +349,6 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 	// Another AWFULLY named deobfuscation function, this one is called when players have all slept,
 	// which means we can set the time of day to local morning safely here!
-	// HOWEVER, since we have to maintain a single world timer, and things will get funky with tidal locking
-	// otherwise, we'll have to fuck over players on other planets when we sleep
-	// There is room for improvement, including having local time for all planets and longitudinal fuckery
 	@Override
 	public void resetRainAndThunder() {
 		super.resetRainAndThunder();
@@ -333,7 +368,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		}
 
 		if(!worldObj.isRemote) {
-			localTime = CelestialBodyWorldSavedData.get(worldObj).getLocalTime();
+			localTime = CelestialBodyWorldSavedData.get(this).getLocalTime();
 		}
 
 		return localTime;
@@ -347,7 +382,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		}
 
 		if(!worldObj.isRemote) {
-			CelestialBodyWorldSavedData.get(worldObj).setLocalTime(time);
+			CelestialBodyWorldSavedData.get(this).setLocalTime(time);
 		}
 
 		localTime = time;
