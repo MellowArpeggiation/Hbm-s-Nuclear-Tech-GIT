@@ -219,6 +219,14 @@ class ImportJSONAnimation(Operator, ImportHelper):
                                 i += 1
                                 
                             previousInterpolation = keyframe.interpolation
+
+        for object in bpy.data.objects:
+            if object.type != 'MESH':
+                continue
+                
+            bpy.ops.object.select_all(action='DESELECT')
+            object.select = True
+            bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
                             
         offsets = collection["offset"]
         for name in offsets:
@@ -230,7 +238,6 @@ class ImportJSONAnimation(Operator, ImportHelper):
                 
                 bpy.ops.object.select_all(action='DESELECT')
                 object.select = True
-                bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
                 
                 if object.name == name:
                     savedLocation = bpy.context.scene.cursor_location
@@ -238,11 +245,12 @@ class ImportJSONAnimation(Operator, ImportHelper):
                     bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
                     bpy.context.scene.cursor_location = savedLocation
         
-        hierarchy = collection["hierarchy"]
-        for name in hierarchy:
-            parent = hierarchy[name]
-            
-            bpy.data.objects[name].parent = bpy.data.objects[parent]
+        if hasattr(collection, 'hierarchy'):
+            hierarchy = collection["hierarchy"]
+            for name in hierarchy:
+                parent = hierarchy[name]
+                
+                bpy.data.objects[name].parent = bpy.data.objects[parent]
         
         return {'FINISHED'}
     
