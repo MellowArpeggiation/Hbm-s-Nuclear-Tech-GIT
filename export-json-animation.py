@@ -4,6 +4,7 @@
 # and run the export, they'll be split into Animation groups with each part being assigned as a Bus.
 # EG. Reload.Body will apply an animation called Reload to the bus called Body
 # For best results, make sure your object Transform Mode is set to YZX Euler, so rotations match in-game
+# When importing, you can use the Action Editor to assign the imported animations to parts to view and modify them
 
 bl_info = {
     "name": "Export JSON Animation",
@@ -40,7 +41,7 @@ class ExportJSONAnimation(Operator, ExportHelper):
         print("writing JSON data to file...")
         f = open(self.filepath, 'w', encoding='utf-8')
 
-        collection = {"anim": {}, "offset": {}}
+        collection = {"anim": {}, "offset": {}, "hierarchy": {}}
         dimensions = ["x", "z", "y"] # Swizzled to X, Z, Y
         mult = [1, -1, 1] # +X, -Z, +Y
 
@@ -50,6 +51,7 @@ class ExportJSONAnimation(Operator, ExportHelper):
 
         animations = collection['anim']
         offsets = collection['offset']
+        hierarchy = collection['hierarchy']
 
         actions = bpy.data.actions
         for action in actions:
@@ -107,6 +109,9 @@ class ExportJSONAnimation(Operator, ExportHelper):
             if object.type != 'MESH':
                 continue
             
+            if object.parent:
+                hierarchy[object.name] = object.parent.name
+            
             if object.location == mathutils.Vector(): # don't export 0,0,0
                 continue
             
@@ -154,6 +159,8 @@ class ImportJSONAnimation(Operator, ImportHelper):
                 actionName = name + '.' + part
                 animation = animations[name][part]
                 action = bpy.data.actions.find(actionName) >= 0 and bpy.data.actions[actionName] or bpy.data.actions.new(actionName)
+                
+                action.use_fake_user = True
                 
                 # Keep the actions, in case they're already associated with objects
                 # but remove the frames to replace with fresh ones
@@ -210,6 +217,30 @@ class ImportJSONAnimation(Operator, ImportHelper):
                                 i += 1
                                 
                             previousInterpolation = keyframe.interpolation
+                            
+        offsets = collection["offset"]
+        for name in offsets:
+            offset = offsets[name]
+            
+            for object in bpy.data.objects:
+                if object.type != 'MESH':
+                    continue
+                
+                bpy.ops.object.select_all(action='DESELECT')
+                object.select_set(True)
+                bpy.ops.object.transform_apply(location=False, rotation=True, scale=False, properties=False)
+                
+                if object.name == name:
+                    savedLocation = bpy.context.scene.cursor.location
+                    bpy.context.scene.cursor.location = (-offset[0], -offset[2], offset[1])
+                    bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+                    bpy.context.scene.cursor.location = savedLocation
+        
+        hierarchy = collection["hierarchy"]
+        for name in hierarchy:
+            parent = hierarchy[name]
+            
+            bpy.data.objects[name].parent = bpy.data.objects[parent]
         
         return {'FINISHED'}
     
