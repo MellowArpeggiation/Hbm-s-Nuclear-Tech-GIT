@@ -8,7 +8,7 @@
 
 bl_info = {
     "name": "Export JSON Animation",
-    "blender": (2, 79, 0),
+    "blender": (3, 2, 0),
     "category": "Import-Export",
 }
 
@@ -31,7 +31,7 @@ class ExportJSONAnimation(Operator, ExportHelper):
     # ExportHelper mix-in class uses this.
     filename_ext = ".json"
 
-    filter_glob = StringProperty(
+    filter_glob: StringProperty(
         default="*.json",
         options={'HIDDEN'},
         maxlen=255,  # Max internal buffer length, longer would be clamped.
@@ -137,7 +137,7 @@ class ImportJSONAnimation(Operator, ImportHelper):
     # ImportHelper mix-in class uses this.
     filename_ext = ".json"
 
-    filter_glob = StringProperty(
+    filter_glob: StringProperty(
         default="*.json",
         options={'HIDDEN'},
         maxlen=255,  # Max internal buffer length, longer would be clamped.
@@ -219,16 +219,17 @@ class ImportJSONAnimation(Operator, ImportHelper):
                                 i += 1
                                 
                             previousInterpolation = keyframe.interpolation
-
+                            
+        
         for object in bpy.data.objects:
             if object.type != 'MESH':
                 continue
-                
+
             bpy.ops.object.select_all(action='DESELECT')
-            object.select = True
-            bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
+            object.select_set(True)
+            bpy.ops.object.transform_apply(location=False, rotation=True, scale=False, properties=False)
             object.rotation_mode = 'YZX'
-                            
+        
         offsets = collection["offset"]
         for name in offsets:
             offset = offsets[name]
@@ -238,13 +239,13 @@ class ImportJSONAnimation(Operator, ImportHelper):
                     continue
                 
                 bpy.ops.object.select_all(action='DESELECT')
-                object.select = True
+                object.select_set(True)
                 
                 if object.name == name:
-                    savedLocation = bpy.context.scene.cursor_location
-                    bpy.context.scene.cursor_location = (-offset[0], -offset[2], offset[1])
+                    savedLocation = bpy.context.scene.cursor.location
+                    bpy.context.scene.cursor.location = (-offset[0], -offset[2], offset[1])
                     bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-                    bpy.context.scene.cursor_location = savedLocation
+                    bpy.context.scene.cursor.location = savedLocation
         
         if hasattr(collection, 'hierarchy'):
             hierarchy = collection["hierarchy"]
@@ -269,22 +270,14 @@ def menu_import(self, context):
 def register():
     bpy.utils.register_class(ExportJSONAnimation)
     bpy.utils.register_class(ImportJSONAnimation)
-    if hasattr(bpy.types, "TOPBAR_MT_file_export"):
-        bpy.types.TOPBAR_MT_file_export.append(menu_export)
-        bpy.types.TOPBAR_MT_file_import.append(menu_import)
-    elif hasattr(bpy.types, "INFO_MT_file_export"):
-        bpy.types.INFO_MT_file_export.append(menu_export)
-        bpy.types.INFO_MT_file_import.append(menu_import)
+    bpy.types.TOPBAR_MT_file_export.append(menu_export)
+    bpy.types.TOPBAR_MT_file_import.append(menu_import)
 
 def unregister():
     bpy.utils.unregister_class(ExportJSONAnimation)
     bpy.utils.unregister_class(ImportJSONAnimation)
-    if hasattr(bpy.types, "TOPBAR_MT_file_export"):
-        bpy.types.TOPBAR_MT_file_export.remove(menu_export)
-        bpy.types.TOPBAR_MT_file_import.remove(menu_import)
-    elif hasattr(bpy.types, "INFO_MT_file_export"):
-        bpy.types.INFO_MT_file_export.remove(menu_export)
-        bpy.types.INFO_MT_file_import.remove(menu_import)
+    bpy.types.TOPBAR_MT_file_export.remove(menu_export)
+    bpy.types.TOPBAR_MT_file_import.remove(menu_import)
 
 
 # This allows you to run the script directly from Blender's Text editor

@@ -222,9 +222,11 @@ class ImportJSONAnimation(Operator, ImportHelper):
         for object in bpy.data.objects:
             if object.type != 'MESH':
                 continue
+
             bpy.ops.object.select_all(action='DESELECT')
             object.select_set(True)
             bpy.ops.object.transform_apply(location=False, rotation=True, scale=False, properties=False)
+            object.rotation_mode = 'YZX'
         
         offsets = collection["offset"]
         for name in offsets:
