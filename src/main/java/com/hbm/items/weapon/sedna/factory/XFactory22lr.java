@@ -13,6 +13,7 @@ import com.hbm.items.weapon.sedna.ItemGunBaseNT.LambdaContext;
 import com.hbm.items.weapon.sedna.factory.GunFactory.EnumAmmo;
 import com.hbm.items.weapon.sedna.mags.MagazineFullReload;
 import com.hbm.lib.RefStrings;
+import com.hbm.main.ResourceManager;
 import com.hbm.particle.SpentCasing;
 import com.hbm.particle.SpentCasing.CasingType;
 import com.hbm.render.anim.BusAnimation;
@@ -71,10 +72,7 @@ public class XFactory22lr {
 		case JAMMED: return new BusAnimation()
 				.addBus("BOLT", new BusAnimationSequence().addPos(0, 0, 0, 750).addPos(0, 0, -1.5, 100, IType.SIN_UP).addPos(0, 0, 0, 100, IType.SIN_UP))
 				.addBus("TURN", new BusAnimationSequence().addPos(0, 0, 0, 500).addPos(0, 0, 45, 250, IType.SIN_FULL).addPos(0, 0, 45, 400).addPos(0, 0, 0, 250, IType.SIN_FULL));
-		case INSPECT: return new BusAnimation()
-				.addBus("MAGTURN", new BusAnimationSequence().addPos(15, 0, 0, 250, IType.SIN_FULL).addPos(15, 0, 0, 1400).addPos(0, 0, 0, 250, IType.SIN_FULL))
-				.addBus("MAG", new BusAnimationSequence().addPos(0, 0, 0, 250).addPos(4, 0, -4, 250, IType.SIN_FULL).addPos(4, 0, -4, 100).addPos(4, 6, -4, 250, IType.SIN_FULL).addPos(4, 0, -4, 150, IType.SIN_UP).addPos(4, -1, -4, 100, IType.SIN_DOWN).addPos(4, -1, -4, 250).addPos(0, 0, 0, 250, IType.SIN_FULL))
-				.addBus("MAGSPIN", new BusAnimationSequence().addPos(0, 0, 0, 600).addPos(680, 0, 0, 500, IType.SIN_FULL).addPos(680, 0, 0, 250).addPos(720, 0, 0, 250));
+		case INSPECT: return ResourceManager.am180_anim.get("Inspect");
 		}
 		
 		return null;
