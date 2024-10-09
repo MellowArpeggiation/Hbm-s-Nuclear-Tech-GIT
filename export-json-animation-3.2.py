@@ -247,7 +247,7 @@ class ImportJSONAnimation(Operator, ImportHelper):
                     bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
                     bpy.context.scene.cursor.location = savedLocation
         
-        if hasattr(collection, 'hierarchy'):
+        if 'hierarchy' in collection:
             hierarchy = collection["hierarchy"]
             for name in hierarchy:
                 parent = hierarchy[name]
