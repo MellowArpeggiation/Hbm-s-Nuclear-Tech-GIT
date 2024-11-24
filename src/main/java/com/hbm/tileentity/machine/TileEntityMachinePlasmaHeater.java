@@ -6,6 +6,7 @@ import java.util.List;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineITER;
+import com.hbm.blocks.machine.MachineHTRF4;
 import com.hbm.inventory.container.ContainerPlasmaHeater;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
@@ -89,6 +90,33 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 			
 			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
 			int dist = 11;
+			
+			if(worldObj.getBlock(xCoord + dir.offsetX * dist, yCoord + 1, zCoord + dir.offsetZ * dist) == ModBlocks.machine_htrf4) {
+				int[] pos = ((MachineHTRF4)ModBlocks.machine_htrf4).findCore(worldObj, xCoord + dir.offsetX * dist, yCoord + 1, zCoord + dir.offsetZ * dist);
+				
+				if(pos != null) {
+					TileEntity te = worldObj.getTileEntity(pos[0], pos[1], pos[2]);
+					
+					if(te instanceof TileEntityMachineHTRF4) {
+						TileEntityMachineHTRF4 htrf = (TileEntityMachineHTRF4)te;
+							
+						if(htrf.tanks[0].getFill() == 0 && this.plasma.getTankType() != Fluids.NONE) {
+							htrf.tanks[0].setTankType(this.plasma.getTankType());
+						}
+							{
+							if(htrf.tanks[0].getTankType() == this.plasma.getTankType()) {
+								
+								int toLoad = Math.min(htrf.tanks[0].getMaxFill() - htrf.tanks[0].getFill(), this.plasma.getFill());
+								toLoad = Math.min(toLoad, 40);
+								this.plasma.setFill(this.plasma.getFill() - toLoad);
+								htrf.tanks[0].setFill(htrf.tanks[0].getFill() + toLoad);
+								this.markDirty();
+								htrf.markDirty();
+							}
+						}
+					}
+				}
+			}
 			
 			if(worldObj.getBlock(xCoord + dir.offsetX * dist, yCoord + 2, zCoord + dir.offsetZ * dist) == ModBlocks.iter) {
 				int[] pos = ((MachineITER)ModBlocks.iter).findCore(worldObj, xCoord + dir.offsetX * dist, yCoord + 2, zCoord + dir.offsetZ * dist);
