@@ -36,7 +36,7 @@ public class TileEntityMachineHTRF4 extends TileEntityMachineBase implements IPr
 	public long power;
 	public static long maxPower = 1_000_000_000;
 
-	private static final int POWER_COST_MULTIPLIER = 100_000;
+	private static final int POWER_COST_MULTIPLIER = 1_000_000;
 
 	private boolean isOn;
 	private float speed;
