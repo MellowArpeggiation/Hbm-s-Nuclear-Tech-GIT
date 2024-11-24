@@ -270,6 +270,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineTurbineGas.class, new RenderTurbineGas());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineLPW2.class, new RenderLPW2());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineHTR3.class, new RenderHTR3());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineHTRF4.class, new RenderHTRF4());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXenonThruster.class, new RenderXenonThruster());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePress.class, new RenderPress());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineEPress.class, new RenderEPress());
@@ -1070,6 +1071,52 @@ public class ClientProxy extends ServerProxy {
 			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);*/
 			
 			ParticleRocketFlame fx = new ParticleRocketFlame(man, world, x, y, z).setScale(scale);
+			fx.motionX = mX;
+			fx.motionY = mY;
+			fx.motionZ = mZ;
+			if(data.hasKey("maxAge")) fx.setMaxAge(data.getInteger("maxAge"));
+			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+		}
+
+		if("missileContrailf".equals(type)) {
+			
+			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
+			
+			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
+			double mX = data.getDouble("moX");
+			double mY = data.getDouble("moY");
+			double mZ = data.getDouble("moZ");
+			
+			/*ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0, 0, 0, scale);
+			contrail.motionX = mX;
+			contrail.motionY = mY;
+			contrail.motionZ = mZ;
+			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);*/
+			
+			ParticleRocketFusion fx = new ParticleRocketFusion(man, world, x, y, z).setScale(scale);
+			fx.motionX = mX;
+			fx.motionY = mY;
+			fx.motionZ = mZ;
+			if(data.hasKey("maxAge")) fx.setMaxAge(data.getInteger("maxAge"));
+			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+		}
+
+		if("missileContrailbf".equals(type)) {
+			
+			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
+			
+			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
+			double mX = data.getDouble("moX");
+			double mY = data.getDouble("moY");
+			double mZ = data.getDouble("moZ");
+			
+			/*ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0, 0, 0, scale);
+			contrail.motionX = mX;
+			contrail.motionY = mY;
+			contrail.motionZ = mZ;
+			Minecraft.getMinecraft().effectRenderer.addEffect(contrail);*/
+			
+			ParticleRocketBF fx = new ParticleRocketBF(man, world, x, y, z).setScale(scale);
 			fx.motionX = mX;
 			fx.motionY = mY;
 			fx.motionZ = mZ;
