@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.main.MainRegistry;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.IDysonConverter;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.BobMathUtil;
@@ -23,6 +24,12 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 	// The energy received is fired as a violently powerful beam,
 	// converters can collect this beam and turn it into HE/TU or used for analysis, crafting, etc.
 
+	public int swarmCount;
+	public int swarmConsumers;
+	public int beamLength;
+
+	private AudioWrapper audio;
+
 	public TileEntityDysonReceiver() {
 		super(1);
 	}
@@ -42,10 +49,6 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 		return (long)(maxOutput * gompertz) / 20;
 	}
 
-	public int swarmCount;
-	public int swarmConsumers;
-	public int beamLength;
-
 	@Override
 	public String getName() {
 		return "container.machineDysonReceiver";
@@ -53,9 +56,9 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 
 	@Override
 	public void updateEntity() {
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
+		
 		if(!worldObj.isRemote) {
-			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
-
 			int swarmId = 12345;
 
 			swarmCount = CBT_Dyson.count(worldObj, swarmId);
@@ -89,6 +92,20 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 			}
 
 			networkPackNT(20);			
+		} else {
+			if(swarmCount > 0) {
+				if(audio == null) {
+					audio = MainRegistry.proxy.getLoopedSound("hbm:block.dysonBeam", xCoord + dir.offsetX * 8, yCoord, zCoord + dir.offsetZ * 8, 0.75F, 20F, 1.0F);
+					audio.startSound();
+				}
+
+				audio.updatePitch(0.85F);
+			} else {
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
+				}
+			}
 		}
 	}
 
@@ -108,6 +125,26 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 		beamLength = buf.readInt();
 	}
 	
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+	
 	AxisAlignedBB bb = null;
 	
 	@Override
@@ -119,7 +156,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 				yCoord,
 				zCoord - 25,
 				xCoord + 25,
-				yCoord + 1,
+				yCoord + 19,
 				zCoord + 25
 			);
 		}

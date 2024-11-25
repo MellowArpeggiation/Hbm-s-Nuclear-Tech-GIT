@@ -30,12 +30,12 @@ public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay
 
 	@Override
 	public int[] getDimensions() {
-		return new int[] {0, 0, 0, 0, 0, 0};
+		return new int[] {2, 0, 4, 2, 2, 2};
 	}
 
 	@Override
 	public int getOffset() {
-		return 0;
+		return 2;
 	}
 
 	@Override

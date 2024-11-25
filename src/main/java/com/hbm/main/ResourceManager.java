@@ -278,6 +278,9 @@ public class ResourceManager {
 	//Shredder
 	public static final IModelCustom shredder = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/shredder.obj"));
 
+	// Dyson
+	public static final IModelCustom dyson_receiver = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/dyson_receiver.obj")).asVBO();
+
 	//Bombs
 	public static final IModelCustom bomb_gadget = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/bombs/gadget.obj")).asVBO();
 	public static final IModelCustom bomb_boy = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/LilBoy1.obj"));
