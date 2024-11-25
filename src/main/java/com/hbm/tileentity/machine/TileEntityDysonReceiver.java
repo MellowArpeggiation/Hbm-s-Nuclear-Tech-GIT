@@ -75,10 +75,12 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 
 					Block block = worldObj.getBlock(x, y, z);
 					
-					TileEntity te;
+					TileEntity te = null;
 					if(block instanceof BlockDummyable) {
 						int[] pos = ((BlockDummyable) block).findCore(worldObj, x, y, z);
-						te = worldObj.getTileEntity(pos[0], pos[1], pos[2]);
+						if(pos != null) {
+							te = worldObj.getTileEntity(pos[0], pos[1], pos[2]);
+						}
 					} else {
 						te = worldObj.getTileEntity(x, y, z);
 					}

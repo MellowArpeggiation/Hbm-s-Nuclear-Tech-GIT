@@ -34,7 +34,7 @@ public class RenderDysonReceiver extends TileEntitySpecialRenderer {
 			}
 			
 			GL11.glShadeModel(GL11.GL_SMOOTH);
-			bindTexture(ResourceManager.universal);
+			bindTexture(ResourceManager.dyson_receiver_tex);
 			ResourceManager.dyson_receiver.renderAll();
 
 			int length = receiver.beamLength;

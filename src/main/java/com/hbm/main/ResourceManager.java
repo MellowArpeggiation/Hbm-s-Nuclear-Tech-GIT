@@ -726,6 +726,9 @@ public class ResourceManager {
 	
 	//Shredder
 	public static final ResourceLocation shredder_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/shredder.png");
+
+	// Dyson
+	public static final ResourceLocation dyson_receiver_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/dyson_receiver.png");
 	
 	//Bombs
 	public static final ResourceLocation bomb_gadget_tex = new ResourceLocation(RefStrings.MODID, "textures/models/bombs/gadget.png");
