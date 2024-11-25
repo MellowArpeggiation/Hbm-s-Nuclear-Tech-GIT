@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.dim.CelestialBody;
+import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.fluid.FluidType;
@@ -51,8 +52,8 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IE
 			
 			this.updateConnections();
 			
-			// Extractors will not work indoors
-			CBT_Atmosphere atmosphere = !ChunkAtmosphereManager.proxy.hasAtmosphere(worldObj, xCoord, yCoord, zCoord)
+			// Extractors will not work indoors (or in space oops)
+			CBT_Atmosphere atmosphere = !(worldObj.provider instanceof WorldProviderOrbit) && !ChunkAtmosphereManager.proxy.hasAtmosphere(worldObj, xCoord, yCoord, zCoord)
 				? CelestialBody.getTrait(worldObj, CBT_Atmosphere.class)
 				: null;
 
