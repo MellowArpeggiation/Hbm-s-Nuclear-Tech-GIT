@@ -58,6 +58,12 @@ public class HydrotreatingRecipes extends SerializableRecipe {
 			new FluidStack(Fluids.COALGAS, 80),
 			new FluidStack(Fluids.SOURGAS, 15)
 		));
+		
+		recipes.put(Fluids.CCL, new Triplet(
+				new FluidStack(Fluids.HYDROGEN, 10, 1),
+				new FluidStack(Fluids.CHLOROMETHANE, 80),
+				new FluidStack(Fluids.HCL, 20)
+			));
 	}
 	
 	public static Triplet<FluidStack, FluidStack, FluidStack> getOutput(FluidType type) {

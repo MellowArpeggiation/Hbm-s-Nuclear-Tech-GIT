@@ -9,7 +9,7 @@ import net.minecraft.world.gen.layer.IntCache;
 
 public class GenlayerTektoBiomes extends GenLayer {
 
-    private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseTekto.polyvinylPlains, BiomeGenBaseTekto.halogenHills };
+    private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseTekto.polyvinylPlains, BiomeGenBaseTekto.halogenHills, BiomeGenBaseTekto.forest, BiomeGenBaseTekto.vinylsands};
    // protected BiomeGenBase[] rareBiomes = { BiomeGenBaseEve.eveSeismicPlains };
 
     public GenlayerTektoBiomes(long l) {

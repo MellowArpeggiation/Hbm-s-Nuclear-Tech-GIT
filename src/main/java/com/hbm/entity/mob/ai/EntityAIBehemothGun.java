@@ -77,7 +77,7 @@ public class EntityAIBehemothGun extends EntityAIBase {
 	private void fireArtilleryShell() {
 		if(reloadTimer <= 0) {
 			EntityArtilleryShell grenade = new EntityArtilleryShell(owner.worldObj);
-			grenade.setType(10);
+			grenade.setType(1);
 			grenade.setPosition(owner.posX, owner.posY + 10, owner.posZ);
 			Vec3 vec = Vec3.createVectorHelper(target.posX - owner.posX, 0, target.posZ - owner.posZ);
 			grenade.motionX = vec.xCoord * 0.05D;

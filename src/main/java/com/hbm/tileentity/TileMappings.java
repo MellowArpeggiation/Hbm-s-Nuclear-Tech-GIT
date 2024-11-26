@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.hbm.blocks.BlockGeysierDCM.TileEntityDCM;
 import com.hbm.blocks.BlockVolcanoV2.TileEntityLightningVolcano;
 import com.hbm.blocks.bomb.BlockVolcano.TileEntityVolcanoCore;
 import com.hbm.blocks.generic.BlockBedrockOreTE.TileEntityBedrockOre;
@@ -218,6 +219,7 @@ public class TileMappings {
 		put(TileEntityPlushie.class, "tileentity_ntm_plushie");
 		put(TileEntityEmitter.class, "tileentity_ntm_emitter");
 		put(TileEntityLightningVolcano.class, "tileentity_electric_volcano");
+		put(TileEntityDCM.class, "tileentity_dcm");
 
 		put(TileEntityDoorGeneric.class, "tileentity_ntm_door");
 

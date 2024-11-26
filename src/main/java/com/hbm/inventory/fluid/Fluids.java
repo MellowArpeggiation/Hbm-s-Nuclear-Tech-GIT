@@ -156,7 +156,7 @@ public class Fluids {
 	public static FluidType COFFEE;
 	public static FluidType TEA;
 	public static FluidType HONEY;
-	public static FluidType OLIVEOIL;
+	public static FluidType CCL;
 	public static FluidType FLUORINE; //why not
 	//public static FluidType HYALURONIC; // from mobs, more efficent than engine lubricant.
 	public static FluidType DUNAAIR; //yields mostly carbon dioxide with a touch of N2
@@ -219,6 +219,7 @@ public class Fluids {
 	public static FluidType MSLURRY; // Morkite slurry, similar to MINSOL
 	public static FluidType PHEROMONE; 
 	public static FluidType PHEROMONE_M; 
+	public static FluidType HGAS; // halide gas, tektos version of natural gas
 
 	//morkite would be like a gravelly oil. it would be a goopy liquidized gravel.
 	//point being, if the crystals were melted down and the liquid extracted
@@ -423,10 +424,10 @@ public class Fluids {
 		REFORMGAS =				new FluidType("REFORMGAS",			0x6362AE, 1, 4, 1, EnumSymbol.NONE).addContainers(new CD_Gastank(0x9392FF, 0xFFB992)).addTraits(GASEOUS, P_GAS);
 		MILK =					new FluidType("MILK",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);//F5DEE4
 		SMILK =					new FluidType("SMILK",				0xF5DEE4, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);
-		OLIVEOIL =				new FluidType("OLIVEOIL",			0xA9B98E, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);
+		CCL =					new FluidType("CCL",				0x0C3B2F, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, new FT_Corrosive(10));
 		COLLOID =				new FluidType("COLLOID",			0x787878, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		EVEAIR =				new FluidType("EVEAIR",				0xDCABF8, 4, 0, 0, EnumSymbol.OXIDIZER).addTraits(GASEOUS, new FT_Corrosive(25), new FT_Poison(true, 1));	
-		KMnO4 =					new FluidType("KMnO4",				0x560046, 4, 0, 0, EnumSymbol.ACID).addTraits(LIQUID, new FT_Corrosive(15), new FT_Poison(true, 1));	
+		KMnO4 =					new FluidType("KMnO4",				0x560046, 4, 0, 0, EnumSymbol.ACID).addTraits(LIQUID, new FT_Corrosive(15), new FT_Poison(true, 1)); //fucking hate this fluid	
 		CHLOROMETHANE =			new FluidType("CHLOROMETHANE",		0xD3CF9E, 2, 4, 0, EnumSymbol.NONE).addTraits(GASEOUS, new FT_Corrosive(15)).addTraits(new FT_Flammable(50_000));
 		METHANOL =				new FluidType("METHANOL",			0x88739F, 3, 4, 0, EnumSymbol.NONE).addTraits(GASEOUS).addTraits(new FT_Flammable(400_000)).addTraits(new FT_Combustible(FuelGrade.HIGH, 600_000), LIQUID);	//ethanol but more etha per nol
 		BROMINE =				new FluidType("BROMINE",			0xAF2214, 2, 0, 1, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS, new FT_Corrosive(10));
@@ -493,7 +494,7 @@ public class Fluids {
 		VITRIOL =				new FluidType("VITRIOL",			0x6E5222, 2, 0, 1, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		SLOP =					new FluidType("SLOP",			0x929D45, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		SUPERHEATED_HYDROGEN =	new FluidType("SUPERHEATED_HYDROGEN",		0xE39393, 0, 0, 0, EnumSymbol.NONE).setTemp(2200).addTraits(GASEOUS, NOCON, NOID);
-		
+		HGAS =					new FluidType("HGAS",		0x999368, 0, 0, 0, EnumSymbol.ACID).addTraits(GASEOUS,  new FT_Corrosive(120));
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
 		
@@ -614,6 +615,7 @@ public class Fluids {
 		metaOrder.add(MORKINE);
 		metaOrder.add(MSLURRY);
 		metaOrder.add(DICYANOACETYLENE);
+		metaOrder.add(HGAS);
 		//processing fluids
 		metaOrder.add(SALIENT);
 		metaOrder.add(SEEDSLURRY);
@@ -702,7 +704,7 @@ public class Fluids {
 		metaOrder.add(COFFEE);
 		metaOrder.add(MILK);
 		metaOrder.add(SMILK);
-		metaOrder.add(OLIVEOIL);
+		metaOrder.add(CCL);
 		metaOrder.add(ELBOWGREASE);
 		metaOrder.add(EMILK);
 		metaOrder.add(CMILK);

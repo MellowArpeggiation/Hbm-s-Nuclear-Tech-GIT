@@ -21,6 +21,8 @@ import com.hbm.dim.moon.WorldProviderMoon;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.tekto.WorldGeneratorTekto;
 import com.hbm.dim.tekto.WorldProviderTekto;
+import com.hbm.dim.thatmo.WorldGeneratorThatmo;
+import com.hbm.dim.thatmo.WorldProviderThatmo;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.world.WorldProvider;
@@ -42,6 +44,7 @@ public class PlanetGen {
 		GameRegistry.registerWorldGenerator(new WorldGeneratorMinmus(), 1);
 		GameRegistry.registerWorldGenerator(new WorldGeneratorLaythe(), 1);
 		GameRegistry.registerWorldGenerator(new WorldGeneratorTekto(), 1);
+		GameRegistry.registerWorldGenerator(new WorldGeneratorThatmo(), 1);
 
 		registerDimension(SpaceConfig.moonDimension, WorldProviderMoon.class);
 		registerDimension(SpaceConfig.dunaDimension, WorldProviderDuna.class);
@@ -53,6 +56,7 @@ public class PlanetGen {
 		registerDimension(SpaceConfig.laytheDimension, WorldProviderLaythe.class);
 		registerDimension(SpaceConfig.orbitDimension, WorldProviderOrbit.class);
 		registerDimension(SpaceConfig.tektoDimension, WorldProviderTekto.class);
+		registerDimension(SpaceConfig.thatmoDimension, WorldProviderThatmo.class);
 
     }
 

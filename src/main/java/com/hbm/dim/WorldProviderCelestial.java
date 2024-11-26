@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.trait.CBT_Atmosphere;
-import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CBT_War.ProjectileType;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
@@ -260,24 +259,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 				color.zCoord + fluidColor.zCoord * percentage
 			);
 		}
-		if(CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
-			CBT_War wardat = CelestialBody.getTrait(worldObj, CBT_War.class);
-		        for (int i = 0; i < wardat.getProjectiles().size(); i++) {
-		            CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
-		            float flash = projectile.getFlashtime();
-		            if(projectile.getAnimtime() > 0) {
-			            float invertedFlash = 100 - flash;
 
-			            int anim = projectile.getAnimtime();
-		                float alpd = 1.0F - Math.min(1.0F, flash / 100);
-						color.xCoord += invertedFlash * 0.5;
-						color.yCoord += invertedFlash * 0.5;
-						color.zCoord += invertedFlash * 0.5;	
-		            }
-		        }
-		    }
-			
-		
 		// Lower pressure sky renders thinner
 		float pressureFactor = MathHelper.clamp_float(totalPressure, 0.0F, 1.0F);
 		color.xCoord *= pressureFactor;
@@ -374,25 +356,12 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		if(CelestialBody.getStar(worldObj).hasTrait(CBT_Destroyed.class))
 			return 0;
 
-
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 		float sunBrightness = super.getSunBrightness(par1);
-		float skyflash = 0;
+
 		if(atmosphere == null) return sunBrightness;
-		if(CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
-			CBT_War wardat = CelestialBody.getTrait(worldObj, CBT_War.class);
-		        for (int i = 0; i < wardat.getProjectiles().size(); i++) {
-		            CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
-		            float flash = projectile.getFlashtime();
-		            if(projectile.getAnimtime() > 0) {
-			            skyflash = 100 - flash;
 
-		            }
-		        }
-		    }
-
-		return sunBrightness * MathHelper.clamp_float(1.0F - ((float)atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F) + skyflash;
-		
+		return sunBrightness * MathHelper.clamp_float(1.0F - ((float)atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F);
 	}
 
 	@Override

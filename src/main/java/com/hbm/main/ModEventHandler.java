@@ -29,9 +29,6 @@ import com.hbm.dim.WorldTypeTeleport;
 import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
-import com.hbm.dim.trait.CBT_War;
-import com.hbm.dim.trait.CBT_War.Projectile;
-import com.hbm.dim.trait.CBT_War.ProjectileType;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityDuck;
 import com.hbm.entity.missile.EntityRideableRocket;
@@ -146,7 +143,6 @@ import net.minecraft.util.WeightedRandomFishable;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.FishingHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -569,6 +565,7 @@ public class ModEventHandler {
 			}
 		}
 	}
+	
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event) {
 

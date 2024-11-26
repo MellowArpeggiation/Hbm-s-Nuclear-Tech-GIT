@@ -13,6 +13,9 @@ public class MapGenVolcano extends MapGenBase {
 	private int chancePerChunk = 100;
 	private int minSize = 32;
 	private int maxSize = 64;
+	
+	private Block coreBlock;
+	private Block materialBlock;
 
 	// Note that the chance is effectively squared, so make it lower than you normally would
 	public MapGenVolcano(int chancePerChunk) {
@@ -25,7 +28,11 @@ public class MapGenVolcano extends MapGenBase {
 
 		this.range = (maxSize / 8) + 1;
 	}
-
+	
+	public void setMaterial(Block coreBlock, Block mateBlock) {
+		this.coreBlock = coreBlock;
+		this.materialBlock = mateBlock;
+	}
 	private double heightFunc(double x, double rad, double depth) {
 		double xs = x / (rad * 2);
 		double inner = (x * x * x) / (rad / 4) + 32;
@@ -63,7 +70,7 @@ public class MapGenVolcano extends MapGenBase {
 								int height = (int)MathHelper.clamp_double(heightFunc(r, radius, depth), 0, y - 1);
 								if(height > 0) {
 									for(int i = 0; i < height && i + y < 255; i++) {
-										blocks[index + i] = ModBlocks.basalt;
+										blocks[index + i] = materialBlock;
 									}
 								} else {
 									for(int i = 0; i > height && i + y > 1; i--) {
@@ -74,7 +81,7 @@ public class MapGenVolcano extends MapGenBase {
 								index += height;
 								y += height;
 
-								if(x == 0 && z == 0 && SpaceConfig.enableVolcanoGen) blocks[index + 1] = ModBlocks.volcano_core;
+								if(x == 0 && z == 0 && SpaceConfig.enableVolcanoGen) blocks[index + 1] = coreBlock;
 							}
 							
 							break;

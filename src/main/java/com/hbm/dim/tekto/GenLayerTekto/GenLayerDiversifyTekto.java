@@ -9,7 +9,7 @@ import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerDiversifyTekto extends GenLayer
 {
-    private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseTekto.polyvinylPlains, BiomeGenBaseTekto.halogenHills, BiomeGenBaseTekto.tetrachloricRiver};
+    private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseTekto.polyvinylPlains, BiomeGenBaseTekto.halogenHills, BiomeGenBaseTekto.tetrachloricRiver, BiomeGenBaseTekto.vinylsands};
 
     public GenLayerDiversifyTekto(long l, GenLayer parent)
     {

@@ -856,6 +856,8 @@ public class ClientProxy extends ServerProxy {
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityMoonCow.class, new RenderMoonCow(new ModelMoonCow(), 0.7F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityScutterfish.class, new RenderScutter(new ModelScutter(), 0.3F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityTankbot.class, new RenderTankbot());
+
 
 	    //"particles"
 	    RenderingRegistry.registerEntityRenderingHandler(EntityBSmokeFX.class, new MultiCloudRenderer(new Item[] { ModItems.b_smoke1, ModItems.b_smoke2, ModItems.b_smoke3, ModItems.b_smoke4, ModItems.b_smoke5, ModItems.b_smoke6, ModItems.b_smoke7, ModItems.b_smoke8 }));
@@ -879,6 +881,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerBlockHandler(new RenderBarrel());
 		RenderingRegistry.registerBlockHandler(new RenderFence());
 		RenderingRegistry.registerBlockHandler(new RenderBarbedWire());
+		RenderingRegistry.registerBlockHandler(new RenderRubbergrass());
 		RenderingRegistry.registerBlockHandler(new RenderAntennaTop());
 		RenderingRegistry.registerBlockHandler(new RenderConserve());
 		RenderingRegistry.registerBlockHandler(new RenderConveyor());
@@ -1062,7 +1065,7 @@ public class ClientProxy extends ServerProxy {
 			double mX = data.getDouble("moX");
 			double mY = data.getDouble("moY");
 			double mZ = data.getDouble("moZ");
-			
+
 			/*ParticleContrail contrail = new ParticleContrail(man, world, x, y, z, 0, 0, 0, scale);
 			contrail.motionX = mX;
 			contrail.motionY = mY;
@@ -1074,6 +1077,10 @@ public class ClientProxy extends ServerProxy {
 			fx.motionY = mY;
 			fx.motionZ = mZ;
 			if(data.hasKey("maxAge")) fx.setMaxAge(data.getInteger("maxAge"));
+			if(data.hasKey("color")) {
+				Color color = new Color(data.getInteger("color"));
+				fx.setCustomColor(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
+			}
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 		}
 		

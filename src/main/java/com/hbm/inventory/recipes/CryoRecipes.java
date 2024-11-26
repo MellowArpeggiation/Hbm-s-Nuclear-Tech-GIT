@@ -31,9 +31,9 @@ public class CryoRecipes extends SerializableRecipe {
 		
 		recipes.put(Fluids.TEKTOAIR, new Quartet<>(
 				new FluidStack(Fluids.CHLORINE, 45),
-				new FluidStack(Fluids.AROMATICS, 25),
-				new FluidStack(Fluids.GAS, 15),
-				new FluidStack(Fluids.PETROLEUM, 5)
+				new FluidStack(Fluids.CHLOROMETHANE, 25),
+				new FluidStack(Fluids.HCL, 15),
+				new FluidStack(Fluids.HYDROGEN, 5)
 				));
 		recipes.put(Fluids.JOOLGAS, new Quartet<>(
 				new FluidStack(Fluids.HELIUM3, 25),

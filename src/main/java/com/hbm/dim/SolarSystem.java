@@ -9,9 +9,8 @@ import org.apache.commons.lang3.NotImplementedException;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Temperature;
-import com.hbm.dim.trait.CBT_War.Projectile;
-import com.hbm.dim.trait.CelestialBodyTrait;
 import com.hbm.dim.trait.CBT_Water;
+import com.hbm.dim.trait.CelestialBodyTrait.CBT_BATTLEFIELD;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -30,6 +29,7 @@ public class SolarSystem {
 	// How much to scale celestial objects when rendering
 	public static final double RENDER_SCALE = 180F;
 	public static final double SUN_RENDER_SCALE = 4F;
+
 
 	public static void init() {
 		// All values pulled directly from KSP, most values are auto-converted to MC friendly ones
@@ -125,7 +125,7 @@ public class SolarSystem {
 					
 
 				new CelestialBody("jool")
-					.withMassRadius(4.233e24F, 3_000) // was radius 6_000 but that just rendered too large, so density is currently incorrect
+					.withMassRadius(4.233e24F, 6_000)
 					.withSemiMajorAxis(68_773_560)
 					.withRotationalPeriod(36_000)
 					.withColor(0.4588f, 0.6784f, 0.3059f)
@@ -166,6 +166,7 @@ public class SolarSystem {
 					.withSemiMajorAxis(125_798_522)
 					.withRotationalPeriod(28_500)
 					.withColor(1f, 0.6862f, 0.5882f)
+					.withRings(10.0F, 3, 0.6F, 0.4F, 0.3F)
 					.withSatellites(
 							
 					new CelestialBody("hale") //no
@@ -188,14 +189,35 @@ public class SolarSystem {
 						.withSemiMajorAxis(42_593)
 						.withRotationalPeriod(192_771),
 
-					new CelestialBody("tekto")
+					new CelestialBody("tekto", SpaceConfig.tektoDimension, Body.TEKTO)
 						.withMassRadius(2.883e21F, 480)
 						.withSemiMajorAxis(67_355)
 						.withRotationalPeriod(57_915)
 						.withAxialTilt(25F)
-						.withTraits(new CBT_Atmosphere(Fluids.TEKTOAIR, 1.5F))
+						.withProcessingLevel(3)
+						.withTraits(new CBT_Atmosphere(Fluids.TEKTOAIR, 1.5F), new CBT_Water(Fluids.CCL)) // :)
 
-				)
+				),
+
+				new CelestialBody("neidon")
+					.withMassRadius(2.1228e23F, 2_145)
+					.withSemiMajorAxis(409_355_192)
+					.withRotationalPeriod(40_250)
+					.withColor(1f, 0.6862f, 0.5882f)
+					.withSatellites(
+
+					new CelestialBody("thatmo", SpaceConfig.thatmoDimension, Body.THATMO)
+						.withMassRadius(2.788e21F, 286)
+						.withSemiMajorAxis(32_301)
+						.withRotationalPeriod(306_443)
+						.withTraits(new CBT_Atmosphere(Fluids.NITROGEN, 0.005F), new CBT_BATTLEFIELD()),
+
+					new CelestialBody("nissee") // words cannot express how much i actually fear this moon whenever im passing by it when playing opm. theres more that meets the eye and no one is brave enough to admit that
+						.withMassRadius(5.951e18F, 30)
+						.withSemiMajorAxis(487_744)
+						.withRotationalPeriod(27_924)
+						.withProcessingLevel(3)
+					)
 			);
 
 		runTests();
@@ -212,8 +234,9 @@ public class SolarSystem {
 		DRES("dres"),
 		EVE("eve"),
 		IKE("ike"),
-		LAYTHE("laythe");
-		// TEKTO("tekto");
+		LAYTHE("laythe"),
+		TEKTO("tekto"),
+		THATMO("thatmo");
 
 		public String name;
 
@@ -461,6 +484,10 @@ public class SolarSystem {
 	}
 
 	private static double getApparentSize(double radius, double distance) {
+		return getApparentSizeUnscaled(Math.min(radius, 3_000), distance);
+	}
+
+	private static double getApparentSizeUnscaled(double radius, double distance) {
 		return 2D * (float)Math.atan((2D * radius) / (2D * distance)) * RENDER_SCALE;
 	}
 
@@ -475,7 +502,7 @@ public class SolarSystem {
 	public static double calculateSunSize(CelestialBody from) {
 		if(from.parent == null) return 0;
 		if(from.parent.parent != null) return calculateSunSize(from.parent);
-		return getApparentSize(from.parent.radiusKm, from.semiMajorAxisKm) * SUN_RENDER_SCALE;
+		return getApparentSizeUnscaled(from.parent.radiusKm, from.semiMajorAxisKm) * SUN_RENDER_SCALE;
 	}
 
 	// Gets angle for a single planet, good for locking tidal bodies

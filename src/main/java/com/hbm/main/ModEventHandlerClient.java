@@ -97,8 +97,6 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.gameevent.InputEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
@@ -156,7 +154,6 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent17;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
@@ -948,7 +945,7 @@ public class ModEventHandlerClient {
 	public static int lastBrightness = 0;
 
 	static boolean isRenderingItems = false;
-
+	
 	@SubscribeEvent
 	public void clientTick(ClientTickEvent event) {
 		
@@ -1098,9 +1095,6 @@ public class ModEventHandlerClient {
 			}
 		}
 	}
-	public static float toy;
-
-
 	
 	public static ItemStack getMouseOverStack() {
 		

@@ -16,7 +16,11 @@ public class ParticleRocketFlame extends EntityFX {
 	
 	private int age;
 	private int maxAge;
-
+	
+	private float customRed;
+	private float customGreen;
+	private float customBlue;
+	
 	public ParticleRocketFlame(TextureManager p_i1213_1_, World p_i1218_1_, double p_i1218_2_, double p_i1218_4_, double p_i1218_6_) {
 		super(p_i1218_1_, p_i1218_2_, p_i1218_4_, p_i1218_6_);
 		particleIcon = ModEventHandlerClient.particleBase;
@@ -33,7 +37,14 @@ public class ParticleRocketFlame extends EntityFX {
 		this.maxAge = maxAge;
 		return this;
 	}
-
+	
+	public ParticleRocketFlame setCustomColor(float red, float green, float blue) {
+		this.customRed = red;
+		this.customGreen = green;
+		this.customBlue = blue;
+		return this;
+	}
+	
 	@Override
 	public void onUpdate() {
 		this.prevPosX = this.posX;
@@ -68,9 +79,9 @@ public class ParticleRocketFlame extends EntityFX {
 			float add = urandom.nextFloat() * 0.3F;
 			float dark = 1 - Math.min(((float) (age) / (float) (maxAge * 0.25F)), 1);
 
-			this.particleRed = 1 * dark + add;
-			this.particleGreen = 0.6F * dark + add;
-			this.particleBlue = 0 + add;
+			this.particleRed = (customRed != 0) ? (customRed * dark + add) : (1 * dark + add);
+			this.particleGreen = (customGreen != 0) ? (customGreen * dark + add) : (0.6F * dark + add);
+			this.particleBlue = (customBlue != 0) ? (customBlue * dark + add) : (0 + add);
 
 			this.particleAlpha = (float) Math.pow(1 - Math.min(((float) (age) / (float) (maxAge)), 1), 0.5);
 

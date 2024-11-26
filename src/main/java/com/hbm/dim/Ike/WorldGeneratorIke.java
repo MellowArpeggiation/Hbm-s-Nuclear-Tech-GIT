@@ -34,7 +34,7 @@ public class WorldGeneratorIke implements IWorldGenerator {
 		//dres and the likes :)
 	
 		
-        DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.mineralSpawn, 10, 12, 32, ModBlocks.ore_mineral, meta, ModBlocks.moho_stone);
+        DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.mineralSpawn, 10, 12, 32, ModBlocks.ore_mineral, meta, ModBlocks.ike_stone);
 
 	}
 }

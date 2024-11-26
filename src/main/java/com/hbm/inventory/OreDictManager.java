@@ -705,6 +705,8 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_STONE, minmus_smooth);
 		OreDictionary.registerOre(KEY_STONE, minmus_stone);
 		
+		OreDictionary.registerOre(KEY_STICK, stick_pvc);
+
 		//Legacy wires
 		OreDictionary.registerOre(AL.wireFine(), wire_aluminium);
 		OreDictionary.registerOre(CU.wireFine(), wire_copper);

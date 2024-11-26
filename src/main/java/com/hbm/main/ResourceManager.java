@@ -159,6 +159,9 @@ public class ResourceManager {
 	public static final IModelCustom chemplant_fluidcap = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/chemplant_new_fluidcap.hmf"));
 	public static final IModelCustom chemfac = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/chemfac.obj"));
 	
+	public static final IModelCustom spike_plant = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/plant_spike.obj"));
+
+	
 	//Mixer
 	public static final IModelCustom mixer = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/mixer.obj"));
 	
@@ -303,7 +306,6 @@ public class ResourceManager {
 	public static final IModelCustom sat_foeq = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sat_foeq.obj"));
 	public static final IModelCustom sat_foeq_burning = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sat_foeq_burning.obj"));
 	public static final IModelCustom sat_foeq_fire = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sat_foeq_fire.obj"));
-	public static final IModelCustom plane = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/plane.obj"));
 
 	//SatDock
 	public static final IModelCustom satDock = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/sat_dock.obj"));
@@ -387,6 +389,7 @@ public class ResourceManager {
 	public static final IModelCustom glyphid = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/glyphid.obj"));
 	public static final IModelCustom drone = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/mobs/quadcopter.obj"));
 	public static final IModelCustom scutterfish = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/mobs/scutterfish.obj"));
+	public static final IModelCustom tankbot = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/tankbot.obj"));
 
 	//ZIRNOX
 	public static final IModelCustom zirnox = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/zirnox.obj"));
@@ -591,6 +594,9 @@ public class ResourceManager {
 	public static final ResourceLocation chemplant_fluid_tex = new ResourceLocation(RefStrings.MODID, "textures/models/lavabase_small.png");
 	public static final ResourceLocation chemfac_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/chemfac.png");
 	
+	
+	public static final ResourceLocation spike_plant_tex = new ResourceLocation(RefStrings.MODID, "textures/models/rubber_cacti.png");
+
 	//Mixer
 	public static final ResourceLocation mixer_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/mixer.png");
 	
@@ -755,7 +761,8 @@ public class ResourceManager {
 	public static final ResourceLocation sat_laser_tex = new ResourceLocation(RefStrings.MODID, "textures/models/sat_laser.png");
 	public static final ResourceLocation sat_foeq_tex = new ResourceLocation(RefStrings.MODID, "textures/models/sat_foeq.png");
 	public static final ResourceLocation sat_foeq_burning_tex = new ResourceLocation(RefStrings.MODID, "textures/models/sat_foeq_burning.png");
-	
+	public static final ResourceLocation sat_rail_tex = new ResourceLocation(RefStrings.MODID, "textures/models/railgun_main.png");
+
 	//SatDock
 	public static final ResourceLocation satdock_tex = new ResourceLocation(RefStrings.MODID, "textures/models/sat_dock.png");
 	
@@ -810,6 +817,7 @@ public class ResourceManager {
 	public static final ResourceLocation glyphid_scout_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/glyphid_scout.png");
 	public static final ResourceLocation glyphid_nuclear_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/glyphid_nuclear.png");
 	public static final ResourceLocation scutter_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/lob2.png");
+	public static final ResourceLocation tankbot_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/robtex.png");
 
 	public static final ResourceLocation glyphid_digger_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/glyphid_digger.png");
 	
@@ -1599,6 +1607,7 @@ public class ResourceManager {
 	public static final IModelCustom capacitor = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/capacitor.obj"));
 	public static final IModelCustom funnel = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/funnel.obj"));
 	public static final IModelCustom algae_film = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/algae_film.obj"));
+	public static final IModelCustom sat_rail = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/railgun_main.obj"));
 
 	public static final IModelCustom charge_dynamite = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/charge_dynamite.obj"));
 	public static final IModelCustom charge_c4 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/charge_c4.obj"));

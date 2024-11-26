@@ -26,7 +26,7 @@ public class BlockRubberLeaves extends Block {
 		this.setTickRandomly(true);
 	}
 
-
+	
 
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
@@ -34,7 +34,7 @@ public class BlockRubberLeaves extends Block {
 	}
 
 	public boolean renderAsNormalBlock() {
-		return false;
+		return true;
 	}
 
 	@Override
