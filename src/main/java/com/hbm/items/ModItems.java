@@ -1669,6 +1669,7 @@ public class ModItems {
 	public static Item sat_lunar_miner;
 	public static Item sat_gerald;
 	public static Item sat_chip;
+	public static Item sat_war;
 
 	public static Item sat_interface;
 	public static Item sat_coord;
@@ -4310,7 +4311,8 @@ public class ModItems {
 		sat_lunar_miner = new ItemSatellite().setUnlocalizedName("sat_lunar_miner").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab).setTextureName(RefStrings.MODID + ":sat_lunar_miner");
 		sat_gerald = new ItemSatellite(128_000).setUnlocalizedName("sat_gerald").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab).setTextureName(RefStrings.MODID + ":sat_gerald");
 		sat_chip = new ItemSatChip().setUnlocalizedName("sat_chip").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab).setTextureName(RefStrings.MODID + ":sat_chip");
-
+		sat_war = new ItemSatellite().setUnlocalizedName("sat_lunar_miner").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab).setTextureName(RefStrings.MODID + ":sat_lunar_miner");
+		
 		sat_interface = new ItemSatInterface().setUnlocalizedName("sat_interface").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab).setTextureName(RefStrings.MODID + ":sat_interface");
 		sat_coord = new ItemSatInterface().setUnlocalizedName("sat_coord").setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab).setTextureName(RefStrings.MODID + ":sat_coord");
 		sat_designator = new ItemSatDesignator().setUnlocalizedName("sat_designator").setFull3D().setMaxStackSize(1).setCreativeTab(MainRegistry.missileTab).setTextureName(RefStrings.MODID + ":sat_designator");
@@ -7580,7 +7582,8 @@ public class ModItems {
 		GameRegistry.registerItem(sat_coord, sat_coord.getUnlocalizedName());
 		GameRegistry.registerItem(sat_designator, sat_designator.getUnlocalizedName());
 		GameRegistry.registerItem(sat_relay, sat_relay.getUnlocalizedName());
-		
+		GameRegistry.registerItem(sat_war, sat_war.getUnlocalizedName());
+
 		//Guns
 		GameRegistry.registerItem(gun_revolver, gun_revolver.getUnlocalizedName());
 		GameRegistry.registerItem(gun_revolver_saturnite, gun_revolver_saturnite.getUnlocalizedName());
