@@ -1,6 +1,8 @@
 package com.hbm.dim;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.trait.CBT_Atmosphere;
@@ -10,6 +12,9 @@ import com.hbm.dim.trait.CBT_War.ProjectileType;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.fluid.Fluids;
+import com.hbm.saveddata.SatelliteSavedData;
+import com.hbm.saveddata.satellites.Satellite;
+import com.hbm.saveddata.satellites.SatelliteWar;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -51,11 +56,16 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	public int getWaterOpacity() {
 		return 3;
 	}
+	int[] array = {1, 2, 3, 4, 5};
 
-	// Runs every tick, use it to decrement timers and run effects
+	// Increment the third element (index 2)
+
+	private final HashMap<Satellite, ArrayList<Integer>> satelliteFlashAnimations = new HashMap<>();
+
 	@Override
 	public void updateWeather() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
+
 
         CBT_War war = CelestialBody.getTrait(worldObj, CBT_War.class);
         if(!worldObj.isRemote) {

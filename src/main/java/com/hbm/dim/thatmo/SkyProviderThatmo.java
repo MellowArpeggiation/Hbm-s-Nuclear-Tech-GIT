@@ -33,7 +33,7 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
         float alpha = (WorldProviderThatmo.flashd <= 0) ? 0.0F : 1.0F - Math.min(1.0F, WorldProviderThatmo.flashd / 100);
 
 		GL11.glPushMatrix();
-		float var14 = WorldProviderThatmo.flashd * 2;
+		float var14 = WorldProviderThatmo.flashd * 2 + partialTicks;
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glRotated(180.0, 0.0, 5.0, 0.0);
@@ -165,15 +165,15 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 
 		GL11.glPopMatrix();
 		
-
+		//genuinley horrific peice of shit i actually vomit looking at this
 		Random random = new Random(42);
-		float alt = WorldProviderThatmo.altitude;
+		float alt = WorldProviderThatmo.altitude + partialTicks;
 		float rnd = WorldProviderThatmo.randPos;
 		float fl = WorldProviderThatmo.scale;
 		float nl = WorldProviderThatmo.shield;
 		float el = WorldProviderThatmo.nmass;
-		float xcl = WorldProviderThatmo.shielde;
-		float xcvl = WorldProviderThatmo.csyw;
+		float xcl = WorldProviderThatmo.shielde + partialTicks;
+		float xcvl = WorldProviderThatmo.csyw + partialTicks;
 
 		GL11.glShadeModel(GL11.GL_FLAT);
 

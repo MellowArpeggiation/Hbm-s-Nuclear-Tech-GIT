@@ -9,6 +9,8 @@ import java.util.Map;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystemWorldSavedData;
 import com.hbm.dim.WorldProviderCelestial;
+import com.hbm.dim.trait.CBT_War;
+import com.hbm.dim.trait.CBT_War.Projectile;
 import com.hbm.dim.trait.CelestialBodyTrait;
 import com.hbm.handler.ImpactWorldHandler;
 import com.hbm.handler.pollution.PollutionHandler;
@@ -121,6 +123,17 @@ public class PermaSyncHandler {
 			buf.writeInt(-1);
 		}
 		/// RIDING DESYNC FIX ///
+		
+		// EFFECTS THAT I DONT KNOW HOW TO GET WORKING ELSEWHERE :P //
+
+        CBT_War war = CelestialBody.getTrait(world, CBT_War.class);
+        if (war != null) {
+            List<Projectile> projectiles = war.getProjectiles();
+            for (Projectile projectile : projectiles) {
+                buf.writeFloat(projectile.getFlashtime());
+            }
+        }
+		// EFFECTS THAT I DONT KNOW HOW TO GET WORKING ELSEWHERE :P //
 	}
 	
 	public static void readPacket(ByteBuf buf, World world, EntityPlayer player) {
@@ -201,5 +214,19 @@ public class PermaSyncHandler {
 			player.mountEntity(entity);
 		}
 		/// RIDING DESYNC FIX ///
-	}
+		//this is something i *dont* want to do at all, if theres anyway to make this CLIENTONLY while respecting each instance of a projectile please dm me im so tired of sinking hours into this
+	    CBT_War war = CelestialBody.getTrait(world, CBT_War.class);
+        if (war != null) {
+            List<Projectile> projectiles = war.getProjectiles();
+            for (Projectile projectile : projectiles){
+                    float flashtime = buf.readFloat();
+                    projectile.setFlashtime(flashtime);
+
+                }
+            }
+		// EFFECTS THAT I DONT KNOW HOW TO GET WORKING ELSEWHERE :P //
+
+    }
+	
+	
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.dim.SolarSystem.AstroMetric;
+import com.hbm.dim.thatmo.WorldProviderThatmo;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
@@ -14,6 +15,9 @@ import com.hbm.inventory.fluid.Fluids;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.shader.Shader;
+import com.hbm.render.util.BeamPronter;
+import com.hbm.render.util.BeamPronter.EnumBeamType;
+import com.hbm.render.util.BeamPronter.EnumWaveType;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.saveddata.satellites.SatelliteWar;
@@ -38,6 +42,9 @@ public class SkyProviderCelestial extends IRenderHandler {
 	private static final ResourceLocation digammaStar = new ResourceLocation(RefStrings.MODID, "textures/misc/space/star_digamma.png");
 	private static final ResourceLocation ringTexture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/rings.png");
 
+	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/particle/shockwave.png");
+	private static final ResourceLocation ThatmoShield = new ResourceLocation("hbm:textures/particle/cens.png");
+	private static final ResourceLocation flash = new ResourceLocation("hbm:textures/misc/space/flare.png");
 	
 	private static final ResourceLocation noise = new ResourceLocation(RefStrings.MODID, "shaders/iChannel1.png");
 
@@ -231,18 +238,47 @@ public class SkyProviderCelestial extends IRenderHandler {
 				for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
 					if(entry.getValue() instanceof SatelliteWar) {
 						GL11.glColor3f(skyR, skyG, skyB);
+	
+						GL11.glPushMatrix();
+
+						GL11.glScaled(5, 5, 5);
+
+						SatelliteWar war = (SatelliteWar) entry.getValue();
+						int interp = 1;
+						SatelliteWar war1 = SatelliteWar.clietnwar;
+						 
+						//System.out.println(war1.interp);
+						GL11.glTranslated(-Math.round(entry.getKey() / 1000.0) + 30, -Math.round(entry.getKey() / 1000.0), 10); 
+
+
+						GL11.glPushMatrix();						
+						GL11.glTranslated(1, 5.5, 0); 
+						GL11.glScaled(3, 3, 3);
+						mc.renderEngine.bindTexture(flash);
+						ResourceManager.plane.renderAll();
+						
+						GL11.glColor4d(1, 1, 1, 0.2);
+						
+
+						mc.renderEngine.bindTexture(texture);
+						ResourceManager.plane.renderAll();
+						GL11.glPopMatrix();
 
 						GL11.glPushMatrix();
-						GL11.glScaled(5, 5, 5);
-						//rudimentary but this is nifty that i can just get the id and use it as my rand <3
-						//wonder how i can manipulate this in a better way that doesnt end up looking weird as fuck
-						
-						GL11.glTranslated(-Math.round(entry.getKey() / 1000.0) + 30, -Math.round(entry.getKey() / 1000.0), 10); 
+						GL11.glTranslated(1, 5.5, 0); 
+
+						BeamPronter.prontBeam(Vec3.createVectorHelper(0, 36 + war.interp, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.2 * 0.2F, 0.3F );
+						BeamPronter.prontBeam(Vec3.createVectorHelper(0, 36, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.2 * 0.6F, 0.3F );
+						BeamPronter.prontBeam(Vec3.createVectorHelper(0, 36, 0), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x202060, 0x202060, (int)(world.getTotalWorldTime() / 5) % 1000, 25, 0.2F, 6, (float)0.2 * 0.1F, 0.3F );
+						GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+						GL11.glDisable(GL11.GL_LIGHTING);
+						GL11.glPopMatrix();
+
+
 
 						GL11.glEnable(GL11.GL_DEPTH_TEST); 
 						GL11.glDisable(GL11.GL_BLEND);
 						GL11.glRotated(-90, 0, 0, 1);
-						GL11.glDisable(GL11.GL_FOG);
 
 						GL11.glDepthRange(0.0, 1.0);
 
@@ -254,9 +290,12 @@ public class SkyProviderCelestial extends IRenderHandler {
 						GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 						GL11.glEnable(GL11.GL_BLEND);
 						GL11.glPopMatrix();
+						
+	
+						
 					}
 					renderSatellite(partialTicks, world, mc, celestialAngle, entry.getKey(), entry.getValue().getColor());
-
+					
 				}
 			}
 
