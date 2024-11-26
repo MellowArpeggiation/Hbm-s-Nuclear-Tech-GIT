@@ -56,11 +56,8 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	public int getWaterOpacity() {
 		return 3;
 	}
-	int[] array = {1, 2, 3, 4, 5};
 
-	// Increment the third element (index 2)
 
-	private final HashMap<Satellite, ArrayList<Integer>> satelliteFlashAnimations = new HashMap<>();
 
 	@Override
 	public void updateWeather() {
