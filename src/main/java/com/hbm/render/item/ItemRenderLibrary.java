@@ -1415,7 +1415,17 @@ public class ItemRenderLibrary {
 				bindTexture(ResourceManager.sawmill_tex);
 				ResourceManager.sawmill.renderPart("Blade");
 			}});
-		
+		renderers.put(ModItems.sat_war, new ItemRenderBase( ) {
+			public void renderInventory() {
+				GL11.glTranslated(0, -7, 0);
+				GL11.glScaled(6, 6, 6);
+				GL11.glRotated(-45, 0, 1, 0);
+			}
+			public void renderCommonWithStack(ItemStack item) {
+				GL11.glTranslated(0, 0, -0.875);
+				bindTexture(ResourceManager.sat_rail_tex);
+				ResourceManager.sat_rail.renderAll();;
+			}});
 		renderers.put(ModItems.ammo_himars, new ItemRenderBase( ) {
 			public void renderInventory() {
 				GL11.glTranslated(0, -2, 0);
