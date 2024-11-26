@@ -13,8 +13,6 @@ public abstract class CelestialBodyTrait {
 	// Similarly to fluid traits, we have classes, and instance members.
 	// For the simple traits, we'll just init both here rather than two places.
 
-	public static class CBT_War extends CelestialBodyTrait { }
-	public static CBT_War WAR = new CBT_War();
 	
 	public static class CBT_BATTLEFIELD extends CelestialBodyTrait { }
 	public static CBT_BATTLEFIELD BATTLE = new CBT_BATTLEFIELD();
