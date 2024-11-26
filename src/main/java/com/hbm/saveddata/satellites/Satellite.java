@@ -48,6 +48,9 @@ public abstract class Satellite {
 		registerSatellite(SatelliteMiner.class, ModItems.sat_miner);
 		registerSatellite(SatelliteLunarMiner.class, ModItems.sat_lunar_miner);
 		registerSatellite(SatelliteHorizons.class, ModItems.sat_gerald);
+		registerSatellite(SatelliteWar.class, ModItems.sat_war);
+
+		
 	}
 
 	/**

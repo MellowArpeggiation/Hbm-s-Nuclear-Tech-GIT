@@ -1417,9 +1417,11 @@ public class ItemRenderLibrary {
 			}});
 		renderers.put(ModItems.sat_war, new ItemRenderBase( ) {
 			public void renderInventory() {
-				GL11.glTranslated(0, -7, 0);
-				GL11.glScaled(6, 6, 6);
+				GL11.glTranslated(3, -2, 0);
+				GL11.glScaled(3, 3, 3);
 				GL11.glRotated(-45, 0, 1, 0);
+				GL11.glRotated(-45, 0, 0, 1);
+
 			}
 			public void renderCommonWithStack(ItemStack item) {
 				GL11.glTranslated(0, 0, -0.875);

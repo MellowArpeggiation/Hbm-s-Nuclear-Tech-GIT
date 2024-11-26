@@ -62,7 +62,10 @@ public class ItemSatellite extends ItemCustomMissilePart implements ISatChip {
 		
 		if(this == ModItems.sat_scanner)
 			list.add("Creates a topdown map of underground ores.");
-
+		
+		if(this == ModItems.sat_war)
+			list.add("Single shot railcannon designed to be used on other planets");
+		
 		if(CelestialBody.inOrbit(player.worldObj))
 			list.add(EnumChatFormatting.BOLD + "Interact to deploy into orbit");
 	}
@@ -70,7 +73,7 @@ public class ItemSatellite extends ItemCustomMissilePart implements ISatChip {
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if(!CelestialBody.inOrbit(world)) return stack;
-
+		
 		if(!world.isRemote) {
 			int targetDimensionId = CelestialBody.getTarget(world, (int)player.posX, (int)player.posZ).body.dimensionId;
 			WorldServer targetWorld = DimensionManager.getWorld(targetDimensionId);
