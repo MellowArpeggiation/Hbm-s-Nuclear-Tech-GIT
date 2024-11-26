@@ -25,7 +25,11 @@ public class ItemSatellite extends ItemCustomMissilePart implements ISatChip {
 	public ItemSatellite(int mass) {
 		makeWarhead(WarheadType.SATELLITE, 15F, mass, PartSize.SIZE_20);
 	}
-
+	
+	public ItemSatellite(int mass, WarheadType type) {
+		makeWarhead(type, 15F, mass, PartSize.SIZE_20);
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean bool) {
