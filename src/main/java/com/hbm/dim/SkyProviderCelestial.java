@@ -9,6 +9,7 @@ import com.hbm.dim.SolarSystem.AstroMetric;
 import com.hbm.dim.thatmo.WorldProviderThatmo;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
+import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.inventory.fluid.Fluids;
@@ -262,15 +263,14 @@ public class SkyProviderCelestial extends IRenderHandler {
 						
 						GL11.glColor4d(1, 1, 1, 0.2);
 						
-
+						System.out.println(entry.getValue().getInterp());
 						mc.renderEngine.bindTexture(texture);
 						ResourceManager.plane.renderAll();
 						GL11.glPopMatrix();
 
 						GL11.glPushMatrix();
 						GL11.glTranslated(1, 5.5, 0); 
-
-						BeamPronter.prontBeam(Vec3.createVectorHelper(0, 36 + war.getInterp(), 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.2 * 0.2F, 0.3F );
+						BeamPronter.prontBeam(Vec3.createVectorHelper(0, 36 + entry.getValue().getInterp() , 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.2 * 0.2F, 0.3F );
 						BeamPronter.prontBeam(Vec3.createVectorHelper(0, 36, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.2 * 0.6F, 0.3F );
 						BeamPronter.prontBeam(Vec3.createVectorHelper(0, 36, 0), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x202060, 0x202060, (int)(world.getTotalWorldTime() / 5) % 1000, 25, 0.2F, 6, (float)0.2 * 0.1F, 0.3F );
 						GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
@@ -307,7 +307,50 @@ public class SkyProviderCelestial extends IRenderHandler {
 		}
 		GL11.glPopMatrix();
 		render3DModel(partialTicks, world, mc);
+	    CBT_War war = CelestialBody.getTrait(mc.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().theWorld, CBT_War.class);
 
+	    if (war != null) {
+	        for (int i = 0; i < war.getProjectiles().size(); i++) {
+	            CBT_War.Projectile projectile = war.getProjectiles().get(i);
+	            float flash = projectile.getFlashtime();
+	            int anim = projectile.getAnimtime();
+	            if (projectile.getTravel() <= 0) {
+	                projectile.impact();
+	                float alpd = 1.0F - Math.min(1.0F, flash / 100);
+
+
+	                GL11.glPushMatrix(); 
+	                render3DModel(partialTicks, world, mc);
+
+	                GL11.glTranslated(projectile.getTranslateX() + 30, 55, projectile.getTranslateZ() + 50); 
+	                GL11.glScaled(flash, flash, flash);
+	                GL11.glRotated(90.0, -10.0, -1.0, 50.0);
+	                GL11.glRotated(20.0, -0.0, -1.0, 1.0);
+
+	                GL11.glColor4d(1, 1, 1, alpd);
+
+	                mc.renderEngine.bindTexture(this.texture);
+	                ResourceManager.plane.renderAll();
+	                
+
+	                GL11.glPopMatrix();
+	                
+
+	                GL11.glPushMatrix(); 
+
+	                GL11.glTranslated(projectile.getTranslateX() + 30, 55, projectile.getTranslateZ() + 50); 
+	                GL11.glScaled(flash * 0.4f, flash * 0.4f, flash * 0.4f);
+	                GL11.glRotated(90.0, -10.0, -1.0, 50.0);
+	                GL11.glRotated(20.0, -0.0, -1.0, 1.0);
+	                GL11.glColor4d(1, 1, 1, alpd);
+	                
+	                mc.renderEngine.bindTexture(this.ThatmoShield);
+	                ResourceManager.plane.renderAll();
+
+	                GL11.glPopMatrix();
+	            }
+	        }
+	    }
 		
 		if(body.hasRings) {
 			GL11.glPushMatrix();

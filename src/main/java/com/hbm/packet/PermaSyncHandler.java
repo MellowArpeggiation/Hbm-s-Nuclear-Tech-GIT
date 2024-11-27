@@ -104,6 +104,8 @@ public class PermaSyncHandler {
 		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
 			buf.writeInt(entry.getKey());
 			buf.writeInt(entry.getValue().getID());
+			entry.getValue().serialize(buf);
+
 		}
 		/// SATELLITES ///
 
@@ -197,8 +199,14 @@ public class PermaSyncHandler {
 		HashMap<Integer, Satellite> sats = new HashMap<Integer, Satellite>();
 		for(int i = 0; i < satSize; i++) {
 			sats.put(buf.readInt(), Satellite.create(buf.readInt()));
+			
+		}
+		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+			entry.getValue().deserialize(buf);
+			
 		}
 		SatelliteSavedData.setClientSats(sats);
+
 		/// SATELLITES ///
 
 		/// TIME OF DAY ///
