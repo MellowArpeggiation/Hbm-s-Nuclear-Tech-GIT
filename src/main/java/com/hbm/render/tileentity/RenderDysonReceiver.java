@@ -35,12 +35,31 @@ public class RenderDysonReceiver extends TileEntitySpecialRenderer {
 			
 			GL11.glShadeModel(GL11.GL_SMOOTH);
 			bindTexture(ResourceManager.dyson_receiver_tex);
-			ResourceManager.dyson_receiver.renderAll();
+			ResourceManager.dyson_receiver.renderPart("DysonReceiver");
+
+			float t = tileEntity.getWorldObj().getTotalWorldTime() + f;
+
+			GL11.glTranslatef(0.0F, 1.0F, 0.0F);
+
+			GL11.glPushMatrix();
+			{
+				GL11.glRotatef(t, 0, 0, 1);
+				GL11.glTranslated(0.0F, -1.0F, 0.0F);
+				ResourceManager.dyson_receiver.renderPart("Coil1");
+				ResourceManager.dyson_receiver.renderPart("Coil3");
+			}
+			GL11.glPopMatrix();
+
+			GL11.glPushMatrix();
+			{
+				GL11.glRotatef(t, 0, 0, -1);
+				GL11.glTranslated(0.0F, -1.0F, 0.0F);
+				ResourceManager.dyson_receiver.renderPart("Coil2");
+			}
+			GL11.glPopMatrix();
 
 			int length = receiver.beamLength;
 			int color = 0xff8800;
-
-			GL11.glTranslated(0.0D, 1.0D, 0.0D);
 
 			if(receiver.swarmCount > 0) {
 				BeamPronter.prontBeamwithDepth(Vec3.createVectorHelper(0, 0, length + 1), EnumWaveType.SPIRAL, EnumBeamType.SOLID, color, color, 0, 1, 0F, 2, 0.4F, 0.5F);
