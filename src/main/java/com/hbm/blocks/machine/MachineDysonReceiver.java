@@ -6,12 +6,15 @@ import java.util.List;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.handler.MultiblockHandlerXR;
+import com.hbm.items.ModItems;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityDysonReceiver;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
@@ -28,6 +31,44 @@ public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay
 		if(meta >= 12) return new TileEntityDysonReceiver();
 		if(meta >= 6) return new TileEntityProxyCombo(false, false, false);
 		return null;
+	}
+	
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(world.isRemote) {
+			return true;
+		} else if(!player.isSneaking()) {
+			int[] pos = this.findCore(world, x, y, z);
+	
+			if(pos == null)
+				return false;
+
+			TileEntity te = world.getTileEntity(pos[0], pos[1], pos[2]);
+
+			if(!(te instanceof TileEntityDysonReceiver))
+				return false;
+
+			TileEntityDysonReceiver receiver = (TileEntityDysonReceiver) te;
+
+			ItemStack heldStack = player.getHeldItem();
+
+			if(heldStack != null && heldStack.getItem() == ModItems.sat_chip) {
+				if(receiver.slots[0] != null)
+					return false;
+
+				receiver.slots[0] = heldStack.copy();
+				heldStack.stackSize = 0;
+				world.playSoundEffect(x, y, z, "hbm:item.upgradePlug", 1.0F, 1.0F);
+			} else if(heldStack == null && receiver.slots[0] != null) {
+				if(player.inventory.addItemStackToInventory(receiver.slots[0].copy())) {
+					receiver.slots[0] = null;
+					receiver.markChanged();
+					world.playSoundEffect(x, y, z, "hbm:item.upgradePlug", 1.0F, 1.0F);
+				}
+			}
+		}
+
+		return true;
 	}
 
 	@Override
@@ -76,9 +117,15 @@ public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay
 		}
 		
 		List<String> text = new ArrayList<String>();
-		text.add("Swarm: " + receiver.swarmCount + " members");
-		text.add("Consumers: " + receiver.swarmConsumers + " consumers");
-		text.add("Power: " + BobMathUtil.getShortNumber(energyOutput) + "HE/s");
+
+		if(receiver.swarmId > 0) {
+			text.add("ID: " + receiver.swarmId);
+			text.add("Swarm: " + receiver.swarmCount + " members");
+			text.add("Consumers: " + receiver.swarmConsumers + " consumers");
+			text.add("Power: " + BobMathUtil.getShortNumber(energyOutput) + "HE/s");
+		} else {
+			text.add("No Satellite ID-Chip installed!");
+		}
 		
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
 	}

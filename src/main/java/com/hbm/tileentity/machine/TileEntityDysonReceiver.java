@@ -11,6 +11,7 @@ import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
 import com.hbm.explosion.vanillant.standard.EntityProcessorStandard;
 import com.hbm.explosion.vanillant.standard.ExplosionEffectStandard;
 import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
+import com.hbm.items.ISatChip;
 import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
@@ -40,6 +41,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 	// converters can collect this beam and turn it into HE/TU or used for analysis, crafting, etc.
 
 	public boolean isReceiving;
+	public int swarmId;
 	public int swarmCount;
 	public int swarmConsumers;
 	public int beamLength;
@@ -75,7 +77,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
 		
 		if(!worldObj.isRemote) {
-			int swarmId = 12345;
+			swarmId = ISatChip.getFreqS(slots[0]);
 			
 			SatelliteSavedData data = SatelliteSavedData.getData(worldObj);
 			Satellite sat = data.getSatFromFreq(swarmId);
@@ -94,7 +96,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 			swarmCount = CBT_Dyson.count(worldObj, swarmId);
 			swarmConsumers = CBT_Dyson.consumers(worldObj, swarmId);
 
-			isReceiving = (sat instanceof SatelliteDysonRelay || sun > 0) && !occluded && swarmCount > 0 && swarmConsumers > 0;
+			isReceiving = (sat instanceof SatelliteDysonRelay || sun > 0) && swarmId > 0 && !occluded && swarmCount > 0 && swarmConsumers > 0;
 
 			if(isReceiving) {
 				long energyOutput = getEnergyOutput(swarmCount) / swarmConsumers;
@@ -191,6 +193,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 	public void serialize(ByteBuf buf) {
 		super.serialize(buf);
 		buf.writeBoolean(isReceiving);
+		buf.writeInt(swarmId);
 		buf.writeInt(swarmCount);
 		buf.writeInt(swarmConsumers);
 		buf.writeInt(beamLength);
@@ -200,6 +203,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 	public void deserialize(ByteBuf buf) {
 		super.deserialize(buf);
 		isReceiving = buf.readBoolean();
+		swarmId = buf.readInt();
 		swarmCount = buf.readInt();
 		swarmConsumers = buf.readInt();
 		beamLength = buf.readInt();
