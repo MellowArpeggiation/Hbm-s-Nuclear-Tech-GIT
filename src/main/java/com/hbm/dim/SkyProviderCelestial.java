@@ -262,8 +262,8 @@ public class SkyProviderCelestial extends IRenderHandler {
 						ResourceManager.plane.renderAll();
 						
 						GL11.glColor4d(1, 1, 1, 0.2);
-						
-						System.out.println(entry.getValue().getInterp());
+
+						//System.out.println(entry.getValue().getInterp());
 						mc.renderEngine.bindTexture(texture);
 						ResourceManager.plane.renderAll();
 						GL11.glPopMatrix();

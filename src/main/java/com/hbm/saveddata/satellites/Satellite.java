@@ -136,6 +136,7 @@ public abstract class Satellite {
 	}
 	
 	public void deserialize(ByteBuf buf) {
+
 	}
 
 	

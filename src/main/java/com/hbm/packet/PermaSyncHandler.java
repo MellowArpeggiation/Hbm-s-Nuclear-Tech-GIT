@@ -27,6 +27,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
+import scala.reflect.internal.Trees.This;
 
 /**
  * Utility for permanently synchronizing values every tick with a player in the given context of a world.
@@ -198,13 +199,16 @@ public class PermaSyncHandler {
 		int satSize = buf.readInt();
 		HashMap<Integer, Satellite> sats = new HashMap<Integer, Satellite>();
 		for(int i = 0; i < satSize; i++) {
-			sats.put(buf.readInt(), Satellite.create(buf.readInt()));
+		    int satelliteID = buf.readInt();
+
+			Satellite satellite = Satellite.create(buf.readInt());
+
+			sats.put(satelliteID, satellite);
 			
+			satellite.deserialize(buf);
+
 		}
-		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-			entry.getValue().deserialize(buf);
-			
-		}
+
 		SatelliteSavedData.setClientSats(sats);
 
 		/// SATELLITES ///
