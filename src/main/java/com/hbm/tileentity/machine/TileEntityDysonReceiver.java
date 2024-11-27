@@ -1,7 +1,16 @@
 package com.hbm.tileentity.machine;
 
+import java.util.List;
+
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.dim.trait.CBT_Dyson;
+import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
+import com.hbm.explosion.vanillant.standard.BlockMutatorFire;
+import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
+import com.hbm.explosion.vanillant.standard.EntityProcessorStandard;
+import com.hbm.explosion.vanillant.standard.ExplosionEffectStandard;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.main.MainRegistry;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.IDysonConverter;
@@ -12,6 +21,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -66,30 +76,70 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 
 			if(swarmCount > 0 && swarmConsumers > 0) {
 				long energyOutput = getEnergyOutput(swarmCount) / swarmConsumers;
+				int maxLength = 24;
 
-				beamLength = 24;
-				for(int i = 3; i < 24; i++) {
+				beamLength = maxLength;
+				for(int i = 9; i < maxLength; i++) {
 					int x = xCoord + dir.offsetX * i;
 					int y = yCoord;
 					int z = zCoord + dir.offsetZ * i;
 
 					Block block = worldObj.getBlock(x, y, z);
 					
+					// two block gap minimum
 					TileEntity te = null;
-					if(block instanceof BlockDummyable) {
-						int[] pos = ((BlockDummyable) block).findCore(worldObj, x, y, z);
-						if(pos != null) {
-							te = worldObj.getTileEntity(pos[0], pos[1], pos[2]);
+					if(i > 10) {
+						if(block instanceof BlockDummyable) {
+							int[] pos = ((BlockDummyable) block).findCore(worldObj, x, y, z);
+							if(pos != null) {
+								te = worldObj.getTileEntity(pos[0], pos[1], pos[2]);
+							}
+						} else {
+							te = worldObj.getTileEntity(x, y, z);
 						}
-					} else {
-						te = worldObj.getTileEntity(x, y, z);
+
+						if(te instanceof IDysonConverter) {
+							((IDysonConverter) te).provideEnergy(x, y, z, energyOutput);
+						}
 					}
 
-					if(te instanceof IDysonConverter) {
-						((IDysonConverter) te).provideEnergy(x, y, z, energyOutput);
+					if(block.isOpaqueCube() || te != null) {
+						if(!(te instanceof IDysonConverter)) {
+							worldObj.setBlockToAir(x, y, z);
+
+							ExplosionVNT vnt = new ExplosionVNT(worldObj, x, y, z, 3, null);
+							vnt.setBlockAllocator(new BlockAllocatorStandard());
+							vnt.setBlockProcessor(new BlockProcessorStandard().withBlockEffect(new BlockMutatorFire()));
+							vnt.setEntityProcessor(new EntityProcessorStandard().allowSelfDamage());
+							vnt.setPlayerProcessor(new PlayerProcessorStandard());
+							vnt.setSFX(new ExplosionEffectStandard());
+							vnt.explode();
+						}
+
 						beamLength = i;
 						break;
 					}
+				}
+
+				
+				double blx = Math.min(xCoord, xCoord + dir.offsetX * beamLength) + 0.2;
+				double bux = Math.max(xCoord, xCoord + dir.offsetX * beamLength) + 0.8;
+				double bly = Math.min(yCoord, 1 + yCoord + dir.offsetY * beamLength) + 0.2;
+				double buy = Math.max(yCoord, 1 + yCoord + dir.offsetY * beamLength) + 0.8;
+				double blz = Math.min(zCoord, zCoord + dir.offsetZ * beamLength) + 0.2;
+				double buz = Math.max(zCoord, zCoord + dir.offsetZ * beamLength) + 0.8;
+				
+				@SuppressWarnings("unchecked")
+				List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(blx, bly, blz, bux, buy, buz));
+				
+				for(EntityLivingBase entity : list) {
+					ExplosionVNT vnt = new ExplosionVNT(worldObj, entity.posX - dir.offsetX, entity.posY + 1.5, entity.posZ - dir.offsetZ, 3, null);
+					vnt.setBlockAllocator(new BlockAllocatorStandard());
+					vnt.setBlockProcessor(new BlockProcessorStandard().withBlockEffect(new BlockMutatorFire()));
+					vnt.setEntityProcessor(new EntityProcessorStandard().allowSelfDamage());
+					vnt.setPlayerProcessor(new PlayerProcessorStandard());
+					vnt.setSFX(new ExplosionEffectStandard());
+					vnt.explode();
 				}
 			}
 

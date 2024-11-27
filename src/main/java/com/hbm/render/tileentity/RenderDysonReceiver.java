@@ -68,8 +68,8 @@ public class RenderDysonReceiver extends TileEntitySpecialRenderer {
 
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 				
-				BeamPronter.prontBeamwithDepth(Vec3.createVectorHelper(0, 0, length + 1), EnumWaveType.SPIRAL, EnumBeamType.SOLID, color, color, 0, 1, 0F, 2, 0.4F, 0.5F);
-				BeamPronter.prontBeamwithDepth(Vec3.createVectorHelper(0, 0, length + 1), EnumWaveType.RANDOM, EnumBeamType.SOLID, color, color, (int)(tileEntity.getWorldObj().getTotalWorldTime() % 1000), (length / 2) + 1, 0.0625F, 2, 0.4F, 0.5F);
+				BeamPronter.prontBeamwithDepth(Vec3.createVectorHelper(0, 0, length), EnumWaveType.SPIRAL, EnumBeamType.SOLID, color, color, 0, 1, 0F, 2, 0.4F, 0.5F);
+				BeamPronter.prontBeamwithDepth(Vec3.createVectorHelper(0, 0, length), EnumWaveType.RANDOM, EnumBeamType.SOLID, color, color, (int)(tileEntity.getWorldObj().getTotalWorldTime() % 1000), (length / 2), 0.0625F, 2, 0.4F, 0.5F);
 				
 				GL11.glEnable(GL11.GL_LIGHTING);
 				GL11.glPopAttrib();
