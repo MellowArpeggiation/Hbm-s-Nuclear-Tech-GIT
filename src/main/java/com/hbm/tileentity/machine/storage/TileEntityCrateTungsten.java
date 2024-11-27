@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine.storage;
 import com.hbm.inventory.container.ContainerCrateTungsten;
 import com.hbm.inventory.gui.GUICrateTungsten;
 import com.hbm.items.ModItems;
+import com.hbm.tileentity.IDysonConverter;
 
 import api.hbm.block.ILaserable;
 import cpw.mods.fml.relauncher.Side;
@@ -14,7 +15,8 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityCrateTungsten extends TileEntityCrateBase implements ILaserable {
+public class TileEntityCrateTungsten extends TileEntityCrateBase implements ILaserable, IDysonConverter {
+
 	private int heatTimer;
 
 	public TileEntityCrateTungsten() {
@@ -111,4 +113,16 @@ public class TileEntityCrateTungsten extends TileEntityCrateBase implements ILas
 	public Object provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return new GUICrateTungsten(player.inventory, this);
 	}
+
+	// Dyson laser support
+	@Override
+	public void provideEnergy(int x, int y, int z, long energy) {
+		addEnergy(worldObj, x, y, z, energy / 5000, ForgeDirection.NORTH);
+	}
+
+	@Override
+	public long maximumEnergy() {
+		return Long.MAX_VALUE;
+	}
+
 }
