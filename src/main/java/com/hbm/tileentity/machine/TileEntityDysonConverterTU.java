@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityDysonConverterTU extends TileEntityMachineBase implements IDysonConverter, IHeatSource {
 
-	public long heatEnergy;
+	public int heatEnergy;
 
     public TileEntityDysonConverterTU() {
         super(0);
@@ -20,14 +20,16 @@ public class TileEntityDysonConverterTU extends TileEntityMachineBase implements
     }
 
     @Override
-    public void updateEntity() {
-        
-    }
+    public void updateEntity() { }
 
     @Override
     public void provideEnergy(int x, int y, int z, long energy) {
+		if(energy > Integer.MAX_VALUE) {
+			heatEnergy = Integer.MAX_VALUE;
+			return;
+		}
         heatEnergy += energy;
-        if(heatEnergy < 0) heatEnergy = Long.MAX_VALUE; // prevent overflow
+        if(heatEnergy < 0) heatEnergy = Integer.MAX_VALUE; // prevent overflow
     }
 
 	@Override
@@ -37,8 +39,7 @@ public class TileEntityDysonConverterTU extends TileEntityMachineBase implements
 
 	@Override
 	public int getHeatStored() {
-        if(heatEnergy > Integer.MAX_VALUE) return Integer.MAX_VALUE;
-		return (int)heatEnergy;
+		return heatEnergy;
 	}
 
 	@Override
@@ -49,7 +50,7 @@ public class TileEntityDysonConverterTU extends TileEntityMachineBase implements
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		this.heatEnergy = nbt.getLong("heatEnergy");
+		this.heatEnergy = nbt.getInteger("heatEnergy");
 	}
 	
 	@Override

@@ -1341,8 +1341,9 @@ public class ModEventHandlerClient {
 	public static IIcon particleSwen;
 	public static IIcon particleLen;
 
-
 	public static IIcon particleSplash;
+
+	public static IIcon particleFlare;
 
 	@SubscribeEvent
 	public void onTextureStitch(TextureStitchEvent.Pre event) {
@@ -1354,6 +1355,8 @@ public class ModEventHandlerClient {
 			particleLen = event.map.registerIcon(RefStrings.MODID + ":particle/particlenote1");
 
 			particleSplash = event.map.registerIcon(RefStrings.MODID + ":particle/particle_splash");
+			
+			particleFlare = event.map.registerIcon(RefStrings.MODID + ":particle/yelflare");
 		}
 	}
 

@@ -16,6 +16,7 @@ import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.IDysonConverter;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.BobMathUtil;
+import com.hbm.util.ParticleUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -143,7 +144,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 				}
 			}
 
-			networkPackNT(20);			
+			networkPackNT(250);			
 		} else {
 			if(swarmCount > 0) {
 				if(audio == null) {
@@ -152,6 +153,10 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 				}
 
 				audio.updatePitch(0.85F);
+
+				if(worldObj.rand.nextInt(10) == 0) {
+					ParticleUtil.spawnFlare(worldObj, xCoord - 5 + worldObj.rand.nextDouble() * 10, yCoord + 11, zCoord - 5 + worldObj.rand.nextDouble() * 10, 0, 0.1 + worldObj.rand.nextFloat() * 0.1, 0, 4F + worldObj.rand.nextFloat() * 2);
+				}
 			} else {
 				if(audio != null) {
 					audio.stopSound();

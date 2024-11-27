@@ -1864,8 +1864,16 @@ public class ClientProxy extends ServerProxy {
 			double mY = data.getDouble("mY");
 			double mZ = data.getDouble("mZ");
 			float scale = data.getFloat("scale");
-			ParticleDust text = new ParticleDust(world, x, y, z, mX, mY, mZ);
-			Minecraft.getMinecraft().effectRenderer.addEffect(text);
+			ParticleDust particle = new ParticleDust(world, x, y, z, mX, mY, mZ, scale);
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+		}
+		if("flare".equals(type)) {
+			double mX = data.getDouble("mX");
+			double mY = data.getDouble("mY");
+			double mZ = data.getDouble("mZ");
+			float scale = data.getFloat("scale");
+			ParticleGlow particle = new ParticleGlow(world, x, y, z, mX, mY, mZ, scale);
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
 		if("anim".equals(type)) {
 			
