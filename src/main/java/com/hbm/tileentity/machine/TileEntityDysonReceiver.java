@@ -80,11 +80,21 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 			SatelliteSavedData data = SatelliteSavedData.getData(worldObj);
 			Satellite sat = data.getSatFromFreq(swarmId);
 			int sun = worldObj.getSavedLightValue(EnumSkyBlock.Sky, xCoord, yCoord, zCoord) - worldObj.skylightSubtracted - 11;
+
+			boolean occluded = false;
+			for(int x = -3; x <= 3; x++) {
+				for(int z = -3; z <= 3; z++) {
+					if(worldObj.getHeightValue(xCoord + x, zCoord + z) > yCoord) {
+						occluded = true;
+						break;
+					}
+				}
+			}
 			
 			swarmCount = CBT_Dyson.count(worldObj, swarmId);
 			swarmConsumers = CBT_Dyson.consumers(worldObj, swarmId);
 
-			isReceiving = (sat instanceof SatelliteDysonRelay || sun > 0) && swarmCount > 0 && swarmConsumers > 0;
+			isReceiving = (sat instanceof SatelliteDysonRelay || sun > 0) && !occluded && swarmCount > 0 && swarmConsumers > 0;
 
 			if(isReceiving) {
 				long energyOutput = getEnergyOutput(swarmCount) / swarmConsumers;
