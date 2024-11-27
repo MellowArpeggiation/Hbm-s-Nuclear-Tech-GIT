@@ -8,6 +8,7 @@ import com.hbm.explosion.vanillant.ExplosionVNT;
 import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
 import com.hbm.explosion.vanillant.standard.BlockMutatorFire;
 import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
+import com.hbm.explosion.vanillant.standard.CustomDamageHandlerDyson;
 import com.hbm.explosion.vanillant.standard.EntityProcessorStandard;
 import com.hbm.explosion.vanillant.standard.ExplosionEffectStandard;
 import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
@@ -86,7 +87,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 			boolean occluded = false;
 			for(int x = -3; x <= 3; x++) {
 				for(int z = -3; z <= 3; z++) {
-					if(worldObj.getHeightValue(xCoord + x, zCoord + z) > yCoord) {
+					if(worldObj.getHeightValue(xCoord + x, zCoord + z) > yCoord + 10) {
 						occluded = true;
 						break;
 					}
@@ -160,7 +161,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 					ExplosionVNT vnt = new ExplosionVNT(worldObj, entity.posX - dir.offsetX, entity.posY + 1.5, entity.posZ - dir.offsetZ, 3, null);
 					vnt.setBlockAllocator(new BlockAllocatorStandard());
 					vnt.setBlockProcessor(new BlockProcessorStandard().withBlockEffect(new BlockMutatorFire()));
-					vnt.setEntityProcessor(new EntityProcessorStandard().allowSelfDamage());
+					vnt.setEntityProcessor(new EntityProcessorStandard().withDamageMod(new CustomDamageHandlerDyson(energyOutput)));
 					vnt.setPlayerProcessor(new PlayerProcessorStandard());
 					vnt.setSFX(new ExplosionEffectStandard());
 					vnt.explode();
