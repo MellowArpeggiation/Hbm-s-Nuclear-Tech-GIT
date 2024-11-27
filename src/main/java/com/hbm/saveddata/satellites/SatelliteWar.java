@@ -12,6 +12,7 @@ import com.hbm.saveddata.satellites.Satellite.Interfaces;
 import com.hbm.util.BufferUtil;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -42,9 +43,22 @@ public class SatelliteWar extends Satellite {
 	
 	public void onClick(World world, int x, int z) {
 	
-		interp++;
-	}
+	}	
 
+	public void fire() {
+		interp += 0.5f;
+		interp = Math.min(100.0f, interp + 0.3f * (100.0f - interp) * 0.15f);
+
+        if (interp >= 100) {
+        	interp = 0;
+        }
+	}
+	
+	public void playsound(World world) {
+        Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
+
+	}
+	
 	@Override
 	public float[] getColor() {
 		return new float[] { 0.0F, 0.0F, 0.0F };

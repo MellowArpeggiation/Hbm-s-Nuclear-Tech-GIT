@@ -62,6 +62,15 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	@Override
 	public void updateWeather() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
+		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(worldObj).sats;
+		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
+			SatelliteWar war = (SatelliteWar) entry.getValue();
+
+			war.fire();
+				if(war.getInterp() <= 1) {
+					war.playsound(worldObj);
+				}
+		}
 
 
         CBT_War war = CelestialBody.getTrait(worldObj, CBT_War.class);
@@ -214,7 +223,6 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			);
 		}
 
-
 		// Fog intensity remains high to simulate a thin looking atmosphere on low pressure planets
 		float pressureFactor = MathHelper.clamp_float(totalPressure * 10.0F, 0.0F, 1.0F);
 		color.xCoord *= pressureFactor;
@@ -268,7 +276,36 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 				color.zCoord + fluidColor.zCoord * percentage
 			);
 		}
+		
 
+
+		if(CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
+			CBT_War wardat = CelestialBody.getTrait(worldObj, CBT_War.class);
+		        for (int i = 0; i < wardat.getProjectiles().size(); i++) {
+		            CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
+		            float flash = projectile.getFlashtime();
+		            if(projectile.getAnimtime() > 0) {
+			            float invertedFlash = 100 - flash;
+
+			            int anim = projectile.getAnimtime();
+		                float alpd = 1.0F - Math.min(1.0F, flash / 100);
+						color.xCoord += invertedFlash * 0.5;
+						color.yCoord += invertedFlash * 0.5;
+						color.zCoord += invertedFlash * 0.5;	
+		            }
+		        }
+		    }
+
+		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+			SatelliteWar war = (SatelliteWar) entry.getValue();
+			float flame = war.getInterp();
+            float invertedFlash = 100 - flame;
+			color.xCoord += invertedFlash * 0.5;
+			color.yCoord += invertedFlash * 0.5;
+			color.zCoord += invertedFlash * 0.5;
+
+			
+		}
 		// Lower pressure sky renders thinner
 		float pressureFactor = MathHelper.clamp_float(totalPressure, 0.0F, 1.0F);
 		color.xCoord *= pressureFactor;
@@ -366,11 +403,24 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			return 0;
 
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
+		float skyflash = 0;
+
 		float sunBrightness = super.getSunBrightness(par1);
 
 		if(atmosphere == null) return sunBrightness;
+		if(CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
+			CBT_War wardat = CelestialBody.getTrait(worldObj, CBT_War.class);
+		        for (int i = 0; i < wardat.getProjectiles().size(); i++) {
+		            CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
+		            float flash = projectile.getFlashtime();
+		            if(projectile.getAnimtime() > 0) {
+			            skyflash = 100 - flash;
 
-		return sunBrightness * MathHelper.clamp_float(1.0F - ((float)atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F);
+		            }
+		        }
+		    }
+
+		return sunBrightness * MathHelper.clamp_float(1.0F - ((float)atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F) + skyflash;
 	}
 
 	@Override

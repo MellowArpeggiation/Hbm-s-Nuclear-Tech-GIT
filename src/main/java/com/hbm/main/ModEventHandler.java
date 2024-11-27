@@ -76,6 +76,7 @@ import com.hbm.packet.toclient.PermaSyncPacket;
 import com.hbm.packet.toclient.PlayerInformPacket;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.AuxSavedData;
+import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.tileentity.machine.TileEntityMachineRadarNT;
 import com.hbm.tileentity.network.RTTYSystem;
 import com.hbm.tileentity.network.RequestNetwork;
@@ -774,6 +775,7 @@ public class ModEventHandler {
 								
 								player.setSneaking(false);
 							}
+
 						}
 						
 						if(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode)
@@ -885,7 +887,7 @@ public class ModEventHandler {
 								((EntityPlayer)entity).triggerAchievement(MainRegistry.achRadPoison);
 						}
 					}
-					
+
 					if(e instanceof EntityItem) {
 						EntityItem item = (EntityItem) e;
 						HazardSystem.updateDroppedItem(item);

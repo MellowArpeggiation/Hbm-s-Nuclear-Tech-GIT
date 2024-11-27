@@ -1,5 +1,13 @@
 package com.hbm.dim;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.saveddata.SatelliteSavedData;
+import com.hbm.saveddata.satellites.Satellite;
+import com.hbm.saveddata.satellites.SatelliteWar;
+
 public class WorldProviderEarth extends WorldProviderCelestial {
 
     @Override
@@ -20,6 +28,14 @@ public class WorldProviderEarth extends WorldProviderCelestial {
     @Override
 	public boolean canRespawnHere() {
 		return true;
+	}
+    
+	@Override
+	public void updateWeather() {
+		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
+
+
+
 	}
     
 }
