@@ -2,6 +2,8 @@ package com.hbm.saveddata.satellites;
 
 import com.hbm.items.ModItems;
 import com.hbm.saveddata.SatelliteSavedData;
+
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -130,6 +132,17 @@ public abstract class Satellite {
 	 */
 	public void onCoordAction(World world, EntityPlayer player, int x, int y, int z) { }
 
+	public void serialize(ByteBuf buf) {
+	}
+	
+	public void deserialize(ByteBuf buf) {
+	}
+
+	
 	public abstract float[] getColor();
+	
+	public float getInterp() {
+		return 0;
+	}
 	
 }

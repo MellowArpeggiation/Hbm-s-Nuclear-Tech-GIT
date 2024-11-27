@@ -66,6 +66,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
         CBT_War war = CelestialBody.getTrait(worldObj, CBT_War.class);
         if(!worldObj.isRemote) {
+        	
 	        if (war != null) {
 	            for (int i = 0; i < war.getProjectiles().size(); i++) {
 	                CBT_War.Projectile projectile = war.getProjectiles().get(i);

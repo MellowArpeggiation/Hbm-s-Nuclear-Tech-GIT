@@ -26,17 +26,6 @@ public class SatelliteWar extends Satellite {
 		this.satIface = Interfaces.SAT_PANEL;
 	}
 	
-	public static SatelliteWar clietnwar = new SatelliteWar(0);
-	
-	//for client
-	public SatelliteWar(float interp) {
-		this.interp = interp;
-	}
-	
-	public SatelliteWar(float interp, int cooldown) {
-		this.interp = interp;
-		this.cooldown = cooldown;
-	}
 	
 	public long lastOp;
 	public float interp;
@@ -53,8 +42,7 @@ public class SatelliteWar extends Satellite {
 	
 	public void onClick(World world, int x, int z) {
 	
-		//interp++;
-		clietnwar.interp++;
+		interp++;
 	}
 
 	@Override
@@ -66,16 +54,16 @@ public class SatelliteWar extends Satellite {
 		return interp;
 	}
 	
+	@Override
 	public void serialize(ByteBuf buf) {
 		buf.writeFloat(interp);
 
 	}
 
-	public static SatelliteWar deserialize(ByteBuf buf) {
-		SatelliteWar sat = new SatelliteWar(buf.readInt());
+	@Override
+	public void deserialize(ByteBuf buf) {
 
-		sat.interp = buf.readFloat();
-		return sat;
+		this.interp = buf.readFloat();
 	}
 
 }

@@ -236,6 +236,8 @@ public class SkyProviderCelestial extends IRenderHandler {
 	
 				// Light up the sky
 				for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+					//System.out.println(entry.getValue().getInterp());
+					
 					if(entry.getValue() instanceof SatelliteWar) {
 						GL11.glColor3f(skyR, skyG, skyB);
 	
@@ -244,10 +246,11 @@ public class SkyProviderCelestial extends IRenderHandler {
 						GL11.glScaled(5, 5, 5);
 
 						SatelliteWar war = (SatelliteWar) entry.getValue();
-						int interp = 1;
-						SatelliteWar war1 = SatelliteWar.clietnwar;
-						 
-						//System.out.println(war1.interp);
+						//SatelliteWar war1 = SatelliteWar.clietnwar;
+						//float fuick = entry.getValue().getInterp();
+
+
+						
 						GL11.glTranslated(-Math.round(entry.getKey() / 1000.0) + 30, -Math.round(entry.getKey() / 1000.0), 10); 
 
 
@@ -267,11 +270,13 @@ public class SkyProviderCelestial extends IRenderHandler {
 						GL11.glPushMatrix();
 						GL11.glTranslated(1, 5.5, 0); 
 
-						BeamPronter.prontBeam(Vec3.createVectorHelper(0, 36 + war.interp, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.2 * 0.2F, 0.3F );
+						BeamPronter.prontBeam(Vec3.createVectorHelper(0, 36 + war.getInterp(), 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.2 * 0.2F, 0.3F );
 						BeamPronter.prontBeam(Vec3.createVectorHelper(0, 36, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.2 * 0.6F, 0.3F );
 						BeamPronter.prontBeam(Vec3.createVectorHelper(0, 36, 0), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x202060, 0x202060, (int)(world.getTotalWorldTime() / 5) % 1000, 25, 0.2F, 6, (float)0.2 * 0.1F, 0.3F );
 						GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 						GL11.glDisable(GL11.GL_LIGHTING);
+						GL11.glEnable(GL11.GL_CULL_FACE);
+
 						GL11.glPopMatrix();
 
 
