@@ -9,6 +9,7 @@ import com.hbm.render.util.BeamPronter.EnumBeamType;
 import com.hbm.render.util.BeamPronter.EnumWaveType;
 import com.hbm.tileentity.machine.TileEntityDysonReceiver;
 
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
@@ -62,8 +63,16 @@ public class RenderDysonReceiver extends TileEntitySpecialRenderer {
 			int color = 0xff8800;
 
 			if(receiver.swarmCount > 0) {
+				GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
+				GL11.glDisable(GL11.GL_LIGHTING);
+
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+				
 				BeamPronter.prontBeamwithDepth(Vec3.createVectorHelper(0, 0, length + 1), EnumWaveType.SPIRAL, EnumBeamType.SOLID, color, color, 0, 1, 0F, 2, 0.4F, 0.5F);
 				BeamPronter.prontBeamwithDepth(Vec3.createVectorHelper(0, 0, length + 1), EnumWaveType.RANDOM, EnumBeamType.SOLID, color, color, (int)(tileEntity.getWorldObj().getTotalWorldTime() % 1000), (length / 2) + 1, 0.0625F, 2, 0.4F, 0.5F);
+				
+				GL11.glEnable(GL11.GL_LIGHTING);
+				GL11.glPopAttrib();
 			}
 
 			GL11.glShadeModel(GL11.GL_FLAT);
