@@ -12,6 +12,9 @@ import com.hbm.explosion.vanillant.standard.EntityProcessorStandard;
 import com.hbm.explosion.vanillant.standard.ExplosionEffectStandard;
 import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.main.MainRegistry;
+import com.hbm.saveddata.SatelliteSavedData;
+import com.hbm.saveddata.satellites.Satellite;
+import com.hbm.saveddata.satellites.SatelliteDysonRelay;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.IDysonConverter;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -25,6 +28,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityDysonReceiver extends TileEntityMachineBase {
@@ -35,6 +39,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 	// The energy received is fired as a violently powerful beam,
 	// converters can collect this beam and turn it into HE/TU or used for analysis, crafting, etc.
 
+	public boolean isReceiving;
 	public int swarmCount;
 	public int swarmConsumers;
 	public int beamLength;
@@ -71,11 +76,17 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 		
 		if(!worldObj.isRemote) {
 			int swarmId = 12345;
-
+			
+			SatelliteSavedData data = SatelliteSavedData.getData(worldObj);
+			Satellite sat = data.getSatFromFreq(swarmId);
+			int sun = worldObj.getSavedLightValue(EnumSkyBlock.Sky, xCoord, yCoord, zCoord) - worldObj.skylightSubtracted - 11;
+			
 			swarmCount = CBT_Dyson.count(worldObj, swarmId);
 			swarmConsumers = CBT_Dyson.consumers(worldObj, swarmId);
 
-			if(swarmCount > 0 && swarmConsumers > 0) {
+			isReceiving = (sat instanceof SatelliteDysonRelay || sun > 0) && swarmCount > 0 && swarmConsumers > 0;
+
+			if(isReceiving) {
 				long energyOutput = getEnergyOutput(swarmCount) / swarmConsumers;
 				int maxLength = 24;
 
@@ -146,7 +157,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 
 			networkPackNT(250);			
 		} else {
-			if(swarmCount > 0) {
+			if(isReceiving) {
 				if(audio == null) {
 					audio = MainRegistry.proxy.getLoopedSound("hbm:block.dysonBeam", xCoord + dir.offsetX * 8, yCoord, zCoord + dir.offsetZ * 8, 0.75F, 20F, 1.0F);
 					audio.startSound();
@@ -169,6 +180,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 	@Override
 	public void serialize(ByteBuf buf) {
 		super.serialize(buf);
+		buf.writeBoolean(isReceiving);
 		buf.writeInt(swarmCount);
 		buf.writeInt(swarmConsumers);
 		buf.writeInt(beamLength);
@@ -177,6 +189,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 	@Override
 	public void deserialize(ByteBuf buf) {
 		super.deserialize(buf);
+		isReceiving = buf.readBoolean();
 		swarmCount = buf.readInt();
 		swarmConsumers = buf.readInt();
 		beamLength = buf.readInt();

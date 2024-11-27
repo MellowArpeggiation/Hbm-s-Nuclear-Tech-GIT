@@ -62,7 +62,7 @@ public class RenderDysonReceiver extends TileEntitySpecialRenderer {
 			int length = receiver.beamLength;
 			int color = 0xff8800;
 
-			if(receiver.swarmCount > 0) {
+			if(receiver.isReceiving) {
 				GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 				GL11.glDisable(GL11.GL_LIGHTING);
 

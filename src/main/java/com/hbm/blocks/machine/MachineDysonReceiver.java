@@ -71,7 +71,7 @@ public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay
 		TileEntityDysonReceiver receiver = (TileEntityDysonReceiver) te;
 
 		long energyOutput = 0;
-		if(receiver.swarmConsumers > 0) {
+		if(receiver.isReceiving) {
 			energyOutput = TileEntityDysonReceiver.getEnergyOutput(receiver.swarmCount) / receiver.swarmConsumers * 20;
 		}
 		
