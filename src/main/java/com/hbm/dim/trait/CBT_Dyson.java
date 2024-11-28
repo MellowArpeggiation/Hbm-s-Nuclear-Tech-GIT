@@ -77,14 +77,14 @@ public class CBT_Dyson extends CelestialBodyTrait {
 		return size;
 	}
 
-	// Called once per frame to lower swarm counts from satellite failures,
+	// Called once per tick to lower swarm counts from satellite failures,
 	// encouraging continuous automation
 	public void attenuate() {
 		for(Swarm swarm : swarms.values()) {
 			swarm.consumers = swarm.addedConsumers;
 			swarm.addedConsumers = 0;
 
-			double decayChance = (double)swarm.members / (1024 * 3 * 20);
+			double decayChance = (double)swarm.members / (1024 * 5 * 20);
 			if(Math.random() < decayChance) swarm.members--;
 		}
 	}

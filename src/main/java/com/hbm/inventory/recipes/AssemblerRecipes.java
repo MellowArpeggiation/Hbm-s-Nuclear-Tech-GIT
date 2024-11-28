@@ -1483,8 +1483,9 @@ public class AssemblerRecipes extends SerializableRecipe {
 		makeRecipe(new ComparableStack(ModBlocks.silo_hatch_large, 1), new AStack[]{new OreDictStack(STEEL.plateWelded(), 6), new ComparableStack(ModItems.plate_polymer, 8), new ComparableStack(ModItems.motor, 2), new OreDictStack(STEEL.bolt(), 16), new OreDictStack(KEY_GREEN, 8)}, 200);
 
 		makeRecipe(new ComparableStack(ModItems.swarm_member, 1), new AStack[] {
-				new OreDictStack(ANY_HARDPLASTIC.ingot(), 8),
-		}, 60);
+				new OreDictStack(ANY_HARDPLASTIC.ingot(), 2),
+				new OreDictStack(BE.billet(), 4),
+		}, 100);
 		
 		if(GeneralConfig.enableMekanismChanges && Loader.isModLoaded("Mekanism")) {
 			
