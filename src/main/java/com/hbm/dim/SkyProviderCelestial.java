@@ -478,10 +478,22 @@ public class SkyProviderCelestial extends IRenderHandler {
 			tessellator.addVertex(-sunSize, 99.9D, sunSize);
 			tessellator.draw();
 
+			// Draw the sun to the depth buffer to block swarm members that are behind
+			GL11.glDepthMask(true);
+			GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.0F);
+
+			tessellator.startDrawingQuads();
+			tessellator.addVertexWithUV(-sunSize * 0.25D, 100.1D, -sunSize * 0.25D, 0.0D, 0.0D);
+			tessellator.addVertexWithUV(sunSize * 0.25D, 100.1D, -sunSize * 0.25D, 1.0D, 0.0D);
+			tessellator.addVertexWithUV(sunSize * 0.25D, 100.1D, sunSize * 0.25D, 1.0D, 1.0D);
+			tessellator.addVertexWithUV(-sunSize * 0.25D, 100.1D, sunSize * 0.25D, 0.0D, 1.0D);
+			tessellator.draw();
+
+			// Draw the swarm members with depth occlusion
+			renderSwarm(partialTicks, world, mc, sunSize * 0.5, swarmCount);
+
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, visibility);
-
-			renderSwarm(partialTicks, world, mc, sunSize * 0.5, false, swarmCount);
 
 			// Draw the MIGHTY SUN
 			mc.renderEngine.bindTexture(sun.texture);
@@ -493,23 +505,25 @@ public class SkyProviderCelestial extends IRenderHandler {
 			tessellator.addVertexWithUV(-sunSize, 100.0D, sunSize, 0.0D, 1.0D);
 			tessellator.draw();
 
-			renderSwarm(partialTicks, world, mc, sunSize * 0.5, true, swarmCount);
-
 			// Draw a big ol' spiky flare! Less so when there is an atmosphere
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1 - MathHelper.clamp_float(pressure, 0.0F, 1.0F) * 0.75F);
 
 			mc.renderEngine.bindTexture(flareTexture);
 
 			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV(-coronaSize, 100.0D, -coronaSize, 0.0D, 0.0D);
-			tessellator.addVertexWithUV(coronaSize, 100.0D, -coronaSize, 1.0D, 0.0D);
-			tessellator.addVertexWithUV(coronaSize, 100.0D, coronaSize, 1.0D, 1.0D);
-			tessellator.addVertexWithUV(-coronaSize, 100.0D, coronaSize, 0.0D, 1.0D);
+			tessellator.addVertexWithUV(-coronaSize, 99.9D, -coronaSize, 0.0D, 0.0D);
+			tessellator.addVertexWithUV(coronaSize, 99.9D, -coronaSize, 1.0D, 0.0D);
+			tessellator.addVertexWithUV(coronaSize, 99.9D, coronaSize, 1.0D, 1.0D);
+			tessellator.addVertexWithUV(-coronaSize, 99.9D, coronaSize, 0.0D, 1.0D);
 			tessellator.draw();
+
+			// Clear and disable the depth buffer once again
+			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+			GL11.glDepthMask(false);
 		}
 	}
 
-	private void renderSwarm(float partialTicks, WorldClient world, Minecraft mc, double swarmRadius, boolean inFront, int swarmCount) {
+	private void renderSwarm(float partialTicks, WorldClient world, Minecraft mc, double swarmRadius, int swarmCount) {
 		Tessellator tessellator = Tessellator.instance;
 
 		// bloodseeking, parasitic, ecstatically tracing decay
@@ -518,84 +532,82 @@ public class SkyProviderCelestial extends IRenderHandler {
 		swarmShader.use();
 
 		float time = ((float)world.getWorldTime() + partialTicks) / 200.0F;
+		float swarmScreenSize = (float)((mc.displayHeight / mc.gameSettings.fovSetting) * swarmRadius * 0.0001); // swarm members render as pixels, which can vary based on screen resolution
 		int textureUnit = 0;
 
 		swarmShader.setTime(time);
 		swarmShader.setTextureUnit(textureUnit);
 		
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glColor4f(0.0F, 0.0F, 0.0F, MathHelper.clamp_float(swarmScreenSize, 0, 1));
 
-		// yes I'll refactor it don't fret
 		GL11.glPushMatrix();
 		{
 
 			GL11.glTranslatef(0.0F, 100.0F, 0.0F);
-			GL11.glRotatef(80.0F, 1, 0, 0);
+			GL11.glScaled(swarmRadius, swarmRadius, swarmRadius);
 
-			tessellator.startDrawing(GL11.GL_POINTS);
-			for(int i = 0; i < swarmCount; i++) {
-				swarmShader.setOffset(i);
-
-				float t = i + time;
-				double z = Math.sin(t) * swarmRadius;
-				
-				if(inFront ? z < 0 : z >= 0) continue;
-
-				double x = Math.cos(t) * swarmRadius;
-
-				tessellator.addVertex(x, 0.0D, z);
+			GL11.glPushMatrix();
+			{
+	
+				GL11.glRotatef(80.0F, 1, 0, 0);
+	
+				tessellator.startDrawing(GL11.GL_POINTS);
+				for(int i = 0; i < swarmCount; i += 3) {
+					swarmShader.setOffset(i);
+	
+					float t = i + time;
+					double x = Math.cos(t);
+					double z = Math.sin(t);
+	
+					tessellator.addVertex(x, 0, z);
+				}
+				tessellator.draw();
+	
 			}
-			tessellator.draw();
-
-		}
-		GL11.glPopMatrix();
-
-		GL11.glPushMatrix();
-		{
-			
-			GL11.glTranslatef(0.0F, 100.0F, 0.0F);
-			GL11.glRotatef(60.0F, 0, 1, 0);
-			GL11.glRotatef(80.0F, 1, 0, 0);
-
-			tessellator.startDrawing(GL11.GL_POINTS);
-			for(int i = 0; i < swarmCount; i++) {
-				swarmShader.setOffset(i);
-
-				float t = i + time;
-				double z = Math.sin(t) * swarmRadius;
+			GL11.glPopMatrix();
+	
+			GL11.glPushMatrix();
+			{
 				
-				if(inFront ? z < 0 : z >= 0) continue;
-
-				double x = Math.cos(t) * swarmRadius;
-
-				tessellator.addVertex(x, 0.0D, z);
+				GL11.glRotatef(60.0F, 0, 1, 0);
+				GL11.glRotatef(80.0F, 1, 0, 0);
+	
+				tessellator.startDrawing(GL11.GL_POINTS);
+				for(int i = 1; i < swarmCount; i += 3) {
+					swarmShader.setOffset(i);
+	
+					float t = i + time;
+					double x = Math.cos(t);
+					double z = Math.sin(t);
+	
+					tessellator.addVertex(x, 0, z);
+				}
+				tessellator.draw();
+	
 			}
-			tessellator.draw();
-
-		}
-		GL11.glPopMatrix();
-
-		GL11.glPushMatrix();
-		{
-			
-			GL11.glTranslatef(0.0F, 100.0F, 0.0F);
-			GL11.glRotatef(-60.0F, 0, 1, 0);
-			GL11.glRotatef(80.0F, 1, 0, 0);
-
-			tessellator.startDrawing(GL11.GL_POINTS);
-			for(int i = 0; i < swarmCount; i++) {
-				swarmShader.setOffset(i);
-
-				float t = i + time;
-				double z = Math.sin(t) * swarmRadius;
+			GL11.glPopMatrix();
+	
+			GL11.glPushMatrix();
+			{
 				
-				if(inFront ? z < 0 : z >= 0) continue;
-
-				double x = Math.cos(t) * swarmRadius;
-
-				tessellator.addVertex(x, 0.0D, z);
+				GL11.glRotatef(-60.0F, 0, 1, 0);
+				GL11.glRotatef(80.0F, 1, 0, 0);
+	
+				tessellator.startDrawing(GL11.GL_POINTS);
+				for(int i = 2; i < swarmCount; i += 3) {
+					swarmShader.setOffset(i);
+	
+					float t = i + time;
+					double x = Math.cos(t);
+					double z = Math.sin(t);
+	
+					tessellator.addVertex(x, 0, z);
+				}
+				tessellator.draw();
+	
 			}
-			tessellator.draw();
+			GL11.glPopMatrix();
 
 		}
 		GL11.glPopMatrix();

@@ -13,7 +13,8 @@ void main() {
     vPosition = gl_Vertex.xyz;
     float t = gl_VertexID + iTime;
     float r = hash(gl_VertexID);
-    float y = cos(t) * r + sin(t) * (1-r) * 0.5; // wrong, please fix me
-    gl_Position = gl_ModelViewProjectionMatrix * (gl_Vertex + vec4(0.0, y, 0.0, 0.0));
+    float r2 = hash(gl_VertexID + 0.5);
+    float y = cos(t) * r + sin(t) * (1-r);
+    gl_Position = gl_ModelViewProjectionMatrix * (vec4(gl_Vertex.x, y * 0.1 * r2 * r2, gl_Vertex.z, gl_Vertex.w));
     gl_TexCoord[0] = gl_MultiTexCoord0;
 }
