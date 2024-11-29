@@ -489,8 +489,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 			tessellator.addVertexWithUV(-sunSize * 0.25D, 100.1D, sunSize * 0.25D, 0.0D, 1.0D);
 			tessellator.draw();
 
-			// Draw the swarm members with depth occlusion
-			renderSwarm(partialTicks, world, mc, sunSize * 0.5, swarmCount);
+			GL11.glDepthMask(false);
 
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, visibility);
@@ -517,7 +516,12 @@ public class SkyProviderCelestial extends IRenderHandler {
 			tessellator.addVertexWithUV(-coronaSize, 99.9D, coronaSize, 0.0D, 1.0D);
 			tessellator.draw();
 
-			// Clear and disable the depth buffer once again
+			// Draw the swarm members with depth occlusion
+			// We do this last so we can render transparency against the sun
+			renderSwarm(partialTicks, world, mc, sunSize * 0.5, swarmCount);
+
+			// Clear and disable the depth buffer once again, buffer has to be writable to clear it
+			GL11.glDepthMask(true);
 			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 			GL11.glDepthMask(false);
 		}
@@ -531,8 +535,11 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 		swarmShader.use();
 
+		// swarm members render as pixels, which can vary based on screen resolution
+		// because of this, we make the pixels more transparent based on their apparent size, which varies by a fair few factors
+		// this isn't a foolproof solution, analyzing the projection matrices would be best, but it works for now.
+		float swarmScreenSize = (float)((mc.displayHeight / mc.gameSettings.fovSetting) * swarmRadius * 0.002); 
 		float time = ((float)world.getWorldTime() + partialTicks) / 200.0F;
-		float swarmScreenSize = (float)((mc.displayHeight / mc.gameSettings.fovSetting) * swarmRadius * 0.0001); // swarm members render as pixels, which can vary based on screen resolution
 		int textureUnit = 0;
 
 		swarmShader.setTime(time);
