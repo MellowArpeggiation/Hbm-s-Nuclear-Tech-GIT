@@ -539,7 +539,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 		// because of this, we make the pixels more transparent based on their apparent size, which varies by a fair few factors
 		// this isn't a foolproof solution, analyzing the projection matrices would be best, but it works for now.
 		float swarmScreenSize = (float)((mc.displayHeight / mc.gameSettings.fovSetting) * swarmRadius * 0.002); 
-		float time = ((float)world.getWorldTime() + partialTicks) / 200.0F;
+		float time = ((float)world.getWorldTime() + partialTicks) / 800.0F;
 		int textureUnit = 0;
 
 		swarmShader.setTime(time);
