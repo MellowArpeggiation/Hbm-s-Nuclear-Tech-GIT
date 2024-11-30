@@ -98,8 +98,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import com.hbm.commands.CommandDebugChunkLoad;
-import com.hbm.commands.CommandReloadRecipes;
 import com.hbm.dim.SolarSystem;
 import com.hbm.dim.WorldTypeTeleport;
 import com.hbm.world.ModBiomes;
@@ -1011,6 +1009,7 @@ public class MainRegistry {
 		event.registerServerCommand(new CommandDebugChunkLoad());
 		event.registerServerCommand(new CommandSatellites());
 		event.registerServerCommand(new CommandRadiation());
+		event.registerServerCommand(new CommandStations());
 	}
 	
 	@EventHandler

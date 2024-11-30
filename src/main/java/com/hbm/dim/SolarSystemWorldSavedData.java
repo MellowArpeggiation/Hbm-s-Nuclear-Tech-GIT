@@ -160,6 +160,10 @@ public class SolarSystemWorldSavedData extends WorldSavedData {
 		return traitMap.get(bodyName);
 	}
 
+	public HashMap<ChunkCoordIntPair, OrbitalStation> getStations() {
+		return stations;
+	}
+
 	// Grabs an existing station
 	public OrbitalStation getStationFromPosition(int x, int z) {
 		// yeah they aren't exactly chunks but this is a nice little hashable that already exists

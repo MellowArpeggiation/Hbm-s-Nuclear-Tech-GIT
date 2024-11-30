@@ -732,6 +732,14 @@ commands.satellite.satellite_descended=Satellite successfully descended.
 commands.satellite.satellite_orbited=Satellite launched.
 commands.satellite.should_be_run_as_player=This command should be run by a player!
 
+commands.station.no_stations=No launched stations found!
+commands.station.invalid_station=You must enter a station ID or name!
+commands.station.no_match=No station matching that ID or name!
+commands.station.invalid_drive=Must be holding a valid station drive!
+commands.station.drive_created=Drive created.
+commands.station.teleported=Teleported to station.
+commands.station.launched=Station core launched.
+
 container.amsBase=AMS Base (Deco)
 container.amsEmitter=AMS Emitter (Deco)
 container.amsLimiter=AMS Stabilizer (Deco)
