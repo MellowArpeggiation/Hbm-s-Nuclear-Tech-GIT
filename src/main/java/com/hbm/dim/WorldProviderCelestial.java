@@ -36,6 +36,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.common.DimensionManager;
 
 public abstract class WorldProviderCelestial extends WorldProvider {
 
@@ -62,15 +63,24 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	@Override
 	public void updateWeather() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
-		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(worldObj).sats;
-		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
-			SatelliteWar war = (SatelliteWar) entry.getValue();
+		World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
+	    SatelliteSavedData data = (SatelliteSavedData)world.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
 
-			war.fire();
-				if(war.getInterp() <= 1) {
-					war.playsound(worldObj);
-				}
-		}
+	    if(data != null) {
+	    	System.out.println(data.sats);
+			HashMap<Integer, Satellite> sats = data.sats;
+			for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
+				SatelliteWar war = (SatelliteWar) entry.getValue();
+				System.out.println("whjat");
+				war.fire();
+					if(war.getInterp() <= 1) {
+						war.playsound(worldObj);
+					}
+				
+			}
+  	
+	    }
+
 
 
         CBT_War war = CelestialBody.getTrait(worldObj, CBT_War.class);
