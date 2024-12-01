@@ -44,6 +44,15 @@ public class Fluids {
 	public static FluidType COOLANT;
 	public static FluidType COOLANT_HOT;
 	public static FluidType SUPERHEATED_HYDROGEN;
+	public static FluidType URANIUM_BROMIDE;
+	public static FluidType PLUTONIUM_BROMIDE;
+	public static FluidType SCHRABIDIUM_BROMIDE;
+	public static FluidType THORIUM_BROMIDE;
+	public static FluidType GASEOUS_URANIUM_BROMIDE;
+	public static FluidType GASEOUS_PLUTONIUM_BROMIDE;
+	public static FluidType GASEOUS_SCHRABIDIUM_BROMIDE;
+	public static FluidType GASEOUS_THORIUM_BROMIDE;
+	public static FluidType GAS_WATZ;
 	public static FluidType LAVA;
 	public static FluidType DEUTERIUM;
 	public static FluidType TRITIUM;
@@ -493,6 +502,15 @@ public class Fluids {
 		VITRIOL =				new FluidType("VITRIOL",			0x6E5222, 2, 0, 1, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		SLOP =					new FluidType("SLOP",			0x929D45, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		SUPERHEATED_HYDROGEN =	new FluidType("SUPERHEATED_HYDROGEN",		0xE39393, 0, 0, 0, EnumSymbol.NONE).setTemp(2200).addTraits(GASEOUS, NOCON, NOID, new FT_Rocket(900, 700_000));
+                GAS_WATZ =					new FluidType("GAS_WATZ",				0x86653E, 4, 0, 3, EnumSymbol.ACID).setTemp(2500).addTraits(GASEOUS, NOCON, NOID, new FT_Polluting().release(PollutionType.POISON, POISON_EXTREME), new FT_Rocket(1200, 700_000));
+                URANIUM_BROMIDE =	new FluidType("URANIUM_BROMIDE",		0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).setTemp(200).addTraits(LIQUID, VISCOUS, new FT_Corrosive(65), new FT_VentRadiation(0.1F));
+		PLUTONIUM_BROMIDE =	new FluidType("PLUTONIUM_BROMIDE",		0x4C4C4C, 0, 0, 0, EnumSymbol.NONE).setTemp(200).addTraits(LIQUID, VISCOUS, new FT_Corrosive(65), new FT_VentRadiation(0.1F));
+		SCHRABIDIUM_BROMIDE =	new FluidType("SCHRABIDIUM_BROMIDE",		0x006B6B, 0, 0, 0, EnumSymbol.NONE).setTemp(200).addTraits(LIQUID, VISCOUS, new FT_Corrosive(65), new FT_VentRadiation(0.1F));
+		THORIUM_BROMIDE =	new FluidType("THORIUM_BROMIDE",		0x7A5542, 0, 0, 0, EnumSymbol.NONE).setTemp(200).addTraits(LIQUID, VISCOUS, new FT_Corrosive(65), new FT_VentRadiation(0.1F));
+		GASEOUS_URANIUM_BROMIDE =	new FluidType("GASEOUS_URANIUM_BROMIDE",		0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).setTemp(2500).addTraits(GASEOUS, NOCON, NOID, new FT_Rocket(1500, 700_000));
+		GASEOUS_PLUTONIUM_BROMIDE =	new FluidType("GASEOUS_PLUTONIUM_BROMIDE",		0x4C4C4C, 0, 0, 0, EnumSymbol.NONE).setTemp(2600).addTraits(GASEOUS, NOCON, NOID, new FT_Rocket(2000, 700_000));
+		GASEOUS_SCHRABIDIUM_BROMIDE =	new FluidType("GASEOUS_SCHRABIDIUM_BROMIDE",		0x006B6B, 0, 0, 0, EnumSymbol.NONE).setTemp(3000).addTraits(GASEOUS, NOCON, NOID, new FT_Rocket(3000, 700_000));
+                GASEOUS_THORIUM_BROMIDE =	new FluidType("GASEOUS_THORIUM_BROMIDE",		0x7A5542, 0, 0, 0, EnumSymbol.NONE).setTemp(2300).addTraits(GASEOUS, NOCON, NOID, new FT_Rocket(1300, 700_000));
 		
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
@@ -526,6 +544,11 @@ public class Fluids {
 		metaOrder.add(MUG);
 		metaOrder.add(MUG_HOT);
 		metaOrder.add(SUPERHEATED_HYDROGEN);
+		metaOrder.add(GAS_WATZ);
+		metaOrder.add(GASEOUS_URANIUM_BROMIDE);
+		metaOrder.add(GASEOUS_PLUTONIUM_BROMIDE);
+		metaOrder.add(GASEOUS_SCHRABIDIUM_BROMIDE);
+		metaOrder.add(GASEOUS_THORIUM_BROMIDE);
 		//blood
 		metaOrder.add(BLOOD);
 		metaOrder.add(BLOODGAS);
@@ -624,6 +647,10 @@ public class Fluids {
 		metaOrder.add(PEROXIDE);
 		metaOrder.add(SULFURIC_ACID);
 		metaOrder.add(BROMINE);
+		metaOrder.add(URANIUM_BROMIDE);
+		metaOrder.add(PLUTONIUM_BROMIDE);
+		metaOrder.add(SCHRABIDIUM_BROMIDE);
+		metaOrder.add(THORIUM_BROMIDE);
 		//meths
 		metaOrder.add(CHLOROMETHANE);
 		metaOrder.add(METHANOL);
@@ -772,8 +799,26 @@ public class Fluids {
 		BLOOD.addTraits(new FT_Heatable().setEff(HeatingType.HEATEXCHANGER, 1.0D).setEff(HeatingType.ICF, 1.25D).addStep(500, 1, BLOOD_HOT, 1));
 		BLOOD_HOT.addTraits(new FT_Coolable(BLOOD, 1, 1, 500).setEff(CoolingType.HEATEXCHANGER, 1.0D));
 
-		HYDROGEN.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).addStep(300, 1, SUPERHEATED_HYDROGEN, 1));
+		HYDROGEN.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).setEff(HeatingType.SH, 1.0D).addStep(300, 1, SUPERHEATED_HYDROGEN, 1));
 		SUPERHEATED_HYDROGEN.addTraits(new FT_Coolable(HYDROGEN, 1, 1, 300));
+
+		WATZ.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).setEff(HeatingType.MB, 1.0D).addStep(300, 1, GAS_WATZ, 1), new FT_PWRModerator(1.40D));
+		GAS_WATZ.addTraits(new FT_Coolable(WATZ, 1, 1, 300));
+
+		WASTEFLUID.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).setEff(HeatingType.WB, 1.0D).addStep(300, 1, WASTEGAS, 1), new FT_PWRModerator(1.20D));
+		WASTEGAS.addTraits(new FT_Coolable(WATZ, 1, 1, 300));
+
+		URANIUM_BROMIDE.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).setEff(HeatingType.UB, 1.0D).addStep(300, 1, GASEOUS_URANIUM_BROMIDE, 1), new FT_PWRModerator(1.75D));
+		GASEOUS_URANIUM_BROMIDE.addTraits(new FT_Coolable(URANIUM_BROMIDE, 1, 1, 300));
+
+		PLUTONIUM_BROMIDE.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).setEff(HeatingType.PB, 1.0D).addStep(300, 1, GASEOUS_PLUTONIUM_BROMIDE, 1), new FT_PWRModerator(2.0D));
+		GASEOUS_PLUTONIUM_BROMIDE.addTraits(new FT_Coolable(PLUTONIUM_BROMIDE, 1, 1, 300));
+
+		SCHRABIDIUM_BROMIDE.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).setEff(HeatingType.SB, 1.0D).addStep(300, 1, GASEOUS_SCHRABIDIUM_BROMIDE, 1), new FT_PWRModerator(2.50D));
+		GASEOUS_SCHRABIDIUM_BROMIDE.addTraits(new FT_Coolable(SCHRABIDIUM_BROMIDE, 1, 1, 300));
+
+		THORIUM_BROMIDE.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).setEff(HeatingType.TB, 1.0D).addStep(300, 1, GASEOUS_THORIUM_BROMIDE, 1), new FT_PWRModerator(1.50D));
+		GASEOUS_THORIUM_BROMIDE.addTraits(new FT_Coolable(THORIUM_BROMIDE, 1, 1, 300));
 	
 		
 
