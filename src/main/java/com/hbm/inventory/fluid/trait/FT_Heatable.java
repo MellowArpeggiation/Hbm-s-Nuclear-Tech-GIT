@@ -72,6 +72,13 @@ public class FT_Heatable extends FluidTrait {
 		HEATEXCHANGER("Heatable"),
 		PWR("PWR Coolant"),
 		ICF("ICF Coolant");
+		UB("UB"),
+		PB("PB"),
+		SB("SB"),
+		TB("TB"),
+		MB("MB"),
+		WB("WB"),
+		SH("SH"),
 		
 		public String name;
 		
