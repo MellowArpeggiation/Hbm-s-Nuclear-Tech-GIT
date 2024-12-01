@@ -1,11 +1,13 @@
 package com.hbm.tileentity.machine;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.fluid.trait.FT_Rocket;
 import com.hbm.main.MainRegistry;
@@ -41,7 +43,7 @@ public class TileEntityMachineHTR3 extends TileEntityMachineBase implements IPro
 	private int fuelCost;
 
 	public TileEntityMachineHTR3() {
-		super(8);
+		super(0);
 		tanks = new FluidTank[1];
         tanks[0] = new FluidTank(Fluids.WASTEGAS, 1_280_000);
         tanks[0] = new FluidTank(Fluids.GAS_WATZ, 1_280_000);
