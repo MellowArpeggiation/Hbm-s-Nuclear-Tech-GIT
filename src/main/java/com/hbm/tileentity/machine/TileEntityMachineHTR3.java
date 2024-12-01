@@ -40,10 +40,17 @@ public class TileEntityMachineHTR3 extends TileEntityMachineBase implements IPro
 
 	private int fuelCost;
 
-	public TileEntityMachineHTR3() {
-		super(0);
+	public TileEntityMachineLPW3N() {
+		super(8);
 		tanks = new FluidTank[1];
-		tanks[0] = new FluidTank(Fluids.SUPERHEATED_HYDROGEN, 1_280_000);
+        tanks[0] = new FluidTank(Fluids.WASTEGAS, 1_280_000);
+        tanks[0] = new FluidTank(Fluids.GAS_WATZ, 1_280_000);
+        tanks[0] = new FluidTank(Fluids.GASEOUS_URANIUM_BROMIDE, 1_280_000);
+        tanks[0] = new FluidTank(Fluids.GASEOUS_PLUTONIUM_BROMIDE, 1_280_000);
+        tanks[0] = new FluidTank(Fluids.GASEOUS_THORIUM_BROMIDE, 1_280_000);
+        tanks[0] = new FluidTank(Fluids.GASEOUS_SCHRABIDIUM_BROMIDE, 1_280_000);
+	tanks[0] = new FluidTank(Fluids.SUPERHEATED_HYDROGEN, 1_280_000);
+        tanks[0] = new FluidTank(Fluids.NONE, 1_280_000);
 	}
 
 	@Override
@@ -95,19 +102,93 @@ public class TileEntityMachineHTR3 extends TileEntityMachineBase implements IPro
 					audio.updateVolume(getVolume(1F));
 					audio.keepAlive();
 
-					ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getRotation(ForgeDirection.UP);
+					{
+						List<FluidType> types = new ArrayList() {{ add(tanks[0].getTankType()); }};
+				
+						if(types.contains(Fluids.SUPERHEATED_HYDROGEN)) {
 
-					NBTTagCompound data = new NBTTagCompound();
-					data.setDouble("posX", xCoord + dir.offsetX * 8);
-					data.setDouble("posY", yCoord + 4);
-					data.setDouble("posZ", zCoord + dir.offsetZ * 8);
-					data.setString("type", "missileContrail");
-					data.setFloat("scale", 3);
-					data.setDouble("moX", dir.offsetX * 10);
-					data.setDouble("moY", 0);
-					data.setDouble("moZ", dir.offsetZ * 10);
-					data.setInteger("maxAge", 20 + worldObj.rand.nextInt(20));
-					MainRegistry.proxy.effectNT(data);
+							ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getRotation(ForgeDirection.UP);
+
+							NBTTagCompound data = new NBTTagCompound();
+							data.setDouble("posX", xCoord + dir.offsetX * 12);
+							data.setDouble("posY", yCoord + 4);
+							data.setDouble("posZ", zCoord + dir.offsetZ * 12);
+							data.setString("type", "missileContrail");
+							data.setFloat("scale", 3);
+							data.setDouble("moX", dir.offsetX * 10);
+							data.setDouble("moY", 0);
+							data.setDouble("moZ", dir.offsetZ * 10);
+							data.setInteger("maxAge", 40 + worldObj.rand.nextInt(40));
+							MainRegistry.proxy.effectNT(data);
+							return;
+							}
+					}
+					
+					{
+						List<FluidType> types = new ArrayList() {{ add(tanks[0].getTankType()); }};
+				
+						if(types.contains(Fluids.GAS_WATZ) || types.contains(Fluids.WASTEGAS) || types.contains(Fluids.GASEOUS_THORIUM_BROMIDE)) {
+
+							ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getRotation(ForgeDirection.UP);
+
+							NBTTagCompound data = new NBTTagCompound();
+							data.setDouble("posX", xCoord + dir.offsetX * 12);
+							data.setDouble("posY", yCoord + 4);
+							data.setDouble("posZ", zCoord + dir.offsetZ * 12);
+							data.setString("type", "missileContrailMUD");
+							data.setFloat("scale", 3);
+							data.setDouble("moX", dir.offsetX * 10);
+							data.setDouble("moY", 0);
+							data.setDouble("moZ", dir.offsetZ * 10);
+							data.setInteger("maxAge", 40 + worldObj.rand.nextInt(40));
+							MainRegistry.proxy.effectNT(data);
+							return;
+							}
+					}
+
+                    {
+						List<FluidType> types = new ArrayList() {{ add(tanks[0].getTankType()); }};
+				
+						if(types.contains(Fluids.GASEOUS_SCHRABIDIUM_BROMIDE)) {
+
+							ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getRotation(ForgeDirection.UP);
+
+							NBTTagCompound data = new NBTTagCompound();
+							data.setDouble("posX", xCoord + dir.offsetX * 12);
+							data.setDouble("posY", yCoord + 4);
+							data.setDouble("posZ", zCoord + dir.offsetZ * 12);
+							data.setString("type", "missileContrailSCH");
+							data.setFloat("scale", 3);
+							data.setDouble("moX", dir.offsetX * 10);
+							data.setDouble("moY", 0);
+							data.setDouble("moZ", dir.offsetZ * 10);
+							data.setInteger("maxAge", 40 + worldObj.rand.nextInt(40));
+							MainRegistry.proxy.effectNT(data);
+							return;
+							}
+					}
+
+                    {
+						List<FluidType> types = new ArrayList() {{ add(tanks[0].getTankType()); }};
+				
+						if(types.contains(Fluids.GASEOUS_URANIUM_BROMIDE) || types.contains(Fluids.GASEOUS_PLUTONIUM_BROMIDE)) {
+
+							ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getRotation(ForgeDirection.UP);
+
+							NBTTagCompound data = new NBTTagCompound();
+							data.setDouble("posX", xCoord + dir.offsetX * 12);
+							data.setDouble("posY", yCoord + 4);
+							data.setDouble("posZ", zCoord + dir.offsetZ * 12);
+							data.setString("type", "missileContrailUP");
+							data.setFloat("scale", 3);
+							data.setDouble("moX", dir.offsetX * 10);
+							data.setDouble("moY", 0);
+							data.setDouble("moZ", dir.offsetZ * 10);
+							data.setInteger("maxAge", 40 + worldObj.rand.nextInt(40));
+							MainRegistry.proxy.effectNT(data);
+							return;
+							}
+					}
 				}
 			} else {
 				speed -= 0.05D;
