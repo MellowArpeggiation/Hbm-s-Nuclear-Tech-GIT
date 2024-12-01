@@ -43,7 +43,7 @@ public class TileEntityMachineHTR3 extends TileEntityMachineBase implements IPro
 	private int fuelCost;
 
 	public TileEntityMachineHTR3() {
-		super(0);
+		super(7);
 		tanks = new FluidTank[1];
         tanks[0] = new FluidTank(Fluids.WASTEGAS, 1_280_000);
         tanks[0] = new FluidTank(Fluids.GAS_WATZ, 1_280_000);
