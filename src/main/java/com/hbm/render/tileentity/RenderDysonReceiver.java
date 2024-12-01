@@ -3,7 +3,9 @@ package com.hbm.render.tileentity;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.item.ItemRenderBase;
 import com.hbm.render.util.BeamPronter;
 import com.hbm.render.util.BeamPronter.EnumBeamType;
 import com.hbm.render.util.BeamPronter.EnumWaveType;
@@ -11,10 +13,12 @@ import com.hbm.tileentity.machine.TileEntityDysonReceiver;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.client.IItemRenderer;
 
-public class RenderDysonReceiver extends TileEntitySpecialRenderer {
+public class RenderDysonReceiver extends TileEntitySpecialRenderer implements IItemRendererProvider {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
@@ -79,6 +83,28 @@ public class RenderDysonReceiver extends TileEntitySpecialRenderer {
 			
 		}
 		GL11.glPopMatrix();
+	}
+
+	@Override
+	public IItemRenderer getRenderer() {
+		return new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -4, 0);
+				GL11.glScaled(1.5D, 1.5D, 1.5D);
+			}
+			public void renderCommon() {
+				GL11.glScaled(0.55, 0.55, 0.55);
+				GL11.glShadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.dyson_receiver_tex);
+				ResourceManager.dyson_receiver.renderAll();
+				GL11.glShadeModel(GL11.GL_FLAT);
+			}
+		};
+	}
+
+	@Override
+	public Item getItemForRenderer() {
+		return Item.getItemFromBlock(ModBlocks.dyson_receiver);
 	}
 	
 }
