@@ -91,7 +91,7 @@ public class MachineHTR3 extends BlockDummyable implements ILookOverlay {
 					htr3.tanks[0].setTankType(Fluids.GAS_WATZ);
 					htr3.markDirty();
 				}
-                                if(type.hasTrait(FT_Heatable.class) && type.getTrait(FT_Heatable.class).getEfficiency(HeatingType.SB) > 0) {
+                                if(type.hasTrait(FT_Heatable.class) && type.getTrait(FT_Heatable.class).getEfficiency(HeatingType.SH) > 0) {
 					htr3.tanks[0].setTankType(Fluids.SUPERHEATED_HYDROGEN);
 					htr3.markDirty();
 				}
