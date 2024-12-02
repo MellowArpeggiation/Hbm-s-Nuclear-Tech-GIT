@@ -102,23 +102,23 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		Random random = new Random(42);
 		float alt = WorldProviderThatmo.altitude + partialTicks;
 		float rnd = WorldProviderThatmo.randPos;
-		float fl = WorldProviderThatmo.scale;
-		float nl = WorldProviderThatmo.shield;
-		float el = WorldProviderThatmo.nmass;
-		float xcl = WorldProviderThatmo.shielde + partialTicks;
-		float xcvl = WorldProviderThatmo.csyw + partialTicks;
+		float beamscale = WorldProviderThatmo.scale;
+		float shieldscale = WorldProviderThatmo.shield;
+		float waveinterp = WorldProviderThatmo.nmass;
+		float shieldinterp = WorldProviderThatmo.shielde + partialTicks;
+		float shielalpha = WorldProviderThatmo.csyw + partialTicks;
 
 		GL11.glShadeModel(GL11.GL_FLAT);
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		
-		float alphad = 1.0F - Math.min(1.0F, el / 100);
-		float alpd = 1.0F - Math.min(1.0F, xcvl / 100);
+		float alphad = 1.0F - Math.min(1.0F, waveinterp / 100);
+		float alpd = 1.0F - Math.min(1.0F, shielalpha / 100);
 
 		GL11.glPushMatrix();
 
 		GL11.glTranslated(21.5, 33, -28); 
-		GL11.glScaled(0 + nl, 0 + nl, 0 + nl);
+		GL11.glScaled(0 + shieldscale, 0 + shieldscale, 0 + shieldscale);
 		GL11.glRotated(90.0, -10.0, -1.0, 50.0);
 		GL11.glRotated(20.0, -0.0, -1.0, 1.0);
 
@@ -136,7 +136,7 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 
 		GL11.glTranslated(21.5, 33, -28); 
 
-		GL11.glScaled(0 + xcl, 0 + xcl, 0 + xcl);
+		GL11.glScaled(0 + shieldinterp, 0 + shieldinterp, 0 + shieldinterp);
 		GL11.glRotated(90.0, -10.0, -1.0, 50.0);
 		GL11.glRotated(20.0, -0.0, -1.0, 1.0);
 
@@ -261,7 +261,7 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		GL11.glScaled(6, 6, 6);
 
 		GL11.glColor4d(1, 1, 1, 1);
-		BeamPronter.prontBeam(Vec3.createVectorHelper(0, fl, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0xFF9000, 0xFF9000, 0, 2, 0F, 2, (float) alphad * 0.1F, 0.5F);
+		BeamPronter.prontBeam(Vec3.createVectorHelper(0, beamscale, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0xFF9000, 0xFF9000, 0, 2, 0F, 2, (float) alphad * 0.1F, 0.5F);
 
 
 

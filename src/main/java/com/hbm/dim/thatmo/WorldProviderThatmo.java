@@ -50,7 +50,7 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
     	Random rand = new Random();
 
 		if(worldObj.isRemote) {
-        if (chargetime <= 0 || chargetime <= 600) {
+        if (chargetime <= 0 || chargetime <= 1000) {
             chargetime += 1;
             flashd = 0;
         } else if (chargetime >= 100) {
@@ -72,7 +72,6 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
         	if (scale <= 0 || scale <= 20) {
     	    scale += 1.5;
     	}
-        
 
     	if (scale >= 20) {
     	    scale = 20; 
