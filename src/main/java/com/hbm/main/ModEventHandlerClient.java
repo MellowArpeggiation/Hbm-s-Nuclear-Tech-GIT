@@ -1108,34 +1108,6 @@ public class ModEventHandlerClient {
 		
 		return null;
 	}
-	
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void onClientTickLast(ClientTickEvent event) {
-		
-		if(event.phase == Phase.START && GeneralConfig.enableSkyboxes) {
-			
-			World world = Minecraft.getMinecraft().theWorld;
-			if(world == null) return;
-			
-			IRenderHandler sky = world.provider.getSkyRenderer();
-			
-			// if(world.provider instanceof WorldProviderSurface) {
-			// 	if(!(sky instanceof RenderNTMSkyboxImpact)) {
-			// 		world.provider.setSkyRenderer(new RenderNTMSkyboxImpact());
-			// 		return;
-			// 	}
-			// }
-
-			// Since we aren't just adding a star or two, we can't employ the chainloader,
-			// sorry, no custom skyboxes for SHPAYCE!
-			if(world.provider.dimensionId == 0) {
-				if(!(sky instanceof SkyProviderCelestial)) {
-					world.provider.setSkyRenderer(new SkyProviderCelestial());
-				}
-			}
-		}
-	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.LOW)

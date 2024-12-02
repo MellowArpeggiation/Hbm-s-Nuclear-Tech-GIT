@@ -323,6 +323,8 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		if(atmosphere == null) return sunBrightness;
 
+		getMoonPhase(worldObj.getWorldTime());
+
 		return sunBrightness * MathHelper.clamp_float(1.0F - ((float)atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F);
 	}
 
@@ -407,10 +409,31 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		return super.getCloudHeight();
 	}
 
+	private IRenderHandler skyProvider;
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IRenderHandler getSkyRenderer() {
-		return new SkyProviderCelestial();
+		// I do not condone this because it WILL confuse your players, but if you absolutely must,
+		// you can uncomment this line below in your fork to get default skybox rendering on Earth.
+		
+		// if(dimensionId == 0) return super.getSkyRenderer();
+		
+		// Make sure you also uncomment the relevant line in getMoonPhase below too.
+
+		// This is not in a config because it is not a decision you should make lightly, as it will break:
+		//  * certain atmosphere/terraforming modifications
+		//  * Dyson swarm rendering
+		//  * seeing weapons platforms in orbit (the big cannon from the trailer will NOT be visible)
+		//  * weapon effects on the atmosphere (burning holes in the atmosphere, hitting planetary defense shields)
+		//  * accurate celestial body rendering (you won't be able to see ANY other planets)
+		//     * this also breaks future plans to modify orbits via huge mass drivers, if someone decides to yeet the moon at you, you won't know
+		//  * sun extinction/modification events (the sun will appear normal even if it has been turned into a black hole)
+		//  * player launched satellites won't be visible
+		//  * artificial moons/rings (once implemented) won't be visible
+
+		if(skyProvider == null) skyProvider = new SkyProviderCelestial();
+		return skyProvider;
 	}
 
 	protected double getDayLength() {
@@ -439,12 +462,19 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	}
 
 	@Override
-	public float getCurrentMoonPhaseFactor() {
-		// Closest satellite determines monster spawning
+	public int getMoonPhase(long worldTime) {
+		// Uncomment this line as well to return moon phase difficulty calcs to vanilla
+		// if(dimensionId == 0) return super.getMoonPhase(worldTime);
+
 		CelestialBody body = CelestialBody.getBody(worldObj);
-		if(body.satellites.size() == 0) return 0.5F;
-		// SolarSystem.calculateSingleAngle(worldObj, 0, body, body.satellites.get(0));
-		return 0.5F;
+
+		// if no moons, default to half-moon difficulty
+		if(body.satellites.size() == 0) return 2;
+
+		// Determine difficulty phase from closest moon
+		int phase = Math.round(8 - ((float)SolarSystem.calculateSingleAngle(worldObj, 0, body, body.satellites.get(0)) / 45 + 4));
+		if(phase >= 8) return 0;
+		return phase;
 	}
 
 	// This is the vanilla junk table, for replacing fish on dead worlds
