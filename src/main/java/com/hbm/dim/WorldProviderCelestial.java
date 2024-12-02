@@ -323,8 +323,6 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		if(atmosphere == null) return sunBrightness;
 
-		getMoonPhase(worldObj.getWorldTime());
-
 		return sunBrightness * MathHelper.clamp_float(1.0F - ((float)atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F);
 	}
 
