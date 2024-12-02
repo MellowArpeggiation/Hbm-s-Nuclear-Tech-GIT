@@ -2,8 +2,8 @@ package com.hbm.dim;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.MathHelper;
@@ -26,6 +26,8 @@ import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.util.BobMathUtil;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
+
 public class SkyProviderCelestial extends IRenderHandler {
 	
 	private static final ResourceLocation planetTexture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/planet.png");
@@ -36,6 +38,9 @@ public class SkyProviderCelestial extends IRenderHandler {
 	private static final ResourceLocation noise = new ResourceLocation(RefStrings.MODID, "shaders/iChannel1.png");
 
 	protected static final Shader planetShader = new Shader(new ResourceLocation(RefStrings.MODID, "shaders/crescent.frag"));
+
+	private static final String[] GL_SKY_LIST = new String[] { "glSkyList", "field_72771_w", "G" };
+	private static final String[] GL_SKY_LIST2 = new String[] { "glSkyList2", "field_72781_x", "H" };
 
 	public static boolean displayListsInitialized = false;
 	public static int glSkyList;
@@ -48,48 +53,9 @@ public class SkyProviderCelestial extends IRenderHandler {
 	}
 
 	private void initializeDisplayLists() {
-		glSkyList = GLAllocation.generateDisplayLists(2);
-		glSkyList2 = glSkyList + 1;
-
-		final Tessellator tessellator = Tessellator.instance;
-		final byte byte2 = 64;
-		final int i = 256 / byte2 + 2;
-
-		GL11.glNewList(glSkyList, GL11.GL_COMPILE);
-		{
-			float f = 16F;
-			tessellator.startDrawingQuads();
-
-			for(int j = -byte2 * i; j <= byte2 * i; j += byte2) {
-				for(int l = -byte2 * i; l <= byte2 * i; l += byte2) {
-					tessellator.addVertex(j + 0, f, l + 0);
-					tessellator.addVertex(j + byte2, f, l + 0);
-					tessellator.addVertex(j + byte2, f, l + byte2);
-					tessellator.addVertex(j + 0, f, l + byte2);
-				}
-			}
-
-			tessellator.draw();
-		}
-		GL11.glEndList();
-
-		GL11.glNewList(glSkyList2, GL11.GL_COMPILE);
-		{
-			float f = -16F;
-			tessellator.startDrawingQuads();
-
-			for(int k = -byte2 * i; k <= byte2 * i; k += byte2) {
-				for(int i1 = -byte2 * i; i1 <= byte2 * i; i1 += byte2) {
-					tessellator.addVertex(k + byte2, f, i1 + 0);
-					tessellator.addVertex(k + 0, f, i1 + 0);
-					tessellator.addVertex(k + 0, f, i1 + byte2);
-					tessellator.addVertex(k + byte2, f, i1 + byte2);
-				}
-			}
-
-			tessellator.draw();
-		}
-		GL11.glEndList();
+		Minecraft mc = Minecraft.getMinecraft();
+		glSkyList = ReflectionHelper.getPrivateValue(RenderGlobal.class, mc.renderGlobal, GL_SKY_LIST);
+		glSkyList2 = ReflectionHelper.getPrivateValue(RenderGlobal.class, mc.renderGlobal, GL_SKY_LIST2);
 
 		displayListsInitialized = true;
 	}
