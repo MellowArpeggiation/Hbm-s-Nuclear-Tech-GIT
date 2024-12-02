@@ -66,7 +66,7 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
             }
         }
 	    if(chargetime == 285) {
-            Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.cenimp", 10F, 1F);
+            Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
     	}
         if ( chargetime >= 300 &&chargetime <= 430) {
         	if (scale <= 0 || scale <= 20) {

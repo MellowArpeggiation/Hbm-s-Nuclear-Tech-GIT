@@ -28,6 +28,39 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 	private static final ResourceLocation ThatmoShield = new ResourceLocation("hbm:textures/particle/cens.png");
 	private static final ResourceLocation flash = new ResourceLocation("hbm:textures/misc/space/flare.png");
 
+	
+	//someone beat me to a pulp for ever conceiving this awful noxious class my god take me out of my misery pls....
+	
+	/*
+	 Father, O Father,
+	Mellow thy wrath, which lessons have brought great cherish and wisdom,
+	For I have sinned upon your gracious OpenGL gifts, the holy relics of your craft.
+	You have blessed me with your very blood and soul,
+	A lineage of knowledge, a testament to your enduring grace.
+
+	I kneel, broken, upon this very pedestal,
+	Begging for salvation from the sins I have wrought,
+	A desecration of thy divine creation.
+	This twisted caricature of competence,
+	This grim reflection of what could have been, bears my name.
+
+	Father, forgive the folly of my misguided hands,
+	They who dared to mold with imperfection,
+	To misinterpret the purity of your light.
+	Let your luminescence pierce through my errors,
+	Guiding me back to the path of clarity and redemption.
+
+	I offer my toil, my remorseful labor,
+	As a prayer, as an offering to cleanse my mistakes.
+	Let this humble plea ascend to the heavens of logic and form,
+	So that I may rise anew,
+	A disciple, unworthy but devoted,
+	To the mastery you have entrusted to me.
+
+	Illuminate my ignorance with your wisdom,
+	And restore my hands to craft with honor and precision.
+	Amen.
+	*/
 	@Override
 	public void renderSpecialEffects(float partialTicks, WorldClient world, Minecraft mc) {
         float alpha = (WorldProviderThatmo.flashd <= 0) ? 0.0F : 1.0F - Math.min(1.0F, WorldProviderThatmo.flashd / 100);
@@ -66,7 +99,56 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		tessellator.addVertexWithUV(-var14, 100.0D, var14, 0.0D, 1.0D);
 		tessellator.draw();
 		GL11.glPopMatrix();
+		Random random = new Random(42);
+		float alt = WorldProviderThatmo.altitude + partialTicks;
+		float rnd = WorldProviderThatmo.randPos;
+		float fl = WorldProviderThatmo.scale;
+		float nl = WorldProviderThatmo.shield;
+		float el = WorldProviderThatmo.nmass;
+		float xcl = WorldProviderThatmo.shielde + partialTicks;
+		float xcvl = WorldProviderThatmo.csyw + partialTicks;
 
+		GL11.glShadeModel(GL11.GL_FLAT);
+
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		
+		float alphad = 1.0F - Math.min(1.0F, el / 100);
+		float alpd = 1.0F - Math.min(1.0F, xcvl / 100);
+
+		GL11.glPushMatrix();
+
+		GL11.glTranslated(21.5, 33, -28); 
+		GL11.glScaled(0 + nl, 0 + nl, 0 + nl);
+		GL11.glRotated(90.0, -10.0, -1.0, 50.0);
+		GL11.glRotated(20.0, -0.0, -1.0, 1.0);
+
+		GL11.glColor4d(1, 1, 1,  alphad);
+
+
+		//GL11.glDepthMask(false);
+		
+		mc.renderEngine.bindTexture(this.texture);
+		ResourceManager.plane.renderAll();
+
+		GL11.glPopMatrix();
+		GL11.glPushMatrix();
+
+
+		GL11.glTranslated(21.5, 33, -28); 
+
+		GL11.glScaled(0 + xcl, 0 + xcl, 0 + xcl);
+		GL11.glRotated(90.0, -10.0, -1.0, 50.0);
+		GL11.glRotated(20.0, -0.0, -1.0, 1.0);
+
+		GL11.glColor4d(1, 1, 1, alpd);
+
+
+		//GL11.glDepthMask(false);
+		
+		mc.renderEngine.bindTexture(ThatmoShield);
+		ResourceManager.plane.renderAll();
+
+		GL11.glPopMatrix();
 	
 
 		for(Meteor meteor : WorldProviderThatmo.meteors) {
@@ -166,23 +248,8 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		GL11.glPopMatrix();
 		
 		//genuinley horrific peice of shit i actually vomit looking at this
-		Random random = new Random(42);
-		float alt = WorldProviderThatmo.altitude + partialTicks;
-		float rnd = WorldProviderThatmo.randPos;
-		float fl = WorldProviderThatmo.scale;
-		float nl = WorldProviderThatmo.shield;
-		float el = WorldProviderThatmo.nmass;
-		float xcl = WorldProviderThatmo.shielde + partialTicks;
-		float xcvl = WorldProviderThatmo.csyw + partialTicks;
 
-		GL11.glShadeModel(GL11.GL_FLAT);
-
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		
-		float alphad = 1.0F - Math.min(1.0F, el / 100);
-		float alpd = 1.0F - Math.min(1.0F, xcvl / 100);
-		
-
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDepthMask(true);
 		GL11.glPushMatrix();
@@ -264,6 +331,8 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		BeamPronter.prontBeam(Vec3.createVectorHelper(0, 5, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0xFF9000, 0xFF9000, 0, 1, 0F, 6, (float)0.2 * 0.2F, 0.5F);
 		}
 		GL11.glPopMatrix();
+		
+		
 	}
 	
 	public void renderSmoke(ResourceLocation loc1, long age) {

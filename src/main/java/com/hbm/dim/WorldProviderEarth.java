@@ -32,9 +32,7 @@ public class WorldProviderEarth extends WorldProviderCelestial {
     
 	@Override
 	public void updateWeather() {
-		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
-
-
+		super.updateWeather();
 
 	}
     
