@@ -65,23 +65,23 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 		World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
 	    SatelliteSavedData data = (SatelliteSavedData)world.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
+        if(!worldObj.isRemote) {
 
-	    if(data != null) {
-	    	System.out.println(data.sats);
-			HashMap<Integer, Satellite> sats = data.sats;
-			for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
-				SatelliteWar war = (SatelliteWar) entry.getValue();
-				System.out.println("whjat");
-				war.fire();
-					if(war.getInterp() <= 1) {
-						war.playsound(worldObj);
-					}
-				
+		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world).sats;
+		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
+			SatelliteWar war = (SatelliteWar) entry.getValue();
+			war.fire();
+			System.out.println(war.getInterp());
+			
 			}
-  	
-	    }
-
-
+        } else {
+			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+				SatelliteWar war = (SatelliteWar) entry.getValue();
+				if(war.getInterp() <= 1) {
+					war.playsound(worldObj);
+				}
+			}
+		}
 
         CBT_War war = CelestialBody.getTrait(worldObj, CBT_War.class);
         if(!worldObj.isRemote) {
@@ -253,9 +253,26 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	@SideOnly(Side.CLIENT)
 	public Vec3 getSkyColor(Entity camera, float partialTicks) {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
-		
+
 		// The cold hard vacuum of space
-		if(atmosphere == null) return Vec3.createVectorHelper(0, 0, 0);
+		if(atmosphere == null) {
+			Vec3 color = Vec3.createVectorHelper(0, 0, 0);
+
+			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+				SatelliteWar war = (SatelliteWar) entry.getValue();
+				float flame = war.getInterp();
+	            float invertedFlash = flame;
+                float alpd = 1.0F - Math.min(1.0F, flame / 100);
+
+				color.xCoord += alpd * 1.5;
+				color.yCoord += alpd * 1.5;
+				color.zCoord += alpd * 1.5;
+
+				
+			}	
+
+			return color;
+		} 
 
 		float sun = this.getSunBrightnessFactor(1.0F);
 		float totalPressure = (float)atmosphere.getPressure();
@@ -286,8 +303,6 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 				color.zCoord + fluidColor.zCoord * percentage
 			);
 		}
-		
-
 
 		if(CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
 			CBT_War wardat = CelestialBody.getTrait(worldObj, CBT_War.class);
@@ -306,16 +321,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		        }
 		    }
 
-		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-			SatelliteWar war = (SatelliteWar) entry.getValue();
-			float flame = war.getInterp();
-            float invertedFlash = 100 - flame;
-			color.xCoord += invertedFlash * 0.5;
-			color.yCoord += invertedFlash * 0.5;
-			color.zCoord += invertedFlash * 0.5;
-
-			
-		}
+		
 		// Lower pressure sky renders thinner
 		float pressureFactor = MathHelper.clamp_float(totalPressure, 0.0F, 1.0F);
 		color.xCoord *= pressureFactor;
@@ -417,7 +423,18 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		float sunBrightness = super.getSunBrightness(par1);
 
-		if(atmosphere == null) return sunBrightness;
+		if(atmosphere == null) {
+			
+			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+				SatelliteWar war = (SatelliteWar) entry.getValue();
+				float flame = war.getInterp();
+	            float invertedFlash = 100 - flame;
+                float alpd = 1.0F - Math.min(1.0F, flame / 100);
+				skyflash = alpd;
+			}
+			return sunBrightness + skyflash;
+		
+		}
 		if(CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
 			CBT_War wardat = CelestialBody.getTrait(worldObj, CBT_War.class);
 		        for (int i = 0; i < wardat.getProjectiles().size(); i++) {
@@ -430,7 +447,8 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		        }
 		    }
 
-		return sunBrightness * MathHelper.clamp_float(1.0F - ((float)atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F) + skyflash;
+		
+		return sunBrightness * MathHelper.clamp_float(1.0F - ((float)atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F) + skyflash + skyflash;
 	}
 
 	@Override

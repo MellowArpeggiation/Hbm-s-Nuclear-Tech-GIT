@@ -273,9 +273,9 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 						GL11.glPushMatrix();
 						GL11.glTranslated(1, 5.5, 0); 
-						BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2 , 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.2 * 0.2F, alped );
-						BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.2 * 0.6F, alped );
-						BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2, 0), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x202060, 0x202060, (int)(world.getTotalWorldTime() / 5) % 1000, 25, 0.2F, 6, (float)0.2 * 0.1F, alped );
+						BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2 , 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)1.6 * 1.2F * alped, alped * 0.2F );
+						BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.7 * 0.6F, alped * 0.6F );
+						BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2, 0), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x202060, 0x202060, (int)(world.getTotalWorldTime() / 5) % 1000, 35, 0.2F, 6, (float)0.2 * 0.1F, alped );
 						GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 						GL11.glDisable(GL11.GL_LIGHTING);
 						GL11.glEnable(GL11.GL_CULL_FACE);
@@ -291,7 +291,8 @@ public class SkyProviderCelestial extends IRenderHandler {
 						GL11.glDepthRange(0.0, 1.0);
 
 						//GL11.glDepthMask(false);
-						
+						GL11.glColor4d(planetTint.xCoord - 0.1F, planetTint.yCoord - 0.1F, planetTint.zCoord - 0.1F, 1);
+
 						mc.renderEngine.bindTexture(ResourceManager.sat_rail_tex);
 						ResourceManager.sat_rail.renderAll();
 						
