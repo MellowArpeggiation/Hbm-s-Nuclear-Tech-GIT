@@ -128,7 +128,17 @@ public class SkyProviderCelestial extends IRenderHandler {
 		GL11.glDepthMask(false);
 		GL11.glEnable(GL11.GL_FOG);
 		GL11.glColor3f(skyR, skyG, skyB);
-		GL11.glCallList(glSkyList);
+
+		GL11.glPushMatrix();
+		{
+
+			GL11.glTranslatef(0.0F, mc.gameSettings.renderDistanceChunks - 12.0F, 0.0F);
+
+			GL11.glCallList(glSkyList);
+
+		}
+		GL11.glPopMatrix();
+
 		GL11.glDisable(GL11.GL_FOG);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
