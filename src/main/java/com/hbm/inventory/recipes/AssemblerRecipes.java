@@ -1485,6 +1485,7 @@ public class AssemblerRecipes extends SerializableRecipe {
 		makeRecipe(new ComparableStack(ModItems.swarm_member, 1), new AStack[] {
 				new OreDictStack(ANY_HARDPLASTIC.ingot(), 2),
 				new OreDictStack(BE.billet(), 4),
+				new OreDictStack(ALLOY.wireFine(), 32),
 		}, 100);
 		
 		if(GeneralConfig.enableMekanismChanges && Loader.isModLoaded("Mekanism")) {
