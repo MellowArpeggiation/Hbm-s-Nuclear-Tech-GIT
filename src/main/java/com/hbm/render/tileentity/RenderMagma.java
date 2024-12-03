@@ -6,10 +6,8 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
-import com.hbm.tileentity.machine.TileEntityMachineExcavator;
 import com.hbm.tileentity.machine.TileEntityMachineMagma;
 
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -38,7 +36,7 @@ public class RenderMagma extends TileEntitySpecialRenderer implements IItemRende
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.magma_drill_tex);
 		ResourceManager.magma_drill.renderAllExcept("DrillHead");
-		GL11.glTranslatef(0, 0, 0);
+		GL11.glTranslatef(0, -drill.drillExtension, 0);
 		ResourceManager.magma_drill.renderPart("DrillHead");
 
 		GL11.glShadeModel(GL11.GL_FLAT);

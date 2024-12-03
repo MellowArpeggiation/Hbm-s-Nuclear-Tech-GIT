@@ -5,60 +5,85 @@ import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energymk2.IEnergyReceiverMK2;
 import api.hbm.fluid.IFluidStandardTransceiver;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.AxisAlignedBB;
 
 public class TileEntityMachineMagma extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardTransceiver {
 
-	public TileEntityMachineMagma(int slotCount) {
-		super(slotCount);
-		// TODO Auto-generated constructor stub
+	public long power;
+	public FluidTank[] tanks;
+
+	public float drillExtension;
+
+	public TileEntityMachineMagma() {
+		super(0);
+		tanks = new FluidTank[0];
+	}
+
+	@Override
+	public void updateEntity() {
+		
 	}
 
 	@Override
 	public long getPower() {
-		// TODO Auto-generated method stub
-		return 0;
+		return power;
 	}
 
 	@Override
 	public void setPower(long power) {
-		// TODO Auto-generated method stub
-
+		this.power = power;
 	}
 
 	@Override
 	public long getMaxPower() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public FluidTank[] getAllTanks() {
-		// TODO Auto-generated method stub
-		return null;
+		return tanks;
 	}
 
 	@Override
 	public FluidTank[] getSendingTanks() {
-		// TODO Auto-generated method stub
-		return null;
+		return tanks;
 	}
 
 	@Override
 	public FluidTank[] getReceivingTanks() {
-		// TODO Auto-generated method stub
-		return null;
+		return tanks;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "container.machineMagma";
 	}
 
+	AxisAlignedBB bb = null;
+	
 	@Override
-	public void updateEntity() {
-		// TODO Auto-generated method stub
-
+	public AxisAlignedBB getRenderBoundingBox() {
+		
+		if(bb == null) {
+			bb = AxisAlignedBB.getBoundingBox(
+				xCoord - 4,
+				yCoord - 3,
+				zCoord - 4,
+				xCoord + 5,
+				yCoord + 3,
+				zCoord + 5
+			);
+		}
+		
+		return bb;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared() {
+		return 65536.0D;
 	}
 
 }
