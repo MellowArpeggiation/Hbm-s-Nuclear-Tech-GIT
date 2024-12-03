@@ -142,7 +142,7 @@ public class Fluids {
 	public static FluidType METHANOL; //syngas + methane, or + natgas? or just from cracking natgas? requires an OH hydroxyl group (it's an alcohOL)
 	public static FluidType CHLOROMETHANE; // halogenated natural gas, used in alkylation
 	public static FluidType BROMINE; // Aklyl Bromide, cokes into bromide powder and natural gas
-	public static FluidType METHYLENE;
+	public static FluidType CHLOROETHANE;
 	public static FluidType POLYTHYLENE; //this is so that you wont need to go through microcrafting hell on circuits //idea is that rubber solution makes these casts that can then be imprinted in the assembly machine without needing to go through the resources to make the circuits one by one, it would be gated behind oil though.
 	public static FluidType RADIOSOLVENT;		//DCM-ish made by wacky radio cracking
 	public static FluidType CHLORINE;			//everone's favorite!
@@ -431,7 +431,7 @@ public class Fluids {
 		CHLOROMETHANE =			new FluidType("CHLOROMETHANE",		0xD3CF9E, 2, 4, 0, EnumSymbol.NONE).addTraits(GASEOUS, new FT_Corrosive(15)).addTraits(new FT_Flammable(50_000));
 		METHANOL =				new FluidType("METHANOL",			0x88739F, 3, 4, 0, EnumSymbol.NONE).addTraits(GASEOUS).addTraits(new FT_Flammable(400_000)).addTraits(new FT_Combustible(FuelGrade.HIGH, 600_000), LIQUID);	//ethanol but more etha per nol
 		BROMINE =				new FluidType("BROMINE",			0xAF2214, 2, 0, 1, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS, new FT_Corrosive(10));
-		METHYLENE =				new FluidType("METHYLENE",			0xBBA9A0, 2, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
+		CHLOROETHANE =			new FluidType("CHLOROETHANE",		0xBBA9A0, 2, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
 		POLYTHYLENE =			new FluidType("POLYTHYLENE",		0x35302E, 1, 2, 0, EnumSymbol.NONE).addTraits(LIQUID).addTraits(new FT_Flammable(50_000));	
 		FLUORINE =				new FluidType("FLUORINE",			0xC5C539, 4, 4, 4, EnumSymbol.OXIDIZER).addTraits(GASEOUS, new FT_Corrosive(40), new FT_Poison(true, 1)).addTraits(new FT_Flammable(10_000));	
 		TEKTOAIR =				new FluidType("TEKTOAIR",			0x245F46, 4, 2, 0, EnumSymbol.OXIDIZER).addTraits(GASEOUS,new FT_Poison(true, 1)).addTraits(new FT_Flammable(30_000));		
@@ -630,7 +630,7 @@ public class Fluids {
 		metaOrder.add(CHLOROMETHANE);
 		metaOrder.add(METHANOL);
 		metaOrder.add(POLYTHYLENE);
-		metaOrder.add(METHYLENE); //oh yeah this is meant to be that inbetween step for making the cast fluid
+		metaOrder.add(CHLOROETHANE); //oh yeah this is meant to be that inbetween step for making the cast fluid
 		//airs
 		metaOrder.add(EVEAIR); //iodine, mercury, potassium permenganate
 		metaOrder.add(JOOLGAS);
