@@ -190,7 +190,7 @@ public class ResourceManager {
 	//Mining Drill
 	public static final IModelCustom mining_drill = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/mining_drill.obj")).asVBO();
 	public static final IModelCustom ore_slopper = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/ore_slopper.obj")).asVBO();
-	public static final IModelCustom magma_drill = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/magma_drill.obj")).asVBO();
+	public static final IModelCustom magma_drill = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/magma_drill.obj")).asVBO();
 
 	//Laser Miner
 	public static final IModelCustom mining_laser = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/mining_laser.obj")).asVBO();
@@ -628,7 +628,7 @@ public class ResourceManager {
 	//Mining Drill
 	public static final ResourceLocation mining_drill_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/mining_drill.png");
 	public static final ResourceLocation ore_slopper_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/ore_slopper.png");
-	public static final ResourceLocation magma_drill_tex = new ResourceLocation(RefStrings.MODID, "textures/models/magma_drill.png");
+	public static final ResourceLocation magma_drill_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/magma_drill.png");
 
 	//Laser Miner
 	public static final ResourceLocation mining_laser_base_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/mining_laser_base.png");

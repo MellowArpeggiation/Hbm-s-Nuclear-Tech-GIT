@@ -54,11 +54,12 @@ public class MachineMagma extends BlockDummyable implements ILookOverlay {
 		z += dir.offsetZ * o;
 		
 		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
-		this.makeExtra(world, x + dir.offsetX * 3, y - 1, z + dir.offsetZ * 3);
-		this.makeExtra(world, x + dir.offsetX * 3 + rot.offsetX, y - 1, z + dir.offsetZ * 3 + rot.offsetZ);
-		this.makeExtra(world, x + dir.offsetX * 3 - rot.offsetX, y - 1, z + dir.offsetZ * 3 - rot.offsetZ);
-		this.makeExtra(world, x + dir.offsetX * 3 + rot.offsetX, y - 2, z + dir.offsetZ * 3 + rot.offsetZ);
-		this.makeExtra(world, x + dir.offsetX * 3 - rot.offsetX, y - 2, z + dir.offsetZ * 3 - rot.offsetZ);
+		this.makeExtra(world, x - dir.offsetX * 3, y - 1, z + dir.offsetZ * 3);
+		this.makeExtra(world, x - dir.offsetX * 3, y - 2, z + dir.offsetZ * 3);
+		this.makeExtra(world, x - dir.offsetX * 3 + rot.offsetX, y - 1, z - dir.offsetZ * 3 + rot.offsetZ);
+		this.makeExtra(world, x - dir.offsetX * 3 - rot.offsetX, y - 1, z - dir.offsetZ * 3 - rot.offsetZ);
+		this.makeExtra(world, x - dir.offsetX * 3 + rot.offsetX, y - 2, z - dir.offsetZ * 3 + rot.offsetZ);
+		this.makeExtra(world, x - dir.offsetX * 3 - rot.offsetX, y - 2, z - dir.offsetZ * 3 - rot.offsetZ);
 	}
 
 	@Override
