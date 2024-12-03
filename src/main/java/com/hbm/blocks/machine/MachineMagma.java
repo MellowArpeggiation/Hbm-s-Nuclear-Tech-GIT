@@ -1,6 +1,7 @@
 package com.hbm.blocks.machine;
 
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.blocks.ILookOverlay;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityMachineMagma;
 
@@ -8,9 +9,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class MachineMagma extends BlockDummyable {
+public class MachineMagma extends BlockDummyable implements ILookOverlay {
 
 	public MachineMagma() {
 		super(Material.iron);
@@ -57,6 +59,11 @@ public class MachineMagma extends BlockDummyable {
 		this.makeExtra(world, x + dir.offsetX * 3 - rot.offsetX, y - 1, z + dir.offsetZ * 3 - rot.offsetZ);
 		this.makeExtra(world, x + dir.offsetX * 3 + rot.offsetX, y - 2, z + dir.offsetZ * 3 + rot.offsetZ);
 		this.makeExtra(world, x + dir.offsetX * 3 - rot.offsetX, y - 2, z + dir.offsetZ * 3 - rot.offsetZ);
+	}
+
+	@Override
+	public void printHook(Pre event, World world, int x, int y, int z) {
+		
 	}
 
 }
