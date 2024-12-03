@@ -3344,7 +3344,8 @@ public class ModBlocks {
 		//Machines
 		register(machine_autocrafter);
 		register(machine_funnel);
-		
+		register(war_controller);
+
 		register(anvil_iron);
 		register(anvil_lead);
 		register(anvil_steel);

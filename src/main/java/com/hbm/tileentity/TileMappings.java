@@ -183,6 +183,7 @@ public class TileMappings {
 		put(TileEntityICFStruct.class, "tileentity_icf_struct");
 		put(TileEntityHadronDiode.class, "tileentity_hadron_diode");
 		put(TileEntityHadronPower.class, "tileentity_hadron_power");
+		put(TileEntityMachineWarController.class, "tileentity_war");
 		put(TileEntityHadron.class, "tileentity_hadron");
 		put(TileEntitySolarBoiler.class, "tileentity_solarboiler");
 		put(TileEntityMachineSolarPanel.class, "tileentity_solarpanel");
