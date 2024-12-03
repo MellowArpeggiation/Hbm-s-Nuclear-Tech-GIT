@@ -214,9 +214,9 @@ public class Fluids {
 	public static FluidType CREAM;
 	public static FluidType DICYANOACETYLENE;//DICYANOACETYLENE
 	public static FluidType FULLERENE;
-	public static FluidType MORKITE;
-	public static FluidType MORKINE; //gaseous morkite
-	public static FluidType MSLURRY; // Morkite slurry, similar to MINSOL
+	public static FluidType MAGMA;
+	public static FluidType MORKINE;
+	public static FluidType MSLURRY;
 	public static FluidType PHEROMONE; 
 	public static FluidType PHEROMONE_M; 
 
@@ -240,6 +240,10 @@ public class Fluids {
 	//MSLURRY should defintely be dissolved though, acidized and fed through some sort of machine that settles the silica goop to the bottom before finally leaving 
 	//some aqueous gel-like fluid behind.
 	//that aqueous gel would then be the main plaything of this godforsaken chain
+	
+	
+	//hello guys i have decided to just literally give up on "morkite"
+	
 	public static FluidType STELLAR_FLUX;
 	public static FluidType VITRIOL;
 	public static FluidType SLOP;
@@ -468,7 +472,7 @@ public class Fluids {
 		EMILK =					new FluidType("EMILK",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);//F5DEE4
 		CMILK =					new FluidType("CMILK",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);//F5DEE4
 		CREAM =					new FluidType("CREAM",				0xCFCFCF, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID);//F5DEE4
-		MORKITE =				new FluidType("MORKITE",			0x333C42, 3, 3, 3, EnumSymbol.NONE).addTraits(new FT_Flammable(60), LIQUID, VISCOUS); 
+		MAGMA =					new FluidType("MAGMA",				0xFF3300, 3, 3, 3, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS); 
 		DICYANOACETYLENE =		new FluidType("DICYANOACETYLENE",	0x675A9F, 1, 2, 1, EnumSymbol.NONE).addTraits(new FT_Flammable(4_000_000), GASEOUS); 
 		MORKINE =				new FluidType("MORKINE",			0x796089, 3, 3, 3, EnumSymbol.NONE).addTraits(new FT_Flammable(200), LIQUID, VISCOUS); 
 		MSLURRY =				new FluidType("MSLURRY",			0x364D47, 0, 0, 2, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS); 
@@ -610,7 +614,7 @@ public class Fluids {
 		metaOrder.add(NITAN);
 		metaOrder.add(HYDRAZINE);
 		metaOrder.add(BALEFIRE);
-		metaOrder.add(MORKITE);
+		metaOrder.add(MAGMA);
 		metaOrder.add(MORKINE);
 		metaOrder.add(MSLURRY);
 		metaOrder.add(DICYANOACETYLENE);
@@ -857,7 +861,6 @@ public class Fluids {
 		registerCalculatedFuel(KEROSENE_REFORM, KEROSENE.getTrait(FT_Flammable.class).getHeatEnergy() * complexityReform, 1.5D, FuelGrade.AERO);
 		registerCalculatedFuel(NMASSTETRANOL, BALEFIRE.getTrait(FT_Flammable.class).getHeatEnergy() * 1000, 10.5, FuelGrade.HIGH); //0.8
 		registerCalculatedFuel(DICYANOACETYLENE, (baseline / 0.15 * flammabilityHigh * demandHigh * complexityRefinery * complexityCracking) + UNSATURATEDS.getTrait(FT_Flammable.class).getHeatEnergy(), 0, null);
-		registerCalculatedFuel(MORKITE, (baseline / 0.9D * flammabilityLow * demandLow), 0, null);
 
 		registerCalculatedFuel(REFORMGAS, (baseline / 0.06 * flammabilityHigh * demandLow * complexityVacuum * complexityFraction), 1.5D, FuelGrade.GAS);
 		
