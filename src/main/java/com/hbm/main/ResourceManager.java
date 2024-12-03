@@ -280,6 +280,7 @@ public class ResourceManager {
 
 	// Dyson
 	public static final IModelCustom dyson_receiver = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/dyson_receiver.obj")).asVBO();
+	public static final IModelCustom dyson_swarm_member = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/dyson_swarm_satellite.obj"));
 
 	//Bombs
 	public static final IModelCustom bomb_gadget = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/bombs/gadget.obj")).asVBO();
@@ -729,6 +730,7 @@ public class ResourceManager {
 
 	// Dyson
 	public static final ResourceLocation dyson_receiver_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/dyson_receiver.png");
+	public static final ResourceLocation dyson_swarm_member_tex = new ResourceLocation(RefStrings.MODID, "textures/models/dyson_swarm_satellite.png");
 	
 	//Bombs
 	public static final ResourceLocation bomb_gadget_tex = new ResourceLocation(RefStrings.MODID, "textures/models/bombs/gadget.png");
