@@ -1485,7 +1485,7 @@ public class AssemblerRecipes extends SerializableRecipe {
 		makeRecipe(new ComparableStack(ModItems.swarm_member, 1), new AStack[] {
 				new OreDictStack(W.plateWelded(), 1),
 				new OreDictStack(ANY_HARDPLASTIC.ingot(), 2),
-				new OreDictStack(BE.billet(), 4),
+				new ComparableStack(ModItems.beryllium_mirror, 1),
 				new OreDictStack(ALLOY.wireFine(), 32),
 				new ComparableStack(ModItems.circuit, 2, EnumCircuitType.CAPACITOR_BOARD),
 				new ComparableStack(ModItems.circuit, 1, EnumCircuitType.GASCHIP),
