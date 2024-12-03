@@ -65,7 +65,8 @@ public class PyroOvenRecipes extends SerializableRecipe {
 		registerSFAuto(REFORMATE);
 		registerSFAuto(XYLENE);
 		registerSFAuto(BALEFIRE, 24_000_000L, ModItems.solid_fuel_bf);
-		
+		registerSFAuto(POLYTHYLENE);
+
 		//bedrock ores
 		
 		for(BedrockOreType type : BedrockOreType.values()) {
