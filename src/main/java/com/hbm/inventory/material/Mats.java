@@ -164,7 +164,7 @@ public class Mats {
 	//Space extension alloys
 	public static final NTMMaterial MAT_GAAS		= makeSmeltable(_EX + 0,	GAAS,		0x6F4A57, 0x6F4A57, 0x6F4A57).setShapes(NUGGET, INGOT, BILLET).m();
 	public static final NTMMaterial MAT_STAINLESS	= makeSmeltable(_EX + 1,	STAINLESS,	0x4A4A4A, 0x4A4A4A, 0x4A4A4A).setShapes(INGOT, PLATE).m();
-	public static final NTMMaterial MAT_RICH_MAGMA	= makeSmeltable(_EX + 2,	RICHMAGMA,	0x7F7F7F, 0x353555, 0xFF3212).setShapes(INGOT).n();
+	public static final NTMMaterial MAT_RICH_MAGMA	= makeSmeltable(_EX + 2,	RICHMAGMA,	0x7F7F7F, 0x353555, 0xFF6212).setShapes(INGOT).n();
 
 	//Bob's rare delicacies
 	public static final NTMMaterial MAT_RAREEARTH	= makeNonSmeltable(_ES + 00, 		RAREEARTH,		0xC1BDBD, 0x384646, 0x7B7F7F).setShapes(FRAGMENT, INGOT).n();
