@@ -3,20 +3,26 @@ package com.hbm.tileentity.machine;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.blocks.BlockDummyable;
+import com.hbm.dim.CelestialBody;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.Mats.MaterialStack;
+import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.CrucibleUtil;
+import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.energymk2.IEnergyReceiverMK2;
 import api.hbm.fluid.IFluidStandardTransceiver;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
@@ -24,13 +30,26 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityMachineMagma extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardTransceiver {
 
+	public boolean operating;
+
 	public long power;
+	public long consumption = 10_000;
+
+	// TODO: probably to handle cooling fluids, remove me if we don't do that
 	public FluidTank[] tanks;
 	
 	public static final int maxLiquid = MaterialShapes.BLOCK.q(16);
 	public List<MaterialStack> liquids = new ArrayList<>();
 
+	public float drillRotation;
+	public float prevDrillRotation;
 	public float drillExtension;
+	public float prevDrillExtension;
+
+	protected MaterialStack[] defaultOutputs = new MaterialStack[] {
+		new MaterialStack(Mats.MAT_SLAG, MaterialShapes.INGOT.q(1)),
+		new MaterialStack(Mats.MAT_RICH_MAGMA, MaterialShapes.QUANTUM.q(2)),
+	};
 
 	public TileEntityMachineMagma() {
 		super(0);
@@ -40,14 +59,31 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 	@Override
 	public void updateEntity() {
 		if(!worldObj.isRemote) {
+			for(DirPos pos : getConPos()) {
+				trySubscribe(worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
+			}
+
 			// baby drill, baby
-			int totalLiquid = 0;
-			for(MaterialStack mat : liquids) totalLiquid += mat.amount;
+			operating = canOperate();
+			if(operating) {
+				power -= consumption;
 
-			int toAdd = MaterialShapes.QUANTUM.q(1);
-
-			if(totalLiquid + toAdd <= maxLiquid) {
-				addToStack(new MaterialStack(Mats.MAT_RICH_MAGMA, toAdd));
+				int timeBetweenOutputs = 10;
+				
+				if(worldObj.getTotalWorldTime() % timeBetweenOutputs == 0) {
+					for(MaterialStack mat : getOutputs()) {
+						int totalLiquid = 0;
+						for(MaterialStack m : liquids) totalLiquid += m.amount;
+			
+						int toAdd = mat.amount;
+			
+						if(totalLiquid + toAdd <= maxLiquid) {
+							addToStack(mat);
+						} else {
+							break;
+						}
+					}
+				}
 			}
 
 			// pour me a drink, barkeep
@@ -70,10 +106,48 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 			}
 			
 			liquids.removeIf(o -> o.amount <= 0);
+
+			networkPackNT(250);
+		} else {
+
 		}
 	}
 
-	public void addToStack(MaterialStack matStack) {
+	private DirPos[] getConPos() {
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
+		return new DirPos[] {
+			new DirPos(xCoord - dir.offsetX * 4, yCoord - 1, zCoord - dir.offsetZ * 4, dir),
+			new DirPos(xCoord - dir.offsetX * 4, yCoord - 2, zCoord - dir.offsetZ * 4, dir),
+			new DirPos(xCoord - dir.offsetX * 4 + rot.offsetX, yCoord - 1, zCoord - dir.offsetZ * 4 + rot.offsetZ, dir),
+			new DirPos(xCoord - dir.offsetX * 4 + rot.offsetX, yCoord - 2, zCoord - dir.offsetZ * 4 + rot.offsetZ, dir),
+			new DirPos(xCoord - dir.offsetX * 4 - rot.offsetX, yCoord - 1, zCoord - dir.offsetZ * 4 - rot.offsetZ, dir),
+			new DirPos(xCoord - dir.offsetX * 4 - rot.offsetX, yCoord - 2, zCoord - dir.offsetZ * 4 - rot.offsetZ, dir),
+		};
+	}
+
+	private boolean canOperate() {
+		// Currently only functions on Moho, so the simplest solution is acceptable
+		CelestialBody body = CelestialBody.getBody(worldObj);
+		if(body.name != "moho") return false;
+
+		if(power < consumption) return false;
+
+		for(int x = -1; x <= 1; x++) {
+			for(int z = -1; z <= 1; z++) {
+				if(worldObj.getBlock(xCoord + x, yCoord - 4, zCoord + z) != Blocks.lava) return false;
+			}
+		}
+
+		return true;
+	}
+
+	// Returns materials produced at this location, varied by perlin noise
+	private MaterialStack[] getOutputs() {
+		return defaultOutputs;
+	}
+
+	private void addToStack(MaterialStack matStack) {
 		for(MaterialStack mat : liquids) {
 			if(mat.material == matStack.material) {
 				mat.amount += matStack.amount;
@@ -82,6 +156,67 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 		}
 		
 		liquids.add(matStack.copy());
+	}
+
+	@Override
+	public void serialize(ByteBuf buf) {
+		super.serialize(buf);
+
+		buf.writeBoolean(operating);
+		buf.writeLong(power);
+		
+		for(int i = 0; i < tanks.length; i++) tanks[i].serialize(buf);
+
+		buf.writeShort(liquids.size());
+		for(MaterialStack sta : liquids) {
+			buf.writeInt(sta.material.id);
+			buf.writeInt(sta.amount);
+		}
+	}
+
+	@Override
+	public void deserialize(ByteBuf buf) {
+		super.deserialize(buf);
+
+		operating = buf.readBoolean();
+		power = buf.readLong();
+
+		for(int i = 0; i < tanks.length; i++) tanks[i].deserialize(buf);
+
+		liquids.clear();
+		int mats = buf.readShort();
+		for(int i = 0; i < mats; i++) {
+			liquids.add(new MaterialStack(Mats.matById.get(buf.readInt()), buf.readInt()));
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+
+		power = nbt.getLong("power");
+
+		for(int i = 0; i < tanks.length; i++) tanks[i].readFromNBT(nbt, "t" + i);
+
+		int[] liquidData = nbt.getIntArray("liquids");
+		for(int i = 0; i < liquidData.length / 2; i++) {
+			NTMMaterial mat = Mats.matById.get(liquidData[i * 2]);
+			if(mat == null) continue;
+			liquids.add(new MaterialStack(mat, liquidData[i * 2 + 1]));
+		}
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+
+		nbt.setLong("power", power);
+		
+		for(int i = 0; i < tanks.length; i++) tanks[i].writeToNBT(nbt, "t" + i);
+
+		int[] liquidData = new int[liquids.size() * 2];
+		for(int i = 0; i < liquids.size(); i++) { MaterialStack sta = liquids.get(i); liquidData[i * 2] = sta.material.id; liquidData[i * 2 + 1] = sta.amount; }
+		nbt.setIntArray("liquids", liquidData);
 	}
 
 	@Override
@@ -96,7 +231,7 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 
 	@Override
 	public long getMaxPower() {
-		return 0;
+		return 1_000_000;
 	}
 
 	@Override
