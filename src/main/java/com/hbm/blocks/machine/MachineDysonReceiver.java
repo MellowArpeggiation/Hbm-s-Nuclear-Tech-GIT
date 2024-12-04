@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
+import com.hbm.blocks.ITooltipProvider;
 import com.hbm.handler.MultiblockHandlerXR;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.TileEntityProxyCombo;
@@ -20,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay {
+public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay, ITooltipProvider {
 	
 	public MachineDysonReceiver(Material mat) {
 		super(mat);
@@ -128,6 +129,12 @@ public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay
 		}
 		
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean ext) {
+		addStandardInfo(stack, player, list, ext);
 	}
 
 }

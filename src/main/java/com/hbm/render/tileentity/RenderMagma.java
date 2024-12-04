@@ -44,7 +44,7 @@ public class RenderMagma extends TileEntitySpecialRenderer implements IItemRende
 			
 			GL11.glShadeModel(GL11.GL_SMOOTH);
 			bindTexture(ResourceManager.magma_drill_tex);
-			ResourceManager.magma_drill.renderAllExcept("DrillHead");
+			ResourceManager.magma_drill.renderAllExcept("DrillHead", "Blades");
 
 			float drillRotation = drill.prevDrillRotation + (drill.drillRotation - drill.prevDrillRotation) * interp;
 			float lavaHeight = drill.prevLavaHeight + (drill.lavaHeight - drill.prevLavaHeight) * interp;
@@ -54,6 +54,15 @@ public class RenderMagma extends TileEntitySpecialRenderer implements IItemRende
 
 				GL11.glRotatef(drillRotation, 0, 1, 0);
 				ResourceManager.magma_drill.renderPart("DrillHead");
+	
+			}
+			GL11.glPopMatrix();
+	
+			GL11.glPushMatrix();
+			{
+
+				GL11.glRotatef(-drillRotation, 0, 1, 0);
+				ResourceManager.magma_drill.renderPart("Blades");
 	
 			}
 			GL11.glPopMatrix();

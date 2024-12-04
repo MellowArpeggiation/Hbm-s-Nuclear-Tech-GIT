@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
+import com.hbm.blocks.ITooltipProvider;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityDysonLauncher;
@@ -20,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
 // swarm shitter
-public class MachineDysonLauncher extends BlockDummyable implements ILookOverlay {
+public class MachineDysonLauncher extends BlockDummyable implements ILookOverlay, ITooltipProvider {
 
 	public MachineDysonLauncher(Material mat) {
 		super(mat);
@@ -103,6 +104,12 @@ public class MachineDysonLauncher extends BlockDummyable implements ILookOverlay
 		}
 		
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean ext) {
+		addStandardInfo(stack, player, list, ext);
 	}
 
 	//. TEMP .//

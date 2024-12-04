@@ -76,6 +76,6 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 
 	@Override public long getPower() { return power; }
 	@Override public void setPower(long power) { this.power = power; }
-	@Override public long getMaxPower() { return maxPower;}
+	@Override public long getMaxPower() { return maxPower; }
 	
 }
