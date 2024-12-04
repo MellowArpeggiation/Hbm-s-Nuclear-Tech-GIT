@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine.oil;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.dim.CelestialBody;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.container.ContainerMachineGasFlare;
@@ -123,7 +124,7 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 				maxVent += maxVent * burn;
 				maxBurn += maxBurn * burn;
 				
-				if(!doesBurn || !(tank.getTankType().hasTrait(FT_Flammable.class))) {
+				if(!doesBurn || !tank.getTankType().hasTrait(FT_Flammable.class) || !breatheAir(Math.min(maxBurn, tank.getFill()))) {
 					
 					if(tank.getTankType().hasTrait(FT_Gaseous.class) || tank.getTankType().hasTrait(FT_Gaseous_ART.class)) {
 						int eject = Math.min(maxVent, tank.getFill());
@@ -137,6 +138,8 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 						if(worldObj.getTotalWorldTime() % 5 == 0 && eject > 0) {
 							FT_Polluting.pollute(worldObj, xCoord, yCoord, zCoord, tank.getTankType(), FluidReleaseType.SPILL, eject * 5);
 						}
+
+						CelestialBody.emitGas(worldObj, tank.getTankType(), eject);
 					}
 				} else {
 					
