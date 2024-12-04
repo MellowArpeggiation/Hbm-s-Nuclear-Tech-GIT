@@ -13,6 +13,7 @@ import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.util.BobMathUtil;
 import com.hbm.util.CrucibleUtil;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
@@ -41,10 +42,12 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 	public static final int maxLiquid = MaterialShapes.BLOCK.q(16);
 	public List<MaterialStack> liquids = new ArrayList<>();
 
+	public float drillSpeed;
 	public float drillRotation;
 	public float prevDrillRotation;
-	public float drillExtension;
-	public float prevDrillExtension;
+
+	public float lavaHeight;
+	public float prevLavaHeight;
 
 	protected MaterialStack[] defaultOutputs = new MaterialStack[] {
 		new MaterialStack(Mats.MAT_SLAG, MaterialShapes.INGOT.q(1)),
@@ -69,7 +72,7 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 				power -= consumption;
 
 				int timeBetweenOutputs = 10;
-				
+
 				if(worldObj.getTotalWorldTime() % timeBetweenOutputs == 0) {
 					for(MaterialStack mat : getOutputs()) {
 						int totalLiquid = 0;
@@ -109,7 +112,28 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 
 			networkPackNT(250);
 		} else {
+			prevLavaHeight = lavaHeight;
+			prevDrillRotation = drillRotation;
 
+			if(operating) {
+				drillSpeed += 0.15F;
+				if(drillSpeed > 15F) drillSpeed = 15F;
+
+				lavaHeight += (worldObj.rand.nextFloat() - 0.5) * 0.01;
+				lavaHeight = (float)BobMathUtil.lerp(0.02D, lavaHeight, 0.9D);
+			} else {
+				drillSpeed -= 0.3F;
+				if(drillSpeed < 0F) drillSpeed = 0F;
+				
+				lavaHeight = (float)BobMathUtil.lerp(0.02D, lavaHeight, 0D);
+			}
+
+			drillRotation += drillSpeed;
+
+			if(drillRotation > 360F) {
+				drillRotation -= 360F;
+				prevDrillRotation -= 360F;
+			}
 		}
 	}
 
