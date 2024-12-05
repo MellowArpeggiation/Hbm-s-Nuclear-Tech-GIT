@@ -6,17 +6,21 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
+import com.hbm.dim.trait.CBT_War;
 import com.hbm.inventory.container.ContainerStardar;
 import com.hbm.items.ItemVOTVdrive;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.toserver.NBTControlPacket;
+import com.hbm.saveddata.SatelliteSavedData;
+import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityMachineStardar;
 import com.hbm.util.I18nUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
@@ -100,7 +104,7 @@ public class GUIMachineStardar extends GuiInfoContainer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-		pushScissor(9, 11, 158, 108);
+		pushScissor(9, 9, 158, 108);
 
 		if(star.radarMode != true) {
 			if(!Mouse.isButtonDown(0)) {
@@ -163,10 +167,68 @@ public class GUIMachineStardar extends GuiInfoContainer {
 			}
 		}
 		else {
+			if(!Mouse.isButtonDown(0)) {
+				velocityX *= 0.85;
+				velocityY *= 0.85;
+				starX += velocityX;
+				starY += velocityY;
+				starX = MathHelper.clamp_float(starX, -256 + 158, 256);
+				starY = MathHelper.clamp_float(starY, -256 + 108, 256);
+			}
 			Minecraft.getMinecraft().getTextureManager().bindTexture(nightTexture);
 			drawTexturedModalRect(guiLeft, guiTop, (int) starX * -1, (int) starY * -1, 256, 256);
+			
+			if(CelestialBody.getBody(star.getWorldObj()).hasTrait(CBT_War.class)) {
+				CBT_War wardat = CelestialBody.getTrait(star.getWorldObj(), CBT_War.class);
+			        for (int i = 0; i < wardat.getProjectiles().size(); i++) {
+			            CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
+			            int projvel = (int) projectile.getTravel();
+						Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+
+				        float randomAngle = projectile.GUIangle;
+				        System.out.println(projectile.GUIangle);
+				        float offsetX = (float) Math.cos(Math.toRadians(randomAngle)) * projvel;
+				        float offsetY = (float) Math.sin(Math.toRadians(randomAngle)) * projvel;
+
+				        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+
+				        long currentTime = System.currentTimeMillis();
+
+				        if (currentTime % 300 < 120) { 
+				            drawTexturedModalRect(
+				                (int) (guiLeft + starX + offsetX + 85),  
+				                (int) (guiTop + starY + offsetY + 60),
+				                xSize + 1 * 8, 0, 8, 8
+				            );
+				        }
+				    }
+				}
+			
+			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+
+			    float radius = 20 + (entry.getKey() / 1000);  
+			    float initialAngle = (entry.getKey() / 1000) * 10f;
+			   
+			    long currentTime = System.currentTimeMillis();
+			    
+			    
+			    float angle = ((currentTime / 80) % 360 + initialAngle) % 360; 
+			    
+			    
+			    float offsetX = (float) Math.cos(Math.toRadians(angle)) * radius;
+			    float offsetY = (float) Math.sin(Math.toRadians(angle)) * radius;
+
+			    Minecraft.getMinecraft().getTextureManager().bindTexture(texture); 
+
+			    drawTexturedModalRect(
+			        (int) (guiLeft + starX + offsetX + 85), 
+			        (int) (guiTop + starY + offsetY + 60),  
+			        xSize + 1 * 8, 0, 8, 8  
+			    );
+			
+			}
+
             GL11.glPushMatrix();
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 			Minecraft.getMinecraft().getTextureManager().bindTexture(CelestialBody.getBody(star.getWorldObj()).texture);
 
@@ -183,7 +245,6 @@ public class GUIMachineStardar extends GuiInfoContainer {
             tessellator.draw();
             
             GL11.glPopMatrix();
-
             
 		}
 		popScissor();
@@ -192,7 +253,7 @@ public class GUIMachineStardar extends GuiInfoContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mx, int my) {
 		ItemStack slotStack = inventorySlots.getSlot(0).getStack();
-
+		
 		if(checkClick(mx, my, 9, 9, 158, 108)) {
 			if(star.heightmap == null) {
 				for(POI poi : pList) {
@@ -273,6 +334,7 @@ public class GUIMachineStardar extends GuiInfoContainer {
 	public void handleMouseInput() {
 		super.handleMouseInput();
 
+		//if(star.radarMode) return;
 		int button = Mouse.getEventButton();
 		if(starX > 256) {
 			velocityX = 0;
@@ -305,7 +367,7 @@ public class GUIMachineStardar extends GuiInfoContainer {
 	protected void mouseClickMove(int x, int y, int p_146273_3_, long p_146273_4_) {
 		super.mouseClickMove(x, y, p_146273_3_, p_146273_4_);
 		if(!dragging) return;
-
+		//if(star.radarMode) return;
 		int deltaX = x - mX;
 		int deltaY = y - mY;
 		starX += deltaX;
@@ -335,6 +397,8 @@ public class GUIMachineStardar extends GuiInfoContainer {
 			NBTTagCompound data = new NBTTagCompound();
 			data.setInteger("pid", SpaceConfig.orbitDimension);
 			data.setBoolean("radarmode", true);
+			//starY =0;
+			//starX =0;
 			PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(data, star.xCoord, star.yCoord, star.zCoord));
 		}
 

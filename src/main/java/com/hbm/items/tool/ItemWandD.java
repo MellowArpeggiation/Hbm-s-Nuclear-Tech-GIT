@@ -11,6 +11,7 @@ import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CBT_War;
+import com.hbm.dim.trait.CBT_War.Projectile;
 import com.hbm.dim.trait.CBT_War.ProjectileType;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
 import com.hbm.lib.Library;
@@ -106,7 +107,10 @@ public class ItemWandD extends Item {
 					if(war != null) {
 						float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat();
 						System.out.println(rand);
-						war.launchProjectile(100, 20, 1, 28 * rand * 5, 33, 20, ProjectileType.SPLITSHOT);
+						//war.launchProjectile(100, 20, 1, 28 * rand * 5, 33, 20, ProjectileType.SPLITSHOT);
+						Projectile projectile = new Projectile(100, 20, 1, 28 * rand * 5, 33, 20, ProjectileType.SMALL);
+						projectile.GUIangle = (int) (rand * 360);
+						war.launchProjectile(projectile);
 						System.out.println(war);
 						if(war.health <= 0) {
 							war.health = 100;

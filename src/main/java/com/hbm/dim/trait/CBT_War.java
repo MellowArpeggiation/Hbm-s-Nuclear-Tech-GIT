@@ -44,6 +44,7 @@ public class CBT_War extends CelestialBodyTrait {
 	
 	public void launchProjectile(Projectile proj) {
 		projectiles.add(proj);
+
 	}
 	public void launchProjectile(float traveltime, int size, int damage, float x, double y, double z, ProjectileType type) {
 		Projectile projectile = new Projectile(traveltime, size, damage, x, y, z, type);
@@ -139,6 +140,7 @@ public class CBT_War extends CelestialBodyTrait {
 	    private double translateY;
 	    private double translateZ;
 	    private ProjectileType type; // New field for projectile type
+	    public int GUIangle; // is this legal
 
 	    public Projectile() {
 	        this.animtime = 0;
@@ -189,6 +191,8 @@ public class CBT_War extends CelestialBodyTrait {
 	        buf.writeDouble(translateZ);
 	        buf.writeInt(animtime);
 	        buf.writeByte(type.ordinal()); 
+	        buf.writeInt(GUIangle);
+
 	    }
 
 	    public void readFromBytes(ByteBuf buf) {
@@ -200,6 +204,7 @@ public class CBT_War extends CelestialBodyTrait {
 	        translateZ = buf.readDouble();
 	        animtime = buf.readInt();
 	        type = ProjectileType.values()[buf.readByte()];
+	        GUIangle = buf.readInt();
 	    }
 
 	    // Getter and setter for the type
@@ -285,6 +290,7 @@ public class CBT_War extends CelestialBodyTrait {
 	    public double getTranslateZ() {
 	        return translateZ;
 	    }
+	    
 	}
 	public enum ProjectileType {
 		SMALL,

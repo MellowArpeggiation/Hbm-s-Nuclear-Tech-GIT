@@ -69,15 +69,20 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world).sats;
 		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
-			SatelliteWar war = (SatelliteWar) entry.getValue();
-			war.fire();
+				if(entry instanceof SatelliteWar) {
+					SatelliteWar war = (SatelliteWar) entry.getValue();
+					war.fire();	
+				}
 			
 			}
         } else {
 			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-				SatelliteWar war = (SatelliteWar) entry.getValue();
-				if(war.getInterp() <= 1) {
-			        Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
+				if(entry instanceof SatelliteWar) {
+
+					SatelliteWar war = (SatelliteWar) entry.getValue();
+					if(war.getInterp() <= 1) {
+				        Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
+					}
 				}
 			}
 		}
