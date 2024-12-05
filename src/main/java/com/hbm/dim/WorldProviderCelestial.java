@@ -69,7 +69,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world).sats;
 		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
-				if(entry instanceof SatelliteWar) {
+				if(entry.getValue() instanceof SatelliteWar) {
 					SatelliteWar war = (SatelliteWar) entry.getValue();
 					war.fire();	
 				}
@@ -77,7 +77,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			}
         } else {
 			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-				if(entry instanceof SatelliteWar) {
+				if(entry.getValue() instanceof SatelliteWar) {
 
 					SatelliteWar war = (SatelliteWar) entry.getValue();
 					if(war.getInterp() <= 1) {
