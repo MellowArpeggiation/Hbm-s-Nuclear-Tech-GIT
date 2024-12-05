@@ -186,7 +186,6 @@ public class GUIMachineStardar extends GuiInfoContainer {
 						Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 
 				        float randomAngle = projectile.GUIangle;
-				        System.out.println(projectile.GUIangle);
 				        float offsetX = (float) Math.cos(Math.toRadians(randomAngle)) * projvel;
 				        float offsetY = (float) Math.sin(Math.toRadians(randomAngle)) * projvel;
 
@@ -198,7 +197,7 @@ public class GUIMachineStardar extends GuiInfoContainer {
 				            drawTexturedModalRect(
 				                (int) (guiLeft + starX + offsetX + 85),  
 				                (int) (guiTop + starY + offsetY + 60),
-				                xSize + 1 * 8, 0, 8, 8
+				                xSize + 9 * 5, 0, 8, 8
 				            );
 				        }
 				    }
@@ -253,59 +252,85 @@ public class GUIMachineStardar extends GuiInfoContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mx, int my) {
 		ItemStack slotStack = inventorySlots.getSlot(0).getStack();
-		
-		if(checkClick(mx, my, 9, 9, 158, 108)) {
-			if(star.heightmap == null) {
-				for(POI poi : pList) {
-					int px = (int) (starX + poi.offsetX);
-					int py = (int) (starY + poi.offsetY);
-		
-					// Has a small buffer area around the POI to improve click targeting
-					drawCustomInfoStat(mx - guiLeft, my - guiTop, px - 2, py - 2, 12, 12, px + 8, py + 10, I18nUtil.resolveKey("body." + poi.body.name), "Processing Tier: " + poi.body.processingLevel);
-				}
-			} else {
-				pushScissor(9, 9, 158, 108);
+		if(star.radarMode) {
+		    for (Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
 
-				Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+			    float radius = 20 + (entry.getKey() / 1000);  
+			    float initialAngle = (entry.getKey() / 1000) * 10f;
+			   
+			    long currentTime = System.currentTimeMillis();
+			    
+			    
+			    float angle = ((currentTime / 80) % 360 + initialAngle) % 360; 
+			    
+			    
+			    float offsetX = (float) Math.cos(Math.toRadians(angle)) * radius;
+			    float offsetY = (float) Math.sin(Math.toRadians(angle)) * radius;
 
-				// translate from mouse coordinate to heightmap coordinate
-				int hx = (mx - (int)starX - guiLeft - 9 + 256) / 2;
-				int hz = (my - (int)starY - guiTop - 9 + 256) / 2;
+		        int satX = (int) (guiLeft + starX + offsetX - 65); 
+		        int satY = (int) (guiTop + starY + offsetY + 55); 
 
-				String info = landingInfo(hx, hz);
-				int altitude = altitude(hx, hz);
-				boolean canLand = info == null;
-				
-				int sx = mx - ((mx + (int)starX) % 2);
-				int sy = my - ((my + (int)starY) % 2);
-				drawTexturedModalRect(sx - 6 - guiLeft, sy - 6 - guiTop, xSize + (canLand ? 14 : 0), 28, 14, 14);
+		        if (checkClick(mx, my, satX - 4, satY - 4, 16, 16)) {
+					drawCustomInfoStat(mx - guiLeft, my - guiTop, satX - 2, satY - 2, 12, 12, satX + 8, satY + 10, I18nUtil.resolveKey(entry.getKey().toString()));
 
-				popScissor();
-
-				fontRendererObj.drawString(canLand ? "Valid location" : info, 10, 128, canLand ? 0x00FF00 : 0xFF0000);
-				if(altitude > 0) fontRendererObj.drawString("Target altitude: " + altitude, 10, 148, 0x00FF00);
-			}
-		} else if(star.heightmap != null) {
-			fontRendererObj.drawString("Select landing zone", 10, 128, 0x00FF00);
-		}
-
-		if(star.heightmap == null) {
-			if(slotStack == null) {
-				fontRendererObj.drawString("Insert drive", 10, 128, 0x00FF00);
-			} else {
-				if(slotStack.getItem() == ModItems.full_drive) {
-					if(ItemVOTVdrive.getDestination(slotStack).body == SolarSystem.Body.ORBIT) {
-						fontRendererObj.drawString("Orbital station ready", 10, 128, 0x00FF00);
-					} else {
-						fontRendererObj.drawString("Loading heightmap...", 10, 128, 0x00FF00);
-						fontRendererObj.drawString("Please wait", 10, 148, 0x00FF00);
+		        }
+		    }	
+		}else {
+			if(checkClick(mx, my, 9, 9, 158, 108)) {
+				if(star.heightmap == null) {
+					for(POI poi : pList) {
+						int px = (int) (starX + poi.offsetX);
+						int py = (int) (starY + poi.offsetY);
+			
+						// Has a small buffer area around the POI to improve click targeting
+						drawCustomInfoStat(mx - guiLeft, my - guiTop, px - 2, py - 2, 12, 12, px + 8, py + 10, I18nUtil.resolveKey("body." + poi.body.name), "Processing Tier: " + poi.body.processingLevel);
 					}
-				} else if(slotStack.getItem() == ModItems.hard_drive) {
-					fontRendererObj.drawString("Select body", 10, 128, 0x00FF00);
-					fontRendererObj.drawString("Drag map to pan", 10, 148, 0x00FF00);
+				} else {
+					pushScissor(9, 9, 158, 108);
+
+					Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+
+					// translate from mouse coordinate to heightmap coordinate
+					int hx = (mx - (int)starX - guiLeft - 9 + 256) / 2;
+					int hz = (my - (int)starY - guiTop - 9 + 256) / 2;
+
+					String info = landingInfo(hx, hz);
+					int altitude = altitude(hx, hz);
+					boolean canLand = info == null;
+					
+					int sx = mx - ((mx + (int)starX) % 2);
+					int sy = my - ((my + (int)starY) % 2);
+					drawTexturedModalRect(sx - 6 - guiLeft, sy - 6 - guiTop, xSize + (canLand ? 14 : 0), 28, 14, 14);
+
+					popScissor();
+
+					fontRendererObj.drawString(canLand ? "Valid location" : info, 10, 128, canLand ? 0x00FF00 : 0xFF0000);
+					if(altitude > 0) fontRendererObj.drawString("Target altitude: " + altitude, 10, 148, 0x00FF00);
+				}
+			} else if(star.heightmap != null) {
+				fontRendererObj.drawString("Select landing zone", 10, 128, 0x00FF00);
+			}
+
+			if(star.heightmap == null) {
+				if(slotStack == null) {
+					fontRendererObj.drawString("Insert drive", 10, 128, 0x00FF00);
+				} else {
+					if(slotStack.getItem() == ModItems.full_drive) {
+						if(ItemVOTVdrive.getDestination(slotStack).body == SolarSystem.Body.ORBIT) {
+							fontRendererObj.drawString("Orbital station ready", 10, 128, 0x00FF00);
+						} else {
+							fontRendererObj.drawString("Loading heightmap...", 10, 128, 0x00FF00);
+							fontRendererObj.drawString("Please wait", 10, 148, 0x00FF00);
+						}
+					} else if(slotStack.getItem() == ModItems.hard_drive) {
+						fontRendererObj.drawString("Select body", 10, 128, 0x00FF00);
+						fontRendererObj.drawString("Drag map to pan", 10, 148, 0x00FF00);
+					}
 				}
 			}
 		}
+
+
 	}
 	
 	private String landingInfo(int x, int z) {
@@ -395,8 +420,20 @@ public class GUIMachineStardar extends GuiInfoContainer {
 			mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
 
 			NBTTagCompound data = new NBTTagCompound();
-			data.setInteger("pid", SpaceConfig.orbitDimension);
+
+			PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(data, star.xCoord, star.yCoord, star.zCoord));
+		}
+		
+		// Clicking RAD will activate Orrey Mode
+		if(checkClick(x, y, 129, 123, 18, 18)) {
+			mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
+
+			NBTTagCompound data = new NBTTagCompound();
 			data.setBoolean("radarmode", true);
+			if(star.radarMode == true) {
+				data.setBoolean("radarmode", false);
+
+			}
 			//starY =0;
 			//starX =0;
 			PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(data, star.xCoord, star.yCoord, star.zCoord));

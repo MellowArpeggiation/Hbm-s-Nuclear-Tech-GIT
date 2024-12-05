@@ -94,7 +94,7 @@ public class ItemWandD extends Item {
 			} else {
 				// TESTING: END OF LIFE
 				//World targetBody = DimensionManager.getWorld(SpaceConfig.dunaDimension);
-				World targetdBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.laytheDimension);
+				World targetdBody = MinecraftServer.getServer().worldServerForDimension(0);
 				CelestialBody target = CelestialBody.getPlanet(targetdBody);
 				
 				
