@@ -197,7 +197,7 @@ public class GUIMachineStardar extends GuiInfoContainer {
 				            drawTexturedModalRect(
 				                (int) (guiLeft + starX + offsetX + 85),  
 				                (int) (guiTop + starY + offsetY + 60),
-				                xSize + 9 * 5, 0, 8, 8
+				                xSize + 1 * 44, 0, 8, 8
 				            );
 				        }
 				    }
