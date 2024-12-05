@@ -22,6 +22,7 @@ import java.util.Random;
 import org.lwjgl.input.Keyboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -99,67 +100,92 @@ public class GUIMachineStardar extends GuiInfoContainer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		pushScissor(9, 11, 158, 108);
 
-		pushScissor(9, 9, 158, 108);
-		if(!Mouse.isButtonDown(0)) {
-			velocityX *= 0.85;
-			velocityY *= 0.85;
-			starX += velocityX;
-			starY += velocityY;
-			starX = MathHelper.clamp_float(starX, -256 + 158, 256);
-			starY = MathHelper.clamp_float(starY, -256 + 108, 256);
-		}
-
-		if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-			starY++;
-		}
-
-		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-			starY--;
-		}
-
-		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			starX++;
-		}
-
-		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-			starX--;
-		}
-		
-		if(star.heightmap == null) {
-			Minecraft.getMinecraft().getTextureManager().bindTexture(nightTexture);
-			drawTexturedModalRect(guiLeft, guiTop, (int) starX * -1, (int) starY * -1, 256, 256);
-
-			Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-
-			for(POI peepee : pList) {
-				int px = (int) (guiLeft + starX + peepee.offsetX);
-				int py = (int) (guiTop + starY + peepee.offsetY);
-
-				drawTexturedModalRect(px, py, xSize + peepee.getBody().processingLevel * 8, 0, 8, 8);
+		if(star.radarMode != true) {
+			if(!Mouse.isButtonDown(0)) {
+				velocityX *= 0.85;
+				velocityY *= 0.85;
+				starX += velocityX;
+				starY += velocityY;
+				starX = MathHelper.clamp_float(starX, -256 + 158, 256);
+				starY = MathHelper.clamp_float(starY, -256 + 108, 256);
 			}
-		} else {
-			if(star.updateHeightmap) {
-				for(int i = 0; i < star.heightmap.length; i++) {
-					int h = star.heightmap[i] % 16 * 16;
-
-					int r = 0;
-					int g = h;
-					int b = 0;
-					int a = 255;
 	
-					groundColors[i] = a << 24 | r << 16 | g << 8 | b;
+			if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+				starY++;
+			}
+	
+			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+				starY--;
+			}
+	
+			if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+				starX++;
+			}
+	
+			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+				starX--;
+			}
+			
+			if(star.heightmap == null) {
+				Minecraft.getMinecraft().getTextureManager().bindTexture(nightTexture);
+				drawTexturedModalRect(guiLeft, guiTop, (int) starX * -1, (int) starY * -1, 256, 256);
+	
+				Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+	
+				for(POI peepee : pList) {
+					int px = (int) (guiLeft + starX + peepee.offsetX);
+					int py = (int) (guiTop + starY + peepee.offsetY);
+	
+					drawTexturedModalRect(px, py, xSize + peepee.getBody().processingLevel * 8, 0, 8, 8);
+				}
+			} else {
+				if(star.updateHeightmap) {
+					for(int i = 0; i < star.heightmap.length; i++) {
+						int h = star.heightmap[i] % 16 * 16;
+	
+						int r = 0;
+						int g = h;
+						int b = 0;
+						int a = 255;
+		
+						groundColors[i] = a << 24 | r << 16 | g << 8 | b;
+					}
+		
+					groundTexture.updateDynamicTexture();
+	
+					star.updateHeightmap = false;
 				}
 	
-				groundTexture.updateDynamicTexture();
-
-				star.updateHeightmap = false;
+				mc.getTextureManager().bindTexture(groundMap);
+				func_146110_a(guiLeft, guiTop, (int) starX * -1 - 256 - 9, (int) starY * -1 - 256 - 9, 256, 256, 512, 512);
 			}
-
-			mc.getTextureManager().bindTexture(groundMap);
-			func_146110_a(guiLeft, guiTop, (int) starX * -1 - 256 - 9, (int) starY * -1 - 256 - 9, 256, 256, 512, 512);
 		}
+		else {
+			Minecraft.getMinecraft().getTextureManager().bindTexture(nightTexture);
+			drawTexturedModalRect(guiLeft, guiTop, (int) starX * -1, (int) starY * -1, 256, 256);
+            GL11.glPushMatrix();
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
 
+			Minecraft.getMinecraft().getTextureManager().bindTexture(CelestialBody.getBody(star.getWorldObj()).texture);
+
+            Tessellator tessellator = Tessellator.instance;
+            tessellator.startDrawingQuads();
+            int offsetX = 85; 
+            int offsetY = 60;  
+            
+            tessellator.addVertexWithUV(guiLeft + starX + offsetX - 5, guiTop + starY + offsetY + 11, 0, 0, 1); 
+            tessellator.addVertexWithUV(guiLeft + starX + offsetX + 11, guiTop + starY + offsetY + 11, 0, 1, 1); 
+            tessellator.addVertexWithUV(guiLeft + starX + offsetX + 11, guiTop + starY + offsetY - 5, 0, 1, 0); 
+            tessellator.addVertexWithUV(guiLeft + starX + offsetX - 5, guiTop + starY + offsetY - 5, 0, 0, 0);  
+
+            tessellator.draw();
+            
+            GL11.glPopMatrix();
+
+            
+		}
 		popScissor();
 	}
 
@@ -308,7 +334,7 @@ public class GUIMachineStardar extends GuiInfoContainer {
 
 			NBTTagCompound data = new NBTTagCompound();
 			data.setInteger("pid", SpaceConfig.orbitDimension);
-
+			data.setBoolean("radarmode", true);
 			PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(data, star.xCoord, star.yCoord, star.zCoord));
 		}
 
