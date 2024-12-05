@@ -5588,6 +5588,7 @@ tile.dyson_receiver.name=Dyson Receiver
 tile.dyson_receiver.desc=Receives energy from a swarm and fires it as a beam.$Requires a relay satellite to operate at night.
 tile.dyson_converter_tu.name=Dyson Heat Converter
 tile.dyson_converter_he.name=Dyson Power Converter
+tile.dyson_converter_anatmogenesis.name=Dyson Anatmogenesis Terraformer
 tile.emp_bomb.name=EMP Device
 tile.eve_silt.name=Eve Silt
 tile.eve_rock.name=Eve Rock
