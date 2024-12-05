@@ -105,7 +105,7 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		float beamscale = WorldProviderThatmo.scale;
 		float shieldscale = WorldProviderThatmo.shield;
 		float waveinterp = WorldProviderThatmo.nmass;
-		float shieldinterp = WorldProviderThatmo.shielde + partialTicks;
+		float shieldinterp = WorldProviderThatmo.shielde;
 		float shielalpha = WorldProviderThatmo.csyw + partialTicks;
 
 		GL11.glShadeModel(GL11.GL_FLAT);
@@ -139,7 +139,6 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		GL11.glScaled(0 + shieldinterp, 0 + shieldinterp, 0 + shieldinterp);
 		GL11.glRotated(90.0, -10.0, -1.0, 50.0);
 		GL11.glRotated(20.0, -0.0, -1.0, 1.0);
-
 		GL11.glColor4d(1, 1, 1, alpd);
 
 
