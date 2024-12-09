@@ -377,9 +377,11 @@ public class CelestialBody {
 			currentTraits.put(CBT_War.class, war);
 		}
 
-		war.health -= dmg;
 		if(war.shield > 0) {
 			war.shield -= dmg;
+		} else {
+			war.health -= dmg;
+
 		}
 		setTraits(world, currentTraits);
 	}

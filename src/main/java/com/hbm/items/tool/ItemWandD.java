@@ -13,7 +13,7 @@ import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_War.Projectile;
 import com.hbm.dim.trait.CBT_War.ProjectileType;
-import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
+import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.lib.Library;
 
 import net.minecraft.client.Minecraft;
@@ -94,7 +94,7 @@ public class ItemWandD extends Item {
 			} else {
 				// TESTING: END OF LIFE
 				//World targetBody = DimensionManager.getWorld(SpaceConfig.dunaDimension);
-				World targetdBody = MinecraftServer.getServer().worldServerForDimension(0);
+				World targetdBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.moonDimension);
 				CelestialBody target = CelestialBody.getPlanet(targetdBody);
 				
 				
@@ -108,13 +108,11 @@ public class ItemWandD extends Item {
 						float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat();
 						System.out.println(rand);
 						//war.launchProjectile(100, 20, 1, 28 * rand * 5, 33, 20, ProjectileType.SPLITSHOT);
-						Projectile projectile = new Projectile(100, 20, 1, 28 * rand * 5, 33, 20, ProjectileType.SMALL);
+						Projectile projectile = new Projectile(100, 20, 50, 28 * rand * 5, 55, 20, ProjectileType.SMALL, SpaceConfig.moonDimension);
 						projectile.GUIangle = (int) (rand * 360);
 						war.launchProjectile(projectile);
 						System.out.println(war);
-						if(war.health <= 0) {
-							war.health = 100;
-						}
+
 						player.addChatMessage(new ChatComponentText("projectile launched"));
 
 					} else {

@@ -46,8 +46,8 @@ public class CBT_War extends CelestialBodyTrait {
 		projectiles.add(proj);
 
 	}
-	public void launchProjectile(float traveltime, int size, int damage, float x, double y, double z, ProjectileType type) {
-		Projectile projectile = new Projectile(traveltime, size, damage, x, y, z, type);
+	public void launchProjectile(float traveltime, int size, int damage, float x, double y, double z, ProjectileType type, int target) {
+		Projectile projectile = new Projectile(traveltime, size, damage, x, y, z, type, target);
 		projectiles.add(projectile);
 	}
 
@@ -57,14 +57,21 @@ public class CBT_War extends CelestialBodyTrait {
                 //currently kind of temp, there might be a better way to generalize this
     	   if (projectile.getTravel() <= 0) {
     		   for (int j = 0; j < amount; j++) {
-    			   	float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat();
-            		war.launchProjectile(Math.abs(20 + j * 10), 
+    			   float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat() * 160 - 80; 
+    			   float randy = Minecraft.getMinecraft().theWorld.rand.nextFloat() * 90 - 80; 
+
+    			   war.launchProjectile(Math.abs(20 + j * 10), 
                     projectile.getSize(), 
                     projectile.getDamage(), 
-                    (float) (projectile.getTranslateX() * rand * j), 
-                    projectile.getTranslateY(), 
-                    projectile.getTranslateZ() * rand * j, 
-                    type);
+                    (float) (projectile.getTranslateX()), 
+                    projectile.getTranslateY() - randy * j, 
+                    projectile.getTranslateZ() + rand * j, 
+                    type,
+    				projectile.getTarget());
+                   projectile.GUIangle = projectile.GUIangle;
+
+         		   System.out.println(projectile.getTranslateY() + rand * j);
+
     		   }
             war.destroyProjectile(projectile); 
             
@@ -78,6 +85,7 @@ public class CBT_War extends CelestialBodyTrait {
     public static List<Projectile> getProjectiles() {
         return projectiles;
     }
+    
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("health", health);
@@ -141,6 +149,7 @@ public class CBT_War extends CelestialBodyTrait {
 	    private double translateZ;
 	    private ProjectileType type; // New field for projectile type
 	    public int GUIangle; // is this legal
+	    private int target;
 
 	    public Projectile() {
 	        this.animtime = 0;
@@ -148,7 +157,7 @@ public class CBT_War extends CelestialBodyTrait {
 	        this.type = ProjectileType.MEDIUM; // Default type
 	    }
 
-	    public Projectile(float traveltime, int size, int damage, float posX, double posY, double posZ, ProjectileType type) {
+	    public Projectile(float traveltime, int size, int damage, double posX, double posY, double posZ, ProjectileType type, int target) {
 	        this.traveltime = traveltime;
 	        this.size = size;
 	        this.damage = damage;
@@ -158,6 +167,7 @@ public class CBT_War extends CelestialBodyTrait {
 	        this.translateY = posY;
 	        this.translateZ = posZ;
 	        this.type = type;
+	        this.target = target;
 	    }
 
 	    public void writeToNBT(NBTTagCompound nbt) {
@@ -169,6 +179,8 @@ public class CBT_War extends CelestialBodyTrait {
 	        nbt.setDouble("translateZ", translateZ);
 	        nbt.setInteger("animtime", animtime);
 	        nbt.setString("type", type.name()); // Serialize the type
+	        nbt.setInteger("target", target); // Serialize the type
+
 	    }
 
 	    public void readFromNBT(NBTTagCompound nbt) {
@@ -180,6 +192,7 @@ public class CBT_War extends CelestialBodyTrait {
 	        translateZ = nbt.getDouble("translateZ");
 	        animtime = nbt.getInteger("animtime");
 	        type = ProjectileType.valueOf(nbt.getString("type"));
+	        target = nbt.getInteger("target");
 	    }
 
 	    public void writeToBytes(ByteBuf buf) {
@@ -192,6 +205,7 @@ public class CBT_War extends CelestialBodyTrait {
 	        buf.writeInt(animtime);
 	        buf.writeByte(type.ordinal()); 
 	        buf.writeInt(GUIangle);
+	        buf.writeInt(target);
 
 	    }
 
@@ -205,6 +219,8 @@ public class CBT_War extends CelestialBodyTrait {
 	        animtime = buf.readInt();
 	        type = ProjectileType.values()[buf.readByte()];
 	        GUIangle = buf.readInt();
+	        target = buf.readInt();
+
 	    }
 
 	    // Getter and setter for the type
@@ -283,6 +299,10 @@ public class CBT_War extends CelestialBodyTrait {
 	        return translateX;
 	    }
 
+	    public int getTarget() {
+	    	return target;
+	    }
+	    
 	    public double getTranslateY() {
 	        return translateY;
 	    }

@@ -2,14 +2,16 @@ package com.hbm.dim;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.hbm.config.SpaceConfig;
+import com.hbm.dim.SolarSystem.AstroMetric;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_War.ProjectileType;
-import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
+import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.saveddata.SatelliteSavedData;
@@ -64,8 +66,19 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	public void updateWeather() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 		World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
-	    SatelliteSavedData data = (SatelliteSavedData)world.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
-        if(!worldObj.isRemote) {
+		
+		
+		for(CelestialBody body : CelestialBody.getAllBodies()) {
+		    CBT_Destroyed d = CelestialBody.getBody(body.dimensionId).getTrait(CBT_Destroyed.class);
+		    if(d != null) {
+		    	d.updatefloat();
+		    	//System.out.println(d);
+		    }
+		}
+
+
+
+		if(!worldObj.isRemote) {
 
 		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world).sats;
 		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
@@ -96,16 +109,19 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	                
 	                projectile.update();
 	                float travel = projectile.getTravel();
-	          
 	                
 	                if(projectile.getAnimtime() >= 100) {
 		                    war.destroyProjectile(projectile);
-		    				World targetBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.laytheDimension);
+		    				World targetBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.moonDimension);
 		                    i--;
 		                    System.out.println("damaged: " + targetBody + " health left: " + war.health);
 		                    if(war.health > 0) {
 			    				CelestialBody.damage(projectile.getDamage(), targetBody);		                    
-	                	}
+		                    } else if(war.health <= 0) {
+		        				CelestialBody target = CelestialBody.getPlanet(targetBody);
+		        				target.modifyTraits(targetBody, new CBT_Destroyed());
+		        				war.health = 0;
+		                    }
 	                }
 	                //currently kind of temp, there might be a better way to generalize this
 	                if(projectile.getType() == ProjectileType.SPLITSHOT) {
@@ -257,30 +273,26 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	@SideOnly(Side.CLIENT)
 	public Vec3 getSkyColor(Entity camera, float partialTicks) {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
+		Vec3 color = Vec3.createVectorHelper(0, 0, 0);
 
+		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+			SatelliteWar war = (SatelliteWar) entry.getValue();
+			float flame = war.getInterp();
+            float invertedFlash = flame;
+            float alpd = 1.0F - Math.min(1.0F, flame / 100);
+
+			color.xCoord += alpd * 1.5;
+			color.yCoord += alpd * 1.5;
+			color.zCoord += alpd * 1.5;
+		}
 		// The cold hard vacuum of space
 		if(atmosphere == null) {
-			Vec3 color = Vec3.createVectorHelper(0, 0, 0);
-
-			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-				SatelliteWar war = (SatelliteWar) entry.getValue();
-				float flame = war.getInterp();
-	            float invertedFlash = flame;
-                float alpd = 1.0F - Math.min(1.0F, flame / 100);
-
-				color.xCoord += alpd * 1.5;
-				color.yCoord += alpd * 1.5;
-				color.zCoord += alpd * 1.5;
-
-				
-			}	
 
 			return color;
 		} 
 
 		float sun = this.getSunBrightnessFactor(1.0F);
 		float totalPressure = (float)atmosphere.getPressure();
-		Vec3 color = Vec3.createVectorHelper(0, 0, 0);
 
 		for(int i = 0; i < atmosphere.fluids.size(); i++) {
 			FluidEntry entry = atmosphere.fluids.get(i);
@@ -325,7 +337,19 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		        }
 		    }
 
-		
+
+		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+			SatelliteWar war = (SatelliteWar) entry.getValue();
+			float flame = war.getInterp();
+            float invertedFlash = flame;
+            float alpd = 1.0F - Math.min(1.0F, flame / 100);
+
+			color.xCoord += alpd * 1.5;
+			color.yCoord += alpd * 1.5;
+			color.zCoord += alpd * 1.5;
+
+			
+		}	
 		// Lower pressure sky renders thinner
 		float pressureFactor = MathHelper.clamp_float(totalPressure, 0.0F, 1.0F);
 		color.xCoord *= pressureFactor;
@@ -426,18 +450,15 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		float skyflash = 0;
 
 		float sunBrightness = super.getSunBrightness(par1);
-
+		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+			SatelliteWar war = (SatelliteWar) entry.getValue();
+			float flame = war.getInterp();
+            float invertedFlash = 100 - flame;
+            float alpd = 1.0F - Math.min(1.0F, flame / 100);
+			skyflash = alpd;
+		}
 		if(atmosphere == null) {
-			
-			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-				SatelliteWar war = (SatelliteWar) entry.getValue();
-				float flame = war.getInterp();
-	            float invertedFlash = 100 - flame;
-                float alpd = 1.0F - Math.min(1.0F, flame / 100);
-				skyflash = alpd;
-			}
-			return sunBrightness + skyflash;
-		
+			return sunBrightness + skyflash;	
 		}
 		if(CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
 			CBT_War wardat = CelestialBody.getTrait(worldObj, CBT_War.class);

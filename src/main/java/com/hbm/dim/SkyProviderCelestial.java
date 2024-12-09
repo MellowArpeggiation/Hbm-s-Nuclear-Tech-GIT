@@ -5,12 +5,13 @@ import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.config.SpaceConfig;
 import com.hbm.dim.SolarSystem.AstroMetric;
 import com.hbm.dim.thatmo.WorldProviderThatmo;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CBT_War;
-import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
+import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.lib.RefStrings;
@@ -42,6 +43,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 	private static final ResourceLocation nightTexture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/night.png");
 	private static final ResourceLocation digammaStar = new ResourceLocation(RefStrings.MODID, "textures/misc/space/star_digamma.png");
 	private static final ResourceLocation ringTexture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/rings.png");
+	private static final ResourceLocation destroyedBody = new ResourceLocation(RefStrings.MODID, "textures/misc/space/destroyed.png");
 
 	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/particle/shockwave.png");
 	private static final ResourceLocation ThatmoShield = new ResourceLocation("hbm:textures/particle/cens.png");
@@ -312,7 +314,6 @@ public class SkyProviderCelestial extends IRenderHandler {
 		GL11.glPopMatrix();
 		render3DModel(partialTicks, world, mc);
 	    CBT_War war = CelestialBody.getTrait(mc.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().theWorld, CBT_War.class);
-
 	    if (war != null) {
 	        for (int i = 0; i < war.getProjectiles().size(); i++) {
 	            CBT_War.Projectile projectile = war.getProjectiles().get(i);
@@ -326,7 +327,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 	                GL11.glPushMatrix(); 
 	                render3DModel(partialTicks, world, mc);
 
-	                GL11.glTranslated(projectile.getTranslateX() + 30, 55, projectile.getTranslateZ() + 50); 
+	                GL11.glTranslated(projectile.getTranslateX() + 70, projectile.getTranslateY(), projectile.getTranslateZ() + 50); 
 	                GL11.glScaled(flash, flash, flash);
 	                GL11.glRotated(90.0, -10.0, -1.0, 50.0);
 	                GL11.glRotated(20.0, -0.0, -1.0, 1.0);
@@ -342,7 +343,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 	                GL11.glPushMatrix(); 
 
-	                GL11.glTranslated(projectile.getTranslateX() + 30, 55, projectile.getTranslateZ() + 50); 
+	                GL11.glTranslated(projectile.getTranslateX() + 70, projectile.getTranslateY(), projectile.getTranslateZ() + 50); 
 	                GL11.glScaled(flash * 0.4f, flash * 0.4f, flash * 0.4f);
 	                GL11.glRotated(90.0, -10.0, -1.0, 50.0);
 	                GL11.glRotated(20.0, -0.0, -1.0, 1.0);
@@ -355,7 +356,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 	            }
 	        }
 	    }
-		
+
 		if(body.hasRings) {
 			GL11.glPushMatrix();
 			{
@@ -728,6 +729,40 @@ public class SkyProviderCelestial extends IRenderHandler {
 						}
 						GL11.glPopMatrix();
 					}
+					
+				    CBT_Destroyed d = CelestialBody.getBody(metric.body.dimensionId).getTrait(CBT_Destroyed.class);
+
+					if(d != null) {
+						//System.out.println(d);
+						GL11.glDisable(GL11.GL_BLEND);
+						GL11.glColor4f(1.0F, 1.0F, 1.0F, visibility);
+						mc.renderEngine.bindTexture(destroyedBody);
+						
+						tessellator.startDrawingQuads();
+						tessellator.addVertexWithUV(-size, 100.0D, -size, 0.0D + uvOffset, 0.0D);
+						tessellator.addVertexWithUV(size, 100.0D, -size, 1.0D + uvOffset, 0.0D);
+						tessellator.addVertexWithUV(size, 100.0D, size, 1.0D + uvOffset, 1.0D);
+						tessellator.addVertexWithUV(-size, 100.0D, size, 0.0D + uvOffset, 1.0D);
+						tessellator.draw();
+
+
+						GL11.glEnable(GL11.GL_BLEND);
+						double interpr = d.interp;
+		                float alpd = (float) (1.0F - Math.min(1.0F, interpr / 100));
+
+		                
+						GL11.glColor4f(1.0F, 1.0F, 1.0F, alpd);
+						mc.renderEngine.bindTexture(texture);
+						
+						tessellator.startDrawingQuads();
+						tessellator.addVertexWithUV(-interpr, 100.0D, -interpr, 0.0D + uvOffset, 0.0D);
+						tessellator.addVertexWithUV(interpr, 100.0D, -interpr, 1.0D + uvOffset, 0.0D);
+						tessellator.addVertexWithUV(interpr, 100.0D, interpr, 1.0D + uvOffset, 1.0D);
+						tessellator.addVertexWithUV(-interpr, 100.0D, interpr, 0.0D + uvOffset, 1.0D);
+						tessellator.draw();
+
+
+					} else {
 
 					GL11.glDisable(GL11.GL_BLEND);
 					GL11.glColor4f(1.0F, 1.0F, 1.0F, visibility);
@@ -742,6 +777,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 
 					GL11.glEnable(GL11.GL_BLEND);
+					}
 					
 					// Draw a shader on top to render celestial phase
 					OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);

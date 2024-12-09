@@ -78,7 +78,7 @@ public class WorldProviderEarth extends WorldProviderCelestial {
 	                
 	                if(projectile.getAnimtime() >= 100) {
 		                    war.destroyProjectile(projectile);
-		    				World targetBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.laytheDimension);
+		    				World targetBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.moonDimension);
 		                    i--;
 		                    System.out.println("damaged: " + targetBody + " health left: " + war.health);
 		                    if(war.health > 0) {

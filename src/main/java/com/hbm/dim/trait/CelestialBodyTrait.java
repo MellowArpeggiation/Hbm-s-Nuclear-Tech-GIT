@@ -17,9 +17,7 @@ public abstract class CelestialBodyTrait {
 	public static class CBT_BATTLEFIELD extends CelestialBodyTrait { }
 	public static CBT_BATTLEFIELD BATTLE = new CBT_BATTLEFIELD();
 
-	public static class CBT_Destroyed extends CelestialBodyTrait { }
-	public static CBT_Destroyed SPLODE = new CBT_Destroyed();
-
+	
 	// Constructor and loading
 	public static List<Class<? extends CelestialBodyTrait>> traitList = new ArrayList<Class<? extends CelestialBodyTrait>>();
 	public static HashBiMap<String, Class<? extends CelestialBodyTrait>> traitMap = HashBiMap.create();
