@@ -72,7 +72,6 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		    CBT_Destroyed d = CelestialBody.getBody(body.dimensionId).getTrait(CBT_Destroyed.class);
 		    if(d != null) {
 		    	d.updatefloat();
-		    	//System.out.println(d);
 		    }
 		}
 
@@ -109,10 +108,14 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	                
 	                projectile.update();
 	                float travel = projectile.getTravel();
-	                
+
+		            if (projectile.getTravel() <= 0) {
+		                projectile.impact();
+		            }
+		            
 	                if(projectile.getAnimtime() >= 100) {
 		                    war.destroyProjectile(projectile);
-		    				World targetBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.moonDimension);
+		    				World targetBody = MinecraftServer.getServer().worldServerForDimension(projectile.getTarget());
 		                    i--;
 		                    System.out.println("damaged: " + targetBody + " health left: " + war.health);
 		                    if(war.health > 0) {
@@ -120,10 +123,10 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		                    } else if(war.health <= 0) {
 		        				CelestialBody target = CelestialBody.getPlanet(targetBody);
 		        				target.modifyTraits(targetBody, new CBT_Destroyed());
-		        				war.health = 0;
+			                	war.health = 0;
+
 		                    }
 	                }
-	                //currently kind of temp, there might be a better way to generalize this
 	                if(projectile.getType() == ProjectileType.SPLITSHOT) {
 	                	if (projectile.getTravel() <= 0) {
 	                		war.split(worldObj, 4, projectile, ProjectileType.SMALL);

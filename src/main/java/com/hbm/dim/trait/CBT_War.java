@@ -28,7 +28,7 @@ public class CBT_War extends CelestialBodyTrait {
 	public int health;
 	public int shield;
 	
-	public static List<Projectile> projectiles;
+	public List<Projectile> projectiles;
 	
 	public CBT_War() {
 		this.health = 100;
@@ -82,7 +82,7 @@ public class CBT_War extends CelestialBodyTrait {
 		projectiles.remove(proj);
 	}
 
-    public static List<Projectile> getProjectiles() {
+    public List<Projectile> getProjectiles() {
         return projectiles;
     }
     
@@ -250,11 +250,14 @@ public class CBT_War extends CelestialBodyTrait {
 
 	    public void impact() {
 	    	
-	        flashtime += 0.1f;
+	        flashtime += 0.6f;
 	        flashtime = Math.min(100.0f, flashtime + 0.1f * (100.0f - flashtime) * 0.15f);
 
 	        if (flashtime >= 100) {
 	            flashtime = 100;
+	        }
+	        if(animtime == 0) {
+	        	flashtime = 0;
 	        }
 
 	    }

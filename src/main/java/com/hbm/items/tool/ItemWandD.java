@@ -27,6 +27,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 
 public class ItemWandD extends Item {
 
@@ -92,33 +93,35 @@ public class ItemWandD extends Item {
 				if(isVacuum)
 					player.addChatMessage(new ChatComponentText("Atmosphere: NEAR VACUUM"));
 			} else {
+				
+				//something broke here....
+				//i might split the war trait and the projectiles trait and have it be its own.
+				//when all projectiles return zero and finish damaging the planet the trait deletes itself
+				//problem right now is that if both planets have war data the projectile list conflates the two
+				
+				
 				// TESTING: END OF LIFE
-				//World targetBody = DimensionManager.getWorld(SpaceConfig.dunaDimension);
-				World targetdBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.moonDimension);
-				CelestialBody target = CelestialBody.getPlanet(targetdBody);
-				
-				
-				if(!target.hasTrait(CBT_War.class)) {
+				//World targetdBody = DimensionManager.getWorld(SpaceConfig.dunaDimension);
+				World targetdBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.minmusDimension);
+				CelestialBody target = CelestialBody.getBody(targetdBody);
+				System.out.println(target);
+
+				if(!target.hasTrait(targetdBody, CBT_War.class)) {
 					// TESTING: END OF TIME
-					target.modifyTraits(new CBT_War());		
-			
+					target.modifyTraits(targetdBody, new CBT_War());		
 				} else {
 					CBT_War war = CelestialBody.getTrait(targetdBody, CBT_War.class);
 					if(war != null) {
 						float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat();
 						System.out.println(rand);
 						//war.launchProjectile(100, 20, 1, 28 * rand * 5, 33, 20, ProjectileType.SPLITSHOT);
-						Projectile projectile = new Projectile(100, 20, 50, 28 * rand * 5, 55, 20, ProjectileType.SMALL, SpaceConfig.moonDimension);
+						Projectile projectile = new Projectile(100, 20, 50, 28 * rand * 5, 55, 20, ProjectileType.SMALL, SpaceConfig.minmusDimension);
 						projectile.GUIangle = (int) (rand * 360);
 						war.launchProjectile(projectile);
-						System.out.println(war);
+						System.out.println(war.health);
 
 						player.addChatMessage(new ChatComponentText("projectile launched"));
 
-					} else {
-						target.modifyTraits(targetdBody, new CBT_War());		
-
-						System.out.println(target.getTraits());
 					}
 				}
 			}

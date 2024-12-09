@@ -1076,14 +1076,13 @@ public class ModEventHandlerClient {
 		        for (int i = 0; i < war.getProjectiles().size(); i++) {
 		            CBT_War.Projectile projectile = war.getProjectiles().get(i);
 		            if (projectile != null && projectile.getTravel() >= 18 && projectile.getTravel() <= 18) {
-		            	
 		            	  Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
 
 	                    }
 		            }
 		        }
 		    }
-
+		
 		if(event.phase == Phase.START && mc.theWorld.provider.dimensionId == SpaceConfig.orbitDimension) {
 			for(Object o : mc.theWorld.loadedEntityList) {
 				if(o instanceof EntityItem) {

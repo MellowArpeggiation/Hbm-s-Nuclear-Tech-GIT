@@ -9,8 +9,8 @@ public class CBT_Destroyed extends CelestialBodyTrait {
 
 	public CBT_Destroyed() {}
 
-	public CBT_Destroyed(float bees) {
-		this.interp = bees;
+	public CBT_Destroyed(float interp) {
+		this.interp = interp;
 	}
 	
 	@Override
@@ -34,11 +34,11 @@ public class CBT_Destroyed extends CelestialBodyTrait {
 	}
 	
 	public void updatefloat() {
-		interp += 0.1f;
-        interp = Math.min(100.0f,interp + 0.1f * (100.0f - interp) * 0.15f);
+		interp += 0.05f;
+        interp = Math.min(100.0f,interp + 0.01f * (100.0f - interp) * 0.15f);
 
         if (interp >= 100) {
-        	interp = 0;
+        	interp = 100;
         }		
 	}
 

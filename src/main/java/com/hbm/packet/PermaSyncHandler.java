@@ -9,6 +9,7 @@ import java.util.Map;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystemWorldSavedData;
 import com.hbm.dim.WorldProviderCelestial;
+import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_War.Projectile;
 import com.hbm.dim.trait.CelestialBodyTrait;
@@ -134,6 +135,7 @@ public class PermaSyncHandler {
             List<Projectile> projectiles = war.getProjectiles();
             for (Projectile projectile : projectiles) {
                 buf.writeFloat(projectile.getFlashtime());
+                buf.writeFloat(projectile.getTravel());
             }
         }
 		// EFFECTS THAT I DONT KNOW HOW TO GET WORKING ELSEWHERE :P //
@@ -232,12 +234,13 @@ public class PermaSyncHandler {
             List<Projectile> projectiles = war.getProjectiles();
             for (Projectile projectile : projectiles){
                     float flashtime = buf.readFloat();
-                    projectile.setFlashtime(flashtime);
+                    float traveltime = buf.readFloat();
 
+                    projectile.setFlashtime(flashtime);
+                    projectile.setTravel(traveltime);
                 }
             }
 		// EFFECTS THAT I DONT KNOW HOW TO GET WORKING ELSEWHERE :P //
-
     }
 	
 	
