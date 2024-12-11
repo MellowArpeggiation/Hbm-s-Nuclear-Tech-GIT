@@ -391,6 +391,7 @@ public class ResourceManager {
 	public static final IModelCustom drone = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/mobs/quadcopter.obj"));
 	public static final IModelCustom scutterfish = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/mobs/scutterfish.obj"));
 	public static final IModelCustom tankbot = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/tankbot.obj"));
+	public static final IModelCustom liquidator = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/liquidator.obj"));
 
 	//ZIRNOX
 	public static final IModelCustom zirnox = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/zirnox.obj"));
@@ -820,6 +821,7 @@ public class ResourceManager {
 	public static final ResourceLocation glyphid_nuclear_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/glyphid_nuclear.png");
 	public static final ResourceLocation scutter_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/lob2.png");
 	public static final ResourceLocation tankbot_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/robtex.png");
+	public static final ResourceLocation liquidator_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/liqtex.png");
 
 	public static final ResourceLocation glyphid_digger_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/glyphid_digger.png");
 	
