@@ -11,7 +11,6 @@ import com.hbm.items.ItemAmmoEnums.IAmmoItemEnum;
 import com.hbm.items.ItemEnumMulti;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.MainRegistry;
 import com.hbm.util.EnumUtil;
 import com.hbm.util.I18nUtil;
 
@@ -124,7 +123,7 @@ public class ItemAmmo extends ItemEnumMulti {
 	
 	public ItemAmmo(Class<? extends Enum<?>> clazz, String altName) {
 		super(clazz, true, true);
-		setCreativeTab(MainRegistry.weaponTab);
+		this.setCreativeTab(null);
 		this.altName = altName;
 	}
 

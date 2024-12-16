@@ -27,7 +27,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
@@ -54,6 +53,9 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 	private int oxygen = 100;
 	private boolean frozen = false;
 	private boolean burning = false;
+	public int fire;
+	public int phosphorus;
+	public int balefire;
 	private List<ContaminationEffect> contamination = new ArrayList();
 	private CBT_Atmosphere atmosphere;
 	private boolean gravity = false;
@@ -321,31 +323,8 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 	}
 	
 	/// OIL ///
-	public static int getOil(EntityLivingBase entity) {
-		return getData(entity).oil;
-	}
-	
-	public static void setOil(EntityLivingBase entity, int oil) {
-		getData(entity).oil = oil;
-	}
-	
-	/// TEMPERATURE ///
-	public static int getTemperature(EntityLivingBase entity) {
-		return getData(entity).temperature;
-	}
-	
-	public static void setTemperature(EntityLivingBase entity, int temperature) {
-		HbmLivingProps data = getData(entity);
-		temperature = MathHelper.clamp_int(temperature, -2500, 2500);
-		data.temperature = temperature;
-		if(temperature > 1000)  data.burning = true;
-		if(temperature < 800)  data.burning = false;
-		if(temperature < -1000)  data.frozen = true;
-		if(temperature > -800)  data.frozen = false;
-	}
-
-	public static boolean isFrozen(EntityLivingBase entity) { return getData(entity).frozen; };
-	public static boolean isBurning(EntityLivingBase entity) { return getData(entity).burning; };
+	public static int getOil(EntityLivingBase entity) { return getData(entity).oil; }
+	public static void setOil(EntityLivingBase entity, int oil) { getData(entity).oil = oil; }
 
 	/// ATMOSPHERE ///
 	public static CBT_Atmosphere getAtmosphere(EntityLivingBase entity) {
@@ -381,6 +360,9 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 		props.setInteger("hfr_oxygen", oxygen);
 		props.setFloat("hfr_activation", activation);
 		props.setBoolean("hfr_gravity", gravity);
+		props.setInteger("hfr_fire", fire);
+		props.setInteger("hfr_phosphorus", phosphorus);
+		props.setInteger("hfr_balefire", balefire);
 		
 		props.setInteger("hfr_cont_count", this.contamination.size());
 		
@@ -407,6 +389,9 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 			activation = props.getFloat("hfr_activation");
 			oxygen = props.getInteger("hfr_oxygen");
 			gravity = props.getBoolean("hfr_gravity");
+			fire = props.getInteger("hfr_fire");
+			phosphorus = props.getInteger("hfr_phosphorus");
+			balefire = props.getInteger("hfr_balefire");
 			
 			int cont = props.getInteger("hfr_cont_count");
 			

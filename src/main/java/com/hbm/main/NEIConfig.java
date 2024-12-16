@@ -4,12 +4,12 @@ import java.util.List;
 
 import codechicken.nei.recipe.*;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.generic.BlockMotherOfAllOres.TileEntityRandomOre;
 import com.hbm.blocks.generic.BlockPlushie.TileEntityPlushie;
 import com.hbm.config.CustomMachineConfigJSON;
 import com.hbm.handler.nei.CustomMachineHandler;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
+import com.hbm.items.weapon.sedna.ItemGunBaseNT;
 import com.hbm.lib.RefStrings;
 
 import codechicken.nei.api.API;
@@ -17,6 +17,7 @@ import codechicken.nei.api.IConfigureNEI;
 import codechicken.nei.api.IHighlightHandler;
 import codechicken.nei.api.ItemInfo.Layout;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
@@ -34,6 +35,11 @@ public class NEIConfig implements IConfigureNEI {
 		for(CustomMachineConfigJSON.MachineConfiguration conf : CustomMachineConfigJSON.niceList) {
 			registerHandlerBypass(new CustomMachineHandler(conf));
 		}
+		
+		for(Item item : ItemGunBaseNT.secrets) {
+			API.hideItem(new ItemStack(item));
+		}
+		API.hideItem(ItemBattery.getEmptyBattery(ModItems.ammo_secret));
 		
 		//Some things are even beyond my control...or are they?
 		API.hideItem(ItemBattery.getEmptyBattery(ModItems.memory));
@@ -63,8 +69,6 @@ public class NEIConfig implements IConfigureNEI {
 		}
 		API.hideItem(new ItemStack(ModBlocks.dummy_block_vault));
 		API.hideItem(new ItemStack(ModBlocks.dummy_block_blast));
-		API.hideItem(new ItemStack(ModBlocks.dummy_block_uf6));
-		API.hideItem(new ItemStack(ModBlocks.dummy_block_puf6));
 		API.hideItem(new ItemStack(ModBlocks.dummy_port_compact_launcher));
 		API.hideItem(new ItemStack(ModBlocks.dummy_port_launch_table));
 		API.hideItem(new ItemStack(ModBlocks.dummy_plate_compact_launcher));
@@ -90,31 +94,6 @@ public class NEIConfig implements IConfigureNEI {
 		API.hideItem(new ItemStack(ModItems.bedrock_ore_base));
 		API.hideItem(new ItemStack(ModItems.ore_density_scanner));
 		API.hideItem(new ItemStack(ModBlocks.machine_ore_slopper));
-		
-		API.registerHighlightIdentifier(ModBlocks.ore_random, new IHighlightHandler() {
-
-			@Override
-			public ItemStack identifyHighlight(World world, EntityPlayer player, MovingObjectPosition mop) {
-				int x = mop.blockX;
-				int y = mop.blockY;
-				int z = mop.blockZ;
-				
-				TileEntity te = world.getTileEntity(x, y, z);
-				
-				if(te instanceof TileEntityRandomOre) {
-					TileEntityRandomOre ore = (TileEntityRandomOre) te;
-					return new ItemStack(ModBlocks.ore_random, 1, ore.getStackId());
-				}
-				
-				return null;
-			}
-
-			@Override
-			public List<String> handleTextData(ItemStack itemStack, World world, EntityPlayer player, MovingObjectPosition mop, List<String> currenttip, Layout layout) {
-				return currenttip;
-			}
-			
-		});
 		
 		API.registerHighlightIdentifier(ModBlocks.plushie, new IHighlightHandler() {
 			@Override public ItemStack identifyHighlight(World world, EntityPlayer player, MovingObjectPosition mop) {

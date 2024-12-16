@@ -206,6 +206,8 @@ public class Fluids {
 	public static FluidType HEAVYWATER_HOT;
 	public static FluidType SODIUM;
 	public static FluidType SODIUM_HOT;
+	public static FluidType LEAD;
+	public static FluidType LEAD_HOT;
 	public static FluidType THORIUM_SALT;
 	public static FluidType THORIUM_SALT_HOT;
 	public static FluidType THORIUM_SALT_DEPLETED;
@@ -375,8 +377,8 @@ public class Fluids {
 		NAPHTHA_CRACK =			new FluidType("NAPHTHA_CRACK",		0x595744, 2, 1, 0, EnumSymbol.NONE).addContainers(new CD_Canister(0x5F6D44)).addTraits(new FT_Flammable(125_000), new FT_Combustible(FuelGrade.MEDIUM, 200_000), LIQUID, VISCOUS, P_FUEL);
 		LIGHTOIL_CRACK =		new FluidType("LIGHTOIL_CRACK",		0x8c7451, 1, 2, 0, EnumSymbol.NONE).addContainers(new CD_Canister(0xB46B52)).addTraits(new FT_Flammable(200_000), new FT_Combustible(FuelGrade.MEDIUM, 500_000), LIQUID, P_FUEL);
 		DIESEL_CRACK =			new FluidType("DIESEL_CRACK",		0xf2eed5, 1, 2, 0, EnumSymbol.NONE).addContainers(new CD_Canister(0xFF2C2C)).addTraits(new FT_Flammable(200_000), new FT_Combustible(FuelGrade.HIGH, 450_000), LIQUID, P_FUEL);
-		AROMATICS =				new FluidType("AROMATICS",			0x68A09A, 1, 4, 1, EnumSymbol.NONE).addTraits(new FT_Flammable(25_000), LIQUID, VISCOUS, P_GAS);
-		UNSATURATEDS =			new FluidType("UNSATURATEDS",		0x628FAE, 1, 4, 1, EnumSymbol.NONE).addTraits(new FT_Flammable(1_000_000), GASEOUS, P_GAS); //acetylene burns as hot as satan's asshole
+		AROMATICS =				new FluidType("AROMATICS",			0x68A09A, 1, 4, 1, EnumSymbol.NONE).addContainers(new CD_Gastank(0x68A09A, 0xEDCF27)).addTraits(new FT_Flammable(25_000), LIQUID, VISCOUS, P_GAS);
+		UNSATURATEDS =			new FluidType("UNSATURATEDS",		0x628FAE, 1, 4, 1, EnumSymbol.NONE).addContainers(new CD_Gastank(0x628FAE, 0xEDCF27)).addTraits(new FT_Flammable(1_000_000), GASEOUS, P_GAS); //acetylene burns as hot as satan's asshole
 		SALIENT =				new FluidType("SALIENT",			0x457F2D, 0, 0, 0, EnumSymbol.NONE).addTraits(DELICIOUS, LIQUID, VISCOUS);
 		XPJUICE =				new FluidType("XPJUICE",			0xBBFF09, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		ENDERJUICE =			new FluidType("ENDERJUICE",			0x127766, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
@@ -493,6 +495,8 @@ public class Fluids {
 		VITRIOL =				new FluidType("VITRIOL",			0x6E5222, 2, 0, 1, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		SLOP =					new FluidType("SLOP",			0x929D45, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID, VISCOUS);
 		SUPERHEATED_HYDROGEN =	new FluidType("SUPERHEATED_HYDROGEN",		0xE39393, 0, 0, 0, EnumSymbol.NONE).setTemp(2200).addTraits(GASEOUS, NOCON, NOID);
+		LEAD =					new FluidType("LEAD",				0x666672, 4, 0, 0, EnumSymbol.NONE).setTemp(350).addTraits(LIQUID, VISCOUS);
+		LEAD_HOT =				new FluidType("LEAD_HOT",		0x776563, 4, 0, 0, EnumSymbol.NONE).setTemp(1500).addTraits(LIQUID, VISCOUS);
 		
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
@@ -532,6 +536,8 @@ public class Fluids {
 		metaOrder.add(BLOOD_HOT);
 		metaOrder.add(SODIUM);
 		metaOrder.add(SODIUM_HOT);
+		metaOrder.add(LEAD);
+		metaOrder.add(LEAD_HOT);
 		metaOrder.add(THORIUM_SALT);
 		metaOrder.add(THORIUM_SALT_HOT);
 		metaOrder.add(THORIUM_SALT_DEPLETED);
@@ -780,9 +786,14 @@ public class Fluids {
 		
 		HEAVYWATER.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).addStep(300, 1, HEAVYWATER_HOT, 1), new FT_PWRModerator(1.25D));
 		HEAVYWATER_HOT.addTraits(new FT_Coolable(HEAVYWATER, 1, 1, 300).setEff(CoolingType.HEATEXCHANGER, 1.0D));
-		
+
 		SODIUM.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 2.5D).setEff(HeatingType.ICF, 3D).addStep(400, 1, SODIUM_HOT, 1));
 		SODIUM_HOT.addTraits(new FT_Coolable(SODIUM, 1, 1, 400).setEff(CoolingType.HEATEXCHANGER, 1.0D));
+		/* Fuck you, this is final now. If you had any concerns, you could have told me like a normal person instead of shitting on in-dev values that change every other day */
+		LEAD.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 0.75D).setEff(HeatingType.ICF, 4D).addStep(800, 1, LEAD_HOT, 1), new FT_PWRModerator(0.75D));
+		/* Or maybe not, because I blocked your sorry ass. Guess why that is? */
+		LEAD_HOT.addTraits(new FT_Coolable(LEAD, 1, 1, 680).setEff(CoolingType.HEATEXCHANGER, 1.0D));
+		/* Maybe shittalking me in some corner where you thought I wouldn't listen was not that bright of an idea afterall? */
 		
 		THORIUM_SALT.addTraits(new FT_Heatable().setEff(HeatingType.PWR, 1.0D).addStep(400, 1, THORIUM_SALT_HOT, 1), new FT_PWRModerator(2.5D));
 		THORIUM_SALT_HOT.addTraits(new FT_Coolable(THORIUM_SALT_DEPLETED, 1, 1, 400).setEff(CoolingType.HEATEXCHANGER, 1.0D));

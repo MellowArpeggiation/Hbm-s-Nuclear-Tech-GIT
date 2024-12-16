@@ -3,7 +3,6 @@ package com.hbm.main;
 import com.google.common.collect.ImmutableList;
 import com.hbm.blocks.BlockEnums.EnumStoneType;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.generic.BlockMotherOfAllOres;
 import com.hbm.blocks.generic.BlockToolConversion;
 import com.hbm.commands.*;
 import com.hbm.config.*;
@@ -261,6 +260,7 @@ public class MainRegistry {
 
 	@EventHandler
 	public void PreLoad(FMLPreInitializationEvent PreEvent) {
+		CrashHelper.init();
 		
 		startupTime = System.currentTimeMillis();
 		configDir = PreEvent.getModConfigurationDirectory();
@@ -287,6 +287,7 @@ public class MainRegistry {
 		 * This "fix" just makes sure that the material system is loaded first no matter what. */
 		Mats.MAT_STONE.getUnlocalizedName();
 		Fluids.init();
+		proxy.registerPreRenderInfo();
 		ModBlocks.mainRegistry();
 		ModItems.mainRegistry();
 		ModBiomes.init();
@@ -310,13 +311,6 @@ public class MainRegistry {
 		OreDictManager.registerOres();
 		
 		if(WorldConfig.enableCraterBiomes) BiomeGenCraterBase.initDictionary();
-
-		/*Library.superuser.add("192af5d7-ed0f-48d8-bd89-9d41af8524f8");
-		Library.superuser.add("5aee1e3d-3767-4987-a222-e7ce1fbdf88e");
-		Library.superuser.add("937c9804-e11f-4ad2-a5b1-42e62ac73077");
-		Library.superuser.add("3af1c262-61c0-4b12-a4cb-424cc3a9c8c0");
-		Library.superuser.add("4729b498-a81c-42fd-8acd-20d6d9f759e0");
-		Library.superuser.add("c3f5e449-6d8c-4fe3-acc9-47ef50e7e7ae");*/
 
 		aMatSchrab.customCraftingMaterial = ModItems.ingot_schrabidium;
 		aMatHaz.customCraftingMaterial = ModItems.hazmat_cloth;
@@ -894,17 +888,17 @@ public class MainRegistry {
 		
 		FalloutConfigJSON.initialize();
 		ItemPoolConfigJSON.initialize();
+		ClientConfig.initConfig();
 
 		TileEntityNukeCustom.registerBombItems();
 		ArmorUtil.register();
 		HazmatRegistry.registerHazmats();
+		DamageResistanceHandler.init();
 		FluidContainerRegistry.register();
 		BlockToolConversion.registerRecipes();
 		AchievementHandler.register();
 
 		proxy.registerMissileItems();
-		
-		BlockMotherOfAllOres.init();
 
 		// Load compatibility for OC.
 		CompatHandler.init();
@@ -957,6 +951,7 @@ public class MainRegistry {
 		
 		Compat.handleRailcraftNonsense();
 		SuicideThreadDump.register();
+		CommandReloadClient.register();
 
 		WorldTypeTeleport.init();
 		
@@ -988,6 +983,9 @@ public class MainRegistry {
 		PollutionHandler pollution = new PollutionHandler();
 		MinecraftForge.EVENT_BUS.register(pollution);
 		FMLCommonHandler.instance().bus().register(pollution);
+
+		DamageResistanceHandler dmgHandler = new DamageResistanceHandler();
+		MinecraftForge.EVENT_BUS.register(dmgHandler);
 
 		ChunkAtmosphereManager atmosphere = new ChunkAtmosphereManager();
 		MinecraftForge.EVENT_BUS.register(atmosphere);
@@ -1043,7 +1041,7 @@ public class MainRegistry {
 		
 		try {
 			if(GeneralConfig.enableThermosPreventer && Class.forName("thermos.ThermosClassTransformer") != null) {
-				throw new IllegalStateException("The mod tried to start on a Thermos or it's fork server and therefore stopped. To allow the server to start on Thermos, change the appropriate "
+				throw new IllegalStateException("The mod tried to start on a Thermos or its fork server and therefore stopped. To allow the server to start on Thermos, change the appropriate "
 						+ "config entry (0.00 in hbm.cfg). This was done because, by default, Thermos "
 						+ "uses a so-called \"optimization\" feature that reduces tile ticking a lot, which will inevitably break a lot of machines. Most people aren't even aware "
 						+ "of this, and start blaming random mods for all their stuff breaking. In order to adjust or even disable this feature, edit \"tileentities.yml\" in your "
@@ -1518,6 +1516,84 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.gas8");
 		ignoreMappings.add("hbm:tile.brick_forgotten");
 		ignoreMappings.add("hbm:tile.watz_conductor");
+		ignoreMappings.add("hbm:item.flame_1");
+		ignoreMappings.add("hbm:item.flame_2");
+		ignoreMappings.add("hbm:item.flame_3");
+		ignoreMappings.add("hbm:item.flame_3");
+		ignoreMappings.add("hbm:item.flame_4");
+		ignoreMappings.add("hbm:item.flame_5");
+		ignoreMappings.add("hbm:item.flame_6");
+		ignoreMappings.add("hbm:item.flame_7");
+		ignoreMappings.add("hbm:item.flame_8");
+		ignoreMappings.add("hbm:item.flame_9");
+		ignoreMappings.add("hbm:item.flame_10");
+		ignoreMappings.add("hbm:tile.dummy_block_uf6");
+		ignoreMappings.add("hbm:tile.dummy_block_puf6");
+		ignoreMappings.add("hbm:item.wire_aluminium");
+		ignoreMappings.add("hbm:item.wire_copper");
+		ignoreMappings.add("hbm:item.wire_red_copper");
+		ignoreMappings.add("hbm:item.wire_tungsten");
+		ignoreMappings.add("hbm:item.wire_gold");
+		ignoreMappings.add("hbm:item.wire_schrabidium");
+		ignoreMappings.add("hbm:item.wire_advanced_alloy");
+		ignoreMappings.add("hbm:item.wire_magnetized_tungsten");
+		ignoreMappings.add("hbm:item.nugget_weidanium");
+		ignoreMappings.add("hbm:item.nugget_reiium");
+		ignoreMappings.add("hbm:item.nugget_unobtainium");
+		ignoreMappings.add("hbm:item.nugget_daffergon");
+		ignoreMappings.add("hbm:item.nugget_verticium");
+		ignoreMappings.add("hbm:item.ingot_weidanium");
+		ignoreMappings.add("hbm:item.ingot_reiium");
+		ignoreMappings.add("hbm:item.ingot_unobtainium");
+		ignoreMappings.add("hbm:item.ingot_daffergon");
+		ignoreMappings.add("hbm:item.ingot_verticium");
+		ignoreMappings.add("hbm:item.powder_weidanium");
+		ignoreMappings.add("hbm:item.powder_reiium");
+		ignoreMappings.add("hbm:item.powder_unobtainium");
+		ignoreMappings.add("hbm:item.powder_daffergon");
+		ignoreMappings.add("hbm:item.powder_verticium");
+		ignoreMappings.add("hbm:tile.ore_random");
+		ignoreMappings.add("hbm:item.crate_caller");
+		ignoreMappings.add("hbm:item.pellet_rtg_berkelium");
+		ignoreMappings.add("hbm:item.folly_shell");
+		ignoreMappings.add("hbm:item.folly_bullet");
+		ignoreMappings.add("hbm:item.folly_bullet_nuclear");
+		ignoreMappings.add("hbm:item.folly_bullet_du");
+		ignoreMappings.add("hbm:item.ammo_folly");
+		ignoreMappings.add("hbm:item.ammo_folly_nuclear");
+		ignoreMappings.add("hbm:item.ammo_folly_du");
+		ignoreMappings.add("hbm:item.clip_revolver_iron");
+		ignoreMappings.add("hbm:item.clip_revolver");
+		ignoreMappings.add("hbm:item.clip_revolver_gold");
+		ignoreMappings.add("hbm:item.clip_revolver_lead");
+		ignoreMappings.add("hbm:item.clip_revolver_schrabidium");
+		ignoreMappings.add("hbm:item.clip_revolver_cursed");
+		ignoreMappings.add("hbm:item.clip_revolver_nightmare");
+		ignoreMappings.add("hbm:item.clip_revolver_nightmare2");
+		ignoreMappings.add("hbm:item.clip_revolver_pip");
+		ignoreMappings.add("hbm:item.clip_revolver_nopip");
+		ignoreMappings.add("hbm:item.clip_rpg");
+		ignoreMappings.add("hbm:item.clip_stinger");
+		ignoreMappings.add("hbm:item.clip_fatman");
+		ignoreMappings.add("hbm:item.clip_mirv");
+		ignoreMappings.add("hbm:item.clip_bf");
+		ignoreMappings.add("hbm:item.clip_mp40");
+		ignoreMappings.add("hbm:item.clip_uzi");
+		ignoreMappings.add("hbm:item.clip_uboinik");
+		ignoreMappings.add("hbm:item.clip_lever_action");
+		ignoreMappings.add("hbm:item.clip_bolt_action");
+		ignoreMappings.add("hbm:item.clip_xvl1456");
+		ignoreMappings.add("hbm:item.clip_osipr");
+		ignoreMappings.add("hbm:item.clip_immolator");
+		ignoreMappings.add("hbm:item.clip_cryolator");
+		ignoreMappings.add("hbm:item.clip_mp");
+		ignoreMappings.add("hbm:item.clip_emp");
+		ignoreMappings.add("hbm:item.clip_jack");
+		ignoreMappings.add("hbm:item.clip_spark");
+		ignoreMappings.add("hbm:item.clip_hp");
+		ignoreMappings.add("hbm:item.clip_euthanasia");
+		ignoreMappings.add("hbm:item.clip_defabricator");
+		ignoreMappings.add("hbm:item.ammo_folly_du");
 		
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);
