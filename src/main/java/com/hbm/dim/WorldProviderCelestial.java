@@ -279,14 +279,17 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		Vec3 color = Vec3.createVectorHelper(0, 0, 0);
 
 		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-			SatelliteWar war = (SatelliteWar) entry.getValue();
-			float flame = war.getInterp();
-            float invertedFlash = flame;
-            float alpd = 1.0F - Math.min(1.0F, flame / 100);
+			if(entry instanceof SatelliteWar) {
+				SatelliteWar war = (SatelliteWar) entry.getValue();
+				float flame = war.getInterp();
+	            float invertedFlash = flame;
+	            float alpd = 1.0F - Math.min(1.0F, flame / 100);
 
-			color.xCoord += alpd * 1.5;
-			color.yCoord += alpd * 1.5;
-			color.zCoord += alpd * 1.5;
+				color.xCoord += alpd * 1.5;
+				color.yCoord += alpd * 1.5;
+				color.zCoord += alpd * 1.5;	
+			}
+
 		}
 		// The cold hard vacuum of space
 		if(atmosphere == null) {
@@ -342,14 +345,16 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 
 		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-			SatelliteWar war = (SatelliteWar) entry.getValue();
-			float flame = war.getInterp();
-            float invertedFlash = flame;
-            float alpd = 1.0F - Math.min(1.0F, flame / 100);
+			if(entry instanceof SatelliteWar) {
+				SatelliteWar war = (SatelliteWar) entry.getValue();
+				float flame = war.getInterp();
+	            float invertedFlash = flame;
+	            float alpd = 1.0F - Math.min(1.0F, flame / 100);
 
-			color.xCoord += alpd * 1.5;
-			color.yCoord += alpd * 1.5;
-			color.zCoord += alpd * 1.5;
+				color.xCoord += alpd * 1.5;
+				color.yCoord += alpd * 1.5;
+				color.zCoord += alpd * 1.5;	
+			}
 
 			
 		}	
@@ -454,11 +459,13 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		float sunBrightness = super.getSunBrightness(par1);
 		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-			SatelliteWar war = (SatelliteWar) entry.getValue();
-			float flame = war.getInterp();
-            float invertedFlash = 100 - flame;
-            float alpd = 1.0F - Math.min(1.0F, flame / 100);
-			skyflash = alpd;
+			if(entry instanceof SatelliteWar) {
+				SatelliteWar war = (SatelliteWar) entry.getValue();
+				float flame = war.getInterp();
+	            float invertedFlash = 100 - flame;
+	            float alpd = 1.0F - Math.min(1.0F, flame / 100);
+				skyflash = alpd;	
+			}
 		}
 		if(atmosphere == null) {
 			return sunBrightness + skyflash;	

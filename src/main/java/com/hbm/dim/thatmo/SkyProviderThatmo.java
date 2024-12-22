@@ -10,6 +10,9 @@ import com.hbm.dim.thatmo.WorldProviderThatmo.Meteor;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_BATTLEFIELD;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.anim.BusAnimation;
+import com.hbm.render.anim.BusAnimationSequence;
+import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.util.BeamPronter;
 import com.hbm.render.util.BeamPronter.EnumBeamType;
 import com.hbm.render.util.BeamPronter.EnumWaveType;
@@ -417,11 +420,9 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		}
 		
 		GL11.glPushMatrix();
-		GL11.glEnable(GL11.GL_DEPTH_TEST); 
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glTranslated(5, -4.5, -50); 
 
-		GL11.glDisable(GL11.GL_FOG);
 		GL11.glRotated(180.0, 0, 1, 0.0);
 
 		GL11.glColor4f(0.2F, 0.2F, 0.2F, 1);
@@ -431,16 +432,32 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 
 		
 		mc.renderEngine.bindTexture(ResourceManager.liquidator_tex);
-		ResourceManager.liquidator.renderAllExcept("eyes", "head", "torso", "rightarm", "rightshoulder", "leftarm", "leftshoulder", "chainsaw", "cannon");
+		ResourceManager.liquidator.renderAllExcept("eyes", "head", "torso", "rightarm", "rightshoulder", "leftarm", "leftshoulder", "chainsaw", "cannon", "antenna");
+
+		
+		GL11.glPushMatrix();
+		GL11.glColor4f(0.2F, 0.2F, 0.2F, 1);
+		
+		
+		GL11.glTranslated(1.75, 53, 2); 
+
+
+		GL11.glRotated(WorldProviderThatmo.key1, -1, 0, 0.0);
+		GL11.glTranslated(-1.75, -53, -2); 
+
+		ResourceManager.liquidator.renderPart("torso");
+
 		
 		GL11.glPushMatrix();
 		GL11.glTranslated(-28, 64, 1); 
 
-		GL11.glRotated(55, -1, 0, 0.0);
+		GL11.glRotated(15, -1, 0, 0.0);
 		GL11.glTranslated(28, -64, -1); 
+		
+		
 		GL11.glTranslated(7.75, 66, 4); 
 
-		GL11.glRotated(-12, 0, 0, 1.0);
+		GL11.glRotated(-WorldProviderThatmo.key3, 0, 0, 1.0);
 		GL11.glTranslated(-7.75, -66, -4); 
 
 
@@ -453,56 +470,44 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		GL11.glPushMatrix();
 		GL11.glColor4f(0.2F, 0.2F, 0.2F, 1);
 
-		GL11.glRotated(45, -1, 0, 0.0);
-		GL11.glTranslated(0, -20, 45); 
-
-		GL11.glRotated(0, -0, 1, 0.0);
-		GL11.glTranslated(0, 20, -45); 
-
-		GL11.glTranslated(0, -20, 45); 
-		ResourceManager.liquidator.renderPart("torso");
-
-
-		
-
-		GL11.glPushMatrix();
 		GL11.glTranslated(-28, 64, 4); 
 
-		GL11.glRotated(60, 1, 0, 0);
+		GL11.glRotated(WorldProviderThatmo.key4, 1, 0, 0);
 		GL11.glTranslated(28, -64, -4); 
 		ResourceManager.liquidator.renderPart("rightshoulder");
 		ResourceManager.liquidator.renderPart("rightarm");
 		GL11.glTranslated(-4.75, 46, 0); 
 
-		GL11.glRotated(4, 0, 0, 1);
+		GL11.glRotated(WorldProviderThatmo.key2, 0, 0, 1);
 		GL11.glTranslated(4.75, -46, -0); 
 		
 		//xaxis
 		
 		GL11.glTranslated(-5.75, 47, 4); 
 
-		GL11.glRotated(35, 1, 0, 0);
-		GL11.glTranslated(5.75, -47, -4); 
+		GL11.glRotated(50 - WorldProviderThatmo.key3, 1, 0, 0);
+		GL11.glTranslated(5.75, -47, -4);
+		
 		ResourceManager.liquidator.renderPart("cannon");
 		GL11.glPopMatrix();
 
+		
+		
 		ResourceManager.liquidator.renderPart("leftshoulder");
 		ResourceManager.liquidator.renderPart("leftarm");
 		GL11.glTranslated(0.5, 1, 1); 
 
 		GL11.glTranslated(0, 44, 3); 
-		GL11.glRotated(95, 1, 0, 0);
-
+		GL11.glRotated(5, 1, 0, 0);
 		GL11.glTranslated(0, -44, -3); 
 
 		GL11.glTranslated(23.75, 46.5, 3); 
 
-		GL11.glRotated(35, 0, 0, 1);
+		GL11.glRotated(12, 0, 0, 1);
 		GL11.glTranslated(-23.75, -46.5, -3); 
 
 		ResourceManager.liquidator.renderPart("chainsaw");
 		GL11.glPopMatrix();
-
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
