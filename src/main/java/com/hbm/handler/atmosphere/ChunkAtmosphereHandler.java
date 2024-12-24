@@ -95,6 +95,8 @@ public class ChunkAtmosphereHandler {
 		ThreeInts pos = new ThreeInts(x, y, z);
 		HashMap<IAtmosphereProvider, AtmosphereBlob> blobs = worldBlobs.get(world.provider.dimensionId);
 
+		if(blobs == null) return inBlobs;
+
 		for(AtmosphereBlob blob : blobs.values()) {
 			if(blob.contains(pos)) {
 				inBlobs.add(blob);
@@ -108,6 +110,8 @@ public class ChunkAtmosphereHandler {
 		ThreeInts pos = new ThreeInts(x, y, z);
 		HashMap<IAtmosphereProvider, AtmosphereBlob> blobs = worldBlobs.get(world.provider.dimensionId);
 
+		if(blobs == null) return false;
+
 		for(AtmosphereBlob blob : blobs.values()) {
 			if(blob.contains(pos)) {
 				return true;
@@ -120,6 +124,8 @@ public class ChunkAtmosphereHandler {
 	protected List<AtmosphereBlob> getBlobsWithinRadius(World world, ThreeInts pos, int radius) {
 		HashMap<IAtmosphereProvider, AtmosphereBlob> blobs = worldBlobs.get(world.provider.dimensionId);
 		List<AtmosphereBlob> list = new LinkedList<AtmosphereBlob>();
+
+		if(blobs == null) return list;
 
 		double radiusSqr = radius * radius;
 
