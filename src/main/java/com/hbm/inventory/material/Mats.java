@@ -135,9 +135,9 @@ public class Mats {
 	public static final NTMMaterial MAT_SILICON			= makeSmeltable(1400,		SI,				0xD1D7DF, 0x1A1A3D, 0x878B9E).setAutogen(FRAGMENT, NUGGET, BILLET).m();
 	public static final NTMMaterial MAT_ASBESTOS		= makeSmeltable(1401,		ASBESTOS,		0xD8D9CF, 0x616258, 0xB0B3A8).setAutogen(FRAGMENT, BLOCK).n();
 	public static final NTMMaterial MAT_OSMIRIDIUM		= makeSmeltable(7699,		OSMIRIDIUM, 	0xDBE3EF, 0x7891BE, 0xACBDD9).setAutogen(NUGGET, CASTPLATE, WELDEDPLATE).m();
-	public static final NTMMaterial MAT_NICKEL			= makeSmeltable(2800,		NI,				0xAE9572, 0xAE9572, 0xAE9572).setAutogen(NUGGET, INGOT, DUST, BLOCK).m();
-	public static final NTMMaterial MAT_GALLIUM			= makeSmeltable(3100,		GALLIUM,		0x52687F, 0x52687F, 0x52687F).setAutogen(NUGGET, INGOT, DUST, DUSTTINY).m();
-	public static final NTMMaterial MAT_ZINC			= makeSmeltable(3000,		ZI,				0xA79DA8, 0xA79DA8, 0xA79DA8).setAutogen(NUGGET, INGOT, DUST, WIRE).m();
+	public static final NTMMaterial MAT_NICKEL			= makeSmeltable(2800,		NI,				0xAE9572, 0xAE9572, 0xAE9572).setAutogen(NUGGET, DUST, BLOCK).m();
+	public static final NTMMaterial MAT_GALLIUM			= makeSmeltable(3100,		GALLIUM,		0x52687F, 0x52687F, 0x52687F).setAutogen(NUGGET, DUST, DUSTTINY).m();
+	public static final NTMMaterial MAT_ZINC			= makeSmeltable(3000,		ZI,				0xA79DA8, 0xA79DA8, 0xA79DA8).setAutogen(NUGGET, DUST, WIRE).m();
 	public static final NTMMaterial MAT_IRIDIUM			= makeSmeltable(7700,		IRIDIUM,		0xB8D0FF, 0xB8D0FF, 0xB8D0FF).setAutogen(INGOT).m();
 	public static final NTMMaterial MAT_PLATNIUM		= makeSmeltable(7800,		PLATNIUM,		0xE6E8F3, 0xE6E8F3, 0xE6E8F3).setAutogen(NUGGET, INGOT, DUST).m();
 	
@@ -165,8 +165,8 @@ public class Mats {
 	public static final NTMMaterial MAT_SATURN		= makeSmeltable(_AS + 4,	BIGMT,			0x3AC4DA, 0x09282C, 0x30A4B7).setAutogen(PLATE, CASTPLATE, SHELL, BLOCK, LIGHTBARREL, HEAVYBARREL, LIGHTRECEIVER, HEAVYRECEIVER, MECHANISM, STOCK, GRIP).m();
 
 	//Space extension alloys
-	public static final NTMMaterial MAT_GAAS		= makeSmeltable(_EX + 0,	GAAS,		0x6F4A57, 0x6F4A57, 0x6F4A57).setAutogen(NUGGET, INGOT, BILLET).m();
-	public static final NTMMaterial MAT_STAINLESS	= makeSmeltable(_EX + 1,	STAINLESS,	0x4A4A4A, 0x4A4A4A, 0x4A4A4A).setAutogen(INGOT, PLATE).m();
+	public static final NTMMaterial MAT_GAAS		= makeSmeltable(_EX + 0,	GAAS,		0x6F4A57, 0x6F4A57, 0x6F4A57).setAutogen(NUGGET, BILLET).m();
+	public static final NTMMaterial MAT_STAINLESS	= makeSmeltable(_EX + 1,	STAINLESS,	0x4A4A4A, 0x4A4A4A, 0x4A4A4A).setAutogen(PLATE).m();
 	
 	//Extension
 	public static final NTMMaterial MAT_RAREEARTH	= makeNonSmeltable(_ES + 00, 		RAREEARTH,		0xC1BDBD, 0x384646, 0x7B7F7F).setAutogen(FRAGMENT).n();
@@ -221,8 +221,9 @@ public class Mats {
 					if(name.startsWith(prefix)) {
 						String materialName = name.substring(prefix.length());
 						NTMMaterial material = matByName.get(materialName);
+						NTMMaterial convert = material.smeltsInto; //hack
 						
-						if(material != null) {
+						if(material != null && (convert.smeltable == SmeltingBehavior.SMELTABLE || convert.smeltable == SmeltingBehavior.ADDITIVE)) {
 							list.add(new MaterialStack(material, prefixEntry.getValue().q(1)));
 							break outer;
 						}

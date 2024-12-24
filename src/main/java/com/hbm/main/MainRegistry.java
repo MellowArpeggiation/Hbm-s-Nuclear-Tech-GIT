@@ -29,7 +29,6 @@ import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.recipes.*;
 import com.hbm.inventory.recipes.anvil.AnvilRecipes;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
-import com.hbm.items.ItemAmmoEnums.Ammo4Gauge;
 import com.hbm.items.ItemEnums.EnumAchievementType;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemFertilizer;
@@ -182,9 +181,7 @@ public class MainRegistry {
 	public static Achievement achSacrifice;
 	public static Achievement achImpossible;
 	public static Achievement achTOB;
-	public static Achievement achFreytag;
 	public static Achievement achPotato;
-	public static Achievement achC44;
 	public static Achievement achC20_5;
 	public static Achievement achFiend;
 	public static Achievement achFiend2;
@@ -195,7 +192,6 @@ public class MainRegistry {
 	public static Achievement achSomeWounds;
 	public static Achievement achSlimeball;
 	public static Achievement achSulfuric;
-	public static Achievement achWitchtaunter;
 	public static Achievement achGoFish;
 	public static Achievement achNo9;
 	public static Achievement achInferno;
@@ -687,16 +683,13 @@ public class MainRegistry {
 		achImpossible = new Achievement("achievement.impossible", "impossible", 18, 10, ModItems.nothing, null).initIndependentStat().setSpecial().registerStat();
 		achTOB = new Achievement("achievement.tasteofblood", "tasteofblood", 3, 10, new ItemStack(ModItems.fluid_icon, 1, Fluids.ASCHRAB.getID()), null).initIndependentStat().setSpecial().registerStat();
 		achGoFish = new Achievement("achievement.goFish", "goFish", 5, 10, DictFrame.fromOne(ModItems.achievement_icon, EnumAchievementType.GOFISH), null).initIndependentStat().setSpecial().registerStat();
-		achFreytag = new Achievement("achievement.freytag", "freytag", 0, -4, ModItems.gun_mp40, null).initIndependentStat().setSpecial().registerStat();
 		achPotato = new Achievement("achievement.potato", "potato", -2, -2, ModItems.battery_potatos, null).initIndependentStat().setSpecial().registerStat();
-		achC44 = new Achievement("achievement.c44", "c44", 2, -4, ModItems.gun_revolver_pip, null).initIndependentStat().setSpecial().registerStat();
 		achC20_5 = new Achievement("achievement.c20_5", "c20_5", 3, 6, DictFrame.fromOne(ModItems.achievement_icon, EnumAchievementType.QUESTIONMARK), null).initIndependentStat().setSpecial().registerStat();
 		achFiend = new Achievement("achievement.fiend", "fiend", -6, 8, ModItems.shimmer_sledge, null).initIndependentStat().setSpecial().registerStat();
 		achFiend2 = new Achievement("achievement.fiend2", "fiend2", -4, 9, ModItems.shimmer_axe, null).initIndependentStat().setSpecial().registerStat();
 		achStratum = new Achievement("achievement.stratum", "stratum", -4, -2, new ItemStack(ModBlocks.stone_gneiss), null).initIndependentStat().setSpecial().registerStat();
 		achOmega12 = new Achievement("achievement.omega12", "omega12", 17, -1, ModItems.particle_digamma, null).initIndependentStat().setSpecial().registerStat();
 
-		achWitchtaunter = new Achievement("achievement.witchtaunter", "witchtaunter", -8, 7, ModItems.ammo_4gauge.stackFromEnum(Ammo4Gauge.VAMPIRE), null).initIndependentStat().setSpecial().registerStat();
 		achNo9 = new Achievement("achievement.no9", "no9", -8, 12, ModItems.no9, null).initIndependentStat().registerStat();
 		achSlimeball = new Achievement("achievement.slimeball", "slimeball", -10, 6, DictFrame.fromOne(ModItems.achievement_icon, EnumAchievementType.ACID), null).initIndependentStat().registerStat();
 		achSulfuric = new Achievement("achievement.sulfuric", "sulfuric", -10, 8, DictFrame.fromOne(ModItems.achievement_icon, EnumAchievementType.BALLS), achSlimeball).initIndependentStat().setSpecial().registerStat();
@@ -766,9 +759,7 @@ public class MainRegistry {
 				achImpossible,
 				achTOB,
 				achGoFish,
-				achFreytag,
 				achPotato,
-				achC44,
 				achC20_5,
 				achFiend,
 				achFiend2,
@@ -780,7 +771,6 @@ public class MainRegistry {
 				horizonsBonus,
 				achRadPoison,
 				achRadDeath,
-				achWitchtaunter,
 				achNo9,
 				achInferno,
 				achRedRoom,
@@ -1594,6 +1584,129 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.clip_euthanasia");
 		ignoreMappings.add("hbm:item.clip_defabricator");
 		ignoreMappings.add("hbm:item.ammo_folly_du");
+		ignoreMappings.add("hbm:tile.#null");
+		ignoreMappings.add("hbm:tile.#void");
+		ignoreMappings.add("hbm:tile.#ngtv");
+		ignoreMappings.add("hbm:item.gun_rpg");
+		ignoreMappings.add("hbm:item.gun_karl");
+		ignoreMappings.add("hbm:item.gun_hk69");
+		ignoreMappings.add("hbm:item.gun_skystinger");
+		ignoreMappings.add("hbm:item.gun_revolver");
+		ignoreMappings.add("hbm:item.gun_revolver_saturnite");
+		ignoreMappings.add("hbm:item.gun_revolver_gold");
+		ignoreMappings.add("hbm:item.gun_revolver_schrabidium");
+		ignoreMappings.add("hbm:item.gun_revolver_cursed");
+		ignoreMappings.add("hbm:item.gun_revolver_nightmare");
+		ignoreMappings.add("hbm:item.gun_revolver_nightmare2");
+		ignoreMappings.add("hbm:item.gun_revolver_pip");
+		ignoreMappings.add("hbm:item.gun_revolver_nopip");
+		ignoreMappings.add("hbm:item.gun_revolver_blackjack");
+		ignoreMappings.add("hbm:item.gun_revolver_silver");
+		ignoreMappings.add("hbm:item.gun_revolver_red");
+		ignoreMappings.add("hbm:item.gun_bio_revolver");
+		ignoreMappings.add("hbm:item.gun_deagle");
+		ignoreMappings.add("hbm:item.gun_flechette");
+		ignoreMappings.add("hbm:item.gun_ar15");
+		ignoreMappings.add("hbm:item.gun_calamity");
+		ignoreMappings.add("hbm:item.gun_lacunae");
+		ignoreMappings.add("hbm:item.gun_proto");
+		ignoreMappings.add("hbm:item.gun_mirv");
+		ignoreMappings.add("hbm:item.gun_bf");
+		ignoreMappings.add("hbm:item.gun_mp40");
+		ignoreMappings.add("hbm:item.gun_thompson");
+		ignoreMappings.add("hbm:item.gun_uzi_silencer");
+		ignoreMappings.add("hbm:item.gun_uzi_saturnite");
+		ignoreMappings.add("hbm:item.gun_uzi_saturnite_silencer");
+		ignoreMappings.add("hbm:item.gun_uboinik");
+		ignoreMappings.add("hbm:item.gun_remington");
+		ignoreMappings.add("hbm:item.gun_supershotgun");
+		ignoreMappings.add("hbm:item.gun_benelli");
+		ignoreMappings.add("hbm:item.gun_ks23");
+		ignoreMappings.add("hbm:item.gun_sauer");
+		ignoreMappings.add("hbm:item.gun_lever_action");
+		ignoreMappings.add("hbm:item.gun_lever_action_dark");
+		ignoreMappings.add("hbm:item.gun_lever_action_sonata");
+		ignoreMappings.add("hbm:item.gun_bolt_action");
+		ignoreMappings.add("hbm:item.gun_bolt_action_green");
+		ignoreMappings.add("hbm:item.gun_bolt_action_saturnite");
+		ignoreMappings.add("hbm:item.gun_mymy");
+		ignoreMappings.add("hbm:item.gun_b93");
+		ignoreMappings.add("hbm:item.gun_xvl1456");
+		ignoreMappings.add("hbm:item.gun_xvl1456_ammo");
+		ignoreMappings.add("hbm:item.gun_osipr");
+		ignoreMappings.add("hbm:item.gun_osipr_ammo");
+		ignoreMappings.add("hbm:item.gun_osipr_ammo2");
+		ignoreMappings.add("hbm:item.gun_immolator");
+		ignoreMappings.add("hbm:item.gun_immolator_ammo");
+		ignoreMappings.add("hbm:item.gun_cryolator");
+		ignoreMappings.add("hbm:item.gun_mp");
+		ignoreMappings.add("hbm:item.gun_bolter_digamma");
+		ignoreMappings.add("hbm:item.gun_zomg");
+		ignoreMappings.add("hbm:item.gun_super_shotgun");
+		ignoreMappings.add("hbm:item.gun_moist_nugget");
+		ignoreMappings.add("hbm:item.gun_revolver_inverted");
+		ignoreMappings.add("hbm:item.gun_emp");
+		ignoreMappings.add("hbm:item.gun_emp_ammo");
+		ignoreMappings.add("hbm:item.gun_jack");
+		ignoreMappings.add("hbm:item.gun_jack_ammo");
+		ignoreMappings.add("hbm:item.gun_spark");
+		ignoreMappings.add("hbm:item.gun_spark_ammo");
+		ignoreMappings.add("hbm:item.gun_hp");
+		ignoreMappings.add("hbm:item.gun_hp_ammo");
+		ignoreMappings.add("hbm:item.gun_euthanasia");
+		ignoreMappings.add("hbm:item.gun_euthanasia_ammo");
+		ignoreMappings.add("hbm:item.gun_defabricator");
+		ignoreMappings.add("hbm:item.gun_defabricator_ammo");
+		ignoreMappings.add("hbm:item.gun_vortex");
+		ignoreMappings.add("hbm:item.gun_waluigi");
+		ignoreMappings.add("hbm:item.gun_darter");
+		ignoreMappings.add("hbm:item.gun_glass_cannon");
+		ignoreMappings.add("hbm:item.gun_lunatic_marksman");
+		ignoreMappings.add("hbm:item.gun_uac_pistol");
+		ignoreMappings.add("hbm:item.ammo_misc");
+		ignoreMappings.add("hbm:item.ammo_12gauge");
+		ignoreMappings.add("hbm:item.ammo_20gauge");
+		ignoreMappings.add("hbm:item.ammo_4gauge");
+		ignoreMappings.add("hbm:item.ammo_357");
+		ignoreMappings.add("hbm:item.ammo_44");
+		ignoreMappings.add("hbm:item.ammo_5mm");
+		ignoreMappings.add("hbm:item.ammo_9mm");
+		ignoreMappings.add("hbm:item.ammo_45");
+		ignoreMappings.add("hbm:item.ammo_556");
+		ignoreMappings.add("hbm:item.ammo_762");
+		ignoreMappings.add("hbm:item.ammo_22lr");
+		ignoreMappings.add("hbm:item.ammo_50ae");
+		ignoreMappings.add("hbm:item.ammo_50bmg");
+		ignoreMappings.add("hbm:item.ammo_75bolt");
+		ignoreMappings.add("hbm:item.ammo_rocket");
+		ignoreMappings.add("hbm:item.ammo_grenade");
+		ignoreMappings.add("hbm:item.ammo_shell");
+		ignoreMappings.add("hbm:item.ammo_nuke");
+		ignoreMappings.add("hbm:item.ammo_fuel");
+		ignoreMappings.add("hbm:item.ammo_fireext");
+		ignoreMappings.add("hbm:item.ammo_dart");
+		ignoreMappings.add("hbm:item.ammo_stinger_rocket");
+		ignoreMappings.add("hbm:item.ammo_luna_sniper");
+		ignoreMappings.add("hbm:item.ammo_coilgun");
+		ignoreMappings.add("hbm:item.ammo_cell");
+		ignoreMappings.add("hbm:item.b_smoke1");
+		ignoreMappings.add("hbm:item.b_smoke2");
+		ignoreMappings.add("hbm:item.b_smoke3");
+		ignoreMappings.add("hbm:item.b_smoke4");
+		ignoreMappings.add("hbm:item.b_smoke5");
+		ignoreMappings.add("hbm:item.b_smoke6");
+		ignoreMappings.add("hbm:item.b_smoke7");
+		ignoreMappings.add("hbm:item.b_smoke8");
+		ignoreMappings.add("hbm:item.ln2_1");
+		ignoreMappings.add("hbm:item.ln2_2");
+		ignoreMappings.add("hbm:item.ln2_3");
+		ignoreMappings.add("hbm:item.ln2_4");
+		ignoreMappings.add("hbm:item.ln2_5");
+		ignoreMappings.add("hbm:item.ln2_6");
+		ignoreMappings.add("hbm:item.ln2_7");
+		ignoreMappings.add("hbm:item.ln2_8");
+		ignoreMappings.add("hbm:item.ln2_9");
+		ignoreMappings.add("hbm:item.ln2_10");
 		
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);

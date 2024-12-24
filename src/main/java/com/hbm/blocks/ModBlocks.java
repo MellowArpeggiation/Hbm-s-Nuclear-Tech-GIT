@@ -136,6 +136,7 @@ public class ModBlocks {
 	public static Block cluster_depth_tungsten;
 
 	public static Block stone_keyhole;
+	public static Block stone_keyhole_meta;
 
 	public static Block stone_depth_nether;
 	public static Block ore_depth_nether_neodymium;
@@ -1143,8 +1144,8 @@ public class ModBlocks {
 	public static Block anvil_lead;
 	public static Block anvil_steel;
 	public static Block anvil_desh;
-	public static Block anvil_saturnite;
 	public static Block anvil_ferrouranium;
+	public static Block anvil_saturnite;
 	public static Block anvil_bismuth_bronze;
 	public static Block anvil_arsenic_bronze;
 	public static Block anvil_schrabidate;
@@ -1211,10 +1212,7 @@ public class ModBlocks {
 	public static Block rail_large_buffer;
 	public static Block rail_large_switch;
 	public static Block rail_large_switch_flipped;
-
-	public static Block statue_elb;
-	public static Block statue_elb_g;
-	public static Block statue_elb_w;
+	
 	public static Block statue_elb_f;
 
 	public static Block cheater_virus;
@@ -1437,6 +1435,7 @@ public class ModBlocks {
 		ore_alexandrite = new BlockDepthOre().setBlockName("ore_alexandrite").setCreativeTab(MainRegistry.blockTab).setBlockTextureName(RefStrings.MODID + ":ore_alexandrite");
 
 		stone_keyhole = new BlockKeyhole().setBlockName("stone_keyhole").setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":stone_keyhole");
+		stone_keyhole_meta = new BlockRedBrickKeyhole(Material.rock).setCreativeTab(null).setBlockName("stone_keyhole_meta").setResistance(10_000);
 
 		ore_bedrock = new BlockBedrockOreTE().setBlockName("ore_bedrock").setCreativeTab(null);
 		ore_volcano = new BlockFissure().setBlockName("ore_volcano").setLightLevel(1F).setCreativeTab(MainRegistry.blockTab);
@@ -2441,8 +2440,8 @@ public class ModBlocks {
 		anvil_lead = new NTMAnvil(Material.iron, NTMAnvil.TIER_IRON).setBlockName("anvil_lead").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":anvil_lead");
 		anvil_steel = new NTMAnvil(Material.iron, NTMAnvil.TIER_STEEL).setBlockName("anvil_steel").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":anvil_steel");
 		anvil_desh = new NTMAnvil(Material.iron, NTMAnvil.TIER_OIL).setBlockName("anvil_desh").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":anvil_desh");
-		anvil_saturnite = new NTMAnvil(Material.iron, NTMAnvil.TIER_OIL).setBlockName("anvil_saturnite").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":anvil_saturnite");
 		anvil_ferrouranium = new NTMAnvil(Material.iron, NTMAnvil.TIER_NUCLEAR).setBlockName("anvil_ferrouranium").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":anvil_ferrouranium");
+		anvil_saturnite = new NTMAnvil(Material.iron, NTMAnvil.TIER_RBMK).setBlockName("anvil_saturnite").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":anvil_saturnite");
 		anvil_bismuth_bronze = new NTMAnvil(Material.iron, NTMAnvil.TIER_RBMK).setBlockName("anvil_bismuth_bronze").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":anvil_bismuth_bronze");
 		anvil_arsenic_bronze = new NTMAnvil(Material.iron, NTMAnvil.TIER_RBMK).setBlockName("anvil_arsenic_bronze").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":anvil_arsenic_bronze");
 		anvil_schrabidate = new NTMAnvil(Material.iron, NTMAnvil.TIER_FUSION).setBlockName("anvil_schrabidate").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":anvil_schrabidate");
@@ -2505,9 +2504,6 @@ public class ModBlocks {
 		volcano_core = new BlockVolcano().setBlockName("volcano_core").setBlockUnbreakable().setResistance(10000.0F).setCreativeTab(MainRegistry.nukeTab).setBlockTextureName(RefStrings.MODID + ":volcano_core");
 		volcano_rad_core = new BlockVolcano().setBlockName("volcano_rad_core").setBlockUnbreakable().setResistance(10000.0F).setCreativeTab(MainRegistry.nukeTab).setBlockTextureName(RefStrings.MODID + ":volcano_rad_core");
 
-		statue_elb = new DecoBlockAlt(Material.iron).setBlockName("#null").setHardness(Float.POSITIVE_INFINITY).setResistance(Float.POSITIVE_INFINITY);
-		statue_elb_g = new DecoBlockAlt(Material.iron).setBlockName("#void").setHardness(Float.POSITIVE_INFINITY).setResistance(Float.POSITIVE_INFINITY);
-		statue_elb_w = new DecoBlockAlt(Material.iron).setBlockName("#ngtv").setHardness(Float.POSITIVE_INFINITY).setResistance(Float.POSITIVE_INFINITY);
 		statue_elb_f = new DecoBlockAlt(Material.iron).setBlockName("#undef").setHardness(Float.POSITIVE_INFINITY).setLightLevel(1.0F).setResistance(Float.POSITIVE_INFINITY);
 
 		mud_fluid = new MudFluid().setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773).setUnlocalizedName("mud_fluid");
@@ -2720,10 +2716,8 @@ public class ModBlocks {
 
 		//Secret
 		register(stone_keyhole);
-
-		//Crystals
-
-
+		register(stone_keyhole_meta);
+		
 		//Resource-bearing Stones
 		register(stone_resource);
 		register(stalagmite);
@@ -3298,8 +3292,8 @@ public class ModBlocks {
 		register(anvil_lead);
 		register(anvil_steel);
 		register(anvil_desh);
-		register(anvil_saturnite);
 		register(anvil_ferrouranium);
+		register(anvil_saturnite);
 		register(anvil_bismuth_bronze);
 		register(anvil_arsenic_bronze);
 		register(anvil_schrabidate);
@@ -3760,9 +3754,6 @@ public class ModBlocks {
 		GameRegistry.registerBlock(crate_jungle, crate_jungle.getUnlocalizedName());
 
 		//ElB
-		GameRegistry.registerBlock(statue_elb, statue_elb.getUnlocalizedName());
-		GameRegistry.registerBlock(statue_elb_g, statue_elb_g.getUnlocalizedName());
-		GameRegistry.registerBlock(statue_elb_w, statue_elb_w.getUnlocalizedName());
 		GameRegistry.registerBlock(statue_elb_f, statue_elb_f.getUnlocalizedName());
 
 		//Fluids
