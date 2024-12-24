@@ -442,7 +442,7 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		GL11.glTranslated(1.75, 53, 2); 
 
 
-		GL11.glRotated(WorldProviderThatmo.key1, -1, 0, 0.0);
+		GL11.glRotated(12, -1, 0, 0.0);
 		GL11.glTranslated(-1.75, -53, -2); 
 
 		ResourceManager.liquidator.renderPart("torso");
@@ -457,7 +457,7 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		
 		GL11.glTranslated(7.75, 66, 4); 
 
-		GL11.glRotated(-WorldProviderThatmo.key3, 0, 0, 1.0);
+		GL11.glRotated(-20, 0, 0, 1.0);
 		GL11.glTranslated(-7.75, -66, -4); 
 
 
@@ -472,20 +472,20 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 
 		GL11.glTranslated(-28, 64, 4); 
 
-		GL11.glRotated(WorldProviderThatmo.key4, 1, 0, 0);
+		GL11.glRotated(12, 1, 0, 0);
 		GL11.glTranslated(28, -64, -4); 
 		ResourceManager.liquidator.renderPart("rightshoulder");
 		ResourceManager.liquidator.renderPart("rightarm");
 		GL11.glTranslated(-4.75, 46, 0); 
 
-		GL11.glRotated(WorldProviderThatmo.key2, 0, 0, 1);
+		GL11.glRotated(14, 0, 0, 1);
 		GL11.glTranslated(4.75, -46, -0); 
 		
 		//xaxis
 		
 		GL11.glTranslated(-5.75, 47, 4); 
 
-		GL11.glRotated(50 - WorldProviderThatmo.key3, 1, 0, 0);
+		GL11.glRotated(50, 1, 0, 0);
 		GL11.glTranslated(5.75, -47, -4);
 		
 		ResourceManager.liquidator.renderPart("cannon");
@@ -511,6 +511,8 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glDepthMask(false);
+
 		GL11.glPopMatrix();
 
 	}
