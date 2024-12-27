@@ -252,13 +252,6 @@ public class ChemplantRecipes extends SerializableRecipe {
 		recipes.add(new ChemRecipe(60, "XENON_OXY", 20)
 				.inputFluids(new FluidStack(Fluids.OXYGEN, 250))
 				.outputFluids(new FluidStack(Fluids.XENON, 50)));
-		recipes.add(new ChemRecipe(61, "SATURN", 60)
-				.inputItems(
-						new OreDictStack(DURA.dust(), 2),
-						new OreDictStack(CU.dust(), 1),
-						new OreDictStack(ANY_COAL_COKE.dust(), 1))
-				.inputFluids(new FluidStack(Fluids.SULFURIC_ACID, 100))
-				.outputItems(new ItemStack(ModItems.ingot_saturnite, 4)));
 		recipes.add(new ChemRecipe(62, "BALEFIRE", 100)
 				.inputItems(new ComparableStack(ModItems.egg_balefire_shard))
 				.inputFluids(new FluidStack(Fluids.KEROSENE, 6000))
@@ -466,14 +459,6 @@ public class ChemplantRecipes extends SerializableRecipe {
 						new ComparableStack(ModItems.pellet_charged, 1),
 						new ComparableStack(ModItems.ingot_euphemium, 1))
 				.outputFluids(new FluidStack(Fluids.NMASS, 1000), new FluidStack(Fluids.WASTEGAS, 2000)));
-		recipes.add(new ChemRecipe(114, "LUNAE", 250)
-				.inputFluids(new FluidStack(Fluids.NMASS, 3000), new FluidStack(Fluids.ASCHRAB, 500)) //eventually used to actually warp to other stars
-				.inputItems(
-						new ComparableStack(ModItems.powder_power, 5),
-						new ComparableStack(ModItems.ingot_ferrouranium, 1),
-						new ComparableStack(ModItems.ingot_copper, 1),
-						new OreDictStack(ANY_SMOKELESS.dust(), 1))
-				.outputItems(new ItemStack(ModItems.ammo_luna_sniper, 1, 3))); //556
 		recipes.add(new ChemRecipe(115, "SHELL_CHLORINE", 100)
 				.inputItems(
 						new ComparableStack(ModItems.ammo_arty, 1, 0),

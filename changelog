@@ -1,20 +1,15 @@
-## Added
-* Mun cows! These rare cows are found on the Mun, they moonwalk and drop cheese. Directly inspired by the 2023 April Fools update
-* Basic atmospheric chemistry
-    * Currently just water table chem, adding 0.2atm of water vapor (steam) to an atmosphere will allow infinite water tanks to function
-
 ## Changed
-* Infinite water tanks now check the water table of the celestial body you're on, rather than atmospheric pressure
-    * It was confusing everyone, since most players assumed they could just increase the air pressure of the room they're in to make them function
+* Removed the old casing items
+* Reduced the flicker on the autoshotgun's holo sights
 
 ## Fixed
-* Missing biome ID configs
-* Mun was called Moon in some places
-* Remove future biomes (they'll be back in the WAR update)
-* No more cascading issues for atmosphere blobs (pressurised rooms should always report correct pressure now)
-* Stations now play space music instead of overworld music
-* Remove duck spawning
-* Fix scutterblood coker recipe
-* Add missing fluid textures
-* Fix groundwater pumps working in space
-* Fix vacuum solderer not receiving power
+* Fixed the bullet casing molds being unobtainable
+* Fixed instant crash caused by smelting certain things in the crucible
+* Fixed the SPAS' alt fire having a delay of only 10 ticks instead of 20
+* Fixed 240mm nuclear shells not triggering properly if they hit their target within 3 ticks of being spawned
+* Fixed some items that are supposed to be hidden in NEI being visible
+* Fixed dual lever action shotguns having inconsistent damage
+* Fixed entities (especially players) not being affected at all by their own explosions (rockets, 40mm grenades, etc)
+  * To keep rocket jumping at least somewhat viable, self-damage from explosions is reduced by 50%, the knockback remains the same
+* Fixed missing localization for the casing molds
+* Fixed the broken CIWS turret crashing instantly

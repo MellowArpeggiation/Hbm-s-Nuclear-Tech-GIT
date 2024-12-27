@@ -2,10 +2,12 @@ package com.hbm.items.weapon;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
+import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.items.special.ItemLootCrate;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -106,6 +108,16 @@ public class ItemCustomMissilePart extends Item {
 		TURBINE,
 		APOLLO,
 		SATELLITE,
+		
+		//shit solution but it works. this allows traits to be attached to these empty dummy types, allowing for custom warheads
+		CUSTOM0, CUSTOM1, CUSTOM2, CUSTOM3, CUSTOM4, CUSTOM5, CUSTOM6, CUSTOM7, CUSTOM8, CUSTOM9;
+
+		/** Overrides that type's impact effect. Only runs serverside */
+		public Consumer<EntityMissileCustom> impactCustom = null;
+		/** Runs at the beginning of the missile's update cycle, both client and serverside. */
+		public Consumer<EntityMissileCustom> updateCustom = null;
+		/** Override for the warhead's name in the missile description */
+		public String labelCustom = null;
 	}
 	
 	public enum FuelType {
@@ -282,8 +294,12 @@ public class ItemCustomMissilePart extends Item {
 	
 	public String getWarhead() {
 		if(!(attributes[0] instanceof WarheadType)) return EnumChatFormatting.BOLD + "N/A";
+
+		WarheadType type = (WarheadType) attributes[0];
 		
-		switch((WarheadType)attributes[0]) {
+		if(type.labelCustom != null) return type.labelCustom;
+		
+		switch(type) {
 		case HE:
 			return EnumChatFormatting.YELLOW + "HE";
 		case INC:
