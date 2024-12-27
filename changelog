@@ -1,17 +1,15 @@
-**WARNING**:
-The gun update changes and removes _many_ items and blocks, and may cause issues for you. Make sure to backup your worlds before updating!
-
-## Added
-* The entirety of the GUN UPDATE from NTM (parity restored!)
-   * See [X5188](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5188) and [X5180](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5180) for the full changelog
-* Refueling Station - works like the Charging Station, but for fluids. Can refuel both held and equipped items that require fluids, like the PLSS and jetpacks
-* Russian localization
-
 ## Changed
-* Stardar dishes now share target pitch/yaw
-* Stardar model updated
+* Removed the old casing items
+* Reduced the flicker on the autoshotgun's holo sights
 
 ## Fixed
-* #136 - Blob access crashing GTNH NEI structure viewer
-* #155 - Endless IDs compatibility
-* #174 - Explosions not unsealing pressurized rooms
+* Fixed the bullet casing molds being unobtainable
+* Fixed instant crash caused by smelting certain things in the crucible
+* Fixed the SPAS' alt fire having a delay of only 10 ticks instead of 20
+* Fixed 240mm nuclear shells not triggering properly if they hit their target within 3 ticks of being spawned
+* Fixed some items that are supposed to be hidden in NEI being visible
+* Fixed dual lever action shotguns having inconsistent damage
+* Fixed entities (especially players) not being affected at all by their own explosions (rockets, 40mm grenades, etc)
+  * To keep rocket jumping at least somewhat viable, self-damage from explosions is reduced by 50%, the knockback remains the same
+* Fixed missing localization for the casing molds
+* Fixed the broken CIWS turret crashing instantly
