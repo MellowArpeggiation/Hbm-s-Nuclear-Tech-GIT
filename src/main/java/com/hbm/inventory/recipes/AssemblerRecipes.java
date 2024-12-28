@@ -1417,7 +1417,7 @@ public class AssemblerRecipes extends SerializableRecipe {
 		}, 400);
 		makeRecipe(new ComparableStack(ModBlocks.machine_htr3, 1), new AStack[] {
 			    new OreDictStack(ANY_RESISTANTALLOY.plateWelded(), 4),
-				new OreDictStack(DURA.bolt(), 16)
+				new OreDictStack(DURA.bolt(), 16),
 				new OreDictStack(W.plateWelded(), 8),
 				new ComparableStack(ModItems.motor_bismuth, 1),
 				new OreDictStack(ANY_HARDPLASTIC.ingot(), 8),

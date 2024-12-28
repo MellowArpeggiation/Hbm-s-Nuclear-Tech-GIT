@@ -11,6 +11,8 @@ import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.machine.IItemFluidIdentifier;
 import com.hbm.inventory.fluid.trait.FT_Heatable;
+import com.hbm.inventory.fluid.trait.FT_Rocket;
+import com.hbm.inventory.fluid.trait.FT_Heatable.HeatingStep;
 import com.hbm.inventory.fluid.trait.FT_Heatable.HeatingType;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityMachineHTR3;
@@ -70,35 +72,14 @@ public class MachineHTR3 extends BlockDummyable implements ILookOverlay {
 				TileEntityMachineHTR3 htr3 = (TileEntityMachineHTR3) te;
 				
 				FluidType type = ((IItemFluidIdentifier) player.getHeldItem().getItem()).getType(world, pos[0], pos[1], pos[2], player.getHeldItem());
+
+				FT_Heatable heatable = type.getTrait(FT_Heatable.class);
+
+				if(heatable != null && heatable.getFirstStep().typeProduced.hasTrait(FT_Rocket.class)) {
+					htr3.tanks[0].setTankType(heatable.getFirstStep().typeProduced);
+					htr3.markDirty();
+				}
 				
-				if(type.hasTrait(FT_Heatable.class) && type.getTrait(FT_Heatable.class).getEfficiency(HeatingType.UB) > 0) {
-					htr3.tanks[0].setTankType(Fluids.GASEOUS_URANIUM_BROMIDE);
-					htr3.markDirty();
-				}
-                                if(type.hasTrait(FT_Heatable.class) && type.getTrait(FT_Heatable.class).getEfficiency(HeatingType.PB) > 0) {
-					htr3.tanks[0].setTankType(Fluids.GASEOUS_PLUTONIUM_BROMIDE);
-					htr3.markDirty();
-				}
-                                if(type.hasTrait(FT_Heatable.class) && type.getTrait(FT_Heatable.class).getEfficiency(HeatingType.SB) > 0) {
-					htr3.tanks[0].setTankType(Fluids.GASEOUS_SCHRABIDIUM_BROMIDE);
-					htr3.markDirty();
-				}
-                                if(type.hasTrait(FT_Heatable.class) && type.getTrait(FT_Heatable.class).getEfficiency(HeatingType.TB) > 0) {
-					htr3.tanks[0].setTankType(Fluids.GASEOUS_THORIUM_BROMIDE);
-					htr3.markDirty();
-				}
-                                if(type.hasTrait(FT_Heatable.class) && type.getTrait(FT_Heatable.class).getEfficiency(HeatingType.MB) > 0) {
-					htr3.tanks[0].setTankType(Fluids.GAS_WATZ);
-					htr3.markDirty();
-				}
-                                if(type.hasTrait(FT_Heatable.class) && type.getTrait(FT_Heatable.class).getEfficiency(HeatingType.SH) > 0) {
-					htr3.tanks[0].setTankType(Fluids.SUPERHEATED_HYDROGEN);
-					htr3.markDirty();
-				}
-                                if(type.hasTrait(FT_Heatable.class) && type.getTrait(FT_Heatable.class).getEfficiency(HeatingType.WB) > 0) {
-					htr3.tanks[0].setTankType(Fluids.WASTEGAS);
-					htr3.markDirty();
-				}
 				return true;
 			}
 			return false;
