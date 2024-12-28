@@ -1416,13 +1416,13 @@ public class AssemblerRecipes extends SerializableRecipe {
 				new OreDictStack(CU.pipe(), 4),
 		}, 400);
 		makeRecipe(new ComparableStack(ModBlocks.machine_htr3, 1), new AStack[] {
-				new OreDictStack(STEEL.plateWelded(), 8),
-				new OreDictStack(STEEL.bolt(), 16),
-				new OreDictStack(W.plateWelded(), 2),
+			    new OreDictStack(ANY_RESISTANTALLOY.plateWelded(), 4),
+				new OreDictStack(DURA.bolt(), 16)
+				new OreDictStack(W.plateWelded(), 8),
 				new ComparableStack(ModItems.motor_bismuth, 1),
 				new OreDictStack(ANY_HARDPLASTIC.ingot(), 8),
 				new ComparableStack(ModItems.circuit, 1, EnumCircuitType.ADVANCED),
-				new OreDictStack(CU.pipe(), 4),
+				new OreDictStack(DURA.pipe(), 8),
 		}, 400);
 
 		makeRecipe(new ComparableStack(ModBlocks.large_vehicle_door, 1), new AStack[]{new OreDictStack(STEEL.plateCast(), 16), new ComparableStack(ModItems.plate_polymer, 4), new ComparableStack(ModItems.motor, 4), new OreDictStack(DURA.bolt(), 16), new OreDictStack("dyeGreen", 4)}, 400);

@@ -103,6 +103,7 @@ public class TileMappings {
 		put(TileEntityMachineTurbineGas.class, "tileentity_machine_gasturbine");
 		put(TileEntityMachineLPW2.class, "tileentity_machine_lpw2");
 		put(TileEntityMachineHTR3.class, "tileentity_machine_htr3");
+		put(TileEntityMachineHTRF4.class, "tileentity_machine_htrf4");
 		put(TileEntityXenonThruster.class, "tileentity_xenon_thruster");
 		put(TileEntityCrateTemplate.class, "tileentity_crate_template");
 		put(TileEntityCrateIron.class, "tileentity_crate_iron");
