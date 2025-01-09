@@ -458,7 +458,7 @@ public class AnvilRecipes {
 				new AnvilOutput(new ItemStack(ModBlocks.machine_deuterium_tower))).setTier(4));
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
-						//new ComparableStack(ModItems.hull_big_steel, 4),
+						new OreDictStack(STEEL.shell(), 6),
 						new ComparableStack(ModItems.plate_stainless, 8),
 						new ComparableStack(ModBlocks.concrete_smooth, 4),
 						new ComparableStack(ModBlocks.heater_heatex),
@@ -467,7 +467,7 @@ public class AnvilRecipes {
 				new AnvilOutput(new ItemStack(ModBlocks.machine_atmo_tower))).setTier(2));
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
-						//new ComparableStack(ModItems.hull_big_steel, 2),
+						new OreDictStack(STEEL.shell(), 4),
 						new ComparableStack(ModItems.plate_stainless, 4),
 						new ComparableStack(ModBlocks.concrete_smooth, 4),
 						new ComparableStack(ModItems.turbine_titanium, 1),
