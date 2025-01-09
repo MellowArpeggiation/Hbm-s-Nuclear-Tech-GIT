@@ -8,6 +8,9 @@ import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.config.WorldConfig;
+import com.hbm.dim.CelestialBody;
+import com.hbm.dim.WorldProviderCelestial;
+import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.entity.missile.EntityRideableRocket;
 import com.hbm.entity.mob.EntityCyberCrab;
@@ -23,6 +26,7 @@ import com.hbm.handler.pollution.PollutionHandler;
 import com.hbm.handler.pollution.PollutionHandler.PollutionType;
 import com.hbm.handler.radiation.ChunkRadiationManager;
 import com.hbm.interfaces.IArmorModDash;
+import com.hbm.items.ItemVOTVdrive.Target;
 import com.hbm.items.armor.ArmorFSB;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
@@ -55,6 +59,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
@@ -241,6 +246,23 @@ public class EntityEffectHandler {
 				HbmLivingProps.setNeutronActivation(entity,0);
 			if(world.provider.isHellWorld && RadiationConfig.hellRad > 0 && rad < RadiationConfig.hellRad)
 				rad = (float) RadiationConfig.hellRad;
+
+			if(world.provider instanceof WorldProviderCelestial || world.provider instanceof WorldProviderOrbit) {
+				if(world.getSavedLightValue(EnumSkyBlock.Sky, ix, iy, iz) - world.skylightSubtracted >= 14) {
+					Target target = CelestialBody.getTarget(world, ix, iz);
+					CBT_Atmosphere atmosphere = !target.inOrbit ? CelestialBody.getTrait(world, CBT_Atmosphere.class) : null;
+	
+					float targetRad = target.body.getSunPower();
+	
+					if(atmosphere != null) {
+						targetRad -= (float)atmosphere.getPressure() * 4;
+					}
+	
+					targetRad *= RadiationConfig.celestialRadMultiplier;
+	
+					if(targetRad > rad) rad = targetRad;
+				}
+			}
 	
 			if(rad > 0) {
 				ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, rad / 20F);
