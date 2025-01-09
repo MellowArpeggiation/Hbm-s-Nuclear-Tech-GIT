@@ -3,6 +3,7 @@ package com.hbm.dim.moon;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.MobConfig;
 import com.hbm.dim.BiomeGenBaseCelestial;
 import com.hbm.entity.mob.EntityMoonCow;
 
@@ -21,7 +22,9 @@ public class BiomeGenMoon extends BiomeGenBaseCelestial {
 		this.setBiomeName("Mun");
 		this.setDisableRain();
 
-        this.creatures.add(new BiomeGenBase.SpawnListEntry(EntityMoonCow.class, 10, 4, 4));
+		if(MobConfig.enableMunCows) {
+			this.creatures.add(new BiomeGenBase.SpawnListEntry(EntityMoonCow.class, 10, 4, 4));
+		}
 
 		this.theBiomeDecorator.generateLakes = false;
 
