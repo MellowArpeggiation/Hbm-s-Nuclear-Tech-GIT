@@ -5,9 +5,7 @@ import java.util.List;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.dim.CelestialBody;
-import com.hbm.main.MainRegistry;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityMachineHTRF4;
@@ -30,18 +28,23 @@ public class MachineHTRF4 extends BlockDummyable implements ILookOverlay {
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		if(meta >= 12) return new TileEntityMachineHTRF4();
-		if(meta >= 6) return new TileEntityProxyCombo(false, false, true);
+		if(meta >= 6) return new TileEntityProxyCombo(false, true, true);
 		return null;
 	}
 
 	@Override
 	public int[] getDimensions() {
-		return new int[] {4, 0, 2, 2, 11, 9};
+		return new int[] {2, 2, 2, 2, 11, 9};
 	}
 
 	@Override
 	public int getOffset() {
-		return 4;
+		return 11;
+	}
+
+	@Override
+	public int getHeightOffset() {
+		return 2;
 	}
 
 	@Override
@@ -55,11 +58,12 @@ public class MachineHTRF4 extends BlockDummyable implements ILookOverlay {
 
 		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
-		x += dir.offsetX * 3;
-		z += dir.offsetZ * 3;
+		x += dir.offsetX * o;
+		z += dir.offsetZ * o;
 
-		this.makeExtra(world, x - rot.offsetX, y, z - rot.offsetZ);
-		this.makeExtra(world, x + rot.offsetX, y, z + rot.offsetZ);
+		this.makeExtra(world, x - rot.offsetX * 9, y, z - rot.offsetZ * 9);
+		this.makeExtra(world, x - rot.offsetX * 9 + dir.offsetX, y, z - rot.offsetZ * 9 + dir.offsetZ);
+		this.makeExtra(world, x - rot.offsetX * 9 - dir.offsetX, y, z - rot.offsetZ * 9 - dir.offsetZ);
 	}
 
 	@Override
@@ -86,6 +90,14 @@ public class MachineHTRF4 extends BlockDummyable implements ILookOverlay {
 			for(int i = 0; i < thruster.tanks.length; i++) {
 				FluidTank tank = thruster.tanks[i];
 				text.add(EnumChatFormatting.GREEN + "-> " + EnumChatFormatting.RESET + tank.getTankType().getLocalizedName() + ": " + tank.getFill() + "/" + tank.getMaxFill() + "mB");
+			}
+
+			if(world.getTileEntity(x, y, z) instanceof TileEntityProxyCombo) {
+				if(pos[0] == x || pos[2] == z) {
+					text.add("Connect to Plasma Heater from here");
+				} else {
+					text.add("Connect to power from here");
+				}
 			}
 		}
 

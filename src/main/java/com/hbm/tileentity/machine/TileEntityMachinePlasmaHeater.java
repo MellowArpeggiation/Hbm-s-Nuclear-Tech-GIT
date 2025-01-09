@@ -100,19 +100,17 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 					if(te instanceof TileEntityMachineHTRF4) {
 						TileEntityMachineHTRF4 htrf = (TileEntityMachineHTRF4)te;
 							
-						if(htrf.tanks[0].getFill() == 0 && this.plasma.getTankType() != Fluids.NONE) {
+						if(this.plasma.getTankType() != Fluids.NONE) {
 							htrf.tanks[0].setTankType(this.plasma.getTankType());
 						}
-							{
-							if(htrf.tanks[0].getTankType() == this.plasma.getTankType()) {
-								
-								int toLoad = Math.min(htrf.tanks[0].getMaxFill() - htrf.tanks[0].getFill(), this.plasma.getFill());
-								toLoad = Math.min(toLoad, 40);
-								this.plasma.setFill(this.plasma.getFill() - toLoad);
-								htrf.tanks[0].setFill(htrf.tanks[0].getFill() + toLoad);
-								this.markDirty();
-								htrf.markDirty();
-							}
+
+						if(htrf.tanks[0].getTankType() == this.plasma.getTankType()) {
+							int toLoad = Math.min(htrf.tanks[0].getMaxFill() - htrf.tanks[0].getFill(), this.plasma.getFill());
+							toLoad = Math.min(toLoad, 200);
+							this.plasma.setFill(this.plasma.getFill() - toLoad);
+							htrf.tanks[0].setFill(htrf.tanks[0].getFill() + toLoad);
+							this.markDirty();
+							htrf.markDirty();
 						}
 					}
 				}
@@ -131,7 +129,7 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 							iter.plasma.setTankType(this.plasma.getTankType());
 						}
 							
-							if(iter.isOn) {
+						if(iter.isOn) {
 							
 							if(iter.plasma.getTankType() == this.plasma.getTankType()) {
 								

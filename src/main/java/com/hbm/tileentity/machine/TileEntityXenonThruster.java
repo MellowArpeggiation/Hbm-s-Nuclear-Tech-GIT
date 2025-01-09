@@ -54,7 +54,9 @@ public class TileEntityXenonThruster extends TileEntityMachineBase implements IP
 
 	@Override
 	public void updateEntity() {
-		if(!worldObj.isRemote && CelestialBody.inOrbit(worldObj)) {
+		if(!CelestialBody.inOrbit(worldObj)) return;
+
+		if(!worldObj.isRemote) {
 			if(!hasRegistered) {
 				if(isFacingPrograde()) registerPropulsion();
 				hasRegistered = true;

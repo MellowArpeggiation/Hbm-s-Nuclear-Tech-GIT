@@ -49,7 +49,9 @@ public class TileEntityMachineLPW2 extends TileEntityMachineBase implements IPro
 
 	@Override
 	public void updateEntity() {
-		if(!worldObj.isRemote && CelestialBody.inOrbit(worldObj)) {
+		if(!CelestialBody.inOrbit(worldObj)) return;
+
+		if(!worldObj.isRemote) {
 			if(!hasRegistered) {
 				if(isFacingPrograde()) registerPropulsion();
 				hasRegistered = true;
@@ -69,7 +71,7 @@ public class TileEntityMachineLPW2 extends TileEntityMachineBase implements IPro
 				} else if(soundtime > 20) {
 					soundtime = 20;
 				}
-			}else {
+			} else {
 				soundtime--;
 
 				if(soundtime == 19) {
