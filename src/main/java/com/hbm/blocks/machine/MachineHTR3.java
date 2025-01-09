@@ -8,12 +8,9 @@ import com.hbm.blocks.ILookOverlay;
 import com.hbm.dim.CelestialBody;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.fluid.FluidType;
-import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.machine.IItemFluidIdentifier;
 import com.hbm.inventory.fluid.trait.FT_Heatable;
 import com.hbm.inventory.fluid.trait.FT_Rocket;
-import com.hbm.inventory.fluid.trait.FT_Heatable.HeatingStep;
-import com.hbm.inventory.fluid.trait.FT_Heatable.HeatingType;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityMachineHTR3;
 import com.hbm.util.BobMathUtil;
@@ -24,9 +21,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChatStyle;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -45,15 +39,20 @@ public class MachineHTR3 extends BlockDummyable implements ILookOverlay {
 
 	@Override
 	public int[] getDimensions() {
-		return new int[] {6, 0, 3, 3, 5, 5};
+		return new int[] {3, 3, 3, 3, 5, 5};
 	}
 
 	@Override
 	public int getOffset() {
-		return 6;
+		return 5;
 	}
 
-        @Override
+	@Override
+	public int getHeightOffset() {
+		return 3;
+	}
+
+	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		
 		if(!world.isRemote && !player.isSneaking()) {
@@ -100,11 +99,10 @@ public class MachineHTR3 extends BlockDummyable implements ILookOverlay {
 
 		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
-		x += dir.offsetX * 3;
-		z += dir.offsetZ * 3;
+		x += dir.offsetX * o;
+		z += dir.offsetZ * o;
 
-		this.makeExtra(world, x - rot.offsetX, y, z - rot.offsetZ);
-		this.makeExtra(world, x + rot.offsetX, y, z + rot.offsetZ);
+		this.makeExtra(world, x - rot.offsetX * 5, y, z - rot.offsetZ * 5);
 	}
 
 	@Override
@@ -130,6 +128,10 @@ public class MachineHTR3 extends BlockDummyable implements ILookOverlay {
 			for(int i = 0; i < thruster.tanks.length; i++) {
 				FluidTank tank = thruster.tanks[i];
 				text.add(EnumChatFormatting.GREEN + "-> " + EnumChatFormatting.RESET + tank.getTankType().getLocalizedName() + ": " + tank.getFill() + "/" + tank.getMaxFill() + "mB");
+			}
+
+			if(world.getTileEntity(x, y, z) instanceof TileEntityProxyCombo) {
+				text.add("Connect to PWR from here");
 			}
 		}
 
