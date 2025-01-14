@@ -8,6 +8,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.laythe.biome.BiomeGenBaseLaythe;
+import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.WeightedRandomGeneric;
 import com.hbm.world.feature.BedrockOre;
@@ -20,6 +21,7 @@ import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -114,21 +116,33 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
     }
 
     public void generateBedrockOres(World world, Random rand, int x, int z, Block planetStone) {
-        if(rand.nextInt(3) == 0) {
-            List<WeightedRandomGeneric<BedrockOreDefinition>> list = BedrockOre.weightedOres;
-            SolarSystem.Body bodyEnum = CelestialBody.getEnum(world);
+        if(WorldConfig.newBedrockOres) {
 
-            // If we haven't got any defined body bedrock ores, default to earth bedrock ores
-            if(BedrockOre.weightedPlanetOres.containsKey(bodyEnum))
-                list = BedrockOre.weightedPlanetOres.get(bodyEnum);
+            if(rand.nextInt(10) == 0) {
+                int randPosX = x + rand.nextInt(2) + 8;
+                int randPosZ = z + rand.nextInt(2) + 8;
 
-            @SuppressWarnings("unchecked")
-            WeightedRandomGeneric<BedrockOreDefinition> item = (WeightedRandomGeneric<BedrockOreDefinition>) WeightedRandom.getRandomItem(rand, list);
-            BedrockOreDefinition def = item.get();
+                BedrockOre.generate(world, randPosX, randPosZ, new ItemStack(ModItems.bedrock_ore_base), null, 0xD78A16, 1);
+            }
+
+        } else {
             
-            int randPosX = x + rand.nextInt(2) + 8;
-            int randPosZ = z + rand.nextInt(2) + 8;
-            BedrockOre.generate(world, randPosX, randPosZ, def.stack, def.acid, def.color, def.tier, ModBlocks.stone_depth, planetStone);
+            if(rand.nextInt(3) == 0) {
+                List<WeightedRandomGeneric<BedrockOreDefinition>> list = BedrockOre.weightedOres;
+                SolarSystem.Body bodyEnum = CelestialBody.getEnum(world);
+    
+                // If we haven't got any defined body bedrock ores, default to earth bedrock ores
+                if(BedrockOre.weightedPlanetOres.containsKey(bodyEnum))
+                    list = BedrockOre.weightedPlanetOres.get(bodyEnum);
+    
+                @SuppressWarnings("unchecked")
+                WeightedRandomGeneric<BedrockOreDefinition> item = (WeightedRandomGeneric<BedrockOreDefinition>) WeightedRandom.getRandomItem(rand, list);
+                BedrockOreDefinition def = item.get();
+                
+                int randPosX = x + rand.nextInt(2) + 8;
+                int randPosZ = z + rand.nextInt(2) + 8;
+                BedrockOre.generate(world, randPosX, randPosZ, def.stack, def.acid, def.color, def.tier, ModBlocks.stone_depth, planetStone);
+            }
         }
     }
 

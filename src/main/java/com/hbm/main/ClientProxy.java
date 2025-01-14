@@ -5,7 +5,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.model.ModelChicken;
-import net.minecraft.client.model.ModelCow;
 import net.minecraft.client.particle.EntityAuraFX;
 import net.minecraft.client.particle.EntityBlockDustFX;
 import net.minecraft.client.particle.EntityCloudFX;
