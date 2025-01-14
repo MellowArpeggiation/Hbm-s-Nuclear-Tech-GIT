@@ -41,6 +41,7 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
 
         WorldProviderCelestial celestialProvider = (WorldProviderCelestial)world.provider;
         Block blockToReplace = celestialProvider.getStone();
+        boolean hasIce = celestialProvider.hasIce();
         int meta = CelestialBody.getMeta(world);
 
         generateStructures(world, rand, chunkX * 16, chunkZ * 16);
@@ -51,7 +52,7 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
         }
 
         generateNTMOres(world, rand, chunkX * 16, chunkZ * 16, blockToReplace, meta);
-        generateBedrockOres(world, rand, chunkX * 16, chunkZ * 16, blockToReplace);
+        generateBedrockOres(world, rand, chunkX * 16, chunkZ * 16, blockToReplace, hasIce);
     }
 
     public void generateStructures(World world, Random rand, int x, int z) {
@@ -115,14 +116,19 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
         DungeonToolbox.generateOre(world, rand, x, z, WorldConfig.limestoneSpawn, 12, 25, 30, ModBlocks.stone_resource, EnumStoneType.CALCIUM.ordinal(), planetStone);
     }
 
-    public void generateBedrockOres(World world, Random rand, int x, int z, Block planetStone) {
+    public void generateBedrockOres(World world, Random rand, int x, int z, Block planetStone, boolean hasIce) {
         if(WorldConfig.newBedrockOres) {
 
             if(rand.nextInt(10) == 0) {
                 int randPosX = x + rand.nextInt(2) + 8;
                 int randPosZ = z + rand.nextInt(2) + 8;
 
-                BedrockOre.generate(world, randPosX, randPosZ, new ItemStack(ModItems.bedrock_ore_base), null, 0xD78A16, 1);
+                BedrockOre.generate(world, randPosX, randPosZ, new ItemStack(ModItems.bedrock_ore_base), null, 0xD78A16, 1, ModBlocks.stone_depth, planetStone);
+            } else if(hasIce && rand.nextInt(3) == 0) {
+                int randPosX = x + rand.nextInt(2) + 8;
+                int randPosZ = z + rand.nextInt(2) + 8;
+
+                BedrockOre.generate(world, randPosX, randPosZ, new ItemStack(Blocks.packed_ice, 8 * 4), null, 0xAAFFFF, 1);
             }
 
         } else {

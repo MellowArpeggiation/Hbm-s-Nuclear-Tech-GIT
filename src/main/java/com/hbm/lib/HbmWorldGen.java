@@ -748,7 +748,7 @@ public class HbmWorldGen implements IWorldGenerator {
 				BedrockOreDefinition def = item.get();
 				int randPosX = i + rand.nextInt(2) + 8;
 				int randPosZ = j + rand.nextInt(2) + 8;
-				BedrockOre.generate(world, randPosX, randPosZ, def.stack, def.acid, def.color, def.tier, ModBlocks.stone_depth_nether);
+				BedrockOre.generate(world, randPosX, randPosZ, def.stack, def.acid, def.color, def.tier, ModBlocks.stone_depth_nether, Blocks.netherrack);
 			}
 
 			DepthDeposit.generateConditionNether(world, i, 0, 3, j, 7, 0.6D, ModBlocks.ore_depth_nether_neodymium, rand, 16);

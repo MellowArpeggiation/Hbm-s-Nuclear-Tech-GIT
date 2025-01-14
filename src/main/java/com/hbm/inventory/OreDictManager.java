@@ -122,6 +122,7 @@ public class OreDictManager {
 	public static final DictFrame QUARTZ = new DictFrame("Quartz");
 	public static final DictFrame DIAMOND = new DictFrame("Diamond");
 	public static final DictFrame EMERALD = new DictFrame("Emerald");
+	public static final DictFrame GLOWSTONE = new DictFrame("Glowstone");
 	/*
 	 * RADIOACTIVE
 	 */
@@ -370,6 +371,7 @@ public class OreDictManager {
 		QUARTZ.dust(powder_quartz);
 		DIAMOND.dust(powder_diamond).ore(gravel_diamond, ore_sellafield_diamond).oreAll(ore_diamond);
 		EMERALD.dust(powder_emerald).ore(ore_sellafield_emerald).oreAll(ore_emerald);
+		GLOWSTONE.dust(Items.glowstone_dust);
 		
 		/*
 		 * RADIOACTIVE

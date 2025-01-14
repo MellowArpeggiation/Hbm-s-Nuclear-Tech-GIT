@@ -40,6 +40,10 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		return Blocks.stone;
 	}
 
+	public boolean hasIce() {
+		return false;
+	}
+
 	public boolean hasLife() {
 		return false;
 	}

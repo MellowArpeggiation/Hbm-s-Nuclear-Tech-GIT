@@ -28,7 +28,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 public class ItemBedrockOreBase extends Item {
 
 	public static double getOreAmount(ItemStack stack, CelestialBedrockOreType type) {
-		if(!stack.hasTagCompound()) return 0;
+		if(!stack.hasTagCompound()) return 1;
 		NBTTagCompound data = stack.getTagCompound();
 		return data.getDouble(type.suffix);
 	}
