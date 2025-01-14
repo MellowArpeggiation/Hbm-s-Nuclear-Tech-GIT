@@ -1,10 +1,10 @@
-# HBM's Nuclear Tech Mod for Minecraft 1.7.10
+# HBM's Nuclear Tech Mod + JameH2 Space for Minecraft 1.7.10
 
 Hi, i am memeing things into existence, dont mind me! im just the bent fork at the end of the table -JamesH_2
 
 [NTM Space on Modrinth](https://modrinth.com/mod/ntmspace)
 
-[NTM on CurseForge](https://minecraft.curseforge.com/projects/hbms-nuclear-tech-mod?gameCategorySlug=mc-mods&projectID=235439)
+[NTM Space on CurseForge](https://www.curseforge.com/minecraft/mc-mods/ntm-space)
 
 [Official NTM Wiki](https://nucleartech.wiki/wiki/Main_Page)
 
@@ -36,7 +36,7 @@ Please note that these installation instructions are assuming you're running Mic
  ```
  5. Download the source code:
  ```bash
-     git clone https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT.git
+     git clone https://github.com/JameH2/Hbm-s-Nuclear-Tech-GIT.git
  ```
  4. Enter the source code directory
  ```bash
@@ -67,7 +67,7 @@ If you want to make some changes to the mod, follow this guide:
 ```
    * Download the source code:
 ```bash
-    git clone https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT.git
+    git clone https://github.com/JameH2/Hbm-s-Nuclear-Tech-GIT.git
  ```
    * Move or copy every file within the new folder into your directory, making sure to overwrite any files.
    * Feel free to delete the remaining folder and rename your directory (such as "Hbm-s-Nuclear-Tech-GIT")
