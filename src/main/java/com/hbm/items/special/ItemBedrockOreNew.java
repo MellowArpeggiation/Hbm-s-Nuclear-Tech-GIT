@@ -71,6 +71,7 @@ public class ItemBedrockOreNew extends Item {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
 		for(int i = 0; i < BedrockOreGrade.values().length; i++) { BedrockOreGrade grade = BedrockOreGrade.values()[i];
+			if(tab != null && grade != BedrockOreGrade.BASE) continue;
 			for(int j = 0; j < CelestialBedrockOre.oreTypes.size(); j++) { CelestialBedrockOreType type = CelestialBedrockOre.oreTypes.get(j);
 				list.add(this.make(grade, type));
 			}
