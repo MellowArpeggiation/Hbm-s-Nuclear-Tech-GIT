@@ -238,6 +238,7 @@ public class OreDictManager {
 	public static final DictFrame FIBER = new DictFrame("Fiberglass");
 	public static final DictFrame ASBESTOS = new DictFrame("Asbestos");
 	public static final DictFrame OSMIRIDIUM = new DictFrame("Osmiridium");
+	public static final DictFrame HAFNIUM = new DictFrame("Hafnium");
 	public static final DictFrame IRIDIUM = new DictFrame("Iridium");
 	public static final DictFrame ZI = new DictFrame("Zinc");
 	public static final DictFrame GALLIUM = new DictFrame("Gallium");
@@ -285,6 +286,9 @@ public class OreDictManager {
 	 * RARE METALS
 	 */
 	public static final DictFrame AUSTRALIUM = new DictFrame("Australium");
+	public static final DictFrame TASMANITE = new DictFrame("Tasmanite");
+	public static final DictFrame AYERITE = new DictFrame("Ayerite");
+
 	public static final DictFrame REIIUM = new DictFrame("Reiium");
 	public static final DictFrame WEIDANIUM = new DictFrame("Weidanium");
 	public static final DictFrame UNOBTAINIUM = new DictFrame("Unobtainium");
@@ -475,6 +479,7 @@ public class OreDictManager {
 		GALLIUM		.nugget(nugget_gallium)									.ingot(ingot_gallium)												.dust(powder_gallium)		.dustSmall(powder_gallium_tiny);
 		GAAS		.nugget(nugget_gaas)									.ingot(ingot_gaas)													.billet(billet_gaas);	
 		PLATNIUM	.nugget(nugget_platnium)								.ingot(ingot_platnium)												.dust(powder_platnium);
+		HAFNIUM		.nugget(nugget_hafnium)									.ingot(ingot_hafnium);
 		IRIDIUM		.ingot(ingot_iridium);							
 	
 		
@@ -516,7 +521,10 @@ public class OreDictManager {
 		/*
 		 * RARE METALS
 		 */
-		AUSTRALIUM	.nugget(nugget_australium)	.billet(billet_australium)	.ingot(ingot_australium)	.dust(powder_australium)	.block(block_australium)	.oreAll(ore_australium);
+		AUSTRALIUM	.nugget(nugget_australium)			.billet(billet_australium)			.ingot(ingot_australium)	.dust(powder_australium)	.block(block_australium)	.oreAll(ore_australium);
+		TASMANITE	.nugget(nugget_australium_lesser)	.billet(billet_australium_lesser);
+		AYERITE		.nugget(nugget_australium_greater)	.billet(billet_australium_greater);
+
 		REIIUM		.block(block_reiium);
 		WEIDANIUM	.block(block_weidanium);
 		UNOBTAINIUM	.block(block_unobtainium);

@@ -26,6 +26,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 
 public class ItemBedrockOreBase extends Item {
+	
+	public ItemBedrockOreBase() {
+		this.setHasSubtypes(true);
+	}
 
 	public static double getOreAmount(ItemStack stack, CelestialBedrockOreType type) {
 		if(!stack.hasTagCompound()) return 1;
