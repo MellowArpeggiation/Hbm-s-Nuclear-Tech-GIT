@@ -70,8 +70,10 @@ public class ItemBedrockOreNew extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
-		for(int j = 0; j < CelestialBedrockOre.oreTypes.size(); j++) { CelestialBedrockOreType type = CelestialBedrockOre.oreTypes.get(j);
-			list.add(this.make(BedrockOreGrade.BASE, type));
+		for(int i = 0; i < BedrockOreGrade.values().length; i++) { BedrockOreGrade grade = BedrockOreGrade.values()[i];
+			for(int j = 0; j < CelestialBedrockOre.oreTypes.size(); j++) { CelestialBedrockOreType type = CelestialBedrockOre.oreTypes.get(j);
+				list.add(this.make(grade, type));
+			}
 		}
 	}
 
