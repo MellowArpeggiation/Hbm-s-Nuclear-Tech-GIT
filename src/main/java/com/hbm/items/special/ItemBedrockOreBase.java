@@ -11,6 +11,7 @@ import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOre;
 import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOreType;
 import com.hbm.items.tool.ItemOreDensityScanner;
 import com.hbm.util.I18nUtil;
+import com.hbm.main.MainRegistry;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -62,7 +63,7 @@ public class ItemBedrockOreBase extends Item {
 		for(CelestialBedrockOreType type : CelestialBedrockOre.get(body.getEnum()).types) {
 			double amount = getOreAmount(stack, type);
 			String typeName = StatCollector.translateToLocalFormatted("item.bedrock_ore.type." + type.suffix + ".name");
-			list.add(typeName + ": " + ((int) (amount * 100)) / 100D + " (" + StatCollector.translateToLocalFormatted(ItemOreDensityScanner.translateDensity(amount)) + EnumChatFormatting.RESET + ")");
+			list.add(typeName + ": " + ((int) (amount * 100)) / 100D + " (" + ItemOreDensityScanner.getColor(amount) + StatCollector.translateToLocalFormatted(ItemOreDensityScanner.translateDensity(amount)) + EnumChatFormatting.GRAY + ")");
 		}
 	}
 	
