@@ -45,19 +45,20 @@ public class WorldProviderEarth extends WorldProviderCelestial {
 		World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
 	    SatelliteSavedData data = (SatelliteSavedData)world.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
 	    
-        if(!worldObj.isRemote) {
+		if(!worldObj.isRemote) {
 
 		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world).sats;
 		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
-				if(entry instanceof SatelliteWar) {
+				if(entry.getValue() instanceof SatelliteWar) {
 					SatelliteWar war = (SatelliteWar) entry.getValue();
-					war.fire();	
+					//war.fire();	
+					war.interp = 100;
 				}
 			
 			}
         } else {
 			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-				if(entry instanceof SatelliteWar) {
+				if(entry.getValue() instanceof SatelliteWar) {
 
 					SatelliteWar war = (SatelliteWar) entry.getValue();
 					if(war.getInterp() <= 1) {
