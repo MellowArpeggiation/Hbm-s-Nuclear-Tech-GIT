@@ -19,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class JetpackBooster extends JetpackBase {
+public class JetpackBooster extends JetpackFueledBase {
 
 	public JetpackBooster(FluidType fuel, int maxFuel) {
 		super(fuel, maxFuel);

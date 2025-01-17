@@ -7,12 +7,14 @@ import java.util.Map;
 
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.SolarSystem.AstroMetric;
+import com.hbm.config.GeneralConfig;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_War.ProjectileType;
 import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
+import com.hbm.inventory.FluidStack;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
@@ -50,6 +52,16 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	// Ore gen will attempt to replace this block with ores
 	public Block getStone() {
 		return Blocks.stone;
+	}
+
+	// What fluid is required to extract new bedrock ores
+	public FluidStack getBedrockAcid() {
+		return null;
+	}
+
+	// Should we generate bedrock ice
+	public boolean hasIce() {
+		return false;
 	}
 
 	public boolean hasLife() {
@@ -220,13 +232,24 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Vec3 getFogColor(float x, float y) {
+	public Vec3 getFogColor(float celestialAngle, float y) {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 
 		// The cold hard vacuum of space
 		if(atmosphere == null) return Vec3.createVectorHelper(0, 0, 0);
 		
-		float sun = this.getSunBrightnessFactor(1.0F);
+		float sun = MathHelper.clamp_float(MathHelper.cos(celestialAngle * (float)Math.PI * 2.0F) * 2.0F + 0.5F, 0.0F, 1.0F);
+
+		float sunR = sun;
+		float sunG = sun;
+		float sunB = sun;
+
+		if(!GeneralConfig.enableHardcoreDarkness) {
+			sunR *= 0.94F;
+			sunG *= 0.94F;
+			sunB *= 0.91F;
+		}
+
 		float totalPressure = (float)atmosphere.getPressure();
 		Vec3 color = Vec3.createVectorHelper(0, 0, 0);
 
@@ -235,17 +258,17 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			Vec3 fluidColor;
 
 			if(entry.fluid == Fluids.EVEAIR) {
-				fluidColor = Vec3.createVectorHelper(53F / 255F * sun, 32F / 255F * sun, 74F / 255F * sun);
+				fluidColor = Vec3.createVectorHelper(53F / 255F * sunR, 32F / 255F * sunG, 74F / 255F * sunB);
 			} else if(entry.fluid == Fluids.DUNAAIR || entry.fluid == Fluids.CARBONDIOXIDE) {
-				fluidColor = Vec3.createVectorHelper(212F / 255F * sun, 112F / 255F * sun, 78F / 255F * sun);
+				fluidColor = Vec3.createVectorHelper(212F / 255F * sunR, 112F / 255F * sunG, 78F / 255F * sunB);
 			} else if(entry.fluid == Fluids.AIR || entry.fluid == Fluids.OXYGEN || entry.fluid == Fluids.NITROGEN) {
 				// Default to regular ol' overworld
-				fluidColor = super.getFogColor(x, y);
+				fluidColor = Vec3.createVectorHelper(0.7529412F * sunR, 0.84705883F * sunG, 1.0F * sunB);
 			} else {
 				fluidColor = getColorFromHex(entry.fluid.getColor());
-				fluidColor.xCoord *= sun * 1.4F;
-				fluidColor.yCoord *= sun * 1.4F;
-				fluidColor.zCoord *= sun * 1.4F;
+				fluidColor.xCoord *= sunR * 1.4F;
+				fluidColor.yCoord *= sunG * 1.4F;
+				fluidColor.zCoord *= sunB * 1.4F;
 			}
 
 			float percentage = (float)entry.pressure / totalPressure;
@@ -254,6 +277,14 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 				color.yCoord + fluidColor.yCoord * percentage,
 				color.zCoord + fluidColor.zCoord * percentage
 			);
+		}
+
+		// Add minimum fog colour, for night-time glow
+		if(!GeneralConfig.enableHardcoreDarkness) {
+			float nightDensity = MathHelper.clamp_float(totalPressure, 0.0F, 1.0F);
+			color.xCoord += 0.06F * nightDensity;
+			color.yCoord += 0.06F * nightDensity;
+			color.zCoord += 0.09F * nightDensity;
 		}
 
 		// Fog intensity remains high to simulate a thin looking atmosphere on low pressure planets
@@ -567,10 +598,31 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		return super.getCloudHeight();
 	}
 
+	private IRenderHandler skyProvider;
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IRenderHandler getSkyRenderer() {
-		return new SkyProviderCelestial();
+		// I do not condone this because it WILL confuse your players, but if you absolutely must,
+		// you can uncomment this line below in your fork to get default skybox rendering on Earth.
+		
+		// if(dimensionId == 0) return super.getSkyRenderer();
+		
+		// Make sure you also uncomment the relevant line in getMoonPhase below too.
+
+		// This is not in a config because it is not a decision you should make lightly, as it will break:
+		//  * certain atmosphere/terraforming modifications
+		//  * Dyson swarm rendering
+		//  * seeing weapons platforms in orbit (the big cannon from the trailer will NOT be visible)
+		//  * weapon effects on the atmosphere (burning holes in the atmosphere, hitting planetary defense shields)
+		//  * accurate celestial body rendering (you won't be able to see ANY other planets)
+		//     * this also breaks future plans to modify orbits via huge mass drivers, if someone decides to yeet the moon at you, you won't know
+		//  * sun extinction/modification events (the sun will appear normal even if it has been turned into a black hole)
+		//  * player launched satellites won't be visible
+		//  * artificial moons/rings (once implemented) won't be visible
+
+		if(skyProvider == null) skyProvider = new SkyProviderCelestial();
+		return skyProvider;
 	}
 
 	protected double getDayLength() {
@@ -599,12 +651,19 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	}
 
 	@Override
-	public float getCurrentMoonPhaseFactor() {
-		// Closest satellite determines monster spawning
+	public int getMoonPhase(long worldTime) {
+		// Uncomment this line as well to return moon phase difficulty calcs to vanilla
+		// if(dimensionId == 0) return super.getMoonPhase(worldTime);
+
 		CelestialBody body = CelestialBody.getBody(worldObj);
-		if(body.satellites.size() == 0) return 0.5F;
-		// SolarSystem.calculateSingleAngle(worldObj, 0, body, body.satellites.get(0));
-		return 0.5F;
+
+		// if no moons, default to half-moon difficulty
+		if(body.satellites.size() == 0) return 2;
+
+		// Determine difficulty phase from closest moon
+		int phase = Math.round(8 - ((float)SolarSystem.calculateSingleAngle(worldObj, 0, body, body.satellites.get(0)) / 45 + 4));
+		if(phase >= 8) return 0;
+		return phase;
 	}
 
 	// This is the vanilla junk table, for replacing fish on dead worlds

@@ -3,11 +3,13 @@ package com.hbm.render.util;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.hbm.config.ClientConfig;
 import com.hbm.extprop.HbmPlayerProps;
 import com.hbm.handler.ImpactWorldHandler;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.interfaces.Untested;
 import com.hbm.items.weapon.sedna.Crosshair;
+import com.hbm.items.weapon.sedna.impl.ItemGunStinger;
 import com.hbm.lib.RefStrings;
 
 import net.minecraft.client.Minecraft;
@@ -26,8 +28,8 @@ import net.minecraftforge.client.GuiIngameForge;
 
 public class RenderScreenOverlay {
 
-	private static final ResourceLocation misc = new ResourceLocation(RefStrings.MODID + ":textures/misc/overlay_misc.png");
-	private static final RenderItem itemRenderer = RenderItem.getInstance();
+	public static final ResourceLocation misc = new ResourceLocation(RefStrings.MODID + ":textures/misc/overlay_misc.png");
+	public static final RenderItem itemRenderer = RenderItem.getInstance();
 	
 	private static long lastSurvey;
 	private static float prevResult;
@@ -39,8 +41,6 @@ public class RenderScreenOverlay {
 		GL11.glPushMatrix();
 
 		GL11.glEnable(GL11.GL_BLEND);
-		// GL11.glDisable(GL11.GL_DEPTH_TEST);
-		// GL11.glDepthMask(false);
 		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -60,8 +60,8 @@ public class RenderScreenOverlay {
 
 		int bar = getScaled(in, maxRad, 74);
 
-		int posX = 16;
-		int posY = resolution.getScaledHeight() - 18 - 2;
+		int posX = 16 + ClientConfig.GEIGER_OFFSET_HORIZONTAL.get();
+		int posY = resolution.getScaledHeight() - 20 - ClientConfig.GEIGER_OFFSET_VERTICAL.get();
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(misc);
 		gui.drawTexturedModalRect(posX, posY, 0, 0, 94, 18);
@@ -99,7 +99,7 @@ public class RenderScreenOverlay {
 
 	
 	public static void renderCustomCrosshairs(ScaledResolution resolution, Gui gui, Crosshair cross) {
-		
+
 		if(cross == Crosshair.NONE) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
 			return;
@@ -108,12 +108,25 @@ public class RenderScreenOverlay {
 		int size = cross.size;
 
 		GL11.glPushMatrix();
-			Minecraft.getMinecraft().renderEngine.bindTexture(misc);
-			GL11.glEnable(GL11.GL_BLEND);
-			OpenGlHelper.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ONE_MINUS_SRC_COLOR, 1, 0);
-			gui.drawTexturedModalRect(resolution.getScaledWidth() / 2 - (size / 2), resolution.getScaledHeight() / 2 - (size / 2), cross.x, cross.y, size, size);
-			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-			GL11.glDisable(GL11.GL_BLEND);
+		Minecraft.getMinecraft().renderEngine.bindTexture(misc);
+		GL11.glEnable(GL11.GL_BLEND);
+		OpenGlHelper.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ONE_MINUS_SRC_COLOR, 1, 0);
+		gui.drawTexturedModalRect(resolution.getScaledWidth() / 2 - (size / 2), resolution.getScaledHeight() / 2 - (size / 2), cross.x, cross.y, size, size);
+		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+		GL11.glDisable(GL11.GL_BLEND);
+        GL11.glPopMatrix();
+		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+	}
+	
+	public static void renderStingerLockon(ScaledResolution resolution, Gui gui) {
+
+		int progress = (int) (ItemGunStinger.lockon * 28);
+		
+		GL11.glPushMatrix();
+		Minecraft.getMinecraft().renderEngine.bindTexture(misc);
+		GL11.glDisable(GL11.GL_BLEND);
+		gui.drawTexturedModalRect(resolution.getScaledWidth() / 2 - 15, resolution.getScaledHeight() / 2  + 18, 146, 18, 30, 10);
+		gui.drawTexturedModalRect(resolution.getScaledWidth() / 2 - 14, resolution.getScaledHeight() / 2  + 19, 147, 29, progress, 8);
 		GL11.glPopMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
 	}

@@ -13,11 +13,14 @@ import com.google.gson.stream.JsonWriter;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.imc.IMCCrystallizer;
 import com.hbm.inventory.FluidStack;
+import com.hbm.inventory.OreDictManager;
+import com.hbm.inventory.OreDictManager.DictFrame;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
 import com.hbm.items.ItemEnums.EnumAshType;
 import com.hbm.items.ItemEnums.EnumPlantType;
@@ -28,7 +31,8 @@ import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.items.special.ItemBedrockOreNew;
 import com.hbm.items.special.ItemBedrockOre.EnumBedrockOre;
 import com.hbm.items.special.ItemBedrockOreNew.BedrockOreGrade;
-import com.hbm.items.special.ItemBedrockOreNew.BedrockOreType;
+import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOre;
+import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOreType;
 import com.hbm.items.special.ItemPlasticScrap.ScrapType;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.Tuple.Pair;
@@ -68,7 +72,7 @@ public class CrystallizerRecipes extends SerializableRecipe {
 		registerRecipe(LAPIS.ore(),		new CrystallizerRecipe(ModItems.crystal_lapis, baseTime));
 		registerRecipe(DIAMOND.ore(),	new CrystallizerRecipe(ModItems.crystal_diamond, baseTime));
 		registerRecipe(U.ore(),			new CrystallizerRecipe(ModItems.crystal_uranium, baseTime), sulfur);
-		registerRecipe(TH232.ore(),		new CrystallizerRecipe(ModItems.crystal_thorium, baseTime), sulfur);
+		for(String ore : OreDictManager.TH232.all(MaterialShapes.ORE)) registerRecipe(ore,	new CrystallizerRecipe(ModItems.crystal_thorium, baseTime), sulfur);
 		registerRecipe(PU.ore(),		new CrystallizerRecipe(ModItems.crystal_plutonium, baseTime), sulfur);
 		registerRecipe(TI.ore(),		new CrystallizerRecipe(ModItems.crystal_titanium, baseTime), sulfur);
 		registerRecipe(S.ore(),			new CrystallizerRecipe(ModItems.crystal_sulfur, baseTime));
@@ -176,7 +180,7 @@ public class CrystallizerRecipes extends SerializableRecipe {
 
 		int bedrock = 200;
 		int washing = 100;
-		for(BedrockOreType type : BedrockOreType.values()) {
+		for(CelestialBedrockOreType type : CelestialBedrockOre.getAllTypes()) {
 			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.BASE, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.BASE_WASHED, type), washing), new FluidStack(Fluids.WATER, 250));
 			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.BASE_ROASTED, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.BASE_WASHED, type), washing), new FluidStack(Fluids.WATER, 250));
 			
@@ -216,16 +220,6 @@ public class CrystallizerRecipes extends SerializableRecipe {
 			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_NOSOLVENT, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_FIRST, type), bedrock), primary);
 			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_RAD, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_FIRST, type), bedrock), primary);
 			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_NORAD, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_FIRST, type), bedrock), primary);
-
-			FluidStack secondary = new FluidStack(Fluids.CHLORINE, 250);
-			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_SECOND, type), bedrock), secondary);
-			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_ROASTED, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_SECOND, type), bedrock), secondary);
-			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_SULFURIC, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_SECOND, type), bedrock), secondary);
-			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_NOSULFURIC, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_SECOND, type), bedrock), secondary);
-			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_SOLVENT, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_SECOND, type), bedrock), secondary);
-			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_NOSOLVENT, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_SECOND, type), bedrock), secondary);
-			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_RAD, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_SECOND, type), bedrock), secondary);
-			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_NORAD, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_SECOND, type), bedrock), secondary);
 			
 			registerRecipe(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.CRUMBS, type)), new CrystallizerRecipe(ItemBedrockOreNew.make(BedrockOreGrade.BASE, type), bedrock).setReq(64), new FluidStack(Fluids.NITRIC_ACID, 1000));
 		}

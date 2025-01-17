@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.hbm.util.Compat;
+import com.hbm.world.WorldUtil;
 import com.hbm.world.biome.BiomeGenCraterBase;
 
+import cpw.mods.fml.common.Loader;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -312,10 +315,16 @@ public abstract class ChunkProviderCelestial implements IChunkProvider {
 		BlockMetaBuffer ablock = getChunkPrimer(x, z);
 		Chunk chunk = new Chunk(worldObj, ablock.blocks, ablock.metas, x, z);
 
-		byte[] abyte1 = chunk.getBiomeArray();
-
-		for(int k = 0; k < abyte1.length; ++k) {
-			abyte1[k] = (byte) biomesForGeneration[k].biomeID;
+		if(Loader.isModLoaded(Compat.MOD_EIDS)) {
+			short[] biomes = WorldUtil.getBiomeShortArray(chunk);
+			for(int k = 0; k < biomes.length; ++k) {
+				biomes[k] = (short) biomesForGeneration[k].biomeID;
+			}
+		} else {
+			byte[] biomes = chunk.getBiomeArray();
+			for(int k = 0; k < biomes.length; ++k) {
+				biomes[k] = (byte) biomesForGeneration[k].biomeID;
+			}
 		}
 
 		chunk.generateSkylightMap();

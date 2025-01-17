@@ -1,20 +1,22 @@
+Includes the performance update and all latest bugfixes from upstream NTMain - see [X5202](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5202) and [X5209](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5209)
+
 ## Added
-* Mun cows! These rare cows are found on the Mun, they moonwalk and drop cheese. Directly inspired by the 2023 April Fools update
-* Basic atmospheric chemistry
-    * Currently just water table chem, adding 0.2atm of water vapor (steam) to an atmosphere will allow infinite water tanks to function
+* All new bedrock ore processing!
+  * Utilises the new system in NTMain, rebalanced and reworked for space!
+  * Drilling raw bedrock on Eve requires potassium permanganate, and Dres requires nitric acid
 
 ## Changed
-* Infinite water tanks now check the water table of the celestial body you're on, rather than atmospheric pressure
-    * It was confusing everyone, since most players assumed they could just increase the air pressure of the room they're in to make them function
+* Rotary furnace now needs a breathable atmosphere to operate
+* Filters on conveyor ejectors/sorters/etc can now filter on bedrock ore grades, so if you want to filter on crumbs you don't have to add every single crumb type (of which there are _many_ more now!)
+* Raw bedrock ore densities are now unique per seed + dimension, before it was identical over _every_ world AND dimension
+  * This means the upstream change that ore taken from the creative tab "...now has the stats of the position the player is in..." won't work (server/client sync issue, the client does not know world seed!). Instead, it'll be a perfectly average ore (1.0 in all stats)
+* /ntmstations tp command can now teleport you to planetary drives too, making saving the location of your builds in creative a breeze
+* Config option added to disable mun cows
+* Oxygen and jetpack tanks now stack to 16 and won't be consumed if your PLSS or jetpack is full
 
 ## Fixed
-* Missing biome ID configs
-* Mun was called Moon in some places
-* Remove future biomes (they'll be back in the WAR update)
-* No more cascading issues for atmosphere blobs (pressurised rooms should always report correct pressure now)
-* Stations now play space music instead of overworld music
-* Remove duck spawning
-* Fix scutterblood coker recipe
-* Add missing fluid textures
-* Fix groundwater pumps working in space
-* Fix vacuum solderer not receiving power
+* All fixes from upstream NTM
+* Certain rocket parts no longer render beyond their inventory slot
+* HTR-3 and HTR-F4 issues fixed, and extra tooltips added to make it easier to understand how to fuel and operate them
+* Rockets and drop pods now gravity turn to the east when launching
+* Fix DNT Nano Suit not showing that it is compatible with the PLSS

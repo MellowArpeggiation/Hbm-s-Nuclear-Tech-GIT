@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import com.hbm.inventory.FluidStack;
+import com.hbm.inventory.OreDictManager.DictFrame;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
@@ -24,7 +25,8 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.items.special.ItemBedrockOreNew;
 import com.hbm.items.special.ItemBedrockOreNew.BedrockOreGrade;
-import com.hbm.items.special.ItemBedrockOreNew.BedrockOreType;
+import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOre;
+import com.hbm.items.special.ItemBedrockOreNew.CelestialBedrockOreType;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -69,7 +71,7 @@ public class PyroOvenRecipes extends SerializableRecipe {
 
 		//bedrock ores
 		
-		for(BedrockOreType type : BedrockOreType.values()) {
+		for(CelestialBedrockOreType type : CelestialBedrockOre.getAllTypes()) {
 			recipes.add(new PyroOvenRecipe(10).in(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.BASE, type))).out(new FluidStack(Fluids.VITRIOL, 50)).out(ItemBedrockOreNew.make(BedrockOreGrade.BASE_ROASTED, type)));
 			recipes.add(new PyroOvenRecipe(10).in(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY, type))).out(new FluidStack(Fluids.VITRIOL, 50)).out(ItemBedrockOreNew.make(BedrockOreGrade.PRIMARY_ROASTED, type)));
 			recipes.add(new PyroOvenRecipe(10).in(new ComparableStack(ItemBedrockOreNew.make(BedrockOreGrade.SULFURIC_BYPRODUCT, type))).out(new FluidStack(Fluids.VITRIOL, 50)).out(ItemBedrockOreNew.make(BedrockOreGrade.SULFURIC_ROASTED, type)));
@@ -93,7 +95,7 @@ public class PyroOvenRecipes extends SerializableRecipe {
 				.out(new FluidStack(Fluids.SYNGAS, 1_000)).out(new ItemStack(Items.coal, 1, 1)));
 		//soot from tar
 		recipes.add(new PyroOvenRecipe(40)
-				.out(new FluidStack(Fluids.HYDROGEN, 250)).in(new OreDictStack(ANY_TAR.any(), 8))
+				.out(new FluidStack(Fluids.HYDROGEN, 250)).in(new OreDictStack(ANY_TAR.any(), 4))
 				.out(new FluidStack(Fluids.CARBONDIOXIDE, 1_000)).out(DictFrame.fromOne(ModItems.powder_ash, EnumAshType.SOOT)));
 		//heavyoil from coal
 		recipes.add(new PyroOvenRecipe(100)

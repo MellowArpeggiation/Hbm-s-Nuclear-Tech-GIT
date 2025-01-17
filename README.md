@@ -1,12 +1,14 @@
-# HBM's Nuclear Tech Mod for Minecraft 1.7.10
+# HBM's Nuclear Tech Mod + JameH2 Space for Minecraft 1.7.10
 
 Hi, i am memeing things into existence, dont mind me! im just the bent fork at the end of the table -JamesH_2
 
 [NTM Space on Modrinth](https://modrinth.com/mod/ntmspace)
 
-[NTM on CurseForge](https://minecraft.curseforge.com/projects/hbms-nuclear-tech-mod?gameCategorySlug=mc-mods&projectID=235439)
+[NTM Space on CurseForge](https://www.curseforge.com/minecraft/mc-mods/ntm-space)
 
 [Official NTM Wiki](https://nucleartech.wiki/wiki/Main_Page)
+
+[Bobcat's Blog (the blag)](https://hbmmods.github.io/), you can find lengthy yapping, upcoming features and some secrets here.
 
 **This is for 1.7.10!** For 1.12, check out these projects:
 
@@ -34,7 +36,7 @@ Please note that these installation instructions are assuming you're running Mic
  ```
  5. Download the source code:
  ```bash
-     git clone https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT.git
+     git clone https://github.com/JameH2/Hbm-s-Nuclear-Tech-GIT.git
  ```
  4. Enter the source code directory
  ```bash
@@ -65,7 +67,7 @@ If you want to make some changes to the mod, follow this guide:
 ```
    * Download the source code:
 ```bash
-    git clone https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT.git
+    git clone https://github.com/JameH2/Hbm-s-Nuclear-Tech-GIT.git
  ```
    * Move or copy every file within the new folder into your directory, making sure to overwrite any files.
    * Feel free to delete the remaining folder and rename your directory (such as "Hbm-s-Nuclear-Tech-GIT")
@@ -95,11 +97,17 @@ If you want to make some changes to the mod, follow this guide:
       * Click **Add Standard VM**; in the JRE home, navigate to the directory where the JDK is installed, then click finish and select it.
 10. Code!
 
+## Contributing animations
+Weapon animations in NTM are stored in JSON files, which are used alongside OBJ models to produce high quality animations with reasonable filesizes. Import/Export Blender addons are available for versions 2.79, 3.2, and 4.0 in `tools`, and they should function reasonably well in newer versions as well. See the comments in the header of the export scripts for usage instructions.
+
 ## Compatibility notice
 NTM has certain behaviors intended to fix vanilla code or to increase compatibility in certain cases where it otherwise would not be possible. These behaviors have the potential of not playing well with other mods, and while no such cases are currently known, here's a list of them.
 
 ### Thermos
 Thermos servers (along with its forks such as Crucible) have a "performance" feature that causes all tile entity ticking to slow down if there's no player present in the same chunk. For obvious reasons, this will heavily impact machines and cause phantom issues that, not having knowledge of this "performance" feature, are near impossible to diagnose. By default, NTM will crash on servers running the Thermos base code and print a lengthy message informing server owners about this "performance" feature as well as how to fix the issues it causes. The error message is printed in plain English on the top of the crash log, failure to read (as well as understand) it will leave the server inoperable.
+
+### Shaders
+Shaders (loaded by either Optifine, Iris or otherwise) will in all likelihood break when a gun is held. This is because guns need to skip vanilla's first person item setup for the rendering, however shaders apparently use the setup step for setting certain GL states, and skipping that will break rendering. [Shader Fixer](https://modrinth.com/mod/shader-fixer) is a mod with various fixes, among which is explicit compatibility for NTM's guns.
 
 ### Optifine
 One of the most common "performance" mods on 1.7.10, Optifine, achieves an increase in performance by breaking small things in spots that are usually hard to notice, although this can cause severe issues with NTM. A short list of problems, along with some solutions, follows:
@@ -111,7 +119,7 @@ One of the most common "performance" mods on 1.7.10, Optifine, achieves an incre
 ### Angelica
 In older versions, Angelica caused issues regarding model rendering, often times making 3D models transparent. Ever since the switch to VBOs, models work fine. Another issue was blocks with connected textures not rendering at all, but this too was fixed, meaning as of time of writing there are no major incompatibilities known with Angelica. However there a few minor issues that persist, but those can be fixed:
 * Often times when making a new world, all items appear as white squares. Somehow, scrolling though the NEI pages fixes this permanently
-* Reeds will render weirdly, this is an incompatibility with the "Compact Vertex Format" feature. Disabling it will make reeds look normal
+* Reeds will render weirdly, this is an incompatibility with the "Compact Vertex Format" feature. Disabling it will make reeds look normal. Alternatively, reed rendering can be disabled by using `/ntmclient set RENDER_REEDS false`, which works around the issue by not rendering the underwater portion of reeds at all.
 
 ### Skybox chainloader
 NTM adds a few small things to the skybox using a custom skybox renderer. Minecraft can only have a single skybox renderer loaded, so setting the skybox to the NTM custom one would break compatibility with other mods' skyboxes. To mend this, NTM employs a **chainloader**. This chainloader will detect if a different skybox is loaded, save a reference to that skybox and then use NTM's skybox, which when used will also make sure to run the previous modded skybox renderer. In the event that NTM's skybox were to cause trouble, it can be disabled with the config option `1.31_enableSkyboxes`.
