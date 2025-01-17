@@ -474,7 +474,7 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		ResourceManager.liquidator.renderPart("rightarm");
 		GL11.glTranslated(-4.75, 46, 0); 
 
-		GL11.glRotated(4, 0, 0, 1);
+		GL11.glRotated(-10, 0, 0, 1);
 		GL11.glTranslated(4.75, -46, -0); 
 		
 		//xaxis
