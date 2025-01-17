@@ -71,7 +71,7 @@ public class EntityAITankshell extends EntityAIBase {
 
 	private void fireArtilleryShell() {
 		if(reloadTimer <= 0) {
-			EntityBulletBaseNT bullet = new EntityBulletBaseNT(owner.worldObj, BulletConfigSyncingUtil.SHELL_NORMAL, owner, target, 1.0F, 0);
+			EntityBulletBaseNT bullet = new EntityBulletBaseNT(owner.worldObj, BulletConfigSyncingUtil.MASKMAN_BULLET, owner, target, 1.0F, 0);
 			bullet.setPosition(owner.posX, owner.posY + 3, owner.posZ);
 			owner.worldObj.spawnEntityInWorld(bullet);
 			owner.worldObj.playSoundEffect(owner.posX, owner.posY, owner.posZ, "hbm:turret.jeremy_fire", 25.0F, 1.0F);

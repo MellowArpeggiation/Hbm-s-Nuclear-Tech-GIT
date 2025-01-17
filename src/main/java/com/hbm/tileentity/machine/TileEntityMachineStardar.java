@@ -153,7 +153,7 @@ public class TileEntityMachineStardar extends TileEntityMachineBase implements I
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setInteger("time", timeUntilPoint);
+		//nbt.setInteger("time", timeUntilPoint);
 
 		nbt.setBoolean("radarmode", radarMode);
 		nbt.setFloat("yaw", targetYaw);
@@ -163,7 +163,7 @@ public class TileEntityMachineStardar extends TileEntityMachineBase implements I
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		timeUntilPoint = nbt.getInteger("time");
+		//timeUntilPoint = nbt.getInteger("time");
 		
 		radarMode = nbt.getBoolean("radarmode");
 		targetYaw = nbt.getFloat("yaw");
