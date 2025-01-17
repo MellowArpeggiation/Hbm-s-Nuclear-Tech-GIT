@@ -1,14 +1,20 @@
 package com.hbm.entity.mob.ai;
 
 import com.hbm.entity.projectile.EntityArtilleryShell;
+import com.hbm.entity.projectile.EntityBulletBaseMK4;
 import com.hbm.entity.projectile.EntityBulletBaseNT;
 import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.handler.BulletConfigSyncingUtil;
+import com.hbm.items.weapon.sedna.factory.XFactory12ga;
+import com.hbm.items.weapon.sedna.factory.XFactory40mm;
+import com.hbm.items.weapon.sedna.factory.XFactoryFlamer;
+import com.hbm.items.weapon.sedna.factory.XFactoryRocket;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.Vec3;
+import scala.collection.mutable.ArrayBuilder.ofBoolean;
 
 public class EntityAITankshell extends EntityAIBase {
 	
@@ -68,18 +74,44 @@ public class EntityAITankshell extends EntityAIBase {
 		this.owner.rotationYaw = this.owner.rotationYawHead;
     }
 
-
+	
 	private void fireArtilleryShell() {
 		if(reloadTimer <= 0) {
-			EntityBulletBaseNT bullet = new EntityBulletBaseNT(owner.worldObj, BulletConfigSyncingUtil.MASKMAN_BULLET, owner, target, 1.0F, 0);
-			bullet.setPosition(owner.posX, owner.posY + 3, owner.posZ);
-			owner.worldObj.spawnEntityInWorld(bullet);
+            double dist = Vec3.createVectorHelper(target.posX - owner.posX, target.posY - owner.posY, target.posZ - owner.posZ).lengthVector();
+            System.out.println(dist);
+            double radYaw = Math.toRadians(owner.rotationYaw);
+            double radPitch = Math.toRadians(owner.rotationPitch);
+
+            double forwardX = -Math.sin(radYaw) * Math.cos(radPitch);
+            double forwardY = -Math.sin(radPitch);
+            double forwardZ = Math.cos(radYaw) * Math.cos(radPitch);
+
+            double spawnDistance = 3.0;
+            double spawnX = owner.posX + forwardX * spawnDistance;
+            double spawnY = owner.posY + 3 + forwardY * spawnDistance;
+            double spawnZ = owner.posZ + forwardZ * spawnDistance;
+			if(dist < 50) {
+		        for (int i = 0; i < 4; i++) {
+
+
+		            EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactory12ga.g12_explosive, 4, 0.01F, spawnX, spawnY, spawnZ);
+		            bullet.setPosition(spawnX, spawnY, spawnZ);
+		            owner.worldObj.spawnEntityInWorld(bullet);
+		        }
+		        
+			} else {
+
+	            EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactory40mm.g40_he, 4, 0.01F, spawnX, spawnY, spawnZ);
+	            bullet.setPosition(spawnX, spawnY, spawnZ);
+	            owner.worldObj.spawnEntityInWorld(bullet);
+			}
+
 			owner.worldObj.playSoundEffect(owner.posX, owner.posY, owner.posZ, "hbm:turret.jeremy_fire", 25.0F, 1.0F);
 			reloadTimer = reloadDelay;
 		} else {
 			reloadTimer--;
 		}
-		System.out.println(reloadTimer);
+		//System.out.println(reloadTimer);
 		if(reloadTimer == 20) {
 			owner.worldObj.playSoundEffect(owner.posX, owner.posY, owner.posZ, "hbm:turret.jeremy_reload", 3.0F, 1.0F);
 
