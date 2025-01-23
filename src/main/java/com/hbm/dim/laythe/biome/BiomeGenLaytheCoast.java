@@ -8,7 +8,7 @@ public class BiomeGenLaytheCoast extends BiomeGenBaseLaythe {
 		super(id);
 		this.setBiomeName("Laythe Reef");
 
-		this.setHeight(new BiomeGenBase.Height(-0.25F, 0.01F));
+		this.setHeight(new BiomeGenBase.Height(-0.3F, 0.01F));
 		this.setTemperatureRainfall(0.2F, 0.2F);
 	}
 }

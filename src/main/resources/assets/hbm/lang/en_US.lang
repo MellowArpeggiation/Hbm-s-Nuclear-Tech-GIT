@@ -5995,6 +5995,7 @@ tile.launch_table.name=Large Launch Pad
 tile.laythe_silt.name=Laythe Silt
 tile.laythe_kelp.name=Laythe Kelp
 tile.laythe_seagrass.name=Laythe Seagrass
+tile.laythe_glowgrass.name=Laythe Glowgrass
 tile.leaves_layer.name=Fallen Leaves
 tile.lox_barrel.name=LOX Barrel
 tile.machine_alkylation.name=Alkylation Unit
