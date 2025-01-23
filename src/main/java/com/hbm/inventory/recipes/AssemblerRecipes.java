@@ -1412,7 +1412,7 @@ public class AssemblerRecipes extends SerializableRecipe {
 				new ComparableStack(ModItems.motor_desh, 2),
 				new ComparableStack(ModItems.coil_advanced_alloy, 8),
 				new OreDictStack(ANY_HARDPLASTIC.ingot(), 8),
-				new ComparableStack(ModItems.circuit, 1, EnumCircuitType.ADVANCED),
+				new ComparableStack(ModItems.circuit, 2, EnumCircuitType.ADVANCED),
 				new OreDictStack(CU.pipe(), 4),
 		}, 400);
 		makeRecipe(new ComparableStack(ModBlocks.machine_htr3, 1), new AStack[] {
@@ -1421,8 +1421,17 @@ public class AssemblerRecipes extends SerializableRecipe {
 				new OreDictStack(W.plateWelded(), 8),
 				new ComparableStack(ModItems.motor_bismuth, 1),
 				new OreDictStack(ANY_HARDPLASTIC.ingot(), 8),
-				new ComparableStack(ModItems.circuit, 1, EnumCircuitType.ADVANCED),
+				new ComparableStack(ModItems.circuit, 4, EnumCircuitType.ADVANCED),
 				new OreDictStack(DURA.pipe(), 8),
+		}, 400);
+		makeRecipe(new ComparableStack(ModBlocks.machine_htrf4, 1), new AStack[] {
+			    new OreDictStack(BIGMT.plateCast(), 8),
+				new OreDictStack(DURA.bolt(), 16),
+				new OreDictStack(W.plateWelded(), 8),
+				new ComparableStack(ModItems.motor_bismuth, 1),
+				new OreDictStack(ANY_HARDPLASTIC.ingot(), 8),
+				new ComparableStack(ModItems.circuit, 1, EnumCircuitType.BISMOID),
+				new ComparableStack(ModBlocks.fusion_conductor, 24),
 		}, 400);
 
 		makeRecipe(new ComparableStack(ModBlocks.large_vehicle_door, 1), new AStack[]{new OreDictStack(STEEL.plateCast(), 16), new ComparableStack(ModItems.plate_polymer, 4), new ComparableStack(ModItems.motor, 4), new OreDictStack(DURA.bolt(), 16), new OreDictStack("dyeGreen", 4)}, 400);

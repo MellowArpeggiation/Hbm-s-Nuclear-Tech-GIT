@@ -6,7 +6,6 @@ import java.util.Random;
 
 import com.hbm.blocks.BlockEnumMulti;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.generic.BlockDeadPlant.EnumDeadPlantType;
 import com.hbm.blocks.generic.BlockNTMFlower.EnumFlowerType;
 import com.hbm.blocks.generic.BlockTallPlant.EnumTallFlower;
 import com.hbm.inventory.OreDictManager.DictFrame;
@@ -30,21 +29,21 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 
-public class BlockTallPlantLaythe extends BlockEnumMulti implements IPlantable, IGrowable {
+public class BlockTallPlantWater extends BlockEnumMulti implements IPlantable, IGrowable {
 	
 	//ngl i dont know why i did this....
-	public BlockTallPlantLaythe() {
-		super(Material.water, EnumTallFlowerLaythe.class, true, true);
+	public BlockTallPlantWater() {
+		super(Material.water, EnumTallPlantWater.class, true, true);
 		this.setTickRandomly(true);
 	}
 
-	public static enum EnumTallFlowerLaythe {
+	public static enum EnumTallPlantWater {
 		LAYTHE;
 	}
 
-	
 	protected IIcon[] bottomIcons;
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
@@ -85,9 +84,9 @@ public class BlockTallPlantLaythe extends BlockEnumMulti implements IPlantable, 
 	public int getRenderType() {
 		return 6;
 	}
+
     @Override
-	public boolean canReplace(World world, int x, int y, int z, int side, ItemStack itemStack)
-    {
+	public boolean canReplace(World world, int x, int y, int z, int side, ItemStack itemStack) {
     	return world.getBlock(x, y + 1, z) == Blocks.water && this.canBlockStay(world, x, y, z);
     }
     
@@ -123,7 +122,7 @@ public class BlockTallPlantLaythe extends BlockEnumMulti implements IPlantable, 
 		
 		if(ownMeta < 8 && (meta != ownMeta + 8 || block != this) && ModBlocks.plant_flower.canBlockStay(world, x, y, z)) {
 
-			if(ownMeta == EnumTallFlowerLaythe.LAYTHE.ordinal())
+			if(ownMeta == EnumTallPlantWater.LAYTHE.ordinal())
 				world.setBlock(x, y, z, Blocks.water);
 			else
 				world.setBlock(x, y, z, ModBlocks.plant_flower, EnumFlowerType.CD0.ordinal(), 3);
@@ -178,43 +177,12 @@ public class BlockTallPlantLaythe extends BlockEnumMulti implements IPlantable, 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 
-		if(world.isRemote) return; //not possible i believe, but better safe than sorry
-		
-		int meta = world.getBlockMetadata(x, y, z);
-		if(meta > 7) return;
-		
-		EnumTallFlower type = EnumTallFlower.values()[rectify(meta)];
-		Block onTop = world.getBlock(x, y - 1, z);
-
 	}
 
 	/* grow condition */
 	@Override
 	public boolean func_149851_a(World world, int x, int y, int z, boolean b) {
 		return false;
-	/*	
-		int meta = world.getBlockMetadata(x, y, z);
-		int rec = rectify(meta);
-		
-		if(rec == EnumTallFlower.CD2.ordinal() || rec == EnumTallFlower.CD3.ordinal()) {
-			
-			int y0 = rec == meta ? y : y - 1;
-			
-			if(world.getBlock(x + 1, y0 - 1, z).getMaterial() != Material.water &&
-					world.getBlock(x - 1, y0 - 1, z).getMaterial() != Material.water &&
-					world.getBlock(x, y0 - 1, z + 1).getMaterial() != Material.water &&
-					world.getBlock(x, y0 - 1, z - 1).getMaterial() != Material.water) {
-				return false;
-			}
-		}
-		
-		if(rec == EnumTallFlower.CD3.ordinal()) {
-			Block onTop = world.getBlock(x, y - (rec == meta ? 1 : 2), z);
-			return onTop == ModBlocks.dirt_dead || onTop == ModBlocks.dirt_oily;
-		}
-		
-		return rec != EnumTallFlower.CD4.ordinal() && rec != EnumTallFlower.WEED.ordinal();
-		*/
 	}
 
 	/* chance */
@@ -231,30 +199,6 @@ public class BlockTallPlantLaythe extends BlockEnumMulti implements IPlantable, 
 	@Override
 	public void func_149853_b(World world, Random rand, int x, int y, int z) {
 
-		int meta = world.getBlockMetadata(x, y, z);
-		int rec = rectify(meta);
-		
-	//	detectCut = false;
-		/*
-		if(rec == EnumTallFlower.CD2.ordinal() || rec == EnumTallFlower.CD3.ordinal()) {
-			
-			if(meta == rec) {
-				world.setBlockMetadataWithNotify(x, y + 1, z, meta + 9, 3);
-				world.setBlockMetadataWithNotify(x, y, z, meta + 1, 3);
-				if(rec == EnumTallFlower.CD3.ordinal()) {
-					world.setBlock(x, y - 1, z, Blocks.dirt);
-				}
-			} else {
-				world.setBlockMetadataWithNotify(x, y, z, meta + 1, 3);
-				world.setBlockMetadataWithNotify(x, y - 1, z, rec + 1, 3);
-				if(rec == EnumTallFlower.CD3.ordinal()) {
-					world.setBlock(x, y - 2, z, Blocks.dirt);
-				}
-			}
-		}
-		*/
-		
-		//detectCut = true;
 	}
 
 	@Override
@@ -272,15 +216,12 @@ public class BlockTallPlantLaythe extends BlockEnumMulti implements IPlantable, 
 		return world.getBlockMetadata(x, y, z);
 	}
     @Override
-    public int quantityDropped(int parMetadata, int parFortune, Random parRand)
-    {
-       return (parRand.nextInt(4));	
-    	
+    public int quantityDropped(int parMetadata, int parFortune, Random parRand) {
+       return (parRand.nextInt(4));
     }
 
     @Override
-    public Item getItemDropped(int parMetadata, Random parRand, int parFortune)  
-    {
+    public Item getItemDropped(int parMetadata, Random parRand, int parFortune) {
        return (ModItems.saltleaf);
     }
 

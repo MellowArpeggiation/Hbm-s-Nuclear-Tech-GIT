@@ -45,6 +45,7 @@ import com.hbm.dim.SolarSystem.AstroMetric;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.lib.RefStrings;
+import com.hbm.main.ModEventHandlerRenderer;
 import com.hbm.render.shader.Shader;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
@@ -108,7 +109,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 				lastBrightestPixel = mc.entityRenderer.lightmapColors[255] + mc.entityRenderer.lightmapColors[250];
 			}
 
-			fogIntensity = ((WorldProviderCelestial) world.provider).fogDensity() * 30;
+			fogIntensity = ModEventHandlerRenderer.lastFogDensity * 30;
 		}
 
 		CelestialBody body = CelestialBody.getBody(world);
