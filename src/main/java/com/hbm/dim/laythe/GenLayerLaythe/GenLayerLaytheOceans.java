@@ -39,7 +39,7 @@ public class GenLayerLaytheOceans extends GenLayer {
                             || (j2 == BiomeGenBaseLaythe.laytheIsland.biomeID)
                             || (k2 == BiomeGenBaseLaythe.laytheIsland.biomeID));
                     if(flag) {
-                        k1 = BiomeGenBaseLaythe.laytheOcean.biomeID;
+                        k1 = BiomeGenBaseLaythe.laytheCoast.biomeID;
                     }
                 }
 

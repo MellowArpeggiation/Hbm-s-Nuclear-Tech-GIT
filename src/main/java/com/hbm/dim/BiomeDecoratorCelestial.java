@@ -19,6 +19,7 @@ public class BiomeDecoratorCelestial extends BiomeDecorator {
 	public int lavaCount = 20;
 
 	public int waterPlantsPerChunk = 0;
+	public int seaLevel = 64;
 	public WorldGenerator genPlants;
 
 	// ACTUAL lakes, not the single block stuff
@@ -62,7 +63,7 @@ public class BiomeDecoratorCelestial extends BiomeDecorator {
 			for (int i = 0; i < waterPlantsPerChunk; ++i) {
 				int x = this.chunk_X + this.randomGenerator.nextInt(16) + 8;
 				int z = this.chunk_Z + this.randomGenerator.nextInt(16) + 8;
-				int y = this.randomGenerator.nextInt(64);
+				int y = this.randomGenerator.nextInt(seaLevel);
 				genPlants.generate(currentWorld, randomGenerator, x, y, z);
 			}
 		}

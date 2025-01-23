@@ -47,7 +47,7 @@ public class GenLayerLaytheIslands extends GenLayer {
 				} else {
 
 					if(k1 == BiomeGenBaseLaythe.laytheIsland.biomeID) {
-						k1 = this.nextInt(3) == 0 ? BiomeGenBaseLaythe.laytheOcean.biomeID : k1;
+						k1 = this.nextInt(3) == 0 ? BiomeGenBaseLaythe.laytheCoast.biomeID : k1;
 					}
 				}
 
