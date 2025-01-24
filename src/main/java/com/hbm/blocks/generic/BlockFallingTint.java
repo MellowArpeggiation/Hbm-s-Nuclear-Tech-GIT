@@ -1,29 +1,32 @@
 package com.hbm.blocks.generic;
 
 import java.awt.Color;
-import java.util.Random;
 
+import com.hbm.blocks.BlockFallingNT;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.MainRegistry;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
-public class BlockIke extends Block {	
+public class BlockFallingTint extends BlockFallingNT {
+    
+    private final String[] textureNames;
 	public IIcon[] icons;
-	
-	public BlockIke(Material mat) {
+
+	public BlockFallingTint(Material mat) {
 		super(mat);
-		this.setCreativeTab(MainRegistry.blockTab);
+		this.textureNames = new String[0];
 	}
+	
+	public BlockFallingTint(Material mat, String... extraTextures) {
+		super(mat);
+		this.textureNames = extraTextures;
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
@@ -42,13 +45,11 @@ public class BlockIke extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		icons = new IIcon[5];
-		icons[0] = reg.registerIcon(RefStrings.MODID + ":ike_regolith");
-		icons[1] = reg.registerIcon(RefStrings.MODID + ":ike_regolith2");
-		icons[2] = reg.registerIcon(RefStrings.MODID + ":ike_regolith3");
-		icons[3] = reg.registerIcon(RefStrings.MODID + ":ike_regolith4");
-		icons[4] = reg.registerIcon(RefStrings.MODID + ":ike_regolith5");
-
+		icons = new IIcon[textureNames.length + 1];
+		icons[0] = reg.registerIcon(textureName);
+		for(int i = 0; i < textureNames.length; i++) {
+			icons[i + 1] = reg.registerIcon(RefStrings.MODID + ":" + textureNames[i]);
+		}
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -56,7 +57,5 @@ public class BlockIke extends Block {
 		int meta = world.getBlockMetadata(x, y, z);
 		return Color.HSBtoRGB(0F, 0F, 1F - meta / 15F);
 	}
+
 }
-
-
-

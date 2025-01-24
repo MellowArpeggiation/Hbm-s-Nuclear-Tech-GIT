@@ -1,37 +1,32 @@
 package com.hbm.blocks.generic;
 
 import java.awt.Color;
-import java.util.List;
 
-import com.hbm.handler.radiation.ChunkRadiationManager;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.MainRegistry;
-import com.hbm.render.icon.RGBMutatorInterpolatedComponentRemap;
-import com.hbm.render.icon.TextureAtlasSpriteMutatable;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
-public class BlockTumor extends Block {
+public class BlockTint extends Block {
 
-	
+	private final String[] textureNames;
 	public IIcon[] icons;
-	
-	public BlockTumor(Material mat) {
+
+	public BlockTint(Material mat) {
 		super(mat);
-		this.setCreativeTab(MainRegistry.blockTab);
+		this.textureNames = new String[0];
 	}
+	
+	public BlockTint(Material mat, String... extraTextures) {
+		super(mat);
+		this.textureNames = extraTextures;
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
@@ -50,11 +45,11 @@ public class BlockTumor extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		icons = new IIcon[4];
-		icons[0] = reg.registerIcon(RefStrings.MODID + ":tumor_base");
-		icons[1] = reg.registerIcon(RefStrings.MODID + ":tumor_base2");
-		icons[2] = reg.registerIcon(RefStrings.MODID + ":tumor_base3");
-		icons[3] = reg.registerIcon(RefStrings.MODID + ":fleshv2");
+		icons = new IIcon[textureNames.length + 1];
+		icons[0] = reg.registerIcon(textureName);
+		for(int i = 0; i < textureNames.length; i++) {
+			icons[i + 1] = reg.registerIcon(RefStrings.MODID + ":" + textureNames[i]);
+		}
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -62,6 +57,8 @@ public class BlockTumor extends Block {
 		int meta = world.getBlockMetadata(x, y, z);
 		return Color.HSBtoRGB(0F, 0F, 1F - meta / 15F);
 	}
+
 }
+
 
 

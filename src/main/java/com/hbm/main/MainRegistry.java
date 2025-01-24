@@ -935,6 +935,8 @@ public class MainRegistry {
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setDimension(SpaceConfig.laytheDimension).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20).withFluid(ModBlocks.sulfuric_acid_block);
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.ASBESTOS.ordinal()).setDimension(SpaceConfig.laytheDimension).setThreshold(1.75D).setRangeMult(20).setYLevel(25).setMaxRange(20);
 		new OreCave(ModBlocks.tumor).setDimension(SpaceConfig.laytheDimension).setThreshold(0.3D).setRangeMult(20).setYLevel(25).setMaxRange(70);
+		new OreCave(ModBlocks.laythe_silt, 6).setDimension(SpaceConfig.laytheDimension).setThreshold(0.25D).setRangeMult(80).setYLevel(54).setMaxRange(24).setBlockOverride(ModBlocks.laythe_silt).setIgnoreWater(true).setStalagmites(false);
+		new OreCave(ModBlocks.laythe_silt, 3).setDimension(SpaceConfig.laytheDimension).setThreshold(0.2D).setRangeMult(60).setYLevel(58).setMaxRange(14).setBlockOverride(ModBlocks.laythe_silt).setIgnoreWater(true).setStalagmites(false);
 
 
 		BedrockOre.init();
