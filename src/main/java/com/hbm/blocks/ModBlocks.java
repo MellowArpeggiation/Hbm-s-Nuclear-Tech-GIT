@@ -22,6 +22,7 @@ import com.hbm.blocks.test.TestCore;
 import com.hbm.blocks.test.TestEventTester;
 import com.hbm.blocks.test.TestObjTester;
 import com.hbm.blocks.turret.*;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.block.*;
 import com.hbm.items.bomb.ItemPrototypeBlock;
 import com.hbm.items.machine.ItemCassette.SoundType;
@@ -41,6 +42,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.block.material.*;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -1866,6 +1868,8 @@ public class ModBlocks {
 		glyphid_base = new BlockGlyphid(Material.coral).setBlockName("glyphid_base").setStepSound(Block.soundTypeCloth).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":glyphid_base");
 		glyphid_spawner = new BlockGlyphidSpawner(Material.coral).setBlockName("glyphid_spawner").setStepSound(Block.soundTypeCloth).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":glyphid_eggs_alt");
 
+		rubber_farmland = new BlockRubberFarm(Material.sand).setBlockName("rubber_farmland").setStepSound(Block.soundTypeGravel).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(1.0F).setBlockTextureName(RefStrings.MODID + ":rubber_silt");
+
 		plant_flower = new BlockNTMFlower().setBlockName("plant_flower").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F);
 		plant_tall = new BlockTallPlant().setBlockName("plant_tall").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F);
 		plant_dead = new BlockDeadPlant().setBlockName("plant_dead").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F);
@@ -1874,9 +1878,9 @@ public class ModBlocks {
 		laythe_kelp = new BlockKelp().setBlockName("laythe_kelp").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F);
 		laythe_short = new BlockWaterPlant().setBlockName("laythe_seagrass").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":laythe_seagrass");
 		laythe_glow = new BlockWaterPlant().setBlockName("laythe_glowgrass").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F).setLightLevel(1.0F).setBlockTextureName(RefStrings.MODID + ":laythe_glowgrass");
-		crop_strawberry = new BlockCrop().setBlockName("crop_strawberry").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":strawberry");
-		crop_coffee = new BlockCrop().setBlockName("crop_coffee").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":coffee");
-		crop_tea = new BlockCrop().setBlockName("crop_tea").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":tea");
+		crop_strawberry = new BlockCrop(ModBlocks.rubber_farmland, Fluids.TEKTOAIR).setBlockName("crop_strawberry").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":strawberry");
+		crop_coffee = new BlockCrop(Blocks.farmland, Fluids.AIR).setBlockName("crop_coffee").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":coffee");
+		crop_tea = new BlockCrop(Blocks.farmland, Fluids.AIR).setBlockName("crop_tea").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":tea");
 		vine_phosphor = new BlockHangingVine(thick_foliage).setBlockName("vine_phosphor").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.5F);
 		
 		waste_earth = new WasteEarth(Material.ground, true).setBlockName("waste_earth").setStepSound(Block.soundTypeGrass).setCreativeTab(MainRegistry.blockTab).setHardness(0.6F).setBlockTextureName(RefStrings.MODID + ":waste_earth");
@@ -2641,7 +2645,6 @@ public class ModBlocks {
 		rubber_silt = new BlockGeneric(Material.sand).setBlockName("rubber_silt").setStepSound(Block.soundTypeGravel).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(1.0F).setBlockTextureName(RefStrings.MODID + ":rubber_silt");
 		rubber_plant = new BlockRubberPlant().setBlockName("rubber_plant").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F);
 		spike_cacti = new BlockRubberCacti(Material.grass).setBlockName("rubber_tall").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F);
-		rubber_farmland = new BlockRubberFarm(Material.sand).setBlockName("rubber_farmland").setStepSound(Block.soundTypeGravel).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(1.0F).setBlockTextureName(RefStrings.MODID + ":rubber_silt");
 		vinyl_sand = new BlockFalling(Material.sand).setBlockName("vinyl_sand").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(1.0F).setBlockTextureName(RefStrings.MODID + ":sand_vinyl");
 		vinyl_vines = new BlockVinylVine().setBlockName("vinyl_vine").setStepSound(Block.soundTypeGrass).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(1.0F).setBlockTextureName(RefStrings.MODID + ":vine");
 

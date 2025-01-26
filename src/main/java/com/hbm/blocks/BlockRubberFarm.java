@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -56,7 +57,7 @@ public class BlockRubberFarm extends BlockFarmland{
         for (int i = x - 4; i <= x + 4; ++i) {
             for (int j = y; j <= y + 1; ++j) {
                 for (int k = z - 4; k <= z + 4; ++k) {
-                    if (world.getBlock(i, j, k) == ModBlocks.bromine_block) {
+                    if (world.getBlock(i, j, k) == ModBlocks.ccl_block) {
                         return true;
                     }
                 }
@@ -76,5 +77,8 @@ public class BlockRubberFarm extends BlockFarmland{
         }
         super.onFallenUpon(world, x, y, z, entity, fallDistance);
     }
-
+    @Override
+    public Item getItem(World world, int x, int y, int z) {
+        return Item.getItemFromBlock(this); 
+    }
 }

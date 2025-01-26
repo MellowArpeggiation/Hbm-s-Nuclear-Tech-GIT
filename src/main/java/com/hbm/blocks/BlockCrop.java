@@ -1,8 +1,11 @@
 package com.hbm.blocks;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 
 import cpw.mods.fml.relauncher.Side;
@@ -21,11 +24,12 @@ import net.minecraft.world.World;
 public class BlockCrop extends BlockBush implements IGrowable {
 	
 	protected int maxGrowthStage = 7;
-
+	protected Block soilsBlocks;
+	protected FluidType neededFluids;
 	@SideOnly(Side.CLIENT)
 	protected IIcon[] blockIcons;
 
-	public BlockCrop() {
+	public BlockCrop(Block block, FluidType neededfluid) {
 		// Basic block setup
 		setTickRandomly(true);
 		float f = 0.5F;
@@ -33,14 +37,18 @@ public class BlockCrop extends BlockBush implements IGrowable {
 		setHardness(0.0F);
 		setStepSound(soundTypeGrass);
 		disableStats();
+		this.soilsBlocks = block;
+		this.neededFluids = neededfluid;
 	}
-
+    public FluidType getRequiredFluid() {
+        return neededFluids;
+    }
 	/**
 	 * is the block grass, dirt or farmland
 	 */
 	@Override
 	protected boolean canPlaceBlockOn(Block block) {
-		return block == Blocks.farmland;
+		return this.soilsBlocks == block;
 	}
 
 	public void incrementGrowStage(World world, Random rand, int x, int y, int z) {

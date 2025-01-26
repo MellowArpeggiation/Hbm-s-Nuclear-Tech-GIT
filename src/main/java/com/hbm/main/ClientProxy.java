@@ -993,6 +993,10 @@ public class ClientProxy extends ServerProxy {
 			fx.motionY = mY;
 			fx.motionZ = mZ;
 			if(data.hasKey("maxAge")) fx.setMaxAge(data.getInteger("maxAge"));
+			if(data.hasKey("color")) {
+				Color color = new Color(data.getInteger("color"));
+				fx.setCustomColor(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
+			}
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 		}
 

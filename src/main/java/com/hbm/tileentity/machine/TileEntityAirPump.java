@@ -68,7 +68,7 @@ public class TileEntityAirPump extends TileEntityMachineBase implements IFluidSt
 			data.setFloat("base", 0.3F);
 			data.setFloat("max", 1F);
 			data.setInteger("life", 20 + worldObj.rand.nextInt(20));
-			data.setInteger("color",0x98bdf9);
+			data.setInteger("color",tank.getTankType().getColor());
 
 			data.setDouble("posX", xCoord + 0.5 + worldObj.rand.nextDouble() - 0.5);
 			data.setDouble("posZ", zCoord + 0.5 + worldObj.rand.nextDouble() -0.5);
