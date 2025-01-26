@@ -60,7 +60,7 @@ public class EntityTankbot extends EntityMob implements IRangedAttackMob, IRadia
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
 		this.tasks.addTask(3, new EntityAIStepTowardsTarget(this, 50, 0.2D, 200, 20, 0.6));
         //this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 0.2D, false));
-		this.tasks.addTask(4, new EntityAITankshell(this, true, true, 2, 10, 5));
+		this.tasks.addTask(4, new EntityAITankshell(this, true, true, 2, 10, 30));
     }
 	protected void onDeathUpdate() {
 		

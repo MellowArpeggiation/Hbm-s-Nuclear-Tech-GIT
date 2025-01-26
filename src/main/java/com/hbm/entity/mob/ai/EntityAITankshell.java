@@ -90,20 +90,16 @@ public class EntityAITankshell extends EntityAIBase {
             double spawnX = owner.posX + forwardX * spawnDistance;
             double spawnY = owner.posY + 3 + forwardY * spawnDistance;
             double spawnZ = owner.posZ + forwardZ * spawnDistance;
-			if(dist < 50) {
-		        for (int i = 0; i < 4; i++) {
-
-
-		            EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactory12ga.g12_explosive, 4, 0.01F, spawnX, spawnY, spawnZ);
-		            bullet.setPosition(spawnX, spawnY, spawnZ);
-		            owner.worldObj.spawnEntityInWorld(bullet);
-		        }
-		        
+			if(dist > 50) {
+		        EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactoryRocket.rocket_qd[1], 4, 0.01F, spawnX, spawnY, spawnZ);
+		        bullet.setPosition(spawnX, spawnY, spawnZ);
+		        owner.worldObj.spawnEntityInWorld(bullet);	        
 			} else {
-
-	            EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactory40mm.g40_he, 4, 0.01F, spawnX, spawnY, spawnZ);
+				for (int i = 0; i < 4; i++) {
+	            EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactory12ga.g12_explosive, 4, 0.01F, spawnX, spawnY, spawnZ);
 	            bullet.setPosition(spawnX, spawnY, spawnZ);
 	            owner.worldObj.spawnEntityInWorld(bullet);
+				}
 			}
 
 			owner.worldObj.playSoundEffect(owner.posX, owner.posY, owner.posZ, "hbm:turret.jeremy_fire", 25.0F, 1.0F);
