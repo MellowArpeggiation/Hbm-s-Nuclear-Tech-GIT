@@ -32,25 +32,133 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 	private static ResourceLocation extra = new ResourceLocation(RefStrings.MODID, "textures/models/horse/dyx.png");
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
+	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {		
 		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5, y, z + 0.5);
-		GL11.glScaled(2, 2, 2);
-		//GL11.glRotated(15, 0, 0, 1);
+		GL11.glTranslated(x + 0.5, y + 0.2, z + 0.5);
 		GL11.glDisable(GL11.GL_CULL_FACE);
-		bindTexture(ResourceManager.tankbot_tex);
+        long time = tileEntity.getWorldObj().getTotalWorldTime();
+        double sine = Math.sin(time * 0.05) * 15;
+        double sin3 = Math.sin(time * 0.05 + Math.PI * 0.5) * 15;
+        double sin2 = Math.sin(time * 0.05 + Math.PI);
+        double insine = Math.sin(time * 0.05) * -15;
+        GL11.glRotated(sin2, 0, 1, 0); 
 
-		ResourceManager.tankbot.renderPart("head");
-		ResourceManager.tankbot.renderPart("body");
+        GL11.glPushMatrix();
+		GL11.glTranslatef(0, 8.6F, 0.5F);
 
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glPushMatrix();
+        GL11.glRotated(sin2, 0, 1, 0); 
+
+    	GL11.glTranslatef(0, -8.7F, -0.5F);
+		bindTexture(ResourceManager.behemoth_body_tex);
+		ResourceManager.behemoth.renderPart("body");
+		ResourceManager.behemoth.renderPart("hatch1");
+		ResourceManager.behemoth.renderPart("hatch2");
+		ResourceManager.behemoth.renderPart("gun");
+
+		bindTexture(ResourceManager.behemoth_helmet_tex);
+		ResourceManager.behemoth.renderPart("helmet");
 		
-		ResourceManager.tankbot.renderPart("front2foot");
-		ResourceManager.tankbot.renderPart("front2leg");
-		ResourceManager.tankbot.renderPart("front2knee");
+        GL11.glPushMatrix();
+
+        
+		bindTexture(ResourceManager.behemoth_eye_tex);
+		ResourceManager.behemoth.renderPart("eye");
+
+		// Re-enable lighting
+		GL11.glPopMatrix();
+
+	
+		GL11.glTranslatef(0, 8.7F, 0.5F);
 
 		GL11.glPopMatrix();
+		
+		GL11.glPushMatrix(); // RIGHT LEG MATRIX START
+		
+		GL11.glTranslatef(0, 8.5F, 0.5F);
+
+		GL11.glRotated(sine, 1, 0, 0); //HIP ANIM
+
+		bindTexture(ResourceManager.behemoth_hip_tex);
+		GL11.glTranslatef(0, -8.6F, -0.5F);
+		ResourceManager.behemoth.renderPart("hip_right");
+		GL11.glTranslatef(0, 8.6F, 0.5F);
+		
+		
+		GL11.glPushMatrix(); //KNEE MATRIX START
+		
+		GL11.glTranslatef(0, -1.8F, -0F);
+
+		GL11.glRotated(sin2, 1, 0, 0); //KNEE ANIM
+
+		GL11.glTranslatef(0, -6.7F, -0.5F);
+		bindTexture(ResourceManager.behemoth_knee_tex);
+
+		ResourceManager.behemoth.renderPart("knee_right");
+		GL11.glTranslatef(0, 6.7F, 0.5F);
+		
+		GL11.glTranslatef(0, -5.6F, 0F);
+		GL11.glRotated(sin3, 1, 0, 0); //FOOT ANIM
+
+		
+		GL11.glTranslatef(0, -1F, -0.5F);
+
+		bindTexture(ResourceManager.behemoth_leg_tex);
+
+		ResourceManager.behemoth.renderPart("leg_right");
+
+		GL11.glTranslatef(0, 1F, 0.5F);
+
+		
+		GL11.glPopMatrix(); //KNEE MATRIX END
+		
+
+
+		GL11.glPopMatrix(); //RIGHT LEG MATRIX END
+		
+		GL11.glPushMatrix(); // RIGHT LEG MATRIX START
+		
+		GL11.glTranslatef(0, 8.5F, 0.5F);
+
+		GL11.glRotated(insine, 1, 0, 0);
+
+		bindTexture(ResourceManager.behemoth_hip_tex);
+		GL11.glTranslatef(0, -8.6F, -0.5F);
+		ResourceManager.behemoth.renderPart("hip_left");
+		GL11.glTranslatef(0, 8.6F, 0.5F);
+		
+		
+		GL11.glPushMatrix(); //KNEE MATRIX START
+		
+		GL11.glTranslatef(0, -1.8F, -0F);
+
+		GL11.glRotated(sin2, 1, 0, 0);
+
+		GL11.glTranslatef(0, -6.7F, -0.5F);
+		bindTexture(ResourceManager.behemoth_knee_tex);
+
+		ResourceManager.behemoth.renderPart("knee_left");
+		GL11.glTranslatef(0, 6.7F, 0.5F);
+		
+		GL11.glTranslatef(0, -5.6F, 0F);
+		GL11.glRotated(sin2, 1, 0, 0);
+
+		
+		GL11.glTranslatef(0, -1F, -0.5F);
+
+		bindTexture(ResourceManager.behemoth_leg_tex);
+
+		ResourceManager.behemoth.renderPart("leg_left");
+
+		GL11.glTranslatef(0, 1F, 0.5F);
+
+		
+		GL11.glPopMatrix(); //KNEE MATRIX END
+		
+
+
+		GL11.glPopMatrix(); //RIGHT LEG MATRIX END
+		GL11.glEnable(GL11.GL_CULL_FACE);
+
 		GL11.glPopMatrix();
 	}
 	

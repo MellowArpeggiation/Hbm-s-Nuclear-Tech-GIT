@@ -400,6 +400,7 @@ public class ResourceManager {
 	public static final IModelCustom scutterfish = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/mobs/scutterfish.obj"));
 	public static final IModelCustom tankbot = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/tankbot.obj"));
 	public static final IModelCustom liquidator = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/liquidator.obj"));
+	public static final IModelCustom behemoth = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/war_machine.obj"));
 
 	//ZIRNOX
 	public static final IModelCustom zirnox = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/zirnox.obj")).asVBO();
@@ -844,6 +845,12 @@ public class ResourceManager {
 	public static final ResourceLocation scutter_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/lob2.png");
 	public static final ResourceLocation tankbot_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/robtex.png");
 	public static final ResourceLocation liquidator_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/liqtex.png");
+	public static final ResourceLocation behemoth_body_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/wm_body.png");
+	public static final ResourceLocation behemoth_eye_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/wm_eye.png");
+	public static final ResourceLocation behemoth_helmet_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/wm_helmet.png");
+	public static final ResourceLocation behemoth_leg_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/wm_leg.png");
+	public static final ResourceLocation behemoth_knee_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/wm_knee.png");
+	public static final ResourceLocation behemoth_hip_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/wm_hip.png");
 
 	public static final ResourceLocation glyphid_digger_tex = new ResourceLocation(RefStrings.MODID, "textures/entity/glyphid_digger.png");
 

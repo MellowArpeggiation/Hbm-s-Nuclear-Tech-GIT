@@ -33,7 +33,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 	protected IIcon[] blockIcons;
 	private Predicate<CBT_Atmosphere> atmospherePredicate;
 
-	public BlockCrop(Block block,Predicate<CBT_Atmosphere> atmospherePredicate) {
+	public BlockCrop(Block block, Predicate<CBT_Atmosphere> atmospherePredicate) {
 		setTickRandomly(true);
 	    float f = 0.5F;
 	    setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
@@ -151,6 +151,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 		} else {
 			return (meta/2);	
 		}
+		
 	}
 
 	@Override
