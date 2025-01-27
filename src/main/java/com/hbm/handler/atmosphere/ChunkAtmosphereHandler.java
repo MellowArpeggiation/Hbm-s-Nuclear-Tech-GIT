@@ -205,8 +205,6 @@ public class ChunkAtmosphereHandler {
 		            canExist = crop.canBreathe(atmosphere);
 		            System.out.println(crop.canBreathe(atmosphere));
 		        }
-		    } else {
-		        canExist = !(atmosphere == null || (!atmosphere.hasFluid(Fluids.OXYGEN, 0.01) && !atmosphere.hasFluid(Fluids.AIR, 0.1)));
 		    }
 		}
 
