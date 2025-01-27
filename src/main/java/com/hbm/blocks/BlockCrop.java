@@ -4,8 +4,10 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 import java.util.Map.Entry;
 
+import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
@@ -27,11 +29,11 @@ public class BlockCrop extends BlockBush implements IGrowable {
 	
 	protected int maxGrowthStage = 7;
 	protected Block soilsBlocks;
-	 protected List<SimpleEntry<FluidType, Float>> requiredFluids;
 	 @SideOnly(Side.CLIENT)
 	protected IIcon[] blockIcons;
+	private Predicate<CBT_Atmosphere> atmospherePredicate;
 
-	public BlockCrop(Block block, SimpleEntry<FluidType, Float>... fluidsAndPressures) {
+	public BlockCrop(Block block,Predicate<CBT_Atmosphere> atmospherePredicate) {
 		setTickRandomly(true);
 	    float f = 0.5F;
 	    setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
@@ -39,18 +41,15 @@ public class BlockCrop extends BlockBush implements IGrowable {
 	    setStepSound(soundTypeGrass);
 	    disableStats();
 	    this.soilsBlocks = block;
-	        
-	    this.requiredFluids = new ArrayList<>();
-	    for (SimpleEntry<FluidType, Float> entry : fluidsAndPressures) {
-	         this.requiredFluids.add(entry);
-	    }
+
+        this.atmospherePredicate = atmospherePredicate;
+
 	}
 	
-    public List<SimpleEntry<FluidType, Float>> getRequiredFluids() {
-        return requiredFluids;
-    }
-	    
 
+    public boolean canBreathe(CBT_Atmosphere atmosphere) {
+        return this.atmospherePredicate.test(atmosphere);
+    }
 	    
 	/**
 	 * is the block grass, dirt or farmland

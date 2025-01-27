@@ -200,11 +200,10 @@ public class ChunkAtmosphereHandler {
 		} else if(requiresCO2) {
 			// TODO: Make plants rely on CO2 once CO2 is more readily available (via natural gas most likely)
 		    if (block instanceof BlockCrop) {
-		        BlockCrop crop = (BlockCrop) block;
-		        for (SimpleEntry<FluidType, Float> fluidEntry : crop.getRequiredFluids()) {
-		            FluidType fluid = fluidEntry.getKey();      
-		            float pressure = fluidEntry.getValue();  
-			        canExist = !(atmosphere == null || (!atmosphere.hasFluid(fluid, pressure)));
+		        if (block instanceof BlockCrop) {
+		            BlockCrop crop = (BlockCrop) block;
+		            canExist = crop.canBreathe(atmosphere);
+		            System.out.println(crop.canBreathe(atmosphere));
 		        }
 		    } else {
 		        canExist = !(atmosphere == null || (!atmosphere.hasFluid(Fluids.OXYGEN, 0.01) && !atmosphere.hasFluid(Fluids.AIR, 0.1)));
