@@ -1,10 +1,12 @@
 package com.hbm.handler.atmosphere;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.hbm.blocks.BlockCrop;
 import com.hbm.config.GeneralConfig;
@@ -13,6 +15,7 @@ import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.handler.ThreeInts;
+import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.trait.FT_Corrosive;
 import com.hbm.main.MainRegistry;
@@ -198,7 +201,11 @@ public class ChunkAtmosphereHandler {
 			// TODO: Make plants rely on CO2 once CO2 is more readily available (via natural gas most likely)
 		    if (block instanceof BlockCrop) {
 		        BlockCrop crop = (BlockCrop) block;
-		        canExist = (atmosphere != null && atmosphere.hasFluid(crop.getRequiredFluid(), 0.1));
+		        for (SimpleEntry<FluidType, Float> fluidEntry : crop.getRequiredFluids()) {
+		            FluidType fluid = fluidEntry.getKey();      
+		            float pressure = fluidEntry.getValue();  
+			        canExist = !(atmosphere == null || (!atmosphere.hasFluid(fluid, pressure)));
+		        }
 		    } else {
 		        canExist = !(atmosphere == null || (!atmosphere.hasFluid(Fluids.OXYGEN, 0.01) && !atmosphere.hasFluid(Fluids.AIR, 0.1)));
 		    }

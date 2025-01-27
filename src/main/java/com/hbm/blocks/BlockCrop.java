@@ -1,8 +1,10 @@
 package com.hbm.blocks;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Map.Entry;
 
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
@@ -25,24 +27,31 @@ public class BlockCrop extends BlockBush implements IGrowable {
 	
 	protected int maxGrowthStage = 7;
 	protected Block soilsBlocks;
-	protected FluidType neededFluids;
-	@SideOnly(Side.CLIENT)
+	 protected List<SimpleEntry<FluidType, Float>> requiredFluids;
+	 @SideOnly(Side.CLIENT)
 	protected IIcon[] blockIcons;
 
-	public BlockCrop(Block block, FluidType neededfluid) {
-		// Basic block setup
+	public BlockCrop(Block block, SimpleEntry<FluidType, Float>... fluidsAndPressures) {
 		setTickRandomly(true);
-		float f = 0.5F;
-		setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
-		setHardness(0.0F);
-		setStepSound(soundTypeGrass);
-		disableStats();
-		this.soilsBlocks = block;
-		this.neededFluids = neededfluid;
+	    float f = 0.5F;
+	    setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
+	    setHardness(0.0F);
+	    setStepSound(soundTypeGrass);
+	    disableStats();
+	    this.soilsBlocks = block;
+	        
+	    this.requiredFluids = new ArrayList<>();
+	    for (SimpleEntry<FluidType, Float> entry : fluidsAndPressures) {
+	         this.requiredFluids.add(entry);
+	    }
 	}
-    public FluidType getRequiredFluid() {
-        return neededFluids;
+	
+    public List<SimpleEntry<FluidType, Float>> getRequiredFluids() {
+        return requiredFluids;
     }
+	    
+
+	    
 	/**
 	 * is the block grass, dirt or farmland
 	 */
