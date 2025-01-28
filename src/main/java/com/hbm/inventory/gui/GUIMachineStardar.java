@@ -63,12 +63,14 @@ public class GUIMachineStardar extends GuiInfoContainer {
 	private final int[] groundColors;
 
 	public void init() {
-		for(CelestialBody rody : CelestialBody.getLandableBodies()) {
-			CelestialBody body = CelestialBody.getBody(star.getWorldObj());
-			if(rody != body) {
+		CelestialBody body = CelestialBody.getBody(star.getWorldObj());
+		boolean inOrbit = CelestialBody.inOrbit(star.getWorldObj());
+
+		for(CelestialBody landable : CelestialBody.getLandableBodies()) {
+			if(landable != body || inOrbit) {
 				int posX = rnd.nextInt(400) - 200;
 				int posY = rnd.nextInt(400) - 200;
-				pList.add(new POI(posX, posY, rody));
+				pList.add(new POI(posX, posY, landable));
 			}
 		}
 	}
