@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,9 +36,13 @@ import net.minecraftforge.common.util.Constants.NBT;
 
 public class NBTStructure {
 	
-	// TODO: optimise for generating multiple copies, rotations, and such
+	// TODO: add rotation support
 
-	private NBTTagCompound data;
+	private boolean isLoaded;
+	private ThreeInts size;
+	private BlockDefinition[] palette;
+	private List<Pair<Short, String>> itemPalette;
+	private BlockState[] blocks;
 
 	public NBTStructure(ResourceLocation resource) {
 		try {
@@ -165,7 +171,71 @@ public class NBTStructure {
 
 	private void loadStructure(InputStream inputStream) {
 		try {
-			data = CompressedStreamTools.readCompressed(inputStream);
+			NBTTagCompound data = CompressedStreamTools.readCompressed(inputStream);
+
+
+			// GET SIZE (for offsetting to center)
+			size = parsePos(data.getTagList("size", NBT.TAG_INT));
+
+			
+			// PARSE BLOCK PALETTE
+			NBTTagList paletteList = data.getTagList("palette", NBT.TAG_COMPOUND);
+			palette = new BlockDefinition[paletteList.tagCount()];
+
+			for(int i = 0; i < paletteList.tagCount(); i++) {
+				NBTTagCompound p = paletteList.getCompoundTagAt(i);
+
+				String blockName = p.getString("Name");
+				NBTTagCompound prop = p.getCompoundTag("Properties");
+
+				int meta = 0;
+				try {
+					meta = Integer.parseInt(prop.getString("meta"));
+				} catch(NumberFormatException ex) {
+					MainRegistry.logger.info("Failed to parse: " + prop.getString("meta"));
+					meta = 0;
+				}
+
+				palette[i] = new BlockDefinition(blockName, meta);
+			}
+			
+
+			// PARSE ITEM PALETTE (custom shite)
+			if(data.hasKey("itemPalette")) {
+				NBTTagList itemPaletteList = data.getTagList("itemPalette", NBT.TAG_COMPOUND);
+				itemPalette = new ArrayList<>(itemPaletteList.tagCount());
+
+				for(int i = 0; i < itemPaletteList.tagCount(); i++) {
+					NBTTagCompound p = itemPaletteList.getCompoundTagAt(i);
+
+					short id = p.getShort("ID");
+					String name = p.getString("Name");
+
+					itemPalette.add(new Pair<>(id, name));
+				}
+			} else {
+				itemPalette = null;
+			}
+
+
+			// LOAD IN BLOCKS
+			NBTTagList blockData = data.getTagList("blocks", NBT.TAG_COMPOUND);
+			blocks = new BlockState[blockData.tagCount()];
+
+			for(int i = 0; i < blockData.tagCount(); i++) {
+				NBTTagCompound block = blockData.getCompoundTagAt(i);
+				int state = block.getInteger("state");
+				ThreeInts pos = parsePos(block.getTagList("pos", NBT.TAG_INT));
+
+				blocks[i] = new BlockState(palette[state], pos);
+
+				if(block.hasKey("nbt")) {
+					blocks[i].nbt = block.getCompoundTag("nbt");
+				}
+			}
+
+
+			isLoaded = true;
 
 		} catch(IOException e) {
 			throw new ModelFormatException("IO Exception reading NBT Structure format", e);
@@ -183,77 +253,38 @@ public class NBTStructure {
 	}
 
 	public void build(World world, int x, int y, int z, Map<Block, Loot> lootTable) {
-		if(data == null) {
+		if(!isLoaded) {
 			MainRegistry.logger.info("NBTStructure is invalid");
 			return;
 		}
 
-		// GET SIZE (for offsetting to center)
-		ThreeInts size = parsePos(data.getTagList("size", NBT.TAG_INT));
 		x -= size.x / 2;
 		z -= size.z / 2;
 
+		HashMap<Short, Short> worldItemPalette = null;
 
-		// PARSE BLOCK PALETTE
-		NBTTagList paletteList = data.getTagList("palette", NBT.TAG_COMPOUND);
-		BlockDefinition[] palette = new BlockDefinition[paletteList.tagCount()];
+		if(itemPalette != null) {
+			worldItemPalette = new HashMap<>();
 
-		for(int i = 0; i < paletteList.tagCount(); i++) {
-			NBTTagCompound p = paletteList.getCompoundTagAt(i);
+			for(Pair<Short, String> entry : itemPalette) {
+				Item item = (Item)Item.itemRegistry.getObject(entry.getValue());
 
-			String blockName = p.getString("Name");
-			NBTTagCompound prop = p.getCompoundTag("Properties");
-
-			int meta = 0;
-			try {
-				meta = Integer.parseInt(prop.getString("meta"));
-			} catch(NumberFormatException ex) {
-				MainRegistry.logger.info("Failed to parse: " + prop.getString("meta"));
-				meta = 0;
-			}
-
-			palette[i] = new BlockDefinition(blockName, meta);
-		}
-
-
-		// PARSE ITEM PALETTE (custom shite)
-		HashMap<Short, Short> itemPalette = null;
-		if(data.hasKey("itemPalette")) {
-			NBTTagList itemPaletteList = data.getTagList("itemPalette", NBT.TAG_COMPOUND);
-			itemPalette = new HashMap<Short, Short>();
-
-			for(int i = 0; i < itemPaletteList.tagCount(); i++) {
-				NBTTagCompound p = itemPaletteList.getCompoundTagAt(i);
-
-				short id = p.getShort("ID");
-				String name = p.getString("Name");
-
-				Item item = (Item)Item.itemRegistry.getObject(name);
-
-				itemPalette.put(id, (short)Item.getIdFromItem(item));
+				worldItemPalette.put(entry.getKey(), (short)Item.getIdFromItem(item));
 			}
 		}
 
+		for(BlockState block : blocks) {
+			world.setBlock(x + block.pos.x, y + block.pos.y, z + block.pos.z, block.definition.block, block.definition.meta, 2);
 
-		// LOAD IN BLOCKS
-		NBTTagList blocks = data.getTagList("blocks", NBT.TAG_COMPOUND);
+			if(block.nbt != null) {
+				NBTTagCompound nbt = (NBTTagCompound)block.nbt.copy();
 
-		for(int i = 0; i < blocks.tagCount(); i++) {
-			NBTTagCompound block = blocks.getCompoundTagAt(i);
-			int state = block.getInteger("state");
-			ThreeInts pos = parsePos(block.getTagList("pos", NBT.TAG_INT));
-
-			world.setBlock(x + pos.x, y + pos.y, z + pos.z, palette[state].block, palette[state].meta, 2);
-
-			if(block.hasKey("nbt")) {
-				NBTTagCompound nbt = (NBTTagCompound)block.getCompoundTag("nbt").copy();
-
-				if(itemPalette != null) relinkItems(itemPalette, nbt);
+				if(worldItemPalette != null) relinkItems(worldItemPalette, nbt);
 
 				TileEntity te = TileEntity.createAndLoadEntity(nbt);
 
-				if(lootTable != null && te instanceof IInventory && lootTable.containsKey(palette[state].block)) {
-					Loot entry = lootTable.get(palette[state].block);
+				if(lootTable != null && te instanceof IInventory && lootTable.containsKey(block.definition.block)) {
+					Loot entry = lootTable.get(block.definition.block);
 					WeightedRandomChestContent.generateChestContents(world.rand, entry.table, (IInventory) te, world.rand.nextInt(entry.maxLoot - entry.minLoot) + entry.minLoot);
 				}
 
@@ -261,7 +292,7 @@ public class NBTStructure {
 					((TileEntityBobble) te).type = BobbleType.values()[world.rand.nextInt(BobbleType.values().length - 1) + 1];
 				}
 
-				world.setTileEntity(x + pos.x, y + pos.y, z + pos.z, te);
+				world.setTileEntity(x + block.pos.x, y + block.pos.y, z + block.pos.z, te);
 			}
 		}
 	}
@@ -295,10 +326,23 @@ public class NBTStructure {
 		}
 	}
 
+	private static class BlockState {
+
+		final BlockDefinition definition;
+		final ThreeInts pos;
+		NBTTagCompound nbt;
+
+		BlockState(BlockDefinition definition, ThreeInts pos) {
+			this.definition = definition;
+			this.pos = pos;
+		}
+
+	}
+
 	private static class BlockDefinition {
 
-		Block block;
-		int meta;
+		final Block block;
+		final int meta;
 
 		BlockDefinition(String name, int meta) {
 			this.block = Block.getBlockFromName(name);
