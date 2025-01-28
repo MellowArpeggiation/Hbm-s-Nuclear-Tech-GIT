@@ -35,10 +35,15 @@ public class BlockCoral extends BlockEnumMulti {
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
-    
+
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		return null;
+	}
+	
+	@Override
+	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+		return super.canPlaceBlockAt(world, x, y, z) && this.canBlockStay(world, x, y, z) && world.getBlock(x, y + 1, z).getMaterial().isLiquid();
 	}
 
 }
