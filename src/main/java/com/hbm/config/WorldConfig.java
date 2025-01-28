@@ -104,6 +104,7 @@ public class WorldConfig {
 	public static int arcticStructure = 500;
 	public static int jungleStructure = 2000;
 	public static int pyramidStructure = 4000;
+	public static int submarineStructure = 500;
 
 	public static int broadcaster = 5000;
 	public static int minefreq = 64;
@@ -237,6 +238,7 @@ public class WorldConfig {
 		arcticStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.22_arcticVaultSpawn", "Spawn arctic code vault on every nTH chunk", 500);
 		jungleStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.23_jungleDungeonSpawn", "Spawn jungle dungeon on every nTH chunk", 2000);
 		pyramidStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.24_pyramidSpawn", "Spawn pyramid on every nTH chunk", 4000);
+		submarineStructure = CommonConfig.createConfigInt(config, CATEGORY_DUNGEON, "4.25_submarineSpawn", "Spawn submarine on Laythe on every nTH chunk", 500);
 
 		final String CATEGORY_METEOR = CommonConfig.CATEGORY_METEORS;
 		enableMeteorStrikes = CommonConfig.createConfigBool(config, CATEGORY_METEOR, "5.00_enableMeteorStrikes", "Toggles the spawning of meteors", true);
@@ -279,6 +281,7 @@ public class WorldConfig {
 		jungleStructure = CommonConfig.setDefZero(jungleStructure, 1000);
 		capsuleStructure = CommonConfig.setDefZero(capsuleStructure, 100);
 		arcticStructure = CommonConfig.setDefZero(arcticStructure, 500);
+		submarineStructure = CommonConfig.setDefZero(submarineStructure, 500);
 		
 
 		

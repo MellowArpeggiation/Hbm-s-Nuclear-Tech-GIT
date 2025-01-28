@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.hbm.blocks.generic.BlockBobble.BobbleType;
+import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
 import com.hbm.handler.ThreeInts;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.Tuple.Pair;
@@ -16,6 +18,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
@@ -24,6 +27,7 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelFormatException;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -175,6 +179,10 @@ public class NBTStructure {
 	}
 
 	public void build(World world, int x, int y, int z) {
+		build(world, x, y, z, null);
+	}
+
+	public void build(World world, int x, int y, int z, Map<Block, Loot> lootTable) {
 		if(data == null) {
 			MainRegistry.logger.info("NBTStructure is invalid");
 			return;
@@ -243,6 +251,16 @@ public class NBTStructure {
 				if(itemPalette != null) relinkItems(itemPalette, nbt);
 
 				TileEntity te = TileEntity.createAndLoadEntity(nbt);
+
+				if(lootTable != null && te instanceof IInventory && lootTable.containsKey(palette[state].block)) {
+					Loot entry = lootTable.get(palette[state].block);
+					WeightedRandomChestContent.generateChestContents(world.rand, entry.table, (IInventory) te, world.rand.nextInt(entry.maxLoot - entry.minLoot) + entry.minLoot);
+				}
+
+				if(te instanceof TileEntityBobble) {
+					((TileEntityBobble) te).type = BobbleType.values()[world.rand.nextInt(BobbleType.values().length - 1) + 1];
+				}
+
 				world.setTileEntity(x + pos.x, y + pos.y, z + pos.z, te);
 			}
 		}
@@ -285,6 +303,20 @@ public class NBTStructure {
 		BlockDefinition(String name, int meta) {
 			this.block = Block.getBlockFromName(name);
 			this.meta = meta;
+		}
+
+	}
+
+	public static class Loot {
+
+		private final WeightedRandomChestContent[] table;
+		private final int minLoot;
+		private final int maxLoot;
+
+		public Loot(WeightedRandomChestContent[] table, int minLoot, int maxLoot) {
+			this.table = table;
+			this.minLoot = minLoot;
+			this.maxLoot = maxLoot;
 		}
 
 	}
