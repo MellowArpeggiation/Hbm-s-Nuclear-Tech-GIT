@@ -7,7 +7,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenLakes;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -19,8 +18,10 @@ public class BiomeDecoratorCelestial extends BiomeDecorator {
 	public int lavaCount = 20;
 
 	public int waterPlantsPerChunk = 0;
-	public int seaLevel = 64;
-	public WorldGenerator genPlants;
+	public int coralPerChunk = 0;
+	public int seaLevel = 63;
+	public WorldGenWaterPlant genPlants;
+	public WorldGenWaterCoral genCoral;
 
 	// ACTUAL lakes, not the single block stuff
 	// honestly MCP couldja give things better names pls?
@@ -32,6 +33,7 @@ public class BiomeDecoratorCelestial extends BiomeDecorator {
 	public BiomeDecoratorCelestial(Block stoneBlock) {
 		this.stoneBlock = stoneBlock;
 		this.genPlants = new WorldGenWaterPlant();
+		this.genCoral = new WorldGenWaterCoral();
 	}
 
 	@Override
@@ -64,7 +66,19 @@ public class BiomeDecoratorCelestial extends BiomeDecorator {
 				int x = this.chunk_X + this.randomGenerator.nextInt(16) + 8;
 				int z = this.chunk_Z + this.randomGenerator.nextInt(16) + 8;
 				int y = this.randomGenerator.nextInt(seaLevel);
+				genPlants.seaLevel = seaLevel;
 				genPlants.generate(currentWorld, randomGenerator, x, y, z);
+			}
+		}
+
+		doGen = TerrainGen.decorate(currentWorld, randomGenerator, chunk_X, chunk_Z, REED);
+		if(doGen && this.coralPerChunk > 0) {
+			for (int i = 0; i < coralPerChunk; ++i) {
+				int x = this.chunk_X + this.randomGenerator.nextInt(16) + 8;
+				int z = this.chunk_Z + this.randomGenerator.nextInt(16) + 8;
+				int y = this.randomGenerator.nextInt(seaLevel);
+				genCoral.seaLevel = seaLevel;
+				genCoral.generate(currentWorld, randomGenerator, x, y, z);
 			}
 		}
 
