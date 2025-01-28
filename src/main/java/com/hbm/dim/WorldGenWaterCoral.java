@@ -22,9 +22,11 @@ public class WorldGenWaterCoral extends WorldGenerator {
 			int py = y + rand.nextInt(4) - rand.nextInt(4);
 			int pz = z + rand.nextInt(8) - rand.nextInt(8);
 
+			if(!world.blockExists(px, py, pz)) continue;
+
 			if(py < seaLevel - 1 && world.getBlock(px, py, pz).getMaterial() == Material.water && world.getBlock(px, py - 1, pz) == ModBlocks.laythe_silt) {
 
-				int meta = rand.nextInt(BlockCoral.EnumCoral.values().length);
+				int meta = rand.nextInt(BlockCoral.EnumCoral.values().length) + 8;
 
 				world.setBlock(px, py - 1, pz, ModBlocks.laythe_coral_block, meta, 2);
 
@@ -43,16 +45,16 @@ public class WorldGenWaterCoral extends WorldGenerator {
 						}
 					}
 
-					world.setBlock(px + ox, py + oy, pz + oz, ModBlocks.laythe_coral_block, meta, 2);
-					if(rand.nextBoolean()) world.setBlock(px + ox + 1, py + oy, pz + oz, ModBlocks.laythe_coral, meta, 2);
-					if(rand.nextBoolean()) world.setBlock(px + ox - 1, py + oy, pz + oz, ModBlocks.laythe_coral, meta, 2);
-					if(rand.nextBoolean()) world.setBlock(px + ox, py + oy, pz + oz + 1, ModBlocks.laythe_coral, meta, 2);
-					if(rand.nextBoolean()) world.setBlock(px + ox, py + oy, pz + oz - 1, ModBlocks.laythe_coral, meta, 2);
+					if(world.blockExists(px + ox, py + oy, pz + oz)) world.setBlock(px + ox, py + oy, pz + oz, ModBlocks.laythe_coral_block, meta, 2);
+					if(rand.nextBoolean() && world.blockExists(px + ox + 1, py + oy, pz + oz)) world.setBlock(px + ox + 1, py + oy, pz + oz, ModBlocks.laythe_coral, meta, 2);
+					if(rand.nextBoolean() && world.blockExists(px + ox - 1, py + oy, pz + oz)) world.setBlock(px + ox - 1, py + oy, pz + oz, ModBlocks.laythe_coral, meta, 2);
+					if(rand.nextBoolean() && world.blockExists(px + ox, py + oy, pz + oz + 1)) world.setBlock(px + ox, py + oy, pz + oz + 1, ModBlocks.laythe_coral, meta, 2);
+					if(rand.nextBoolean() && world.blockExists(px + ox, py + oy, pz + oz - 1)) world.setBlock(px + ox, py + oy, pz + oz - 1, ModBlocks.laythe_coral, meta, 2);
 
 					oy++;
 				}
 				
-				world.setBlock(px + ox, py + oy, pz + oz, ModBlocks.laythe_coral, meta, 2);
+				if(world.blockExists(px + ox, py + oy, pz + oz)) world.setBlock(px + ox, py + oy, pz + oz, ModBlocks.laythe_coral, meta, 2);
 
 				flag = true;
 			}

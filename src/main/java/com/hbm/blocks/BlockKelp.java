@@ -74,7 +74,7 @@ public class BlockKelp extends Block {
 		if (above == this) {
 			world.setBlockMetadataWithNotify(x, y, z, 0, 2);
 		} else {
-			world.setBlockMetadataWithNotify(x, y, z, 1, 2);
+			world.setBlockMetadataWithNotify(x, y, z, 8, 2);
 		}
 	}
 
