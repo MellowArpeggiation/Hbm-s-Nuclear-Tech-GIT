@@ -98,12 +98,10 @@ public class WorldProviderLaythe extends WorldProviderCelestial {
 
 		biomes = new GenLayerLaytheOceans(4000L, biomes);
 		biomes = new GenLayerLaytheOceans(4001L, biomes, BiomeGenBaseLaythe.laytheCoast.biomeID);
-		biomes = new GenLayerLaytheOceans(4002L, biomes, BiomeGenBaseLaythe.laytheCoast.biomeID);
 
 		biomes = new GenLayerZoom(1003L, biomes);
 		biomes = new GenLayerLaytheOceans(4342L, biomes, BiomeGenBaseLaythe.laytheCoast.biomeID);
 		biomes = new GenLayerSmooth(700L, biomes);
-		biomes = new GenLayerLaytheOceans(220L, biomes, BiomeGenBaseLaythe.laytheCoast.biomeID);
 
 		biomes = new GenLayerZoom(1006L, biomes);
 			

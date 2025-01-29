@@ -828,8 +828,6 @@ public class MainRegistry {
 		IMCHandler.registerHandler("blastfurnace", new IMCBlastFurnace());
 		IMCHandler.registerHandler("crystallizer", new IMCCrystallizer());
 		IMCHandler.registerHandler("centrifuge", new IMCCentrifuge());
-		
-		PlanetGen.init();
 
 		if (Loader.isModLoaded("NotEnoughItems")){
 			if (Loader.instance().getIndexedModList().get("NotEnoughItems").getVersion().contains("GTNH")) {
@@ -879,6 +877,9 @@ public class MainRegistry {
 		FalloutConfigJSON.initialize();
 		ItemPoolConfigJSON.initialize();
 		ClientConfig.initConfig();
+
+		// gotta init AFTER loot pools
+		PlanetGen.init();
 
 		TileEntityNukeCustom.registerBombItems();
 		ArmorUtil.register();

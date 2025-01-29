@@ -13,6 +13,7 @@ import java.util.Set;
 
 import com.hbm.blocks.generic.BlockBobble.BobbleType;
 import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
+import com.hbm.config.GeneralConfig;
 import com.hbm.config.StructureConfig;
 import com.hbm.handler.ThreeInts;
 import com.hbm.main.MainRegistry;
@@ -30,9 +31,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -53,8 +57,7 @@ public class NBTStructure {
 	
 	// TODO: add rotation support
 
-	protected static Map<String, NBTStructure> structures = new HashMap<>();
-	protected static List<NBTStructure> structureList = new ArrayList<>();
+	protected static Map<Integer, List<SpawnCondition>> dimensionMap = new HashMap<>();
 
 	public String structureName;
 
@@ -76,6 +79,14 @@ public class NBTStructure {
 	public static void register() {
 		MapGenStructureIO.registerStructure(Start.class, "NBTStructures");
 		MapGenStructureIO.func_143031_a(Component.class, "NBTComponents");
+	}
+
+	// REGISTRATION ORDER MATTERS, make sure new structures are registered AFTER older ones
+	public static void registerStructureForDimension(int dimensionId, SpawnCondition spawn) {
+		List<SpawnCondition> list = dimensionMap.computeIfAbsent(dimensionId, integer -> new ArrayList<SpawnCondition>());
+		spawn.dimensionId = dimensionId;
+		spawn.conditionId = list.size();
+		list.add(spawn);
 	}
 
 	// Saves a selected area into an NBT structure (+ some of our non-standard stuff to support 1.7.10)
@@ -263,8 +274,6 @@ public class NBTStructure {
 			isLoaded = true;
 
 			structureName = inputName;
-			structures.put(inputName, this);
-			structureList.add(this);
 
 		} catch(IOException e) {
 			throw new ModelFormatException("IO Exception reading NBT Structure format", e);
@@ -345,7 +354,7 @@ public class NBTStructure {
 
 		for(BlockState block : blocks) {
 			int bx = totalBounds.minX + block.pos.x;
-			int by = totalBounds.minY + block.pos.y + 96;
+			int by = totalBounds.minY + block.pos.y;
 			int bz = totalBounds.minZ + block.pos.z;
 
 			// Check that this block is inside the currently generating area, preventing cascades
@@ -429,34 +438,56 @@ public class NBTStructure {
 		}
 
 	}
+	
+	public static class SpawnCondition {
+
+		public NBTStructure structure;
+		public Map<Block, Loot> lootTable;
+
+		public List<BiomeGenBase> validBiomes;
+		public int minHeight = 0;
+		public int maxHeight = 128;
+
+		// Used for serializing/deserializing in Component
+		private int dimensionId;
+		private int conditionId;
+
+		// Can this spawn in the current biome
+		protected boolean isValid(BiomeGenBase biome) {
+			if(validBiomes == null) return true;
+			return validBiomes.contains(biome);
+		}
+
+	}
 
 	public static class Component extends StructureComponent {
 
-		NBTStructure structure;
+		SpawnCondition spawn;
 
 		public Component() {}
 		
-		public Component(NBTStructure structure, Random rand, int x, int z) {
+		public Component(SpawnCondition spawn, Random rand, int x, int y, int z) {
 			super(0);
-			this.boundingBox = new StructureBoundingBox(x, z, x + structure.size.x, z + structure.size.z);
-			this.structure = structure;
+			this.boundingBox = new StructureBoundingBox(x, y, z, x + spawn.structure.size.x, 255, z + spawn.structure.size.z);
+			this.spawn = spawn;
 		}
 
 		// Save to NBT
 		@Override
 		protected void func_143012_a(NBTTagCompound nbt) {
-			nbt.setString("structure", structure.structureName);
+			nbt.setInteger("dim", spawn.dimensionId);
+			nbt.setInteger("con", spawn.conditionId);
 		}
 
 		// Load from NBT
 		@Override
 		protected void func_143011_b(NBTTagCompound nbt) {
-			structure = structures.get(nbt.getString("structure"));
+			spawn = dimensionMap.get(nbt.getInteger("dim")).get(nbt.getInteger("con"));
 		}
 
 		@Override
 		public boolean addComponentParts(World world, Random rand, StructureBoundingBox box) {
-			return structure.build(world, null, boundingBox, box);
+			return spawn.structure.build(world, spawn.lootTable, boundingBox, box);
 		}
 		
 	}
@@ -465,14 +496,16 @@ public class NBTStructure {
 		
 		public Start() {}
 		
-		public Start(World world, Random rand, int chunkX, int chunkZ) {
+		public Start(World world, Random rand, SpawnCondition spawn, int chunkX, int chunkZ) {
 			super(chunkX, chunkZ);
 			
-			int x = (chunkX << 4) + 8;
-			int z = (chunkZ << 4) + 8;
+			int x = (chunkX << 4);
+			int z = (chunkZ << 4);
+
+			int y = MathHelper.clamp_int(getAverageHeight(world, chunkX, chunkZ), spawn.minHeight, spawn.maxHeight);
 
 			// testing, just grab the first loaded structure and generate that (martian base)
-			addComponent(new Component(structureList.get(0), rand, x, z));
+			addComponent(new Component(spawn, rand, x, y, z));
 
 			updateBoundingBox();
 		}
@@ -482,9 +515,40 @@ public class NBTStructure {
 			this.components.add(component);
 		}
 
+		private int getAverageHeight(World world, int chunkX, int chunkZ) {
+			int total = 0;
+			int iterations = 0;
+
+			int minX = chunkX << 4;
+			int minZ = chunkZ << 4;
+			int maxX = minX + 16;
+			int maxZ = minZ + 16;
+			
+			for(int z = minZ; z <= maxZ; z++) {
+				for(int x = minX; x <= maxX; x++) {
+					total += world.getTopSolidOrLiquidBlock(x, z);
+					iterations++;
+				}
+			}
+			
+			if(iterations == 0)
+				return 64;
+			
+			return total / iterations;
+		}
+
 	}
 
 	public static class GenStructure extends MapGenStructure {
+
+		private SpawnCondition nextSpawn;
+
+		public void generateStructures(World world, Random rand, IChunkProvider chunkProvider, int chunkX, int chunkZ) {
+			Block[] ablock = new Block[65536];
+
+			func_151539_a(chunkProvider, world, chunkX, chunkZ, ablock);
+			generateStructuresInChunk(world, rand, chunkX, chunkZ);
+		}
 
 		@Override
 		public String func_143025_a() {
@@ -493,26 +557,50 @@ public class NBTStructure {
 	
 		@Override
 		protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
-			int startX = chunkX;
-			int startZ = chunkZ;
+			if(!dimensionMap.containsKey(worldObj.provider.dimensionId)) return false;
+
+			int x = chunkX;
+			int z = chunkZ;
 			
-			if(chunkX < 0) chunkX -= StructureConfig.structureMaxChunks - 1;
-			if(chunkZ < 0) chunkZ -= StructureConfig.structureMaxChunks - 1;
+			if(x < 0) x -= StructureConfig.structureMaxChunks - 1;
+			if(z < 0) z -= StructureConfig.structureMaxChunks - 1;
 			
-			int x = chunkX / StructureConfig.structureMaxChunks;
-			int z = chunkZ / StructureConfig.structureMaxChunks;
-			Random random = this.worldObj.setRandomSeed(x, z, 996996996);
+			x /= StructureConfig.structureMaxChunks;
+			z /= StructureConfig.structureMaxChunks;
+			Random random = this.worldObj.setRandomSeed(x, z, 996996996 - worldObj.provider.dimensionId);
 			x *= StructureConfig.structureMaxChunks;
 			z *= StructureConfig.structureMaxChunks;
 			x += random.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
 			z += random.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
 			
-			return startX == x && startZ == z;
+			if(chunkX == x && chunkZ == z) {
+				BiomeGenBase biome = this.worldObj.getWorldChunkManager().getBiomeGenAt(chunkX * 16 + 8, chunkZ * 16 + 8);
+
+				nextSpawn = findSpawn(biome);
+
+				if(GeneralConfig.enableDebugMode)
+					MainRegistry.logger.info("[Debug] Spawning NBT structure at: " + chunkX * 16 + ", " + chunkZ * 16);
+				
+				return nextSpawn != null;
+			}
+
+			return false;
 		}
 	
 		@Override
 		protected StructureStart getStructureStart(int chunkX, int chunkZ) {
-			return new Start(this.worldObj, this.rand, chunkX, chunkZ);
+			return new Start(this.worldObj, this.rand, nextSpawn, chunkX, chunkZ);
+		}
+
+		private SpawnCondition findSpawn(BiomeGenBase biome) {
+			List<SpawnCondition> spawnList = dimensionMap.get(worldObj.provider.dimensionId);
+
+			for(int i = 0; i < 64; i++) {
+				SpawnCondition spawn = spawnList.get(rand.nextInt(spawnList.size()));
+				if(spawn.isValid(biome)) return spawn;
+			}
+
+			return null;
 		}
 
 	}

@@ -17,7 +17,9 @@ import static net.minecraftforge.event.terraingen.TerrainGen.*;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class NTMWorldGenerator implements IWorldGenerator {
+
 	private MapGenNTMFeatures scatteredFeatureGen = new MapGenNTMFeatures();
+	private NBTStructure.GenStructure nbtGen = new NBTStructure.GenStructure();
 	
 	private final Random rand = new Random(); //A central random, used to cleanly generate our stuff without affecting vanilla or modded seeds.
 	
@@ -25,13 +27,14 @@ public class NTMWorldGenerator implements IWorldGenerator {
 	@SubscribeEvent
 	public void onLoad(WorldEvent.Load event) {
 		scatteredFeatureGen = (MapGenNTMFeatures) getModdedMapGen(new MapGenNTMFeatures(), EventType.CUSTOM);
+		nbtGen = (NBTStructure.GenStructure) getModdedMapGen(new NBTStructure.GenStructure(), EventType.CUSTOM);
 		
 		hasPopulationEvent = false;
 	}
 	
 	/** Called upon the initial population of a chunk. Called in the pre-population event first; called again if pre-population didn't occur (flatland) */
 	private void setRandomSeed(World world, int chunkX, int chunkZ) {
-		rand.setSeed(world.getSeed());
+		rand.setSeed(world.getSeed() + world.provider.dimensionId);
 		final long i = rand.nextLong() / 2L * 2L + 1L;
 		final long j = rand.nextLong() / 2L * 2L + 1L;
 		rand.setSeed((long)chunkX * i + (long)chunkZ * j ^ world.getSeed());
@@ -46,11 +49,14 @@ public class NTMWorldGenerator implements IWorldGenerator {
 	
 	@SubscribeEvent
 	public void generateStructures(PopulateChunkEvent.Pre event) {
-		setRandomSeed(event.world, event.chunkX, event.chunkZ); //Set random for population down the line.
 		hasPopulationEvent = true;
 		
 		if(StructureConfig.enableStructures == 0) return;
 		if(StructureConfig.enableStructures == 2 && !event.world.getWorldInfo().isMapFeaturesEnabled()) return;
+
+		setRandomSeed(event.world, event.chunkX, event.chunkZ); //Set random for population down the line.
+
+		nbtGen.generateStructures(event.world, rand, event.chunkProvider, event.chunkX, event.chunkZ);
 		
 		switch (event.world.provider.dimensionId) {
 		case -1:
@@ -76,43 +82,28 @@ public class NTMWorldGenerator implements IWorldGenerator {
 	 */
 	
 	@Override
-	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+	public void generate(Random unusedRandom, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+		if(hasPopulationEvent) return; //If we've failed to generate any structures (flatlands)
+		
+		if(StructureConfig.enableStructures == 0) return;
+		if(StructureConfig.enableStructures == 2 && !world.getWorldInfo().isMapFeaturesEnabled()) return;
+
+		setRandomSeed(world, chunkX, chunkZ); //Reset the random seed to compensate
+
+		nbtGen.generateStructures(world, rand, chunkProvider, chunkX, chunkZ);
 		
 		switch (world.provider.dimensionId) {
 		case -1:
-			generateNether(world, rand, chunkGenerator, chunkX, chunkZ); break;
+			generateNetherStructures(world, chunkGenerator, chunkX, chunkZ); break;
 		case 0:
-			generateSurface(world, rand, chunkGenerator, chunkProvider, chunkX, chunkZ); break;
+			generateOverworldStructures(world, chunkGenerator, chunkX, chunkZ); break;
 		case 1:
-			generateEnd(world, rand, chunkGenerator, chunkX, chunkZ); break;
+			generateEndStructures(world, chunkGenerator, chunkX, chunkZ); break;
 		}
 	}
 	
-	private void generateNether(World world, Random rand, IChunkProvider chunkGenerator, int chunkX, int chunkZ) { }
-	
-	/* Overworld Generation */
-	
-	private void generateSurface(World world, Random rand, IChunkProvider chunkGenerator, IChunkProvider chunkProvider, int chunkX, int chunkZ) {
-		if(!hasPopulationEvent) { //If we've failed to generate any structures (flatlands)
-			setRandomSeed(world, chunkX, chunkZ); //Reset the random seed to compensate
-			
-			boolean enableStructures = world.getWorldInfo().isMapFeaturesEnabled();
-			if(StructureConfig.enableStructures == 1) enableStructures = true;
-			if(StructureConfig.enableStructures == 0) enableStructures = false;
-
-			if(enableStructures) generateOverworldStructures(world, chunkGenerator, chunkX, chunkZ); //Do it through the post-population generation directly
-		}
-		
-		/* biome dictionary my beloved <3 
-		 * no check for tom here because the event handler already checks for decoration events, + this way they won't become permanently extinct.
-		 */
-		
-		/* Biome check, followed by chance, followed by event (for compat, both intra- and inter- (in the case of Tom). */
-		
-		
-	}
-
-	private void generateEnd(World world, Random rand, IChunkProvider chunkGenerator, int chunkX, int chunkZ) { }
+	private void generateNetherStructures(World world, IChunkProvider chunkGenerator, int chunkX, int chunkZ) { }
+	private void generateEndStructures(World world, IChunkProvider chunkGenerator, int chunkX, int chunkZ) { }
 	
 	/** Utility method for biome checking multiple types exclusively. Not sure why it wasn't already present. */
 	public static boolean isBiomeOfTypes(BiomeGenBase biome, Type... types) { //If new biomes are implemented, move this to any biome-related utility class.
