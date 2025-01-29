@@ -29,7 +29,7 @@ public class CryoRecipes extends SerializableRecipe {
 				new FluidStack(Fluids.CARBONDIOXIDE, 5)
 				));
 		
-		recipes.put(Fluids.TEKTOAIR, new Quartet<>(
+		recipes.put(Fluids.TEKTOAIR, new Quartet<>( //rebalance this because i want it to give better gases...
 				new FluidStack(Fluids.CHLORINE, 45),
 				new FluidStack(Fluids.AROMATICS, 25),
 				new FluidStack(Fluids.GAS, 15),
@@ -48,14 +48,14 @@ public class CryoRecipes extends SerializableRecipe {
 				new FluidStack(Fluids.XENON, 14)
 				));
 		recipes.put(Fluids.UGAS, new Quartet<>(
-				new FluidStack(Fluids.OXYGEN, 35),
+				new FluidStack(Fluids.OXYGEN, 45),
 				new FluidStack(Fluids.NITROGEN, 25),
 				new FluidStack(Fluids.METHANOL, 15),
-				new FluidStack(Fluids.AROMATICS, 10)
+				new FluidStack(Fluids.AROMATICS, 15)
 				));
 		recipes.put(Fluids.SARNUSGAS, new Quartet<>(
 				new FluidStack(Fluids.HYDROGEN, 45),
-				new FluidStack(Fluids.HELIUM3, 25),
+				new FluidStack(Fluids.HELIUM3, 35),
 				new FluidStack(Fluids.GAS, 15),
 				new FluidStack(Fluids.NITROGEN, 5)
 				));
