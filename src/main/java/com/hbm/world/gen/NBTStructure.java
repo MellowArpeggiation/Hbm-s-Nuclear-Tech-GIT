@@ -65,7 +65,7 @@ public class NBTStructure {
 	private ThreeInts size;
 	private BlockDefinition[] palette;
 	private List<Pair<Short, String>> itemPalette;
-	private BlockState[] blocks;
+	private BlockState[][][] blockArray;
 
 	public NBTStructure(ResourceLocation resource) {
 		try {
@@ -256,17 +256,17 @@ public class NBTStructure {
 
 			// LOAD IN BLOCKS
 			NBTTagList blockData = data.getTagList("blocks", NBT.TAG_COMPOUND);
-			blocks = new BlockState[blockData.tagCount()];
+			blockArray = new BlockState[size.x][size.y][size.z];
 
 			for(int i = 0; i < blockData.tagCount(); i++) {
 				NBTTagCompound block = blockData.getCompoundTagAt(i);
 				int state = block.getInteger("state");
 				ThreeInts pos = parsePos(block.getTagList("pos", NBT.TAG_INT));
 
-				blocks[i] = new BlockState(palette[state], pos);
-
+				blockArray[pos.x][pos.y][pos.z] = new BlockState(palette[state]);
+				
 				if(block.hasKey("nbt")) {
-					blocks[i].nbt = block.getCompoundTag("nbt");
+					blockArray[pos.x][pos.y][pos.z].nbt = block.getCompoundTag("nbt");
 				}
 			}
 
@@ -334,12 +334,19 @@ public class NBTStructure {
 
 		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
 
-		for(BlockState block : blocks) {
-			world.setBlock(x + block.pos.x, y + block.pos.y, z + block.pos.z, block.definition.block, block.definition.meta, 2);
+		for(int bx = 0; bx < size.x; bx++) {
+			for(int bz = 0; bz < size.z; bz++) {
+				for(int by = 0; by < size.y; by++) {
+					BlockState state = blockArray[bx][by][bz];
+					if(state == null) continue;
 
-			if(block.nbt != null) {
-				TileEntity te = buildTileEntity(world, block.definition.block, lootTable, worldItemPalette, block.nbt);
-				world.setTileEntity(x + block.pos.x, y + block.pos.y, z + block.pos.z, te);
+					world.setBlock(x + bx, y + by, z + bz, state.definition.block, state.definition.meta, 2);
+		
+					if(state.nbt != null) {
+						TileEntity te = buildTileEntity(world, state.definition.block, lootTable, worldItemPalette, state.nbt);
+						world.setTileEntity(x + bx, y + by, z + bz, te);
+					}
+				}
 			}
 		}
 	}
@@ -352,19 +359,24 @@ public class NBTStructure {
 
 		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
 
-		for(BlockState block : blocks) {
-			int bx = totalBounds.minX + block.pos.x;
-			int by = totalBounds.minY + block.pos.y;
-			int bz = totalBounds.minZ + block.pos.z;
+		int minX = Math.max(generatingBounds.minX - totalBounds.minX, 0);
+        int maxX = Math.min(generatingBounds.maxX - totalBounds.minX + 1, size.x);
+        int minZ = Math.max(generatingBounds.minZ - totalBounds.minZ, 0);
+        int maxZ = Math.min(generatingBounds.maxZ - totalBounds.minZ + 1, size.z);
 
-			// Check that this block is inside the currently generating area, preventing cascades
-			if(!generatingBounds.isVecInside(bx, by, bz)) continue;
+		for(int bx = minX; bx < maxX; bx++) {
+			for(int bz = minZ; bz < maxZ; bz++) {
+				for(int by = 0; by < size.y; by++) {
+					BlockState state = blockArray[bx][by][bz];
+					if(state == null) continue;
 
-			world.setBlock(bx, by, bz, block.definition.block, block.definition.meta, 2);
+					world.setBlock(bx + totalBounds.minX, by + totalBounds.minY, bz + totalBounds.minZ, state.definition.block, state.definition.meta, 2);
 
-			if(block.nbt != null) {
-				TileEntity te = buildTileEntity(world, block.definition.block, lootTable, worldItemPalette, block.nbt);
-				world.setTileEntity(bx, by, bz, te);
+					if(state.nbt != null) {
+						TileEntity te = buildTileEntity(world, state.definition.block, lootTable, worldItemPalette, state.nbt);
+						world.setTileEntity(bx + totalBounds.minX, by + totalBounds.minY, bz + totalBounds.minZ, te);
+					}
+				}
 			}
 		}
 
@@ -403,12 +415,10 @@ public class NBTStructure {
 	private static class BlockState {
 
 		final BlockDefinition definition;
-		final ThreeInts pos;
 		NBTTagCompound nbt;
 
-		BlockState(BlockDefinition definition, ThreeInts pos) {
+		BlockState(BlockDefinition definition) {
 			this.definition = definition;
-			this.pos = pos;
 		}
 
 	}
@@ -578,7 +588,7 @@ public class NBTStructure {
 
 				nextSpawn = findSpawn(biome);
 
-				if(GeneralConfig.enableDebugMode)
+				if(GeneralConfig.enableDebugMode && nextSpawn != null)
 					MainRegistry.logger.info("[Debug] Spawning NBT structure at: " + chunkX * 16 + ", " + chunkZ * 16);
 				
 				return nextSpawn != null;
