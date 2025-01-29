@@ -109,6 +109,8 @@ public class MixerRecipes extends SerializableRecipe {
 		register(Fluids.PHEROMONE_M, new MixerRecipe(2000, 10).setStack1(new FluidStack(Fluids.PHEROMONE, 1500)).setStack2(new FluidStack(Fluids.BLOOD, 500)).setSolid(new ComparableStack(ModItems.pill_herbal)));
 		register(Fluids.SCUTTERBLOOD, new MixerRecipe(550, 50).setStack1(new FluidStack(Fluids.HCL, 300)).setSolid(new ComparableStack(ModItems.scuttertail))); 
 
+		register(Fluids.PERFLUOROMETHYL, new MixerRecipe(1000, 20).setStack1(new FluidStack(Fluids.PETROLEUM, 1000)).setStack2(new FluidStack(Fluids.UNSATURATEDS, 500)).setSolid(new OreDictStack(F.dust())));
+
 	}
 	
 	public static void register(FluidType type, MixerRecipe... rec) {
