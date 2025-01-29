@@ -35,6 +35,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.*;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -1364,6 +1365,9 @@ public class ModBlocks {
 	public static Block orbital_station_computer;
 	public static Block propulsion_creative;
 
+	// NBT Structure wand blocks
+	public static Block wand_air;
+
 	public static Material materialGas = new MaterialGas();
 
 	private static void initializeBlock() {
@@ -2623,6 +2627,8 @@ public class ModBlocks {
 		orbital_station_port = new BlockOrbitalStation(Material.iron).setBlockName("orbital_station_port").setHardness(1.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		orbital_station_computer = new BlockOrbitalStationComputer(Material.iron).setBlockName("orbital_station_computer").setHardness(1.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		propulsion_creative = new BlockStationPropulsionCreative(Material.iron).setBlockName("propulsion_creative").setHardness(1.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
+
+		wand_air = new BlockWand(Blocks.air).setBlockName("wand_air").setBlockTextureName(RefStrings.MODID + ":wand_air");
 	}
 
 	private static void registerBlock() {
@@ -3864,6 +3870,8 @@ public class ModBlocks {
 		register(orbital_station_port);
 		register(orbital_station_computer);
 		register(propulsion_creative);
+
+		register(wand_air);
 	}
 
 	private static void register(Block b) {

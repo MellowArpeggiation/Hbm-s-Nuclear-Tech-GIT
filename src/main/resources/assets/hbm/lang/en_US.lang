@@ -6652,6 +6652,7 @@ tile.vitrified_barrel.name=Vitrified Nuclear Waste Drum
 tile.volcanic_lava_block.name=Volcanic Lava
 tile.volcano_core.name=Volcano Core
 tile.volcano_rad_core.name=Rad Volcano Core
+tile.wand_air.name=Structure Wand Block (Air)
 tile.waste_earth.name=Dead Grass
 tile.waste_leaves.name=Dead Leaves
 tile.waste_log.name=Charred Log

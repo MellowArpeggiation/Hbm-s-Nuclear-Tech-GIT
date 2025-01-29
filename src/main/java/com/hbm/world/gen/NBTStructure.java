@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import com.hbm.blocks.generic.BlockWand;
 import com.hbm.blocks.generic.BlockBobble.BobbleType;
 import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
 import com.hbm.config.GeneralConfig;
@@ -113,6 +114,10 @@ public class NBTStructure {
 					Pair<Block, Integer> block = new Pair<Block, Integer>(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
 
 					if(exclude.contains(block)) continue;
+
+					if(block.key instanceof BlockWand) {
+						block.key = ((BlockWand) block.key).exportAs;
+					}
 
 					int paletteId = palette.size();
 					if(palette.containsKey(block)) {
@@ -361,9 +366,9 @@ public class NBTStructure {
 		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
 
 		int minX = Math.max(generatingBounds.minX - totalBounds.minX, 0);
-        int maxX = Math.min(generatingBounds.maxX - totalBounds.minX + 1, size.x);
-        int minZ = Math.max(generatingBounds.minZ - totalBounds.minZ, 0);
-        int maxZ = Math.min(generatingBounds.maxZ - totalBounds.minZ + 1, size.z);
+		int maxX = Math.min(generatingBounds.maxX - totalBounds.minX + 1, size.x);
+		int minZ = Math.max(generatingBounds.minZ - totalBounds.minZ, 0);
+		int maxZ = Math.min(generatingBounds.maxZ - totalBounds.minZ + 1, size.z);
 
 		for(int bx = minX; bx < maxX; bx++) {
 			for(int bz = minZ; bz < maxZ; bz++) {
