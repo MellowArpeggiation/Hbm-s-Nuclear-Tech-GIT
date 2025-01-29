@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import com.hbm.blocks.generic.BlockBobble.BobbleType;
 import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
@@ -454,7 +455,7 @@ public class NBTStructure {
 		public NBTStructure structure;
 		public Map<Block, Loot> lootTable;
 
-		public List<BiomeGenBase> validBiomes;
+		public Predicate<BiomeGenBase> canSpawn;
 		public int minHeight = 0;
 		public int maxHeight = 128;
 
@@ -464,8 +465,8 @@ public class NBTStructure {
 
 		// Can this spawn in the current biome
 		protected boolean isValid(BiomeGenBase biome) {
-			if(validBiomes == null) return true;
-			return validBiomes.contains(biome);
+			if(canSpawn == null) return true;
+			return canSpawn.test(biome);
 		}
 
 	}
@@ -476,9 +477,9 @@ public class NBTStructure {
 
 		public Component() {}
 		
-		public Component(SpawnCondition spawn, Random rand, int x, int y, int z) {
+		public Component(SpawnCondition spawn, Random rand, int x, int z) {
 			super(0);
-			this.boundingBox = new StructureBoundingBox(x, y, z, x + spawn.structure.size.x, 255, z + spawn.structure.size.z);
+			this.boundingBox = new StructureBoundingBox(x, 0, z, x + spawn.structure.size.x, 255, z + spawn.structure.size.z);
 			this.spawn = spawn;
 		}
 
@@ -497,45 +498,22 @@ public class NBTStructure {
 
 		@Override
 		public boolean addComponentParts(World world, Random rand, StructureBoundingBox box) {
+			// now we're in the world, update minY/maxY
+			if(boundingBox.minY == 0) {
+				int y = MathHelper.clamp_int(getAverageHeight(world, box), spawn.minHeight, spawn.maxHeight);
+				boundingBox.minY = y;
+				boundingBox.maxY = y + spawn.structure.size.y;
+			}
+
 			return spawn.structure.build(world, spawn.lootTable, boundingBox, box);
 		}
-		
-	}
 
-	public static class Start extends StructureStart {
-		
-		public Start() {}
-		
-		public Start(World world, Random rand, SpawnCondition spawn, int chunkX, int chunkZ) {
-			super(chunkX, chunkZ);
-			
-			int x = (chunkX << 4);
-			int z = (chunkZ << 4);
-
-			int y = MathHelper.clamp_int(getAverageHeight(world, chunkX, chunkZ), spawn.minHeight, spawn.maxHeight);
-
-			// testing, just grab the first loaded structure and generate that (martian base)
-			addComponent(new Component(spawn, rand, x, y, z));
-
-			updateBoundingBox();
-		}
-
-		@SuppressWarnings("unchecked")
-		private void addComponent(StructureComponent component) {
-			this.components.add(component);
-		}
-
-		private int getAverageHeight(World world, int chunkX, int chunkZ) {
+		private int getAverageHeight(World world, StructureBoundingBox box) {
 			int total = 0;
 			int iterations = 0;
-
-			int minX = chunkX << 4;
-			int minZ = chunkZ << 4;
-			int maxX = minX + 16;
-			int maxZ = minZ + 16;
 			
-			for(int z = minZ; z <= maxZ; z++) {
-				for(int x = minX; x <= maxX; x++) {
+			for(int z = box.minZ; z <= box.maxZ; z++) {
+				for(int x = box.minX; x <= box.maxX; x++) {
 					total += world.getTopSolidOrLiquidBlock(x, z);
 					iterations++;
 				}
@@ -545,6 +523,24 @@ public class NBTStructure {
 				return 64;
 			
 			return total / iterations;
+		}
+		
+	}
+
+	public static class Start extends StructureStart {
+		
+		public Start() {}
+		
+		@SuppressWarnings("unchecked")
+		public Start(World world, Random rand, SpawnCondition spawn, int chunkX, int chunkZ) {
+			super(chunkX, chunkZ);
+			
+			int x = chunkX << 4;
+			int z = chunkZ << 4;
+
+			this.components.add(new Component(spawn, rand, x, z));
+
+			updateBoundingBox();
 		}
 
 	}

@@ -1,6 +1,5 @@
 package com.hbm.dim.laythe;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -32,7 +31,7 @@ public class WorldGeneratorLaythe implements IWorldGenerator {
 	public WorldGeneratorLaythe() {
 		NBTStructure.registerStructureForDimension(SpaceConfig.laytheDimension, new SpawnCondition() {{
 			structure = ResourceManager.nuke_sub;
-			validBiomes = Arrays.asList(BiomeGenBaseLaythe.laytheOcean);
+			canSpawn = biome -> biome == BiomeGenBaseLaythe.laytheOcean;
 			maxHeight = 54;
 			lootTable = new HashMap<Block, Loot>() {{
 				put(ModBlocks.crate_iron, new Loot(ItemPool.getPool(ItemPoolsComponent.POOL_SUBMARINE), 6, 12));
