@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import com.hbm.blocks.generic.BlockBobble.BobbleType;
 import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
+import com.hbm.config.StructureConfig;
 import com.hbm.handler.ThreeInts;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.Tuple.Pair;
@@ -31,12 +33,30 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.MapGenStructure;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraftforge.client.model.ModelFormatException;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class NBTStructure {
+
+	/**
+	 * Now with structure support!
+	 * 
+	 * the type of structure to generate is saved into the Component,
+	 * meaning this can generate all sorts of different structures,
+	 * without having to define and register each structure manually
+	 */
 	
 	// TODO: add rotation support
+
+	protected static Map<String, NBTStructure> structures = new HashMap<>();
+	protected static List<NBTStructure> structureList = new ArrayList<>();
+
+	public String structureName;
 
 	private boolean isLoaded;
 	private ThreeInts size;
@@ -47,10 +67,15 @@ public class NBTStructure {
 	public NBTStructure(ResourceLocation resource) {
 		try {
 			IResource res = Minecraft.getMinecraft().getResourceManager().getResource(resource);
-			loadStructure(res.getInputStream());
+			loadStructure(res.toString(), res.getInputStream());
 		} catch(IOException e) {
 			throw new ModelFormatException("IO Exception loading NBT resource", e);
 		}
+	}
+
+	public static void register() {
+		MapGenStructureIO.registerStructure(Start.class, "NBTStructures");
+		MapGenStructureIO.func_143031_a(Component.class, "NBTComponents");
 	}
 
 	// Saves a selected area into an NBT structure (+ some of our non-standard stuff to support 1.7.10)
@@ -169,7 +194,7 @@ public class NBTStructure {
 		}
 	}
 
-	private void loadStructure(InputStream inputStream) {
+	private void loadStructure(String inputName, InputStream inputStream) {
 		try {
 			NBTTagCompound data = CompressedStreamTools.readCompressed(inputStream);
 
@@ -237,6 +262,10 @@ public class NBTStructure {
 
 			isLoaded = true;
 
+			structureName = inputName;
+			structures.put(inputName, this);
+			structureList.add(this);
+
 		} catch(IOException e) {
 			throw new ModelFormatException("IO Exception reading NBT Structure format", e);
 		} finally {
@@ -246,6 +275,39 @@ public class NBTStructure {
 				// hush
 			}
 		}
+	}
+
+	private HashMap<Short, Short> getWorldItemPalette() {
+		if(itemPalette == null) return null;
+
+		HashMap<Short, Short> worldItemPalette = new HashMap<>();
+
+		for(Pair<Short, String> entry : itemPalette) {
+			Item item = (Item)Item.itemRegistry.getObject(entry.getValue());
+
+			worldItemPalette.put(entry.getKey(), (short)Item.getIdFromItem(item));
+		}
+
+		return worldItemPalette;
+	}
+
+	private TileEntity buildTileEntity(World world, Block block, Map<Block, Loot> lootTable, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt) {
+		nbt = (NBTTagCompound)nbt.copy();
+
+		if(worldItemPalette != null) relinkItems(worldItemPalette, nbt);
+
+		TileEntity te = TileEntity.createAndLoadEntity(nbt);
+
+		if(lootTable != null && te instanceof IInventory && lootTable.containsKey(block)) {
+			Loot entry = lootTable.get(block);
+			WeightedRandomChestContent.generateChestContents(world.rand, entry.table, (IInventory) te, world.rand.nextInt(entry.maxLoot - entry.minLoot) + entry.minLoot);
+		}
+
+		if(te instanceof TileEntityBobble) {
+			((TileEntityBobble) te).type = BobbleType.values()[world.rand.nextInt(BobbleType.values().length - 1) + 1];
+		}
+
+		return te;
 	}
 
 	public void build(World world, int x, int y, int z) {
@@ -261,40 +323,43 @@ public class NBTStructure {
 		x -= size.x / 2;
 		z -= size.z / 2;
 
-		HashMap<Short, Short> worldItemPalette = null;
-
-		if(itemPalette != null) {
-			worldItemPalette = new HashMap<>();
-
-			for(Pair<Short, String> entry : itemPalette) {
-				Item item = (Item)Item.itemRegistry.getObject(entry.getValue());
-
-				worldItemPalette.put(entry.getKey(), (short)Item.getIdFromItem(item));
-			}
-		}
+		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
 
 		for(BlockState block : blocks) {
 			world.setBlock(x + block.pos.x, y + block.pos.y, z + block.pos.z, block.definition.block, block.definition.meta, 2);
 
 			if(block.nbt != null) {
-				NBTTagCompound nbt = (NBTTagCompound)block.nbt.copy();
-
-				if(worldItemPalette != null) relinkItems(worldItemPalette, nbt);
-
-				TileEntity te = TileEntity.createAndLoadEntity(nbt);
-
-				if(lootTable != null && te instanceof IInventory && lootTable.containsKey(block.definition.block)) {
-					Loot entry = lootTable.get(block.definition.block);
-					WeightedRandomChestContent.generateChestContents(world.rand, entry.table, (IInventory) te, world.rand.nextInt(entry.maxLoot - entry.minLoot) + entry.minLoot);
-				}
-
-				if(te instanceof TileEntityBobble) {
-					((TileEntityBobble) te).type = BobbleType.values()[world.rand.nextInt(BobbleType.values().length - 1) + 1];
-				}
-
+				TileEntity te = buildTileEntity(world, block.definition.block, lootTable, worldItemPalette, block.nbt);
 				world.setTileEntity(x + block.pos.x, y + block.pos.y, z + block.pos.z, te);
 			}
 		}
+	}
+
+	protected boolean build(World world, Map<Block, Loot> lootTable, StructureBoundingBox totalBounds, StructureBoundingBox generatingBounds) {
+		if(!isLoaded) {
+			MainRegistry.logger.info("NBTStructure is invalid");
+			return false;
+		}
+
+		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
+
+		for(BlockState block : blocks) {
+			int bx = totalBounds.minX + block.pos.x;
+			int by = totalBounds.minY + block.pos.y + 96;
+			int bz = totalBounds.minZ + block.pos.z;
+
+			// Check that this block is inside the currently generating area, preventing cascades
+			if(!generatingBounds.isVecInside(bx, by, bz)) continue;
+
+			world.setBlock(bx, by, bz, block.definition.block, block.definition.meta, 2);
+
+			if(block.nbt != null) {
+				TileEntity te = buildTileEntity(world, block.definition.block, lootTable, worldItemPalette, block.nbt);
+				world.setTileEntity(bx, by, bz, te);
+			}
+		}
+
+		return true;
 	}
 
 	// What a fucken mess, why even implement the IntArray NBT if ye aint gonna use it Moe Yang?
@@ -361,6 +426,93 @@ public class NBTStructure {
 			this.table = table;
 			this.minLoot = minLoot;
 			this.maxLoot = maxLoot;
+		}
+
+	}
+
+	public static class Component extends StructureComponent {
+
+		NBTStructure structure;
+
+		public Component() {}
+		
+		public Component(NBTStructure structure, Random rand, int x, int z) {
+			super(0);
+			this.boundingBox = new StructureBoundingBox(x, z, x + structure.size.x, z + structure.size.z);
+			this.structure = structure;
+		}
+
+		// Save to NBT
+		@Override
+		protected void func_143012_a(NBTTagCompound nbt) {
+			nbt.setString("structure", structure.structureName);
+		}
+
+		// Load from NBT
+		@Override
+		protected void func_143011_b(NBTTagCompound nbt) {
+			structure = structures.get(nbt.getString("structure"));
+		}
+
+		@Override
+		public boolean addComponentParts(World world, Random rand, StructureBoundingBox box) {
+			return structure.build(world, null, boundingBox, box);
+		}
+		
+	}
+
+	public static class Start extends StructureStart {
+		
+		public Start() {}
+		
+		public Start(World world, Random rand, int chunkX, int chunkZ) {
+			super(chunkX, chunkZ);
+			
+			int x = (chunkX << 4) + 8;
+			int z = (chunkZ << 4) + 8;
+
+			// testing, just grab the first loaded structure and generate that (martian base)
+			addComponent(new Component(structureList.get(0), rand, x, z));
+
+			updateBoundingBox();
+		}
+
+		@SuppressWarnings("unchecked")
+		private void addComponent(StructureComponent component) {
+			this.components.add(component);
+		}
+
+	}
+
+	public static class GenStructure extends MapGenStructure {
+
+		@Override
+		public String func_143025_a() {
+			return "NBTStructures";
+		}
+	
+		@Override
+		protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
+			int startX = chunkX;
+			int startZ = chunkZ;
+			
+			if(chunkX < 0) chunkX -= StructureConfig.structureMaxChunks - 1;
+			if(chunkZ < 0) chunkZ -= StructureConfig.structureMaxChunks - 1;
+			
+			int x = chunkX / StructureConfig.structureMaxChunks;
+			int z = chunkZ / StructureConfig.structureMaxChunks;
+			Random random = this.worldObj.setRandomSeed(x, z, 996996996);
+			x *= StructureConfig.structureMaxChunks;
+			z *= StructureConfig.structureMaxChunks;
+			x += random.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
+			z += random.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
+			
+			return startX == x && startZ == z;
+		}
+	
+		@Override
+		protected StructureStart getStructureStart(int chunkX, int chunkZ) {
+			return new Start(this.worldObj, this.rand, chunkX, chunkZ);
 		}
 
 	}
