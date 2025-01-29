@@ -24,7 +24,6 @@ import com.hbm.util.Tuple.Pair;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResource;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -44,7 +43,6 @@ import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
-import net.minecraftforge.client.model.ModelFormatException;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class NBTStructure {
@@ -61,8 +59,6 @@ public class NBTStructure {
 
 	protected static Map<Integer, List<SpawnCondition>> dimensionMap = new HashMap<>();
 
-	public String structureName;
-
 	private boolean isLoaded;
 	private ThreeInts size;
 	private BlockDefinition[] palette;
@@ -70,11 +66,12 @@ public class NBTStructure {
 	private BlockState[][][] blockArray;
 
 	public NBTStructure(ResourceLocation resource) {
-		try {
-			IResource res = Minecraft.getMinecraft().getResourceManager().getResource(resource);
-			loadStructure(res.toString(), res.getInputStream());
-		} catch(IOException e) {
-			throw new ModelFormatException("IO Exception loading NBT resource", e);
+		// Can't use regular resource loading, servers don't know how!
+		InputStream stream = NBTStructure.class.getResourceAsStream("/assets/" + resource.getResourceDomain() + "/" + resource.getResourcePath());
+		if(stream != null) {
+			loadStructure(stream);
+		} else {
+			MainRegistry.logger.error("NBT Structure not found: " + resource.getResourcePath());
 		}
 	}
 
@@ -211,7 +208,7 @@ public class NBTStructure {
 		}
 	}
 
-	private void loadStructure(String inputName, InputStream inputStream) {
+	private void loadStructure(InputStream inputStream) {
 		try {
 			NBTTagCompound data = CompressedStreamTools.readCompressed(inputStream);
 
@@ -279,10 +276,8 @@ public class NBTStructure {
 
 			isLoaded = true;
 
-			structureName = inputName;
-
-		} catch(IOException e) {
-			throw new ModelFormatException("IO Exception reading NBT Structure format", e);
+		} catch(Exception e) {
+			MainRegistry.logger.error("Exception reading NBT Structure format", e);
 		} finally {
 			try {
 				inputStream.close();

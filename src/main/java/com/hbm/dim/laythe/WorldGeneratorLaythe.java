@@ -11,7 +11,7 @@ import com.hbm.dim.laythe.biome.BiomeGenBaseLaythe;
 import com.hbm.itempool.ItemPool;
 import com.hbm.itempool.ItemPoolsComponent;
 import com.hbm.itempool.ItemPoolsLegacy;
-import com.hbm.main.ResourceManager;
+import com.hbm.main.StructureManager;
 import com.hbm.world.dungeon.CrashedVertibird;
 import com.hbm.world.dungeon.Vertibird;
 import com.hbm.world.feature.OilBubble;
@@ -30,7 +30,7 @@ public class WorldGeneratorLaythe implements IWorldGenerator {
 
 	public WorldGeneratorLaythe() {
 		NBTStructure.registerStructureForDimension(SpaceConfig.laytheDimension, new SpawnCondition() {{
-			structure = ResourceManager.nuke_sub;
+			structure = StructureManager.nuke_sub;
 			canSpawn = biome -> biome == BiomeGenBaseLaythe.laytheOcean;
 			maxHeight = 54;
 			lootTable = new HashMap<Block, Loot>() {{

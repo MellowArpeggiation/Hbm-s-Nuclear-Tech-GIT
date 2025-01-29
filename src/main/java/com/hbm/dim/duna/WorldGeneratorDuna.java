@@ -7,7 +7,7 @@ import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.WorldTypeTeleport;
-import com.hbm.main.ResourceManager;
+import com.hbm.main.StructureManager;
 import com.hbm.world.feature.OilBubble;
 import com.hbm.world.generator.DungeonToolbox;
 
@@ -51,7 +51,7 @@ public class WorldGeneratorDuna implements IWorldGenerator {
 			int z = 0;
 			int y = world.getHeightValue(x, z) - 1;
 
-			ResourceManager.martian.build(world, x, y, z);
+			StructureManager.martian.build(world, x, y, z);
 		}
 	}
 	

@@ -8,7 +8,6 @@ import com.hbm.render.anim.AnimationLoader;
 import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.loader.HFRWavefrontObject;
 import com.hbm.render.loader.IModelCustomNamed;
-import com.hbm.world.gen.NBTStructure;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
@@ -1704,8 +1703,5 @@ public class ResourceManager {
 	public static final IModelCustom deb_zirnox_element = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/zirnox/deb_element.obj"));
 	public static final IModelCustom deb_zirnox_exchanger = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/zirnox/deb_exchanger.obj"));
 	public static final IModelCustom deb_zirnox_shrapnel = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/zirnox/deb_shrapnel.obj"));
-
-	public static final NBTStructure martian = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/martian-base.nbt"));
-	public static final NBTStructure nuke_sub = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/nuke-sub.nbt"));
 
 }
