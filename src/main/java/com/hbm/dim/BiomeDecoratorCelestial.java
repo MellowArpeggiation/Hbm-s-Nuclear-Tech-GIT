@@ -7,6 +7,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -19,10 +20,11 @@ public class BiomeDecoratorCelestial extends BiomeDecorator {
 
 	public int waterPlantsPerChunk = 0;
 	public int rubberPlantsPerChunk = 0;
+	public int coralPerChunk = 0;
 
-	public int seaLevel = 64;
-	public WorldGenerator genPlants;
-	public WorldGenerator genRPlants;
+	public int seaLevel = 63;
+	public WorldGenWaterPlant genPlants;
+	public WorldGenRubberPlant genRPlants;
 	public WorldGenWaterCoral genCoral;
 
 	// ACTUAL lakes, not the single block stuff

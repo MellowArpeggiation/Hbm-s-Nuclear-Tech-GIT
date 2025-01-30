@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 @SideOnly(Side.CLIENT)
 public class ParticleRocketFlame extends EntityFX {
 	
-	private int age;
-	private int maxAge;
+	public int age;
+	public int maxAge;
 	
 	private float customRed;
 	private float customGreen;
