@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 
 public class RendererObjTester extends TileEntitySpecialRenderer {
 
@@ -36,19 +37,19 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y + 0.2, z + 0.5);
 		GL11.glDisable(GL11.GL_CULL_FACE);
-        long time = tileEntity.getWorldObj().getTotalWorldTime();
-        double sine = Math.sin(time * 0.05) * 15;
-        double sin3 = Math.sin(time * 0.05 + Math.PI * 0.5) * 15;
-        double sin2 = Math.sin(time * 0.05 + Math.PI);
-        double insine = Math.sin(time * 0.05) * -15;
-        GL11.glRotated(sin2, 0, 1, 0); 
+		long time = tileEntity.getWorldObj().getTotalWorldTime();
+		double sine = Math.sin(time * 0.05) * 15;
+		double sin3 = Math.sin(time * 0.05 + Math.PI * 0.5) * 15;
+		double sin2 = Math.sin(time * 0.05 + Math.PI);
+		double insine = Math.sin(time * 0.05) * -15;
+		GL11.glRotated(sin2, 0, 1, 0); 
 
-        GL11.glPushMatrix();
+		GL11.glPushMatrix();
 		GL11.glTranslatef(0, 8.6F, 0.5F);
+		
+		GL11.glRotated(sin2, 0, 1, 0); 
 
-        GL11.glRotated(sin2, 0, 1, 0); 
-
-    	GL11.glTranslatef(0, -8.7F, -0.5F);
+		GL11.glTranslatef(0, -8.7F, -0.5F);
 		bindTexture(ResourceManager.behemoth_body_tex);
 		ResourceManager.behemoth.renderPart("body");
 		ResourceManager.behemoth.renderPart("hatch1");
@@ -58,106 +59,127 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		bindTexture(ResourceManager.behemoth_helmet_tex);
 		ResourceManager.behemoth.renderPart("helmet");
 		
-        GL11.glPushMatrix();
+		GL11.glPushMatrix();
 
-        
 		bindTexture(ResourceManager.behemoth_eye_tex);
 		ResourceManager.behemoth.renderPart("eye");
 
 		// Re-enable lighting
 		GL11.glPopMatrix();
 
-	
 		GL11.glTranslatef(0, 8.7F, 0.5F);
 
 		GL11.glPopMatrix();
-		
-		GL11.glPushMatrix(); // RIGHT LEG MATRIX START
-		
-		GL11.glTranslatef(0, 8.5F, 0.5F);
 
-		GL11.glRotated(sine, 1, 0, 0); //HIP ANIM
+	    GL11.glPushMatrix(); // RIGHT LEG MATRIX START
 
-		bindTexture(ResourceManager.behemoth_hip_tex);
-		GL11.glTranslatef(0, -8.6F, -0.5F);
-		ResourceManager.behemoth.renderPart("hip_right");
-		GL11.glTranslatef(0, 8.6F, 0.5F);
-		
-		
-		GL11.glPushMatrix(); //KNEE MATRIX START
-		
-		GL11.glTranslatef(0, -1.8F, -0F);
+	    // Define the target position for the right foot
+	    double targetFootX = 5.0; // Target X position for right foot
+	    double targetFootY = 2.0 * Math.sin(insine * 0.15) + 7; // Target Y position for right foot
+	    double targetFootZ = 2.0; // Target Z position for right foot
+	    // Define the length of the thigh and shin parts (you can adjust these values)
+	    double thighLength = 8.0;
+	    double shinLength = 6.0;
 
-		GL11.glRotated(sin2, 1, 0, 0); //KNEE ANIM
+	    // Calculate the distance between the hip and the target foot
+	    double deltaX = targetFootX;
+	    double deltaY = targetFootY - 8.5; // Hip height offset
+	    double deltaZ = targetFootZ - 0.5; // Foot Z offset
 
-		GL11.glTranslatef(0, -6.7F, -0.5F);
-		bindTexture(ResourceManager.behemoth_knee_tex);
+	    // Calculate the hip and knee angles using basic inverse kinematics (Law of Cosines)
+	    double distanceToTarget = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+	    double cosKneeAngle = (thighLength * thighLength + shinLength * shinLength - distanceToTarget * distanceToTarget) / (2 * thighLength * shinLength);
+	    double kneeAngle = Math.acos(cosKneeAngle); // Knee angle in radians
+	    double hipAngle = Math.atan2(deltaY, deltaX) - Math.atan2(shinLength * Math.sin(kneeAngle), thighLength + shinLength * Math.cos(kneeAngle));
 
-		ResourceManager.behemoth.renderPart("knee_right");
-		GL11.glTranslatef(0, 6.7F, 0.5F);
-		
-		GL11.glTranslatef(0, -5.6F, 0F);
-		GL11.glRotated(sin3, 1, 0, 0); //FOOT ANIM
+	    // Apply the calculated angles to the right leg parts
+	    GL11.glTranslatef(0, 8.5F, 0.5F); // Move to the hip position
+	    GL11.glRotated(hipAngle * (180.0 / Math.PI), 1, 0, 0); // Rotate the hip to the calculated angle
 
-		
-		GL11.glTranslatef(0, -1F, -0.5F);
+	    // Render the hip for the right leg
+	    bindTexture(ResourceManager.behemoth_hip_tex);
+	    GL11.glTranslatef(0, -8.6F, -0.5F);
+	    ResourceManager.behemoth.renderPart("hip_right");
+	    GL11.glTranslatef(0, 8.6F, 0.5F);
 
-		bindTexture(ResourceManager.behemoth_leg_tex);
+	    // Calculate knee transformation and render knee part for the right leg
+	    GL11.glPushMatrix(); // KNEE MATRIX START
+	    GL11.glTranslatef(0, -1.8F, -0F);
 
-		ResourceManager.behemoth.renderPart("leg_right");
+	    GL11.glRotated(kneeAngle * (180.0 / Math.PI), 1, 0, 0); // Rotate the knee to the calculated angle
 
-		GL11.glTranslatef(0, 1F, 0.5F);
+	    GL11.glTranslatef(0, -6.7F, -0.5F);
+	    bindTexture(ResourceManager.behemoth_knee_tex);
+	    ResourceManager.behemoth.renderPart("knee_right");
+	    GL11.glTranslatef(0, 6.7F, 0.5F);
 
-		
-		GL11.glPopMatrix(); //KNEE MATRIX END
-		
+	    // Apply foot transformation for the right leg
+	    GL11.glTranslatef(0, -5.6F, 0F);
+	    GL11.glRotated(sine, 1, 0, 0); // Foot animation
 
+	    GL11.glTranslatef(0, -1F, -0.5F);
+	    bindTexture(ResourceManager.behemoth_leg_tex);
+	    ResourceManager.behemoth.renderPart("leg_right");
 
-		GL11.glPopMatrix(); //RIGHT LEG MATRIX END
-		
-		GL11.glPushMatrix(); // RIGHT LEG MATRIX START
-		
-		GL11.glTranslatef(0, 8.5F, 0.5F);
+	    GL11.glTranslatef(0, 1F, 0.5F);
 
-		GL11.glRotated(insine, 1, 0, 0);
+	    GL11.glPopMatrix(); // KNEE MATRIX END
+	    GL11.glPopMatrix(); // RIGHT LEG MATRIX END
 
-		bindTexture(ResourceManager.behemoth_hip_tex);
-		GL11.glTranslatef(0, -8.6F, -0.5F);
-		ResourceManager.behemoth.renderPart("hip_left");
-		GL11.glTranslatef(0, 8.6F, 0.5F);
-		
-		
-		GL11.glPushMatrix(); //KNEE MATRIX START
-		
-		GL11.glTranslatef(0, -1.8F, -0F);
+	    // Inverse Kinematics for the Left Leg
+	    GL11.glPushMatrix(); // LEFT LEG MATRIX START
 
-		GL11.glRotated(sin2, 1, 0, 0);
+	    // Define the target position for the left foot
+	    double targetFootX_left = 1.0 * Math.sin(time * 0.15) + 2; // Target X position for left foot
+	    double targetFootY_left = 1.0 *  Math.sin(sin2 * 0.015) + 9 ; // Target Y position for left foot
+	    double targetFootZ_left =   Math.sin(time * 0.015) - 2 ; // Target Z position for left foot (opposite direction to right leg)
 
-		GL11.glTranslatef(0, -6.7F, -0.5F);
-		bindTexture(ResourceManager.behemoth_knee_tex);
+	    // Calculate the distance between the hip and the target foot
+	    double deltaX_left = targetFootX_left;
+	    double deltaY_left = targetFootY_left - 8.5; // Hip height offset
+	    double deltaZ_left = targetFootZ_left - 0.5; // Foot Z offset
 
-		ResourceManager.behemoth.renderPart("knee_left");
-		GL11.glTranslatef(0, 6.7F, 0.5F);
-		
-		GL11.glTranslatef(0, -5.6F, 0F);
-		GL11.glRotated(sin2, 1, 0, 0);
+	    // Calculate the hip and knee angles using basic inverse kinematics (Law of Cosines)
+	    double distanceToTarget_left = Math.sqrt(deltaX_left * deltaX_left + deltaY_left * deltaY_left + deltaZ_left * deltaZ_left);
+	    double cosKneeAngle_left = (thighLength * thighLength + shinLength * shinLength - distanceToTarget_left * distanceToTarget_left) / (2 * thighLength * shinLength);
+	    double kneeAngle_left = Math.acos(cosKneeAngle_left); // Knee angle in radians
+	    double hipAngle_left = Math.atan2(deltaY_left, deltaX_left) - Math.atan2(shinLength * Math.sin(kneeAngle_left), thighLength + shinLength * Math.cos(kneeAngle_left));
 
-		
-		GL11.glTranslatef(0, -1F, -0.5F);
+	    // Apply the calculated angles to the left leg parts
+	    GL11.glTranslatef(0, 8.5F, 0.5F); // Move to the hip position
+	    GL11.glRotated(-hipAngle_left * (180.0 / Math.PI), 1, 0, 0); // Rotate the hip to the calculated angle (negative for left leg)
 
-		bindTexture(ResourceManager.behemoth_leg_tex);
+	    // Render the hip for the left leg
+	    bindTexture(ResourceManager.behemoth_hip_tex);
+	    GL11.glTranslatef(0, -8.6F, -0.5F);
+	    ResourceManager.behemoth.renderPart("hip_left");
+	    GL11.glTranslatef(0, 8.6F, 0.5F);
 
-		ResourceManager.behemoth.renderPart("leg_left");
+	    // Calculate knee transformation and render knee part for the left leg
+	    GL11.glPushMatrix(); // KNEE MATRIX START
+	    GL11.glTranslatef(0, -1.8F, -0F);
 
-		GL11.glTranslatef(0, 1F, 0.5F);
+	    GL11.glRotated(kneeAngle_left * (180.0 / Math.PI), 1, 0, 0); // Rotate the knee to the calculated angle
 
-		
-		GL11.glPopMatrix(); //KNEE MATRIX END
-		
+	    GL11.glTranslatef(0, -6.7F, -0.5F);
+	    bindTexture(ResourceManager.behemoth_knee_tex);
+	    ResourceManager.behemoth.renderPart("knee_left");
+	    GL11.glTranslatef(0, 6.7F, 0.5F);
 
+	    // Apply foot transformation for the left leg
+	    GL11.glTranslatef(0, -5.6F, 0F);
+	    GL11.glRotated(sin2, 1, 0, 0); // Foot animation
 
-		GL11.glPopMatrix(); //RIGHT LEG MATRIX END
-		GL11.glEnable(GL11.GL_CULL_FACE);
+	    GL11.glTranslatef(0, -1F, -0.5F);
+	    bindTexture(ResourceManager.behemoth_leg_tex);
+	    ResourceManager.behemoth.renderPart("leg_left");
+
+	    GL11.glTranslatef(0, 1F, 0.5F);
+
+	    GL11.glPopMatrix(); // KNEE MATRIX END
+	    GL11.glPopMatrix(); // LEFT LEG MATRIX END
+
+	    GL11.glEnable(GL11.GL_CULL_FACE);
 
 		GL11.glPopMatrix();
 	}
