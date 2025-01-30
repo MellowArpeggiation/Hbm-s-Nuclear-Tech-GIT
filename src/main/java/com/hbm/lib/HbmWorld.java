@@ -1,6 +1,7 @@
 package com.hbm.lib;
 
 import com.hbm.world.gen.MapGenNTMFeatures;
+import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.gen.NTMWorldGenerator;
 import com.hbm.world.gen.component.*;
 import com.hbm.world.gen.component.BunkerComponents.BunkerStart;
@@ -31,6 +32,8 @@ public class HbmWorld {
 		registerWorldGen(worldGenerator, 1); //Ideally, move everything over from HbmWorldGen to NTMWorldGenerator
 		MinecraftForge.EVENT_BUS.register(worldGenerator);
 		//registerWorldGen(new WorldGenTest(), 1);
+
+		NBTStructure.register();
 	}
 
 	public static void registerWorldGen(IWorldGenerator nukerWorldGen, int weightedProbability) {

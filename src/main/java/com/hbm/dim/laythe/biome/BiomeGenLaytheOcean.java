@@ -8,7 +8,7 @@ public class BiomeGenLaytheOcean extends BiomeGenBaseLaythe {
 		super(id);
 		this.setBiomeName("Sagan Sea");
 
-		this.setHeight(new BiomeGenBase.Height(-1.0F, 0.12F));
+		this.setHeight(new BiomeGenBase.Height(-1.8F, 0.24F));
 		this.setTemperatureRainfall(0.2F, 0.2F);
 	}
 }

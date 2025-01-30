@@ -6,8 +6,10 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.material.Mats;
 import com.hbm.items.ItemEnums.EnumCokeType;
 import com.hbm.items.machine.ItemCircuit.EnumCircuitType;
+import com.hbm.items.machine.ItemPWRFuel.EnumPWRFuel;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemBlowtorch;
+import com.hbm.items.weapon.sedna.factory.GunFactory.EnumAmmo;
 
 import net.minecraft.init.Items;
 import net.minecraft.util.WeightedRandomChestContent;
@@ -22,6 +24,7 @@ public class ItemPoolsComponent {
 	public static final String POOL_SOLID_FUEL = "POOL_SOLID_FUEL";
 	public static final String POOL_VAULT_LAB = "POOL_VAULT_LAB";
 	public static final String POOL_VAULT_LOCKERS = "POOL_VAULT_LOCKERS";
+	public static final String POOL_SUBMARINE = "POOL_SUBMARINE";
 	
 	public static void init() {
 		
@@ -181,7 +184,34 @@ public class ItemPoolsComponent {
 					weighted(Items.clock, 0, 1, 1, 3),
 					weighted(Items.book, 0, 1, 5, 10),
 					weighted(Items.experience_bottle, 0, 1, 3, 1)
-			};
+				};
+			}};
+			
+			// Submarines found sunk on Laythe
+			new ItemPool(POOL_SUBMARINE) {{
+				this.pool = new WeightedRandomChestContent[] {
+					weighted(ModItems.nugget_u235, 0, 3, 12, 5),
+					weighted(ModItems.nugget_pu238, 0, 3, 12, 5),
+					weighted(ModItems.nugget_ra226, 0, 3, 6, 5),
+					weighted(ModItems.oxy_pinwheel, 0, 1, 1, 1),
+					weighted(ModItems.gas_mask_m65, 0, 1, 1, 2),
+					weighted(ModItems.gas_mask_mono, 0, 1, 1, 2),
+					weighted(ModItems.gas_mask_filter, 0, 1, 1, 2),
+					weighted(ModItems.powder_iodine, 0, 1, 1, 1),
+					weighted(ModItems.powder_bromine, 0, 1, 2, 1),
+					weighted(ModItems.hazmat_kit, 0, 1, 1, 2),
+					weighted(ModItems.gun_carbine, 0, 1, 1, 2),
+					weighted(ModItems.ammo_standard, EnumAmmo.R762_FMJ.ordinal(), 8, 32, 4),
+					weighted(ModBlocks.yellow_barrel, 0, 1, 3, 3),
+					weighted(ModItems.powder_neptunium, 0, 1, 1, 1),
+					weighted(ModItems.pwr_fuel, EnumPWRFuel.MEU.ordinal(), 1, 3, 3),
+					weighted(ModItems.pwr_fuel, EnumPWRFuel.MEP.ordinal(), 1, 3, 3),
+					weighted(ModItems.pwr_fuel, EnumPWRFuel.HEU235.ordinal(), 1, 3, 4),
+					weighted(Items.paper, 0, 1, 6, 5),
+					weighted(Items.clock, 0, 1, 1, 3),
+					weighted(Items.compass, 0, 1, 1, 3),
+					weighted(Items.book, 0, 1, 5, 4),
+				};
 		}};
 	}
 }

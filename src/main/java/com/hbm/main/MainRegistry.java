@@ -102,7 +102,6 @@ import com.hbm.dim.WorldTypeTeleport;
 import com.hbm.world.ModBiomes;
 import com.hbm.world.PlanetGen;
 
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -828,8 +827,6 @@ public class MainRegistry {
 		IMCHandler.registerHandler("blastfurnace", new IMCBlastFurnace());
 		IMCHandler.registerHandler("crystallizer", new IMCCrystallizer());
 		IMCHandler.registerHandler("centrifuge", new IMCCentrifuge());
-		
-		PlanetGen.init();
 
 		if (Loader.isModLoaded("NotEnoughItems")){
 			if (Loader.instance().getIndexedModList().get("NotEnoughItems").getVersion().contains("GTNH")) {
@@ -880,6 +877,9 @@ public class MainRegistry {
 		ItemPoolConfigJSON.initialize();
 		ClientConfig.initConfig();
 
+		// gotta init AFTER loot pools
+		PlanetGen.init();
+
 		TileEntityNukeCustom.registerBombItems();
 		ArmorUtil.register();
 		HazmatRegistry.registerHazmats();
@@ -903,6 +903,7 @@ public class MainRegistry {
 		// Sulfur caves can't be defined globally due to vacuums evaporating fluids
 		new OreLayer3D(ModBlocks.stone_resource, EnumStoneType.HEMATITE.ordinal()).setGlobal(true).setScaleH(0.04D).setScaleV(0.25D).setThreshold(230);
 		new OreLayer3D(ModBlocks.stone_resource, EnumStoneType.BAUXITE.ordinal()).setGlobal(true).setScaleH(0.03D).setScaleV(0.15D).setThreshold(300);
+		new OreLayer3D(ModBlocks.stone_resource, EnumStoneType.MALACHITE.ordinal()).setGlobal(true).setScaleH(0.1D).setScaleV(0.15D).setThreshold(275);
 
 		
 		// Earth caves + layers
@@ -929,12 +930,13 @@ public class MainRegistry {
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setDimension(SpaceConfig.minmusDimension).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20);
 		new OreLayer3D(ModBlocks.minmus_regolith, 0).setDimension(SpaceConfig.minmusDimension).setScaleH(0.06D).setScaleV(0.25D).setThreshold(220);
 		new OreLayer3D(ModBlocks.minmus_smooth, 0).setDimension(SpaceConfig.minmusDimension).setScaleH(0.05D).setScaleV(0.15D).setThreshold(280);
-		new OreLayer3D(ModBlocks.stone_resource, EnumStoneType.MALACHITE.ordinal()).setDimension(SpaceConfig.minmusDimension).setScaleH(0.04D).setScaleV(0.25D).setThreshold(180);
 		
 		// Laythe caves + layers
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setDimension(SpaceConfig.laytheDimension).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20).withFluid(ModBlocks.sulfuric_acid_block);
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.ASBESTOS.ordinal()).setDimension(SpaceConfig.laytheDimension).setThreshold(1.75D).setRangeMult(20).setYLevel(25).setMaxRange(20);
 		new OreCave(ModBlocks.tumor).setDimension(SpaceConfig.laytheDimension).setThreshold(0.3D).setRangeMult(20).setYLevel(25).setMaxRange(70);
+		new OreCave(ModBlocks.laythe_silt, 6).setDimension(SpaceConfig.laytheDimension).setThreshold(0.25D).setRangeMult(80).setYLevel(54).setMaxRange(24).setBlockOverride(ModBlocks.laythe_silt).setIgnoreWater(true).setStalagmites(false);
+		new OreCave(ModBlocks.laythe_silt, 3).setDimension(SpaceConfig.laytheDimension).setThreshold(0.2D).setRangeMult(60).setYLevel(58).setMaxRange(14).setBlockOverride(ModBlocks.laythe_silt).setIgnoreWater(true).setStalagmites(false);
 
 
 		BedrockOre.init();
@@ -1717,6 +1719,23 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.casing_9");
 		ignoreMappings.add("hbm:item.casing_50");
 		ignoreMappings.add("hbm:item.casing_buckshot");
+		ignoreMappings.add("hbm:item.assembly_iron");
+		ignoreMappings.add("hbm:item.assembly_steel");
+		ignoreMappings.add("hbm:item.assembly_lead");
+		ignoreMappings.add("hbm:item.assembly_gold");
+		ignoreMappings.add("hbm:item.assembly_schrabidium");
+		ignoreMappings.add("hbm:item.assembly_nightmare");
+		ignoreMappings.add("hbm:item.assembly_desh");
+		ignoreMappings.add("hbm:item.assembly_nopip");
+		ignoreMappings.add("hbm:item.assembly_smg");
+		ignoreMappings.add("hbm:item.assembly_556");
+		ignoreMappings.add("hbm:item.assembly_762");
+		ignoreMappings.add("hbm:item.assembly_45");
+		ignoreMappings.add("hbm:item.assembly_uzi");
+		ignoreMappings.add("hbm:item.assembly_actionexpress");
+		ignoreMappings.add("hbm:item.assembly_calamity");
+		ignoreMappings.add("hbm:item.assembly_lacunae");
+		ignoreMappings.add("hbm:item.assembly_luna");
 
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);

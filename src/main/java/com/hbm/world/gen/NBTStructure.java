@@ -4,10 +4,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.function.Predicate;
 
+import com.hbm.blocks.generic.BlockWand;
+import com.hbm.blocks.generic.BlockBobble.BobbleType;
+import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
+import com.hbm.config.GeneralConfig;
+import com.hbm.config.StructureConfig;
 import com.hbm.handler.ThreeInts;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.Tuple.Pair;
@@ -15,7 +24,7 @@ import com.hbm.util.Tuple.Pair;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IResource;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
@@ -23,24 +32,60 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelFormatException;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.structure.MapGenStructure;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class NBTStructure {
-	
-	// TODO: optimise for generating multiple copies, rotations, and such
 
-	private NBTTagCompound data;
+	/**
+	 * Now with structure support!
+	 * 
+	 * the type of structure to generate is saved into the Component,
+	 * meaning this can generate all sorts of different structures,
+	 * without having to define and register each structure manually
+	 */
+	
+	// TODO: add rotation support
+
+	protected static Map<Integer, List<SpawnCondition>> dimensionMap = new HashMap<>();
+
+	private boolean isLoaded;
+	private ThreeInts size;
+	private BlockDefinition[] palette;
+	private List<Pair<Short, String>> itemPalette;
+	private BlockState[][][] blockArray;
 
 	public NBTStructure(ResourceLocation resource) {
-		try {
-			IResource res = Minecraft.getMinecraft().getResourceManager().getResource(resource);
-			loadStructure(res.getInputStream());
-		} catch(IOException e) {
-			throw new ModelFormatException("IO Exception loading NBT resource", e);
+		// Can't use regular resource loading, servers don't know how!
+		InputStream stream = NBTStructure.class.getResourceAsStream("/assets/" + resource.getResourceDomain() + "/" + resource.getResourcePath());
+		if(stream != null) {
+			loadStructure(stream);
+		} else {
+			MainRegistry.logger.error("NBT Structure not found: " + resource.getResourcePath());
 		}
+	}
+
+	public static void register() {
+		MapGenStructureIO.registerStructure(Start.class, "NBTStructures");
+		MapGenStructureIO.func_143031_a(Component.class, "NBTComponents");
+	}
+
+	// REGISTRATION ORDER MATTERS, make sure new structures are registered AFTER older ones
+	public static void registerStructureForDimension(int dimensionId, SpawnCondition spawn) {
+		List<SpawnCondition> list = dimensionMap.computeIfAbsent(dimensionId, integer -> new ArrayList<SpawnCondition>());
+		spawn.dimensionId = dimensionId;
+		spawn.conditionId = list.size();
+		list.add(spawn);
 	}
 
 	// Saves a selected area into an NBT structure (+ some of our non-standard stuff to support 1.7.10)
@@ -66,6 +111,10 @@ public class NBTStructure {
 					Pair<Block, Integer> block = new Pair<Block, Integer>(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
 
 					if(exclude.contains(block)) continue;
+
+					if(block.key instanceof BlockWand) {
+						block.key = ((BlockWand) block.key).exportAs;
+					}
 
 					int paletteId = palette.size();
 					if(palette.containsKey(block)) {
@@ -161,10 +210,74 @@ public class NBTStructure {
 
 	private void loadStructure(InputStream inputStream) {
 		try {
-			data = CompressedStreamTools.readCompressed(inputStream);
+			NBTTagCompound data = CompressedStreamTools.readCompressed(inputStream);
 
-		} catch(IOException e) {
-			throw new ModelFormatException("IO Exception reading NBT Structure format", e);
+
+			// GET SIZE (for offsetting to center)
+			size = parsePos(data.getTagList("size", NBT.TAG_INT));
+
+			
+			// PARSE BLOCK PALETTE
+			NBTTagList paletteList = data.getTagList("palette", NBT.TAG_COMPOUND);
+			palette = new BlockDefinition[paletteList.tagCount()];
+
+			for(int i = 0; i < paletteList.tagCount(); i++) {
+				NBTTagCompound p = paletteList.getCompoundTagAt(i);
+
+				String blockName = p.getString("Name");
+				NBTTagCompound prop = p.getCompoundTag("Properties");
+
+				int meta = 0;
+				try {
+					meta = Integer.parseInt(prop.getString("meta"));
+				} catch(NumberFormatException ex) {
+					MainRegistry.logger.info("Failed to parse: " + prop.getString("meta"));
+					meta = 0;
+				}
+
+				palette[i] = new BlockDefinition(blockName, meta);
+			}
+			
+
+			// PARSE ITEM PALETTE (custom shite)
+			if(data.hasKey("itemPalette")) {
+				NBTTagList itemPaletteList = data.getTagList("itemPalette", NBT.TAG_COMPOUND);
+				itemPalette = new ArrayList<>(itemPaletteList.tagCount());
+
+				for(int i = 0; i < itemPaletteList.tagCount(); i++) {
+					NBTTagCompound p = itemPaletteList.getCompoundTagAt(i);
+
+					short id = p.getShort("ID");
+					String name = p.getString("Name");
+
+					itemPalette.add(new Pair<>(id, name));
+				}
+			} else {
+				itemPalette = null;
+			}
+
+
+			// LOAD IN BLOCKS
+			NBTTagList blockData = data.getTagList("blocks", NBT.TAG_COMPOUND);
+			blockArray = new BlockState[size.x][size.y][size.z];
+
+			for(int i = 0; i < blockData.tagCount(); i++) {
+				NBTTagCompound block = blockData.getCompoundTagAt(i);
+				int state = block.getInteger("state");
+				ThreeInts pos = parsePos(block.getTagList("pos", NBT.TAG_INT));
+
+				blockArray[pos.x][pos.y][pos.z] = new BlockState(palette[state]);
+				
+				if(block.hasKey("nbt")) {
+					blockArray[pos.x][pos.y][pos.z].nbt = block.getCompoundTag("nbt");
+				}
+			}
+
+
+			isLoaded = true;
+
+		} catch(Exception e) {
+			MainRegistry.logger.error("Exception reading NBT Structure format", e);
 		} finally {
 			try {
 				inputStream.close();
@@ -174,78 +287,101 @@ public class NBTStructure {
 		}
 	}
 
+	private HashMap<Short, Short> getWorldItemPalette() {
+		if(itemPalette == null) return null;
+
+		HashMap<Short, Short> worldItemPalette = new HashMap<>();
+
+		for(Pair<Short, String> entry : itemPalette) {
+			Item item = (Item)Item.itemRegistry.getObject(entry.getValue());
+
+			worldItemPalette.put(entry.getKey(), (short)Item.getIdFromItem(item));
+		}
+
+		return worldItemPalette;
+	}
+
+	private TileEntity buildTileEntity(World world, Block block, Map<Block, Loot> lootTable, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt) {
+		nbt = (NBTTagCompound)nbt.copy();
+
+		if(worldItemPalette != null) relinkItems(worldItemPalette, nbt);
+
+		TileEntity te = TileEntity.createAndLoadEntity(nbt);
+
+		if(lootTable != null && te instanceof IInventory && lootTable.containsKey(block)) {
+			Loot entry = lootTable.get(block);
+			WeightedRandomChestContent.generateChestContents(world.rand, entry.table, (IInventory) te, world.rand.nextInt(entry.maxLoot - entry.minLoot) + entry.minLoot);
+		}
+
+		if(te instanceof TileEntityBobble) {
+			((TileEntityBobble) te).type = BobbleType.values()[world.rand.nextInt(BobbleType.values().length - 1) + 1];
+		}
+
+		return te;
+	}
+
 	public void build(World world, int x, int y, int z) {
-		if(data == null) {
+		build(world, x, y, z, null);
+	}
+
+	public void build(World world, int x, int y, int z, Map<Block, Loot> lootTable) {
+		if(!isLoaded) {
 			MainRegistry.logger.info("NBTStructure is invalid");
 			return;
 		}
 
-		// GET SIZE (for offsetting to center)
-		ThreeInts size = parsePos(data.getTagList("size", NBT.TAG_INT));
 		x -= size.x / 2;
 		z -= size.z / 2;
 
+		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
 
-		// PARSE BLOCK PALETTE
-		NBTTagList paletteList = data.getTagList("palette", NBT.TAG_COMPOUND);
-		BlockDefinition[] palette = new BlockDefinition[paletteList.tagCount()];
+		for(int bx = 0; bx < size.x; bx++) {
+			for(int bz = 0; bz < size.z; bz++) {
+				for(int by = 0; by < size.y; by++) {
+					BlockState state = blockArray[bx][by][bz];
+					if(state == null) continue;
 
-		for(int i = 0; i < paletteList.tagCount(); i++) {
-			NBTTagCompound p = paletteList.getCompoundTagAt(i);
-
-			String blockName = p.getString("Name");
-			NBTTagCompound prop = p.getCompoundTag("Properties");
-
-			int meta = 0;
-			try {
-				meta = Integer.parseInt(prop.getString("meta"));
-			} catch(NumberFormatException ex) {
-				MainRegistry.logger.info("Failed to parse: " + prop.getString("meta"));
-				meta = 0;
-			}
-
-			palette[i] = new BlockDefinition(blockName, meta);
-		}
-
-
-		// PARSE ITEM PALETTE (custom shite)
-		HashMap<Short, Short> itemPalette = null;
-		if(data.hasKey("itemPalette")) {
-			NBTTagList itemPaletteList = data.getTagList("itemPalette", NBT.TAG_COMPOUND);
-			itemPalette = new HashMap<Short, Short>();
-
-			for(int i = 0; i < itemPaletteList.tagCount(); i++) {
-				NBTTagCompound p = itemPaletteList.getCompoundTagAt(i);
-
-				short id = p.getShort("ID");
-				String name = p.getString("Name");
-
-				Item item = (Item)Item.itemRegistry.getObject(name);
-
-				itemPalette.put(id, (short)Item.getIdFromItem(item));
+					world.setBlock(x + bx, y + by, z + bz, state.definition.block, state.definition.meta, 2);
+		
+					if(state.nbt != null) {
+						TileEntity te = buildTileEntity(world, state.definition.block, lootTable, worldItemPalette, state.nbt);
+						world.setTileEntity(x + bx, y + by, z + bz, te);
+					}
+				}
 			}
 		}
+	}
 
+	protected boolean build(World world, Map<Block, Loot> lootTable, StructureBoundingBox totalBounds, StructureBoundingBox generatingBounds) {
+		if(!isLoaded) {
+			MainRegistry.logger.info("NBTStructure is invalid");
+			return false;
+		}
 
-		// LOAD IN BLOCKS
-		NBTTagList blocks = data.getTagList("blocks", NBT.TAG_COMPOUND);
+		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
 
-		for(int i = 0; i < blocks.tagCount(); i++) {
-			NBTTagCompound block = blocks.getCompoundTagAt(i);
-			int state = block.getInteger("state");
-			ThreeInts pos = parsePos(block.getTagList("pos", NBT.TAG_INT));
+		int minX = Math.max(generatingBounds.minX - totalBounds.minX, 0);
+		int maxX = Math.min(generatingBounds.maxX - totalBounds.minX + 1, size.x);
+		int minZ = Math.max(generatingBounds.minZ - totalBounds.minZ, 0);
+		int maxZ = Math.min(generatingBounds.maxZ - totalBounds.minZ + 1, size.z);
 
-			world.setBlock(x + pos.x, y + pos.y, z + pos.z, palette[state].block, palette[state].meta, 2);
+		for(int bx = minX; bx < maxX; bx++) {
+			for(int bz = minZ; bz < maxZ; bz++) {
+				for(int by = 0; by < size.y; by++) {
+					BlockState state = blockArray[bx][by][bz];
+					if(state == null) continue;
 
-			if(block.hasKey("nbt")) {
-				NBTTagCompound nbt = (NBTTagCompound)block.getCompoundTag("nbt").copy();
+					world.setBlock(bx + totalBounds.minX, by + totalBounds.minY, bz + totalBounds.minZ, state.definition.block, state.definition.meta, 2);
 
-				if(itemPalette != null) relinkItems(itemPalette, nbt);
-
-				TileEntity te = TileEntity.createAndLoadEntity(nbt);
-				world.setTileEntity(x + pos.x, y + pos.y, z + pos.z, te);
+					if(state.nbt != null) {
+						TileEntity te = buildTileEntity(world, state.definition.block, lootTable, worldItemPalette, state.nbt);
+						world.setTileEntity(bx + totalBounds.minX, by + totalBounds.minY, bz + totalBounds.minZ, te);
+					}
+				}
 			}
 		}
+
+		return true;
 	}
 
 	// What a fucken mess, why even implement the IntArray NBT if ye aint gonna use it Moe Yang?
@@ -277,14 +413,200 @@ public class NBTStructure {
 		}
 	}
 
+	private static class BlockState {
+
+		final BlockDefinition definition;
+		NBTTagCompound nbt;
+
+		BlockState(BlockDefinition definition) {
+			this.definition = definition;
+		}
+
+	}
+
 	private static class BlockDefinition {
 
-		Block block;
-		int meta;
+		final Block block;
+		final int meta;
 
 		BlockDefinition(String name, int meta) {
 			this.block = Block.getBlockFromName(name);
 			this.meta = meta;
+		}
+
+	}
+
+	public static class Loot {
+
+		private final WeightedRandomChestContent[] table;
+		private final int minLoot;
+		private final int maxLoot;
+
+		public Loot(WeightedRandomChestContent[] table, int minLoot, int maxLoot) {
+			this.table = table;
+			this.minLoot = minLoot;
+			this.maxLoot = maxLoot;
+		}
+
+	}
+	
+	public static class SpawnCondition {
+
+		public NBTStructure structure;
+		public Map<Block, Loot> lootTable;
+
+		public Predicate<BiomeGenBase> canSpawn;
+		public int minHeight = 0;
+		public int maxHeight = 128;
+
+		// Used for serializing/deserializing in Component
+		private int dimensionId;
+		private int conditionId;
+
+		// Can this spawn in the current biome
+		protected boolean isValid(BiomeGenBase biome) {
+			if(canSpawn == null) return true;
+			return canSpawn.test(biome);
+		}
+
+	}
+
+	public static class Component extends StructureComponent {
+
+		SpawnCondition spawn;
+
+		public Component() {}
+		
+		public Component(SpawnCondition spawn, Random rand, int x, int z) {
+			super(0);
+			this.boundingBox = new StructureBoundingBox(x, 0, z, x + spawn.structure.size.x, 255, z + spawn.structure.size.z);
+			this.spawn = spawn;
+		}
+
+		// Save to NBT
+		@Override
+		protected void func_143012_a(NBTTagCompound nbt) {
+			nbt.setInteger("dim", spawn.dimensionId);
+			nbt.setInteger("con", spawn.conditionId);
+		}
+
+		// Load from NBT
+		@Override
+		protected void func_143011_b(NBTTagCompound nbt) {
+			spawn = dimensionMap.get(nbt.getInteger("dim")).get(nbt.getInteger("con"));
+		}
+
+		@Override
+		public boolean addComponentParts(World world, Random rand, StructureBoundingBox box) {
+			// now we're in the world, update minY/maxY
+			if(boundingBox.minY == 0) {
+				int y = MathHelper.clamp_int(getAverageHeight(world, box), spawn.minHeight, spawn.maxHeight);
+				boundingBox.minY = y;
+				boundingBox.maxY = y + spawn.structure.size.y;
+			}
+
+			return spawn.structure.build(world, spawn.lootTable, boundingBox, box);
+		}
+
+		private int getAverageHeight(World world, StructureBoundingBox box) {
+			int total = 0;
+			int iterations = 0;
+			
+			for(int z = box.minZ; z <= box.maxZ; z++) {
+				for(int x = box.minX; x <= box.maxX; x++) {
+					total += world.getTopSolidOrLiquidBlock(x, z);
+					iterations++;
+				}
+			}
+			
+			if(iterations == 0)
+				return 64;
+			
+			return total / iterations;
+		}
+		
+	}
+
+	public static class Start extends StructureStart {
+		
+		public Start() {}
+		
+		@SuppressWarnings("unchecked")
+		public Start(World world, Random rand, SpawnCondition spawn, int chunkX, int chunkZ) {
+			super(chunkX, chunkZ);
+			
+			int x = chunkX << 4;
+			int z = chunkZ << 4;
+
+			this.components.add(new Component(spawn, rand, x, z));
+
+			updateBoundingBox();
+		}
+
+	}
+
+	public static class GenStructure extends MapGenStructure {
+
+		private SpawnCondition nextSpawn;
+
+		public void generateStructures(World world, Random rand, IChunkProvider chunkProvider, int chunkX, int chunkZ) {
+			Block[] ablock = new Block[65536];
+
+			func_151539_a(chunkProvider, world, chunkX, chunkZ, ablock);
+			generateStructuresInChunk(world, rand, chunkX, chunkZ);
+		}
+
+		@Override
+		public String func_143025_a() {
+			return "NBTStructures";
+		}
+	
+		@Override
+		protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
+			if(!dimensionMap.containsKey(worldObj.provider.dimensionId)) return false;
+
+			int x = chunkX;
+			int z = chunkZ;
+			
+			if(x < 0) x -= StructureConfig.structureMaxChunks - 1;
+			if(z < 0) z -= StructureConfig.structureMaxChunks - 1;
+			
+			x /= StructureConfig.structureMaxChunks;
+			z /= StructureConfig.structureMaxChunks;
+			Random random = this.worldObj.setRandomSeed(x, z, 996996996 - worldObj.provider.dimensionId);
+			x *= StructureConfig.structureMaxChunks;
+			z *= StructureConfig.structureMaxChunks;
+			x += random.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
+			z += random.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
+			
+			if(chunkX == x && chunkZ == z) {
+				BiomeGenBase biome = this.worldObj.getWorldChunkManager().getBiomeGenAt(chunkX * 16 + 8, chunkZ * 16 + 8);
+
+				nextSpawn = findSpawn(biome);
+
+				if(GeneralConfig.enableDebugMode && nextSpawn != null)
+					MainRegistry.logger.info("[Debug] Spawning NBT structure at: " + chunkX * 16 + ", " + chunkZ * 16);
+				
+				return nextSpawn != null;
+			}
+
+			return false;
+		}
+	
+		@Override
+		protected StructureStart getStructureStart(int chunkX, int chunkZ) {
+			return new Start(this.worldObj, this.rand, nextSpawn, chunkX, chunkZ);
+		}
+
+		private SpawnCondition findSpawn(BiomeGenBase biome) {
+			List<SpawnCondition> spawnList = dimensionMap.get(worldObj.provider.dimensionId);
+
+			for(int i = 0; i < 64; i++) {
+				SpawnCondition spawn = spawnList.get(rand.nextInt(spawnList.size()));
+				if(spawn.isValid(biome)) return spawn;
+			}
+
+			return null;
 		}
 
 	}

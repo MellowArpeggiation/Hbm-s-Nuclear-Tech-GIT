@@ -1719,8 +1719,8 @@ public class ModEventHandler {
 	public void onClickSign(PlayerInteractEvent event) {
 
 		int x = event.x;
-		int y = event.y;
-		int z = event.z;
+		int y = event.z;
+		int z = event.y;
 		World world = event.world;
 
 		if(!world.isRemote && event.action == Action.RIGHT_CLICK_BLOCK && world.getTileEntity(x, y, z) instanceof TileEntitySign) {

@@ -21,6 +21,10 @@ public class ParticleRocketFlame extends EntityFX {
 	private float customGreen;
 	private float customBlue;
 	
+
+
+	protected double pressure = 1;
+
 	public ParticleRocketFlame(TextureManager p_i1213_1_, World p_i1218_1_, double p_i1218_2_, double p_i1218_4_, double p_i1218_6_) {
 		super(p_i1218_1_, p_i1218_2_, p_i1218_4_, p_i1218_6_);
 		particleIcon = ModEventHandlerClient.particleBase;
@@ -45,6 +49,26 @@ public class ParticleRocketFlame extends EntityFX {
 		return this;
 	}
 	
+
+	public ParticleRocketFlame setAtmosphericPressure(double pressure) {
+		this.pressure = pressure;
+
+		if(pressure < 0.08) {
+			double factor = (0.08 - pressure) * 100;
+			this.motionX += (rand.nextDouble() - 0.5) * factor;
+			this.motionY += (rand.nextDouble() - 0.5) * factor;
+			this.motionZ += (rand.nextDouble() - 0.5) * factor;
+		}
+
+		if(pressure < 0.05) {
+			this.maxAge /= 4;
+		} else if (pressure < 0.2) {
+			this.maxAge /= 2;
+		}
+
+		return this;
+	}
+
 	@Override
 	public void onUpdate() {
 		this.prevPosX = this.posX;

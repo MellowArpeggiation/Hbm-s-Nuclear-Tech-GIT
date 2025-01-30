@@ -85,14 +85,14 @@ public class BlockTallPlantWater extends BlockEnumMulti implements IPlantable, I
 		return 6;
 	}
 
-    @Override
+	@Override
 	public boolean canReplace(World world, int x, int y, int z, int side, ItemStack itemStack) {
-    	return world.getBlock(x, y + 1, z) == Blocks.water && this.canBlockStay(world, x, y, z);
-    }
-    
+		return world.getBlock(x, y + 1, z) == Blocks.water && this.canBlockStay(world, x, y, z);
+	}
+	
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return super.canPlaceBlockAt(world, x, y, z) && this.canBlockStay(world, x, y, z) && world.isAirBlock(x, y + 1, z);
+		return super.canPlaceBlockAt(world, x, y, z) && this.canBlockStay(world, x, y, z) && world.getBlock(x, y + 1, z).getMaterial().isLiquid();
 	}
 
 	protected boolean canPlaceBlockOn(Block block) {
@@ -148,26 +148,26 @@ public class BlockTallPlantWater extends BlockEnumMulti implements IPlantable, I
 	
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
-	    // Check if the top part of the plant is being broken
-	    if (meta > 7) {
-	        // Set the bottom part to air
-	        if (world.getBlock(x, y - 1, z) == this) {
-	            world.setBlockToAir(x, y - 1, z);
-	        }
-	    } else {
-	        // If the bottom part is being broken, check for the top part and set it to air
-	        if (world.getBlock(x, y + 1, z) == this) {
-	            world.setBlockToAir(x, y + 1, z);
-	        }
-	        
-	    }
+		// Check if the top part of the plant is being broken
+		if (meta > 7) {
+			// Set the bottom part to air
+			if (world.getBlock(x, y - 1, z) == this) {
+				world.setBlockToAir(x, y - 1, z);
+			}
+		} else {
+			// If the bottom part is being broken, check for the top part and set it to air
+			if (world.getBlock(x, y + 1, z) == this) {
+				world.setBlockToAir(x, y + 1, z);
+			}
+			
+		}
 		if(player.capabilities.isCreativeMode) {
 			world.setBlock(x, y + 1, z, Blocks.air, 0, 2);
 		} else {
 			this.dropBlockAsItem(world, x, y + 1, z, world.getBlockMetadata(x, y + 1, z), 0);
 		}
 
-	    super.onBlockHarvested(world, x, y, z, meta, player);
+		super.onBlockHarvested(world, x, y, z, meta, player);
 	}
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
@@ -215,15 +215,15 @@ public class BlockTallPlantWater extends BlockEnumMulti implements IPlantable, I
 	public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
 		return world.getBlockMetadata(x, y, z);
 	}
-    @Override
-    public int quantityDropped(int parMetadata, int parFortune, Random parRand) {
-       return (parRand.nextInt(4));
-    }
+	@Override
+	public int quantityDropped(int parMetadata, int parFortune, Random parRand) {
+	   return (parRand.nextInt(4));
+	}
 
-    @Override
-    public Item getItemDropped(int parMetadata, Random parRand, int parFortune) {
-       return (ModItems.saltleaf);
-    }
+	@Override
+	public Item getItemDropped(int parMetadata, Random parRand, int parFortune) {
+	   return (ModItems.saltleaf);
+	}
 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {

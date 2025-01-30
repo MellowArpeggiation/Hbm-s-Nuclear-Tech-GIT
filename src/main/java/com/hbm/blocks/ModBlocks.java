@@ -548,6 +548,8 @@ public class ModBlocks {
 	public static Block laythe_kelp;
 	public static Block laythe_short;
 	public static Block laythe_glow;
+	public static Block laythe_coral;
+	public static Block laythe_coral_block;
 
 	public static Block crop_strawberry;
 	public static Block crop_coffee;
@@ -1391,6 +1393,9 @@ public class ModBlocks {
 	public static Block orbital_station_computer;
 	public static Block propulsion_creative;
 
+	// NBT Structure wand blocks
+	public static Block wand_air;
+
 	public static Material materialGas = new MaterialGas();
 
 	private static void initializeBlock() {
@@ -1763,7 +1768,7 @@ public class ModBlocks {
 		moon_turf = new BlockFalling(Material.sand).setBlockName("moon_turf").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":moon_turf");
 		moon_rock = new BlockGeneric(Material.rock).setBlockName("moon_rock").setStepSound(Block.soundTypeStone).setCreativeTab(MainRegistry.blockTab).setHardness(1.5F).setBlockTextureName(RefStrings.MODID + ":moon_rock");
 
-		tumor = new BlockTumor(Material.clay).setBlockName("tumor").setStepSound(Block.soundTypeSnow).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setBlockTextureName(RefStrings.MODID + ":tumor_base");
+		tumor = new BlockTint(Material.clay, "tumor_base2", "tumor_base3", "fleshv2").setBlockName("tumor").setStepSound(Block.soundTypeSnow).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setBlockTextureName(RefStrings.MODID + ":tumor_base");
 
 		duna_sands = new BlockFalling(Material.sand).setBlockName("duna_sands").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":duna_sands");
 		duna_rock = new BlockGeneric(Material.rock).setBlockName("duna_rock").setStepSound(Block.soundTypeStone).setCreativeTab(MainRegistry.blockTab).setHardness(1.5F).setBlockTextureName(RefStrings.MODID + ":duna_rock");
@@ -1773,10 +1778,10 @@ public class ModBlocks {
 		eve_silt = new BlockFalling(Material.sand).setBlockName("eve_silt").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":eve_silt");
 		eve_rock = new BlockGeneric(Material.rock).setBlockName("eve_rock").setStepSound(Block.soundTypeStone).setCreativeTab(MainRegistry.blockTab).setHardness(1.5F).setBlockTextureName(RefStrings.MODID + ":eve_stone_2");
 
-		laythe_silt = new BlockFalling(Material.sand).setBlockName("laythe_silt").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":laythe_silt");
+		laythe_silt = new BlockFallingTint(Material.sand).setBlockName("laythe_silt").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":laythe_silt");
 
 
-		ike_regolith = new BlockIke(Material.rock).setBlockName("ike_regolith").setStepSound(Block.soundTypeStone).setCreativeTab(MainRegistry.blockTab).setHardness(1.5F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":ike_regolith");
+		ike_regolith = new BlockTint(Material.rock, "ike_regolith2", "ike_regolith3", "ike_regolith4", "ike_regolith5").setBlockName("ike_regolith").setStepSound(Block.soundTypeStone).setCreativeTab(MainRegistry.blockTab).setHardness(1.5F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":ike_regolith");
 		ike_stone = new BlockGeneric(Material.rock).setBlockName("ike_stone").setStepSound(Block.soundTypeStone).setCreativeTab(MainRegistry.blockTab).setHardness(1.5F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":ike_stone");
 
 		dres_rock = new BlockGeneric(Material.rock).setBlockName("dres_rock").setStepSound(Block.soundTypeStone).setCreativeTab(MainRegistry.blockTab).setHardness(1.5F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":dresbase");
@@ -1882,6 +1887,8 @@ public class ModBlocks {
 		crop_strawberry = new BlockCrop(ModBlocks.rubber_farmland, (atmosphere) -> atmosphere.hasFluid(Fluids.AIR, 0.1) || atmosphere.hasFluid(Fluids.OXYGEN, 0.1)).setBlockName("crop_strawberry").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":strawberry");
 		crop_coffee = new BlockCrop(Blocks.farmland, (atmosphere) -> atmosphere.hasFluid(Fluids.AIR, 0.1) || atmosphere.hasFluid(Fluids.OXYGEN, 0.1)).setBlockName("crop_coffee").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":coffee");
 		crop_tea = new BlockCrop(Blocks.farmland,(atmosphere) -> atmosphere.hasFluid(Fluids.AIR, 0.1) || atmosphere.hasFluid(Fluids.OXYGEN, 0.1)).setBlockName("crop_tea").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":tea");
+		laythe_coral = new BlockCoral().setBlockName("laythe_coral").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":laythe_coral");
+		laythe_coral_block = new BlockEnumMulti(Material.coral, BlockCoral.EnumCoral.class, false, true).setHardness(0.5F).setBlockName("laythe_coral_block").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setBlockTextureName(RefStrings.MODID + ":laythe_coral_block");
 		vine_phosphor = new BlockHangingVine(thick_foliage).setBlockName("vine_phosphor").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.5F);
 		
 		waste_earth = new WasteEarth(Material.ground, true).setBlockName("waste_earth").setStepSound(Block.soundTypeGrass).setCreativeTab(MainRegistry.blockTab).setHardness(0.6F).setBlockTextureName(RefStrings.MODID + ":waste_earth");
@@ -2664,6 +2671,8 @@ public class ModBlocks {
 		orbital_station_port = new BlockOrbitalStation(Material.iron).setBlockName("orbital_station_port").setHardness(1.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		orbital_station_computer = new BlockOrbitalStationComputer(Material.iron).setBlockName("orbital_station_computer").setHardness(1.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		propulsion_creative = new BlockStationPropulsionCreative(Material.iron).setBlockName("propulsion_creative").setHardness(1.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
+
+		wand_air = new BlockWand(Blocks.air).setBlockName("wand_air").setBlockTextureName(RefStrings.MODID + ":wand_air");
 	}
 
 	private static void registerBlock() {
@@ -3125,6 +3134,8 @@ public class ModBlocks {
 		register(laythe_kelp);
 		register(laythe_short);
 		register(laythe_glow);
+		register(laythe_coral);
+		register(laythe_coral_block);
 		register(plant_dead);
 		register(reeds);
 		register(crop_strawberry);
@@ -3915,6 +3926,8 @@ public class ModBlocks {
 		register(orbital_station_port);
 		register(orbital_station_computer);
 		register(propulsion_creative);
+
+		register(wand_air);
 	}
 
 	private static void register(Block b) {

@@ -6,6 +6,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.world.dungeon.AncientTomb;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -34,7 +35,16 @@ public class WorldGeneratorIke implements IWorldGenerator {
 		//dres and the likes :)
 	
 		
-        DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.mineralSpawn, 10, 12, 32, ModBlocks.ore_mineral, meta, ModBlocks.ike_stone);
+		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.mineralSpawn, 10, 12, 32, ModBlocks.ore_mineral, meta, ModBlocks.ike_stone);
 
+		
+
+		if(WorldConfig.pyramidStructure > 0 && rand.nextInt(WorldConfig.pyramidStructure) == 0) {
+			int x = i + rand.nextInt(16);
+			int z = j + rand.nextInt(16);
+			int y = world.getHeightValue(x, z);
+
+			new AncientTomb().build(world, rand, x, y, z);
+		}
 	}
 }

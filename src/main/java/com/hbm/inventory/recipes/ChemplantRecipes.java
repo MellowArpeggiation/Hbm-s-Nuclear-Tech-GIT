@@ -420,32 +420,6 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.inputItems(
 						new ComparableStack(ModBlocks.sand_dirty, 20))
 				.outputItems(new ItemStack(ModItems.ingot_iridium, 1)));
-		recipes.add(new ChemRecipe(108, "ELBOMB", 300)
-				.inputFluids(new FluidStack(Fluids.ELBOWGREASE, 100))
-				.inputItems(
-						new ComparableStack(ModItems.ingot_lead, 1),
-						new OreDictStack(ANY_SMOKELESS.dust(), 1))
-				.outputItems(new ItemStack(ModItems.assembly_smg, 32))); //9mm
-		recipes.add(new ChemRecipe(109, "ELBOOB", 350)
-				.inputFluids(new FluidStack(Fluids.ELBOWGREASE, 100))
-				.inputItems(
-						new ComparableStack(ModItems.ingot_copper, 1),
-						new OreDictStack(ANY_SMOKELESS.dust(), 1))
-				.outputItems(new ItemStack(ModItems.assembly_762, 32))); //762
-		recipes.add(new ChemRecipe(110, "ELGORE", 250)
-				.inputFluids(new FluidStack(Fluids.ELBOWGREASE, 100))
-				.inputItems(
-						new ComparableStack(ModItems.ingot_copper, 1),
-						new ComparableStack(ModItems.ingot_lead, 1),
-						new OreDictStack(ANY_SMOKELESS.dust(), 1))
-				.outputItems(new ItemStack(ModItems.assembly_556, 32))); //556
-		recipes.add(new ChemRecipe(111, "FIVEFIVE", 300)
-				.inputFluids(new FluidStack(Fluids.ELBOWGREASE, 100))
-				.inputItems(
-						new ComparableStack(ModItems.ingot_copper, 1),
-						new ComparableStack(ModItems.ingot_steel, 1),
-						new OreDictStack(ANY_SMOKELESS.dust(), 1))
-				.outputItems(new ItemStack(ModItems.assembly_lacunae, 32))); //5mm
 		recipes.add(new ChemRecipe(112, "NMASSIII", 300)
 				.inputFluids(new FluidStack(Fluids.DEATH, 7000), (new FluidStack(Fluids.ELBOWGREASE, 6000)))
 				.inputItems(
