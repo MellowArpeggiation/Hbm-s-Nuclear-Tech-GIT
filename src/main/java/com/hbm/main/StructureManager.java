@@ -9,5 +9,6 @@ public class StructureManager {
 
 	public static final NBTStructure martian = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/martian-base.nbt"));
 	public static final NBTStructure nuke_sub = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/nuke-sub.nbt"));
+	// public static final NBTStructure test_rot = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-rot.nbt"));
 	
 }

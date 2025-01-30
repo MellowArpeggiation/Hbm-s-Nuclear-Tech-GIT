@@ -23,6 +23,13 @@ import com.hbm.util.Tuple.Pair;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockButton;
+import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockRotatedPillar;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -54,10 +61,9 @@ public class NBTStructure {
 	 * meaning this can generate all sorts of different structures,
 	 * without having to define and register each structure manually
 	 */
-	
-	// TODO: add rotation support
 
 	protected static Map<Integer, List<SpawnCondition>> dimensionMap = new HashMap<>();
+	protected static Map<Integer, List<SpawnCondition>> weightedMap = new HashMap<>();
 
 	private boolean isLoaded;
 	private ThreeInts size;
@@ -86,6 +92,11 @@ public class NBTStructure {
 		spawn.dimensionId = dimensionId;
 		spawn.conditionId = list.size();
 		list.add(spawn);
+
+		List<SpawnCondition> weightedList = weightedMap.computeIfAbsent(dimensionId, integer -> new ArrayList<SpawnCondition>());
+		for(int i = 0; i < spawn.spawnWeight; i++) {
+			weightedList.add(spawn);
+		}
 	}
 
 	// Saves a selected area into an NBT structure (+ some of our non-standard stuff to support 1.7.10)
@@ -321,38 +332,47 @@ public class NBTStructure {
 	}
 
 	public void build(World world, int x, int y, int z) {
-		build(world, x, y, z, null);
+		build(world, x, y, z, null, 0);
 	}
 
-	public void build(World world, int x, int y, int z, Map<Block, Loot> lootTable) {
+	public void build(World world, int x, int y, int z, Map<Block, Loot> lootTable, int coordBaseMode) {
 		if(!isLoaded) {
 			MainRegistry.logger.info("NBTStructure is invalid");
 			return;
 		}
-
-		x -= size.x / 2;
-		z -= size.z / 2;
-
+		
 		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
+		
+		boolean swizzle = coordBaseMode == 1 || coordBaseMode == 3;
+		x -= (swizzle ? size.z : size.x) / 2;
+		z -= (swizzle ? size.x : size.z) / 2;
 
-		for(int bx = 0; bx < size.x; bx++) {
-			for(int bz = 0; bz < size.z; bz++) {
+		int maxX = size.x;
+		int maxZ = size.z;
+
+		for(int bx = 0; bx < maxX; bx++) {
+			for(int bz = 0; bz < maxZ; bz++) {
 				for(int by = 0; by < size.y; by++) {
+					int rx = rotateX(bx, bz, coordBaseMode);
+					int rz = rotateZ(bx, bz, coordBaseMode);
+
 					BlockState state = blockArray[bx][by][bz];
 					if(state == null) continue;
 
-					world.setBlock(x + bx, y + by, z + bz, state.definition.block, state.definition.meta, 2);
+					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
+
+					world.setBlock(x + rx, y + by, z + rz, state.definition.block, meta, 2);
 		
 					if(state.nbt != null) {
 						TileEntity te = buildTileEntity(world, state.definition.block, lootTable, worldItemPalette, state.nbt);
-						world.setTileEntity(x + bx, y + by, z + bz, te);
+						world.setTileEntity(x + rx, y + by, z + rz, te);
 					}
 				}
 			}
 		}
 	}
 
-	protected boolean build(World world, Map<Block, Loot> lootTable, StructureBoundingBox totalBounds, StructureBoundingBox generatingBounds) {
+	protected boolean build(World world, Map<Block, Loot> lootTable, StructureBoundingBox totalBounds, StructureBoundingBox generatingBounds, int coordBaseMode) {
 		if(!isLoaded) {
 			MainRegistry.logger.info("NBTStructure is invalid");
 			return false;
@@ -360,22 +380,37 @@ public class NBTStructure {
 
 		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
 
-		int minX = Math.max(generatingBounds.minX - totalBounds.minX, 0);
-		int maxX = Math.min(generatingBounds.maxX - totalBounds.minX + 1, size.x);
-		int minZ = Math.max(generatingBounds.minZ - totalBounds.minZ, 0);
-		int maxZ = Math.min(generatingBounds.maxZ - totalBounds.minZ + 1, size.z);
+		int absMinX = Math.max(generatingBounds.minX - totalBounds.minX, 0);
+		int absMaxX = Math.min(generatingBounds.maxX - totalBounds.minX, size.x - 1);
+		int absMinZ = Math.max(generatingBounds.minZ - totalBounds.minZ, 0);
+		int absMaxZ = Math.min(generatingBounds.maxZ - totalBounds.minZ, size.z - 1);
 
-		for(int bx = minX; bx < maxX; bx++) {
-			for(int bz = minZ; bz < maxZ; bz++) {
+		int rotMinX = rotateX(absMinX, absMinZ, coordBaseMode);
+		int rotMaxX = rotateX(absMaxX, absMaxZ, coordBaseMode);
+		int rotMinZ = rotateZ(absMinX, absMinZ, coordBaseMode);
+		int rotMaxZ = rotateZ(absMaxX, absMaxZ, coordBaseMode);
+
+		int minX = Math.min(rotMinX, rotMaxX);
+		int maxX = Math.max(rotMinX, rotMaxX);
+		int minZ = Math.min(rotMinZ, rotMaxZ);
+		int maxZ = Math.max(rotMinZ, rotMaxZ);
+
+		for(int bx = minX; bx <= maxX; bx++) {
+			for(int bz = minZ; bz <= maxZ; bz++) {
 				for(int by = 0; by < size.y; by++) {
+					int rx = rotateX(bx, bz, coordBaseMode);
+					int rz = rotateZ(bx, bz, coordBaseMode);
+
 					BlockState state = blockArray[bx][by][bz];
 					if(state == null) continue;
 
-					world.setBlock(bx + totalBounds.minX, by + totalBounds.minY, bz + totalBounds.minZ, state.definition.block, state.definition.meta, 2);
+					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
+
+					world.setBlock(rx + totalBounds.minX, by + totalBounds.minY, rz + totalBounds.minZ, state.definition.block, meta, 2);
 
 					if(state.nbt != null) {
 						TileEntity te = buildTileEntity(world, state.definition.block, lootTable, worldItemPalette, state.nbt);
-						world.setTileEntity(bx + totalBounds.minX, by + totalBounds.minY, bz + totalBounds.minZ, te);
+						world.setTileEntity(rx + totalBounds.minX, by + totalBounds.minY, rz + totalBounds.minZ, te);
 					}
 				}
 			}
@@ -410,6 +445,40 @@ public class NBTStructure {
 		for(int i = 0; i < items.tagCount(); i++) {
 			NBTTagCompound item = items.getCompoundTagAt(i);
 			item.setShort("id", palette.get(item.getShort("id")));
+		}
+	}
+
+	private int transformMeta(BlockDefinition definition, int coordBaseMode) {
+		// Our shit
+		if(definition.block instanceof IRotatable) return ((IRotatable) definition.block).transformMeta(definition.meta, coordBaseMode);
+
+		// Vanilla shit
+		if(definition.block instanceof BlockStairs) return IRotatable.transformMetaStairs(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockRotatedPillar) return IRotatable.transformMetaPillar(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockDirectional) return IRotatable.transformMetaDirectional(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockTorch) return IRotatable.transformMetaTorch(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockButton) return IRotatable.transformMetaTorch(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockDoor) return IRotatable.transformMetaDoor(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockLever) return IRotatable.transformMetaLever(definition.meta, coordBaseMode);
+
+		return definition.meta;
+	}
+
+	private int rotateX(int x, int z, int coordBaseMode) {
+		switch(coordBaseMode) {
+		case 1: return size.z - 1 - z;
+		case 2: return size.x - 1 - x;
+		case 3: return z;
+		default: return x;
+		}
+	}
+
+	private int rotateZ(int x, int z, int coordBaseMode) {
+		switch(coordBaseMode) {
+		case 1: return x;
+		case 2: return size.z - 1 - z;
+		case 3: return size.x - 1 - x;
+		default: return z;
 		}
 	}
 
@@ -456,8 +525,14 @@ public class NBTStructure {
 		public Map<Block, Loot> lootTable;
 
 		public Predicate<BiomeGenBase> canSpawn;
+		public int spawnWeight = 1;
+
+		// Height modifiers, will apply offset and clamp height generated at, allowing for:
+		//  * Submarines that must spawn under the ocean surface
+		//  * Bunkers that sit underneath the ground
 		public int minHeight = 0;
 		public int maxHeight = 128;
+		public int heightOffset = 0;
 
 		// Used for serializing/deserializing in Component
 		private int dimensionId;
@@ -479,8 +554,18 @@ public class NBTStructure {
 		
 		public Component(SpawnCondition spawn, Random rand, int x, int z) {
 			super(0);
-			this.boundingBox = new StructureBoundingBox(x, 0, z, x + spawn.structure.size.x, 255, z + spawn.structure.size.z);
+			this.coordBaseMode = rand.nextInt(3);
 			this.spawn = spawn;
+
+			switch(this.coordBaseMode) {
+			case 1:
+			case 3:
+				this.boundingBox = new StructureBoundingBox(x, 0, z, x + spawn.structure.size.z, 255, z + spawn.structure.size.x);
+				break;
+			default:
+				this.boundingBox = new StructureBoundingBox(x, 0, z, x + spawn.structure.size.x, 255, z + spawn.structure.size.z);
+				break;
+			}
 		}
 
 		// Save to NBT
@@ -500,12 +585,12 @@ public class NBTStructure {
 		public boolean addComponentParts(World world, Random rand, StructureBoundingBox box) {
 			// now we're in the world, update minY/maxY
 			if(boundingBox.minY == 0) {
-				int y = MathHelper.clamp_int(getAverageHeight(world, box), spawn.minHeight, spawn.maxHeight);
+				int y = MathHelper.clamp_int(getAverageHeight(world, box) + spawn.heightOffset, spawn.minHeight, spawn.maxHeight);
 				boundingBox.minY = y;
 				boundingBox.maxY = y + spawn.structure.size.y;
 			}
 
-			return spawn.structure.build(world, spawn.lootTable, boundingBox, box);
+			return spawn.structure.build(world, spawn.lootTable, boundingBox, box, coordBaseMode);
 		}
 
 		private int getAverageHeight(World world, StructureBoundingBox box) {
@@ -573,11 +658,11 @@ public class NBTStructure {
 			
 			x /= StructureConfig.structureMaxChunks;
 			z /= StructureConfig.structureMaxChunks;
-			Random random = this.worldObj.setRandomSeed(x, z, 996996996 - worldObj.provider.dimensionId);
+			rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L + this.worldObj.getWorldInfo().getSeed() + (long)996996996 - worldObj.provider.dimensionId);
 			x *= StructureConfig.structureMaxChunks;
 			z *= StructureConfig.structureMaxChunks;
-			x += random.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
-			z += random.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
+			x += rand.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
+			z += rand.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
 			
 			if(chunkX == x && chunkZ == z) {
 				BiomeGenBase biome = this.worldObj.getWorldChunkManager().getBiomeGenAt(chunkX * 16 + 8, chunkZ * 16 + 8);
@@ -599,7 +684,7 @@ public class NBTStructure {
 		}
 
 		private SpawnCondition findSpawn(BiomeGenBase biome) {
-			List<SpawnCondition> spawnList = dimensionMap.get(worldObj.provider.dimensionId);
+			List<SpawnCondition> spawnList = weightedMap.get(worldObj.provider.dimensionId);
 
 			for(int i = 0; i < 64; i++) {
 				SpawnCondition spawn = spawnList.get(rand.nextInt(spawnList.size()));

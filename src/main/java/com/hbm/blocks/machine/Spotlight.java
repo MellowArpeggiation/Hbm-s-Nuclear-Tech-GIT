@@ -7,6 +7,7 @@ import java.util.Random;
 import com.hbm.blocks.BlockEnums.LightType;
 import com.hbm.blocks.ISpotlight;
 import com.hbm.main.ResourceManager;
+import com.hbm.world.gen.IRotatable;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -22,7 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.obj.WavefrontObject;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class Spotlight extends Block implements ISpotlight {
+public class Spotlight extends Block implements ISpotlight, IRotatable {
 
 	// I'd be extending the ReinforcedLamp class if it wasn't for the inverted behaviour of these specific lights
 	// I want these blocks to be eminently useful, so removing the need for redstone by default is desired,
@@ -313,4 +314,10 @@ public class Spotlight extends Block implements ISpotlight {
 	public int getBeamLength() {
 		return this.beamLength;
 	}
+
+	@Override
+	public int transformMeta(int meta, int coordBaseMode) {
+		return IRotatable.transformMetaDeco(meta >> 1, coordBaseMode) << 1;
+	}
+
 }

@@ -2,6 +2,7 @@ package com.hbm.blocks.generic;
 
 import com.hbm.blocks.BlockMulti;
 import com.hbm.lib.RefStrings;
+import com.hbm.world.gen.IRotatable;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -16,7 +17,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockDecoToaster extends BlockMulti {
+public class BlockDecoToaster extends BlockMulti implements IRotatable {
 
 	protected String[] variants = new String[] {"toaster_iron", "toaster_steel", "toaster_wood"};
 	@SideOnly(Side.CLIENT) protected IIcon[] icons;
@@ -89,5 +90,10 @@ public class BlockDecoToaster extends BlockMulti {
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return AxisAlignedBB.getBoundingBox(x + this.minX, y + this.minY, z + this.minZ, x + this.maxX, y + this.maxY, z + this.maxZ);
+	}
+
+	@Override
+	public int transformMeta(int meta, int coordBaseMode) {
+		return (meta & 12) + coordBaseMode;
 	}
 }

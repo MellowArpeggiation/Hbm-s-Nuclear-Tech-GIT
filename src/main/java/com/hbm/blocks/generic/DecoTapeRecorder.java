@@ -1,5 +1,7 @@
 package com.hbm.blocks.generic;
 
+import com.hbm.world.gen.IRotatable;
+
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -9,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class DecoTapeRecorder extends BlockContainer {
+public class DecoTapeRecorder extends BlockContainer implements IRotatable {
 
 	public DecoTapeRecorder(Material p_i45386_1_) {
 		super(p_i45386_1_);
@@ -57,6 +59,11 @@ public class DecoTapeRecorder extends BlockContainer {
 		{
 			world.setBlockMetadataWithNotify(x, y, z, 4, 2);
 		}
+	}
+
+	@Override
+	public int transformMeta(int meta, int coordBaseMode) {
+		return IRotatable.transformMetaDeco(meta, coordBaseMode);
 	}
 
 }
