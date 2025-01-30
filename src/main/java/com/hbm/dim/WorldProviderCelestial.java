@@ -436,6 +436,10 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 				colors[2] = f5 * f5;
 				colors[3] = f6;
 			}
+		} else if( atmosphere.hasFluid(Fluids.TEKTOAIR) ||  atmosphere.hasFluid(Fluids.JOOLGAS) || atmosphere.hasFluid(Fluids.CHLORINE)) {
+			float tmp = colors[1];
+			colors[1] = colors[2];
+			colors[2] = tmp;
 		}
 
 		return colors;
