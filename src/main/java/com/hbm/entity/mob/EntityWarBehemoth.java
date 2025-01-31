@@ -16,15 +16,18 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityEgg;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 //no model yet, im gonna take this low n slow
-public class EntityWarBehemoth extends EntityMob implements IRangedAttackMob {
+public class EntityWarBehemoth extends EntityMob implements IMob, IAnimals {
     private int stepTimer = 0;
 	public double headTargetYaw; 
 
@@ -47,14 +50,10 @@ public class EntityWarBehemoth extends EntityMob implements IRangedAttackMob {
         //this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 0.2D, false));
 		this.tasks.addTask(4, new EntityAIBehemothGun(this, true, true, 2, 40, 30));
 		this.targetTasks.addTask(5, new EntityAIHurtByTarget(this, false));
-
+		
 
     }
-	@Override
-	public void attackEntityWithRangedAttack(EntityLivingBase p_82196_1_, float p_82196_2_) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		
@@ -83,7 +82,7 @@ public class EntityWarBehemoth extends EntityMob implements IRangedAttackMob {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(300.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(50.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(15.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(1000.0D);
@@ -104,9 +103,8 @@ public class EntityWarBehemoth extends EntityMob implements IRangedAttackMob {
 
 
     }
-    public double getMaxTargetRange() {
-        return 64;
-    }
+   
+    
 	protected void entityInit() {
 		super.entityInit();
 		this.dataWatcher.addObject(19, (int) 0);

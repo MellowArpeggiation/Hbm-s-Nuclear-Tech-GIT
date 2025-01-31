@@ -5,14 +5,23 @@ import com.hbm.entity.projectile.EntityBulletBaseMK4;
 import com.hbm.entity.projectile.EntityBulletBaseNT;
 import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.handler.BulletConfigSyncingUtil;
+import com.hbm.handler.CasingEjector;
+import com.hbm.items.weapon.ItemAmmoArty;
 import com.hbm.items.weapon.sedna.factory.XFactory12ga;
 import com.hbm.items.weapon.sedna.factory.XFactory40mm;
 import com.hbm.items.weapon.sedna.factory.XFactoryFlamer;
 import com.hbm.items.weapon.sedna.factory.XFactoryRocket;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.toclient.AuxParticlePacketNT;
+import com.hbm.particle.SpentCasing;
+import com.hbm.particle.SpentCasing.CasingType;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import scala.collection.mutable.ArrayBuilder.ofBoolean;
 
@@ -74,32 +83,69 @@ public class EntityAITankshell extends EntityAIBase {
 		this.owner.rotationYaw = this.owner.rotationYawHead;
     }
 
-	
+	protected static CasingEjector ejector = new CasingEjector().setMotion(0, 0.6, -1).setAngleRange(0.1F, 0.1F);
+
+	protected CasingEjector getEjector() {
+		return ejector;
+	}
+	protected SpentCasing cachedCasingConfig = null;
+
+	protected Vec3 getCasingSpawnPos() {
+		return Vec3.createVectorHelper(owner.posX, owner.posY, owner.posZ);
+	}
+	protected void spawnCasing() {
+		//cachedCasingConfig = ItemAmmoArty.itemTypes[2].casing;
+		cachedCasingConfig = new SpentCasing(CasingType.SHOTGUN).setColor(0xE5DD00, SpentCasing.COLOR_CASE_12GA).setScale(10F).register("TankGa").setupSmoke(0.02F, 0.5D, 60, 20).setMaxAge(60);
+		
+		if(cachedCasingConfig == null) return;
+		CasingEjector ej = getEjector();
+		
+		Vec3 spawn = this.getCasingSpawnPos();
+		NBTTagCompound data = new NBTTagCompound();
+		data.setString("type", "casing");
+		data.setFloat("pitch", (float) 0);
+		data.setFloat("yaw", (float) owner.rotationYawHead);
+		data.setBoolean("crouched", false);
+		data.setString("name", cachedCasingConfig.getName());
+		if(ej != null) data.setInteger("ej", ej.getId());
+		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, spawn.xCoord, spawn.yCoord, spawn.zCoord), new TargetPoint(owner.worldObj.provider.dimensionId, owner.posX, owner.posY, owner.posZ, 50));
+		
+		cachedCasingConfig = null;
+	}
+
 	private void fireArtilleryShell() {
 		if(reloadTimer <= 0) {
-            double dist = Vec3.createVectorHelper(target.posX - owner.posX, target.posY - owner.posY, target.posZ - owner.posZ).lengthVector();
-            System.out.println(dist);
-            double radYaw = Math.toRadians(owner.rotationYaw);
-            double radPitch = Math.toRadians(owner.rotationPitch);
+		    double xOffset = Math.cos(Math.toRadians(owner.rotationYawHead)) * 0;
+		    double zOffset = Math.sin(Math.toRadians(owner.rotationYawHead)) * 1.5;
+		    double yOffset = 10; 
 
-            double forwardX = -Math.sin(radYaw) * Math.cos(radPitch);
-            double forwardY = -Math.sin(radPitch);
-            double forwardZ = Math.cos(radYaw) * Math.cos(radPitch);
+		    double targetX = target.posX - (owner.posX + xOffset);
+		    double targetY = target.posY + target.getEyeHeight() - (owner.posY + yOffset);
+		    double targetZ = target.posZ - (owner.posZ + zOffset);
 
-            double spawnDistance = 3.0;
-            double spawnX = owner.posX + forwardX * spawnDistance;
-            double spawnY = owner.posY + 3 + forwardY * spawnDistance;
-            double spawnZ = owner.posZ + forwardZ * spawnDistance;
-			if(dist > 50) {
-		        EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactoryRocket.rocket_qd[1], 4, 0.01F, spawnX, spawnY, spawnZ);
-		        bullet.setPosition(spawnX, spawnY, spawnZ);
-		        owner.worldObj.spawnEntityInWorld(bullet);	        
+		    double distance = Math.sqrt(targetX * targetX + targetY * targetY + targetZ * targetZ);
+		    targetX /= distance;
+		    targetY /= distance;
+		    targetZ /= distance;
+			spawnCasing();
+
+			if (distance > 30) {
+			    EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactoryRocket.rocket_qd[1], 4, 0.01F, owner.posX, owner.posY + 3, owner.posZ);
+			    bullet.setPosition(owner.posX, owner.posY + 3, owner.posZ);
+			    bullet.motionX = targetX * 0.5D;  
+			    bullet.motionZ = targetZ * 0.5D;
+			    bullet.motionY = targetY * 0.1D;
+			    owner.worldObj.spawnEntityInWorld(bullet);
 			} else {
-				for (int i = 0; i < 4; i++) {
-	            EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactory12ga.g12_explosive, 4, 0.01F, spawnX, spawnY, spawnZ);
-	            bullet.setPosition(spawnX, spawnY, spawnZ);
-	            owner.worldObj.spawnEntityInWorld(bullet);
-				}
+			    for (int i = 0; i < 8; i++) {
+			        EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactory12ga.g12_bp, 4, 0.01F, owner.posX, owner.posY + 3, owner.posZ);
+				    bullet.setPosition(owner.posX + xOffset, owner.posY + 3, owner.posZ + zOffset);
+				    
+				    bullet.addVelocity(targetX, 0, targetZ);
+				    
+
+			        owner.worldObj.spawnEntityInWorld(bullet);
+			    }
 			}
 
 			owner.worldObj.playSoundEffect(owner.posX, owner.posY, owner.posZ, "hbm:turret.jeremy_fire", 25.0F, 1.0F);

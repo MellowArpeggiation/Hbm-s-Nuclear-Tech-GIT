@@ -71,7 +71,6 @@ public class RenderBehemoth extends RenderLiving {
 	    	            double targetPitch = Math.atan2(dy, horizontalDistance) * (180 / Math.PI);
 	    	            double deltaPitch = MathHelper.wrapAngleTo180_double(targetPitch - behemoth.rotationPitch);
 	    	            behemoth.rotationPitch += deltaPitch * 0.1;  // Smooth pitch rotation
-	    	            System.out.println(targetBase.getEyeHeight());
 	    	            
 		                double targetYaw = Math.atan2(dz, dx) * (180 / Math.PI) - 90;
 		                double deltaYaw = MathHelper.wrapAngleTo180_double(targetYaw - behemoth.newRotationYaw);

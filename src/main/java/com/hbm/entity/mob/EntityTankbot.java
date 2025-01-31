@@ -27,6 +27,8 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.item.ItemStack;
@@ -35,11 +37,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.world.World;
 
-public class EntityTankbot extends EntityMob implements IRangedAttackMob, IRadiationImmune {
+public class EntityTankbot extends EntityMob implements IMob, IRadiationImmune, IAnimals {
     private int stepTimer = 0;
 	public double headTargetYaw; 
 	public double currentHeadYaw; 
 	public EntityLivingBase targetEntityLiving;
+	
     private static final IEntitySelector selector = new IEntitySelector() {
 		public boolean isEntityApplicable(Entity p_82704_1_) {
 			return !(p_82704_1_ instanceof EntityTankbot);
@@ -53,14 +56,16 @@ public class EntityTankbot extends EntityMob implements IRangedAttackMob, IRadia
         this.getNavigator().setAvoidsWater(true);
         this.deathTime = -50;
         this.isImmuneToFire = true;
-        this.renderDistanceWeight = 15.0D;
+        this.renderDistanceWeight = 24.0D;
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
         this.tasks.addTask(5, new EntityAIWander(this, 0.2D));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLiving.class, 0, true, true, selector));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
 		this.tasks.addTask(3, new EntityAIStepTowardsTarget(this, 50, 0.2D, 200, 20, 0.6));
         //this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 0.2D, false));
-		this.tasks.addTask(4, new EntityAITankshell(this, true, true, 2, 10, 30));
+		this.tasks.addTask(4, new EntityAITankshell(this, true, true, 2, 10, 2));
+		
+		
     }
 	protected void onDeathUpdate() {
 		
@@ -86,11 +91,7 @@ public class EntityTankbot extends EntityMob implements IRangedAttackMob, IRadia
 		return this.worldObj.getClosestVulnerablePlayerToEntity(this, 64D);
 	}
 
-	@Override
-	public void attackEntityWithRangedAttack(EntityLivingBase p_82196_1_, float p_82196_2_) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	
 	protected void entityInit() {
@@ -135,7 +136,7 @@ public class EntityTankbot extends EntityMob implements IRangedAttackMob, IRadia
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(300.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(60.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(15.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(140.0D);
@@ -157,6 +158,7 @@ public class EntityTankbot extends EntityMob implements IRangedAttackMob, IRadia
     public void onUpdate() {
         super.onUpdate();
         
+        
         float targetYaw = this.rotationYawHead; 
         float currentYaw = this.rotationYaw;
         float maxYawChange = 1f; 
@@ -172,7 +174,5 @@ public class EntityTankbot extends EntityMob implements IRangedAttackMob, IRadia
         this.rotationYaw += yawDifference;
     }
     
-    public double getMaxTargetRange() {
-        return 64;
-    }
+
 }

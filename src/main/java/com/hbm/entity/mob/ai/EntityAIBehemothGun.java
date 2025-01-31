@@ -85,7 +85,7 @@ public class EntityAIBehemothGun extends EntityAIBase {
 	    targetY /= distance;
 	    targetZ /= distance;
 
-	    EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactory762mm.r762_ap, 1F, 0.01F, owner.posX + xOffset, owner.posY + yOffset, owner.posZ + zOffset);
+	    EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactory762mm.r762_ap.setKnockback(0), 1F, 0.01F, owner.posX + xOffset, owner.posY + yOffset, owner.posZ + zOffset);
 	    bullet.setPosition(owner.posX + xOffset, owner.posY + yOffset, owner.posZ + zOffset);
 	    
 	    bullet.motionX = targetX * 0.5D;  

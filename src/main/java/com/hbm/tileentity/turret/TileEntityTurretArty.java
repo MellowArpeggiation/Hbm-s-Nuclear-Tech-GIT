@@ -437,7 +437,8 @@ public class TileEntityTurretArty extends TileEntityTurretBaseArtillery implemen
 	
 	@Override
 	protected void spawnCasing() {
-		
+		cachedCasingConfig = ItemAmmoArty.itemTypes[1].casing;
+
 		if(cachedCasingConfig == null) return;
 		CasingEjector ej = getEjector();
 		
