@@ -52,7 +52,7 @@ public class EntityTankbot extends EntityMob implements IMob, IRadiationImmune, 
     public EntityTankbot(World p_i1733_1_)
     {
         super(p_i1733_1_);
-        this.setSize(3.75F, 3.35F);
+        this.setSize(2.45F, 3.25F);
         this.getNavigator().setAvoidsWater(true);
         this.deathTime = -50;
         this.isImmuneToFire = true;
