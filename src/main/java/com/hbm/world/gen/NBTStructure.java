@@ -90,11 +90,28 @@ public class NBTStructure {
 	}
 
 	// REGISTRATION ORDER MATTERS, make sure new structures are registered AFTER older ones
-	public static void registerStructureForDimension(int dimensionId, SpawnCondition spawn) {
+	public static void registerStructure(int dimensionId, SpawnCondition spawn) {
 		List<SpawnCondition> list = dimensionMap.computeIfAbsent(dimensionId, integer -> new ArrayList<SpawnCondition>());
 		spawn.dimensionId = dimensionId;
 		spawn.conditionId = list.size();
 		list.add(spawn);
+
+		List<SpawnCondition> weightedList = weightedMap.computeIfAbsent(dimensionId, integer -> new ArrayList<SpawnCondition>());
+		for(int i = 0; i < spawn.spawnWeight; i++) {
+			weightedList.add(spawn);
+		}
+	}
+
+	// Add a chance for nothing to spawn at a given valid spawn location
+	public static void registerNullWeight(int dimensionId, int weight) {
+		registerNullWeight(dimensionId, weight, null);
+	}
+
+	public static void registerNullWeight(int dimensionId, int weight, Predicate<BiomeGenBase> predicate) {
+		SpawnCondition spawn = new SpawnCondition() {{
+			spawnWeight = weight;
+			canSpawn = predicate;
+		}};
 
 		List<SpawnCondition> weightedList = weightedMap.computeIfAbsent(dimensionId, integer -> new ArrayList<SpawnCondition>());
 		for(int i = 0; i < spawn.spawnWeight; i++) {
@@ -173,7 +190,7 @@ public class NBTStructure {
 						if(nbt.hasKey("Items")) itemKey = "Items";
 
 						if(nbt.hasKey(itemKey)) {
-							NBTTagList items = nbt.getTagList("items", NBT.TAG_COMPOUND);
+							NBTTagList items = nbt.getTagList(itemKey, NBT.TAG_COMPOUND);
 							for(int i = 0; i < items.tagCount(); i++) {
 								NBTTagCompound item = items.getCompoundTagAt(i);
 								short id = item.getShort("id");
@@ -694,10 +711,10 @@ public class NBTStructure {
 
 				nextSpawn = findSpawn(biome);
 
-				if(GeneralConfig.enableDebugMode && nextSpawn != null)
+				if(GeneralConfig.enableDebugMode && nextSpawn != null && nextSpawn.structure != null)
 					MainRegistry.logger.info("[Debug] Spawning NBT structure: " + nextSpawn.structure.name + " - at: " + chunkX * 16 + ", " + chunkZ * 16);
 				
-				return nextSpawn != null;
+				return nextSpawn != null && nextSpawn.structure != null;
 			}
 
 			return false;
