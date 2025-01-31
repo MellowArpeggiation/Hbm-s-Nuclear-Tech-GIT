@@ -65,6 +65,8 @@ public class NBTStructure {
 	protected static Map<Integer, List<SpawnCondition>> dimensionMap = new HashMap<>();
 	protected static Map<Integer, List<SpawnCondition>> weightedMap = new HashMap<>();
 
+	private String name;
+
 	private boolean isLoaded;
 	private ThreeInts size;
 	private BlockDefinition[] palette;
@@ -75,6 +77,7 @@ public class NBTStructure {
 		// Can't use regular resource loading, servers don't know how!
 		InputStream stream = NBTStructure.class.getResourceAsStream("/assets/" + resource.getResourceDomain() + "/" + resource.getResourcePath());
 		if(stream != null) {
+			name = resource.getResourcePath();
 			loadStructure(stream);
 		} else {
 			MainRegistry.logger.error("NBT Structure not found: " + resource.getResourcePath());
@@ -353,19 +356,20 @@ public class NBTStructure {
 		for(int bx = 0; bx < maxX; bx++) {
 			for(int bz = 0; bz < maxZ; bz++) {
 				for(int by = 0; by < size.y; by++) {
-					int rx = rotateX(bx, bz, coordBaseMode);
-					int rz = rotateZ(bx, bz, coordBaseMode);
-
 					BlockState state = blockArray[bx][by][bz];
 					if(state == null) continue;
 
+					int rx = rotateX(bx, bz, coordBaseMode) + x;
+					int rz = rotateZ(bx, bz, coordBaseMode) + z;
+					int ry = by + y;
+
 					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
 
-					world.setBlock(x + rx, y + by, z + rz, state.definition.block, meta, 2);
+					world.setBlock(rx, ry, rz, state.definition.block, meta, 2);
 		
 					if(state.nbt != null) {
 						TileEntity te = buildTileEntity(world, state.definition.block, lootTable, worldItemPalette, state.nbt);
-						world.setTileEntity(x + rx, y + by, z + rz, te);
+						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
 			}
@@ -380,15 +384,17 @@ public class NBTStructure {
 
 		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
 
+		// voxel grid transforms can fuck you up
+		// you have my respect, vaer
 		int absMinX = Math.max(generatingBounds.minX - totalBounds.minX, 0);
-		int absMaxX = Math.min(generatingBounds.maxX - totalBounds.minX, size.x - 1);
+		int absMaxX = Math.min(generatingBounds.maxX - totalBounds.minX, totalBounds.maxX - totalBounds.minX - 1);
 		int absMinZ = Math.max(generatingBounds.minZ - totalBounds.minZ, 0);
-		int absMaxZ = Math.min(generatingBounds.maxZ - totalBounds.minZ, size.z - 1);
+		int absMaxZ = Math.min(generatingBounds.maxZ - totalBounds.minZ, totalBounds.maxZ - totalBounds.minZ - 1);
 
-		int rotMinX = rotateX(absMinX, absMinZ, coordBaseMode);
-		int rotMaxX = rotateX(absMaxX, absMaxZ, coordBaseMode);
-		int rotMinZ = rotateZ(absMinX, absMinZ, coordBaseMode);
-		int rotMaxZ = rotateZ(absMaxX, absMaxZ, coordBaseMode);
+		int rotMinX = unrotateX(absMinX, absMinZ, coordBaseMode);
+		int rotMaxX = unrotateX(absMaxX, absMaxZ, coordBaseMode);
+		int rotMinZ = unrotateZ(absMinX, absMinZ, coordBaseMode);
+		int rotMaxZ = unrotateZ(absMaxX, absMaxZ, coordBaseMode);
 
 		int minX = Math.min(rotMinX, rotMaxX);
 		int maxX = Math.max(rotMinX, rotMaxX);
@@ -398,19 +404,20 @@ public class NBTStructure {
 		for(int bx = minX; bx <= maxX; bx++) {
 			for(int bz = minZ; bz <= maxZ; bz++) {
 				for(int by = 0; by < size.y; by++) {
-					int rx = rotateX(bx, bz, coordBaseMode);
-					int rz = rotateZ(bx, bz, coordBaseMode);
-
 					BlockState state = blockArray[bx][by][bz];
 					if(state == null) continue;
 
+					int rx = rotateX(bx, bz, coordBaseMode) + totalBounds.minX;
+					int rz = rotateZ(bx, bz, coordBaseMode) + totalBounds.minZ;
+					int ry = by + totalBounds.minY;
+
 					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
 
-					world.setBlock(rx + totalBounds.minX, by + totalBounds.minY, rz + totalBounds.minZ, state.definition.block, meta, 2);
+					world.setBlock(rx, ry, rz, state.definition.block, meta, 2);
 
 					if(state.nbt != null) {
 						TileEntity te = buildTileEntity(world, state.definition.block, lootTable, worldItemPalette, state.nbt);
-						world.setTileEntity(rx + totalBounds.minX, by + totalBounds.minY, rz + totalBounds.minZ, te);
+						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
 			}
@@ -478,6 +485,24 @@ public class NBTStructure {
 		case 1: return x;
 		case 2: return size.z - 1 - z;
 		case 3: return size.x - 1 - x;
+		default: return z;
+		}
+	}
+
+	private int unrotateX(int x, int z, int coordBaseMode) {
+		switch(coordBaseMode) {
+		case 3: return size.x - 1 - z;
+		case 2: return size.x - 1 - x;
+		case 1: return z;
+		default: return x;
+		}
+	}
+
+	private int unrotateZ(int x, int z, int coordBaseMode) {
+		switch(coordBaseMode) {
+		case 3: return x;
+		case 2: return size.z - 1 - z;
+		case 1: return size.z - 1 - x;
 		default: return z;
 		}
 	}
@@ -554,7 +579,7 @@ public class NBTStructure {
 		
 		public Component(SpawnCondition spawn, Random rand, int x, int z) {
 			super(0);
-			this.coordBaseMode = rand.nextInt(3);
+			this.coordBaseMode = rand.nextInt(4);
 			this.spawn = spawn;
 
 			switch(this.coordBaseMode) {
@@ -670,7 +695,7 @@ public class NBTStructure {
 				nextSpawn = findSpawn(biome);
 
 				if(GeneralConfig.enableDebugMode && nextSpawn != null)
-					MainRegistry.logger.info("[Debug] Spawning NBT structure at: " + chunkX * 16 + ", " + chunkZ * 16);
+					MainRegistry.logger.info("[Debug] Spawning NBT structure: " + nextSpawn.structure.name + " - at: " + chunkX * 16 + ", " + chunkZ * 16);
 				
 				return nextSpawn != null;
 			}
