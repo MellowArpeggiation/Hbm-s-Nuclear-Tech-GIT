@@ -52,7 +52,7 @@ public class EntityTankbot extends EntityMob implements IMob, IRadiationImmune, 
     public EntityTankbot(World p_i1733_1_)
     {
         super(p_i1733_1_);
-        this.setSize(0.75F, 1.35F);
+        this.setSize(3.75F, 3.35F);
         this.getNavigator().setAvoidsWater(true);
         this.deathTime = -50;
         this.isImmuneToFire = true;
@@ -63,7 +63,7 @@ public class EntityTankbot extends EntityMob implements IMob, IRadiationImmune, 
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
 		this.tasks.addTask(3, new EntityAIStepTowardsTarget(this, 50, 0.2D, 200, 20, 0.6));
         //this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 0.2D, false));
-		this.tasks.addTask(4, new EntityAITankshell(this, true, true, 2, 10, 2));
+		this.tasks.addTask(4, new EntityAITankshell(this, true, true, 2, 10, 30));
 		
 		
     }
