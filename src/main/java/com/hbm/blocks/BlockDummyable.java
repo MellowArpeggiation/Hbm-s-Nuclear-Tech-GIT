@@ -5,6 +5,8 @@ import com.hbm.handler.ThreeInts;
 import com.hbm.interfaces.ICopiable;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.IPersistentNBT;
+import com.hbm.world.gen.IRotatable;
+
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -33,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class BlockDummyable extends BlockContainer implements ICustomBlockHighlight, ICopiable {
+public abstract class BlockDummyable extends BlockContainer implements ICustomBlockHighlight, ICopiable, IRotatable {
 
 	public BlockDummyable(Material mat) {
 		super(mat);
@@ -492,7 +494,7 @@ public abstract class BlockDummyable extends BlockContainer implements ICustomBl
 		z = pos[2];
 
 		for(AxisAlignedBB aabb :this.bounding) {
-			AxisAlignedBB boxlet = getAABBRotationOffset(aabb, x + 0.5, y, z + 0.5, ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z) - this.offset).getRotation(ForgeDirection.UP));
+			AxisAlignedBB boxlet = getAABBRotationOffset(aabb, x + 0.5, y, z + 0.5, ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z) - offset).getRotation(ForgeDirection.UP));
 
 			if(entityBounding.intersectsWith(boxlet)) {
 				list.add(boxlet);
@@ -583,4 +585,27 @@ public abstract class BlockDummyable extends BlockContainer implements ICustomBl
 			return ((ICopiable) tile).infoForDisplay(world, x, y, z);
 		return null;
 	}
+
+	@Override
+	public int transformMeta(int meta, int coordBaseMode) {
+		boolean isOffset = meta >= 12; // squishing causes issues
+		boolean isExtra = !isOffset && meta >= extra;
+
+		if(isOffset) {
+			meta -= offset;
+		} else if(isExtra) {
+			meta -= extra;
+		}
+		
+		meta = IRotatable.transformMetaDeco(meta, coordBaseMode);
+
+		if(isOffset) {
+			meta += offset;
+		} else if(isExtra) {
+			meta += extra;
+		}
+
+		return meta;
+	}
+
 }

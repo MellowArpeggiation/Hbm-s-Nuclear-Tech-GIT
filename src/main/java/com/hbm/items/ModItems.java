@@ -2275,6 +2275,7 @@ public class ModItems {
 	public static Item armor_battery;
 	public static Item armor_battery_mk2;
 	public static Item armor_battery_mk3;
+	public static Item flippers;
 
 	public static Item hazmat_helmet;
 	public static Item hazmat_plate;
@@ -3509,6 +3510,7 @@ public class ModItems {
 		armor_battery = new ItemModBattery(1.25D).setUnlocalizedName("armor_battery").setTextureName(RefStrings.MODID + ":armor_battery");
 		armor_battery_mk2 = new ItemModBattery(1.5D).setUnlocalizedName("armor_battery_mk2").setTextureName(RefStrings.MODID + ":armor_battery_mk2");
 		armor_battery_mk3 = new ItemModBattery(2D).setUnlocalizedName("armor_battery_mk3").setTextureName(RefStrings.MODID + ":armor_battery_mk3");
+		flippers = new ItemModFlippers().setUnlocalizedName("flippers").setTextureName(RefStrings.MODID + ":flippers");
 
 		cap_nuka = new Item().setUnlocalizedName("cap_nuka").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":cap_nuka");
 		cap_quantum = new Item().setUnlocalizedName("cap_quantum").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":cap_quantum");
@@ -7514,6 +7516,7 @@ public class ModItems {
 		GameRegistry.registerItem(armor_battery, armor_battery.getUnlocalizedName());
 		GameRegistry.registerItem(armor_battery_mk2, armor_battery_mk2.getUnlocalizedName());
 		GameRegistry.registerItem(armor_battery_mk3, armor_battery_mk3.getUnlocalizedName());
+		GameRegistry.registerItem(flippers, flippers.getUnlocalizedName());
 
 		//Chaos
 		GameRegistry.registerItem(chocolate_milk, chocolate_milk.getUnlocalizedName());

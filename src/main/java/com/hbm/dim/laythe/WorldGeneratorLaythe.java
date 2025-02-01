@@ -12,8 +12,6 @@ import com.hbm.itempool.ItemPool;
 import com.hbm.itempool.ItemPoolsComponent;
 import com.hbm.itempool.ItemPoolsLegacy;
 import com.hbm.main.StructureManager;
-import com.hbm.world.dungeon.CrashedVertibird;
-import com.hbm.world.dungeon.Vertibird;
 import com.hbm.world.feature.OilBubble;
 import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.gen.NBTStructure.Loot;
@@ -29,7 +27,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorLaythe implements IWorldGenerator {
 
 	public WorldGeneratorLaythe() {
-		NBTStructure.registerStructureForDimension(SpaceConfig.laytheDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
 			structure = StructureManager.nuke_sub;
 			canSpawn = biome -> biome == BiomeGenBaseLaythe.laytheOcean;
 			maxHeight = 54;
@@ -37,6 +35,24 @@ public class WorldGeneratorLaythe implements IWorldGenerator {
 				put(ModBlocks.crate_iron, new Loot(ItemPool.getPool(ItemPoolsComponent.POOL_SUBMARINE), 6, 12));
 				put(ModBlocks.crate_steel, new Loot(ItemPool.getPool(ItemPoolsLegacy.POOL_EXPENSIVE), 8, 18));
 				put(ModBlocks.filing_cabinet, new Loot(ItemPool.getPool(ItemPoolsLegacy.POOL_NUKE_TRASH), 0, 6));
+			}};
+		}});
+		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
+			structure = StructureManager.vertibird;
+			canSpawn = biome -> biome.rootHeight > 0;
+			heightOffset = -3;
+			lootTable = new HashMap<Block, Loot>() {{
+				put(Blocks.chest, new Loot(ItemPool.getPool(ItemPoolsLegacy.POOL_VERTIBIRD), 6, 10));
+				put(ModBlocks.crate_iron, new Loot(ItemPool.getPool(ItemPoolsLegacy.POOL_VERTIBIRD), 6, 10));
+			}};
+		}});
+		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
+			structure = StructureManager.crashed_vertibird;
+			canSpawn = biome -> biome.rootHeight > 0;
+			heightOffset = -10;
+			lootTable = new HashMap<Block, Loot>() {{
+				put(Blocks.chest, new Loot(ItemPool.getPool(ItemPoolsLegacy.POOL_VERTIBIRD), 6, 10));
+				put(ModBlocks.crate_iron, new Loot(ItemPool.getPool(ItemPoolsLegacy.POOL_EXPENSIVE), 6, 10));
 			}};
 		}});
 	}
@@ -60,18 +76,6 @@ public class WorldGeneratorLaythe implements IWorldGenerator {
 		}
 
 		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.asbestosSpawn, 4, 16, 16, ModBlocks.ore_asbestos, meta);
-
-		if(WorldConfig.vertibirdStructure > 0 && rand.nextInt(WorldConfig.vertibirdStructure) == 0) {
-			int x = i + rand.nextInt(16);
-			int z = j + rand.nextInt(16);
-			int y = world.getHeightValue(x, z);
-
-			if(rand.nextInt(2) == 0) {
-				new Vertibird().generate(world, rand, x, y, z);
-			} else {
-				new CrashedVertibird().generate(world, rand, x, y, z);
-			}
-		}
 	}
 	
 }

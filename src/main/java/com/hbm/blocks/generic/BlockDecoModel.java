@@ -1,6 +1,7 @@
 package com.hbm.blocks.generic;
 
 import com.hbm.blocks.BlockEnumMulti;
+import com.hbm.world.gen.IRotatable;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.material.Material;
@@ -11,7 +12,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockDecoModel extends BlockEnumMulti {
+public class BlockDecoModel extends BlockEnumMulti implements IRotatable {
 	
 	public BlockDecoModel(Material mat, Class<? extends Enum> theEnum, boolean multiName, boolean multiTexture) {
 		super(mat, theEnum, multiName, multiTexture);
@@ -103,5 +104,33 @@ public class BlockDecoModel extends BlockEnumMulti {
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		this.setBlockBoundsBasedOnState(world, x, y, z);
 		return AxisAlignedBB.getBoundingBox(x + this.minX, y + this.minY, z + this.minZ, x + this.maxX, y + this.maxY, z + this.maxZ);
+	}
+
+	@Override
+	public int transformMeta(int meta, int coordBaseMode) {
+		//N: 0b00, S: 0b01, W: 0b10, E: 0b11
+		meta = meta >> 2;
+		
+		switch(coordBaseMode) {
+		default: //South
+			break;
+		case 1: //West
+			if((meta & 3) < 2) //N & S can just have bits toggled
+				meta = meta ^ 3;
+			else //W & E can just have first bit set to 0
+				meta = meta ^ 2;
+			break;
+		case 2: //North
+			meta = meta ^ 1; //N, W, E & S can just have first bit toggled
+			break;
+		case 3: //East
+			if((meta & 3) < 2)//N & S can just have second bit set to 1
+				meta = meta ^ 2;
+			else //W & E can just have bits toggled
+				meta = meta ^ 3;
+			break;
+		}
+		//genuinely like. why did i do that
+		return meta << 2; //To accommodate for BlockDecoModel's shift in the rotation bits; otherwise, simply bit-shift right and or any non-rotation meta after
 	}
 }

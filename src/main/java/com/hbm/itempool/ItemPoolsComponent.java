@@ -187,9 +187,9 @@ public class ItemPoolsComponent {
 				};
 			}};
 			
-			// Submarines found sunk on Laythe
-			new ItemPool(POOL_SUBMARINE) {{
-				this.pool = new WeightedRandomChestContent[] {
+		// Submarines found sunk on Laythe
+		new ItemPool(POOL_SUBMARINE) {{
+			this.pool = new WeightedRandomChestContent[] {
 					weighted(ModItems.nugget_u235, 0, 3, 12, 5),
 					weighted(ModItems.nugget_pu238, 0, 3, 12, 5),
 					weighted(ModItems.nugget_ra226, 0, 3, 6, 5),
