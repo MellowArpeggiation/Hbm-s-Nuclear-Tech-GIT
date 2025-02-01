@@ -59,7 +59,7 @@ public class ItemBedrockOreBase extends Item {
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
 		CelestialBody body = getOreBody(stack);
 		list.add("Mined on: " + I18nUtil.resolveKey("body." + body.name));
-		
+		//TODO: add br ores so this isnt broke
 		//for(CelestialBedrockOreType type : CelestialBedrockOre.get(body.getEnum()).types) {
 			//double amount = getOreAmount(stack, type);
 			//String typeName = StatCollector.translateToLocalFormatted("item.bedrock_ore.type." + type.suffix + ".name");
