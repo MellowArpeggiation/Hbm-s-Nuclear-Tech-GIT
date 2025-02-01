@@ -40,19 +40,20 @@ public class EntityWarBehemoth extends EntityMob implements IMob, IAnimals {
     public EntityWarBehemoth(World p_i1733_1_)
     {
         super(p_i1733_1_);
-        this.setSize(0.75F, 1.35F);
+        this.setSize(1.75F, 6.35F);
         this.getNavigator().setAvoidsWater(true);
-                
+        this.stepHeight = 5.0F;
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLiving.class, 0, true, true, selector));
         //this.tasks.addTask(3, new EntityAIStepTowardsTarget(this, 4, 0.18, 20, 60, 0.6));
-		this.tasks.addTask(3, new EntityAIStepTowardsTarget(this, 50, 0.2D, 100, 20, 0.6));
+		this.tasks.addTask(3, new EntityAIStepTowardsTarget(this, 50, 0.27D, 50, 20, 0.6));
         //this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 0.2D, false));
-		this.tasks.addTask(4, new EntityAIBehemothGun(this, true, true, 2, 40, 30));
+		this.tasks.addTask(4, new EntityAIBehemothGun(this, true, true, 3, 35, 30));
 		this.targetTasks.addTask(5, new EntityAIHurtByTarget(this, false));
-		
+		this.jumpMovementFactor = 0;
 
     }
+    
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
@@ -84,8 +85,8 @@ public class EntityWarBehemoth extends EntityMob implements IMob, IAnimals {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(50.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(15.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(1000.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(100.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(200.0D);
 	}
 
     @Override
@@ -100,7 +101,9 @@ public class EntityWarBehemoth extends EntityMob implements IMob, IAnimals {
     @Override
     public void onUpdate() {
         super.onUpdate();
-
+        if (!this.worldObj.isRemote) {
+            this.motionY -= 0.10D;  // Increase the downward pull for heavier gravity (adjust value as needed)
+        }
 
     }
    

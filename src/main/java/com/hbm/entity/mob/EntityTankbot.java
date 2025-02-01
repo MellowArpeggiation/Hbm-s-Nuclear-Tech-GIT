@@ -76,7 +76,7 @@ public class EntityTankbot extends EntityMob implements IMob, IRadiationImmune, 
 		ParticleUtil.spawnGasFlame(worldObj, this.posX, this.posY + 1, this.posZ, rand.nextGaussian(), 0.4, rand.nextGaussian());
 		}
 		if(this.deathTime == -5 && !worldObj.isRemote) {
-			worldObj.newExplosion(this, posX, posY, posZ, 10F, true, true);
+			worldObj.newExplosion(this, posX, posY, posZ, 5F, true, false);
 			ExplosionCreator.composeEffectSmall(worldObj, this.posX, this.posY, this.posZ);
 			this.setDead();
 
@@ -139,7 +139,7 @@ public class EntityTankbot extends EntityMob implements IMob, IRadiationImmune, 
 		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(60.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(15.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(140.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(180.0D);
 
 	}
 

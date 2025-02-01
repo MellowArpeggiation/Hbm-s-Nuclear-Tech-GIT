@@ -128,10 +128,9 @@ public class EntityAITankshell extends EntityAIBase {
 		    targetY /= distance;
 		    targetZ /= distance;
 			spawnCasing();
-
+			
 			if (distance > 30) {
 				if(owner.getHealth() < 30) {
-					System.out.println("!");
 				    EntityBulletBaseMK4 bullet = new EntityBulletBaseMK4(owner, XFactoryRocket.rocket_qd[3], 4, 0.01F, owner.posX, owner.posY + 3, owner.posZ);
 				    bullet.setPosition(owner.posX, owner.posY + 3, owner.posZ);
 				    bullet.motionX = targetX * 0.5D;  

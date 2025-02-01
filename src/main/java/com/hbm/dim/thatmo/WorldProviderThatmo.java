@@ -5,8 +5,18 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
+import com.hbm.dim.CelestialBody;
 import com.hbm.dim.WorldProviderCelestial;
 import com.hbm.dim.laythe.SkyProviderLaytheSunset;
+import com.hbm.dim.trait.CBT_War;
+import com.hbm.dim.trait.CelestialBodyTrait.CBT_BATTLEFIELD;
+import com.hbm.entity.logic.EntityBomber;
+import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
+import com.hbm.explosion.vanillant.standard.ExplosionEffectWeapon;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
+import com.hbm.util.fauxpointtwelve.BlockPos;
+import com.hbm.world.WorldUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -47,83 +57,113 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 	@Override
 	public void updateWeather() {
 		super.updateWeather();
-    	Random rand = new Random();
-
-		if(worldObj.isRemote) {
-        if (chargetime <= 0 || chargetime <= 1000) {
-            chargetime += 1;
-            flashd = 0;
-        } else if (chargetime >= 100) {
-            flashd += 0.3f;
-            flashd = Math.min(100.0f, flashd + 0.3f * (100.0f - flashd) * 0.15f);
-
-            if (flashd <= 5) {
-                Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
-            }
-
-            if (flashd >= 100) {
-                chargetime = 0;
-            }
-        }
-	    if(chargetime == 285) {
-            Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
-    	}
-        if ( chargetime >= 300 &&chargetime <= 430) {
-        	if (scale <= 0 || scale <= 20) {
-    	    scale += 1.5;
-    	}
-
-    	if (scale >= 20) {
-    	    scale = 20; 
-    	    shield += 0.4f; 
-    	    shield = Math.min(25.0f, shield + 0.5f * (25.0f - shield) * 0.15f);	        	
-    	    nmass = Math.min(180.0f, nmass + 0.2f * (180.0f - nmass) * 0.15f);
-    	    shielde = Math.min(15.0f, shielde + 0.6f * (15.0f - shielde) * 0.10f);	   
-    	    csyw += 0.2f;
-    	    csyw = Math.min(100.0f, csyw + 0.2f * (100.0f - csyw) * 0.15f);
-
-    	    }
-
-    	if (shield > 0) {
-    	    if (cooldown <= 0 || cooldown <= 60) {
-    	        cooldown += 0.5;
-    	    }
-
-    	    if (cooldown >= 60) {
-            	reset();
-
-    	    	}
-    		}
-        } else {
-        reset();
-        }
-        if (altitude <= 400) {
-            altitude += 5;
-        }
-        if (altitude >= 400) {
-            altitude = 0;
-            randPos = Minecraft.getMinecraft().theWorld.rand.nextFloat();
-        }
-		for(Meteor meteor : meteors) {
-			meteor.update();
-		}
-		for(Meteor fragment : fragments) {
-			fragment.update();
-		}
-		for(Meteor smoke : smoke) {
-			smoke.update();
-		}	            
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		if(rand.nextInt(1)==0)
-    	{
-            	Meteor meteor = new Meteor((player.posX+rand.nextInt(16000))-8000, 2017, (player.posZ+rand.nextInt(16000))-8000);
-            	meteors.add(meteor);
-    	}
-		meteors.removeIf(x -> x.isDead);
-		fragments.removeIf(xx -> xx.isDead);
-		smoke.removeIf(xxx -> xxx.isDead);
+        CBT_BATTLEFIELD war = CelestialBody.getTrait(worldObj, CBT_BATTLEFIELD.class);
+        //i am violating the genercizing philosphy mellow told me about, this shit sucks
+        //if other planets have the battlefield trait, what could be done....?
+		if(war != null) {
+			if(!worldObj.isRemote) {
+				for (Object p : worldObj.playerEntities) {
+			        long currentTime = System.currentTimeMillis();
+			        if(currentTime % 5000 < 50){
+			        	System.out.println("summoned");
+					    BlockPos playerPos = new BlockPos(((EntityPlayer)p).posX, ((EntityPlayer)p).posY, ((EntityPlayer)p).posZ);
+					    int radius = 10;
+					    Random rand = worldObj.rand;
+					    int offsetX = rand.nextInt(radius * 2 + 1) - radius;
+					    int offsetY = 60 + rand.nextInt(9); 
+					    int offsetZ = rand.nextInt(radius * 2 + 1) - radius;
+					    
 		
+					    BlockPos targetPos = playerPos.add(offsetX, 0, offsetZ);
+						EntityBomber bomber = EntityBomber.statFacCarpetJet(worldObj, targetPos.getX(), targetPos.getY(), targetPos.getZ());
+						bomber.posY = targetPos.getY() + 20;
+						WorldUtil.loadAndSpawnEntityInWorld(bomber);	
+						
+			        }		
+
+				}			
+			}	
+			
+		   	Random rand = new Random();
+
+			if(worldObj.isRemote) {
+	        if (chargetime <= 0 || chargetime <= 1000) {
+	            chargetime += 1;
+	            flashd = 0;
+	        } else if (chargetime >= 100) {
+	            flashd += 0.3f;
+	            flashd = Math.min(100.0f, flashd + 0.3f * (100.0f - flashd) * 0.15f);
+
+	            if (flashd <= 5) {
+	                Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
+	            }
+
+	            if (flashd >= 100) {
+	                chargetime = 0;
+	            }
+	        }
+		    if(chargetime == 285) {
+	            Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
+	    	}
+	        if ( chargetime >= 300 &&chargetime <= 430) {
+	        	if (scale <= 0 || scale <= 20) {
+	    	    scale += 1.5;
+	    	}
+
+	    	if (scale >= 20) {
+	    	    scale = 20; 
+	    	    shield += 0.4f; 
+	    	    shield = Math.min(25.0f, shield + 0.5f * (25.0f - shield) * 0.15f);	        	
+	    	    nmass = Math.min(180.0f, nmass + 0.2f * (180.0f - nmass) * 0.15f);
+	    	    shielde = Math.min(15.0f, shielde + 0.6f * (15.0f - shielde) * 0.10f);	   
+	    	    csyw += 0.2f;
+	    	    csyw = Math.min(100.0f, csyw + 0.2f * (100.0f - csyw) * 0.15f);
+
+	    	    }
+
+	    	if (shield > 0) {
+	    	    if (cooldown <= 0 || cooldown <= 60) {
+	    	        cooldown += 0.5;
+	    	    }
+
+	    	    if (cooldown >= 60) {
+	            	reset();
+
+	    	    	}
+	    		}
+	        } else {
+	        reset();
+	        }
+	        if (altitude <= 400) {
+	            altitude += 5;
+	        }
+	        if (altitude >= 400) {
+	            altitude = 0;
+	            randPos = Minecraft.getMinecraft().theWorld.rand.nextFloat();
+	        }
+			for(Meteor meteor : meteors) {
+				meteor.update();
+			}
+			for(Meteor fragment : fragments) {
+				fragment.update();
+			}
+			for(Meteor smoke : smoke) {
+				smoke.update();
+			}	            
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			if(rand.nextInt(1)==0)
+	    	{
+	            	Meteor meteor = new Meteor((player.posX+rand.nextInt(16000))-8000, 2017, (player.posZ+rand.nextInt(16000))-8000);
+	            	meteors.add(meteor);
+	    	}
+			meteors.removeIf(x -> x.isDead);
+			fragments.removeIf(xx -> xx.isDead);
+			smoke.removeIf(xxx -> xxx.isDead);
+			
+			}
 		}
+			
+ 
 		
 	}
 	private void reset() {

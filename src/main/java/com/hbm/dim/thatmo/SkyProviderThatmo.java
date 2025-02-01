@@ -419,6 +419,8 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 
 		}
 		
+		/*
+		
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glTranslated(5, -4.5, -50); 
@@ -514,6 +516,6 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		GL11.glDepthMask(false);
 
 		GL11.glPopMatrix();
-
+		*/
 	}
 }

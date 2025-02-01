@@ -1226,6 +1226,7 @@ public class ResourceManager {
 	public static final IModelCustom b29 = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/b29.obj"));
 	public static final IModelCustom c130 = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/c130.obj")).asVBO();
 	public static final IModelCustom Airliner = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/737.obj"));
+	public static final IModelCustom b2x = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/b2.obj")).asVBO();
 
 	//Missiles
 	public static final IModelCustom missileV2 = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/missile_v2.obj")).asVBO();
@@ -1378,6 +1379,7 @@ public class ResourceManager {
 	public static final ResourceLocation b29_3_tex = new ResourceLocation(RefStrings.MODID, "textures/models/b29_3.png");
 	public static final ResourceLocation c130_0_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/c130_0.png");
 	public static final ResourceLocation airliner_tex = new ResourceLocation(RefStrings.MODID, "textures/models/airlinerplaceholder.png");
+	public static final ResourceLocation b2x_tex_mex_sex = new ResourceLocation(RefStrings.MODID, "textures/entity/b_2.png");
 
 	//Missiles
 	public static final ResourceLocation missileV2_HE_tex = new ResourceLocation(RefStrings.MODID, "textures/models/missile_v2.png");

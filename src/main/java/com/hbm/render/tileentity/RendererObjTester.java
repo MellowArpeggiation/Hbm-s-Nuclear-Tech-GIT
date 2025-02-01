@@ -14,6 +14,7 @@ import com.hbm.wiaj.WorldInAJar;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -42,6 +43,68 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		double sin3 = Math.sin(time * 0.05 + Math.PI * 0.5) * 15;
 		double sin2 = Math.sin(time * 0.05 + Math.PI);
 		double insine = Math.sin(time * 0.05) * -15;
+
+		bindTexture(ResourceManager.b2x_tex_mex_sex);
+
+		ResourceManager.b2x.renderAll();
+		float trailStretch = tileEntity.getWorldObj().rand.nextFloat();
+		trailStretch = 1.2F - (trailStretch * trailStretch * 0.2F);
+		trailStretch *= 2;
+
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+
+		
+		if(trailStretch > 0) {
+			GL11.glColor4d(0.25, 0.88, 0.82, 1);
+
+			GL11.glDisable(GL11.GL_CULL_FACE);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glEnable(GL11.GL_BLEND);
+			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+			GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+			GL11.glDepthMask(false);
+			
+			GL11.glPushMatrix();
+			GL11.glTranslatef(-0.56F, -0.56F, 1F);
+			GL11.glRotatef(180, 0, 1, 0);
+			GL11.glScalef(0.5F, 0.5F, trailStretch);
+			GL11.glTranslatef(0, 0, 1F);
+
+			bindTexture(ResourceManager.xenon_exhaust_tex);
+			ResourceManager.xenon_thruster.renderPart("Exhaust");
+			
+			
+			
+			GL11.glPopMatrix();
+			GL11.glPushMatrix();
+			GL11.glTranslatef(0.56F, -0.56F, 1F);
+			GL11.glRotatef(180, 0, 1, 0);
+			GL11.glScalef(0.5F, 0.5F, trailStretch);
+			GL11.glTranslatef(0, 0, 1F);
+
+			bindTexture(ResourceManager.xenon_exhaust_tex);
+			ResourceManager.xenon_thruster.renderPart("Exhaust");
+			
+			
+			GL11.glPopMatrix();
+			
+			GL11.glDepthMask(true);
+			GL11.glPopAttrib();
+			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL11.glDisable(GL11.GL_BLEND);
+
+			GL11.glColor4d(1, 1, 1, 1);
+		}
+
+		GL11.glShadeModel(GL11.GL_FLAT);
+		GL11.glPopMatrix();
+
+
+		
+		
+		/*
 		GL11.glRotated(sin2, 0, 1, 0); 
 
 		GL11.glPushMatrix();
@@ -182,6 +245,7 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 	    GL11.glEnable(GL11.GL_CULL_FACE);
 
 		GL11.glPopMatrix();
+		*/
 	}
 	
 
