@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.hbm.blocks.generic.BlockWand;
@@ -20,6 +21,7 @@ import com.hbm.config.StructureConfig;
 import com.hbm.handler.ThreeInts;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.Tuple.Pair;
+import com.hbm.util.Tuple.Quartet;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -573,6 +575,9 @@ public class NBTStructure {
 		public NBTStructure structure;
 		public Map<Block, Loot> lootTable;
 
+		// If defined, will spawn in a non-nbt structure component
+		public Function<Quartet<World, Random, Integer, Integer>, StructureStart> start;
+
 		public Predicate<BiomeGenBase> canSpawn;
 		public int spawnWeight = 1;
 
@@ -674,6 +679,10 @@ public class NBTStructure {
 
 			this.components.add(new Component(spawn, rand, x, z));
 
+			if(GeneralConfig.enableDebugMode) {
+				MainRegistry.logger.info("[Debug] Spawning NBT structure: " + spawn.structure.name + " - at: " + chunkX * 16 + ", " + chunkZ * 16);
+			}
+
 			updateBoundingBox();
 		}
 
@@ -717,11 +726,8 @@ public class NBTStructure {
 				BiomeGenBase biome = this.worldObj.getWorldChunkManager().getBiomeGenAt(chunkX * 16 + 8, chunkZ * 16 + 8);
 
 				nextSpawn = findSpawn(biome);
-
-				if(GeneralConfig.enableDebugMode && nextSpawn != null && nextSpawn.structure != null)
-					MainRegistry.logger.info("[Debug] Spawning NBT structure: " + nextSpawn.structure.name + " - at: " + chunkX * 16 + ", " + chunkZ * 16);
 				
-				return nextSpawn != null && nextSpawn.structure != null;
+				return nextSpawn != null && (nextSpawn.structure != null || nextSpawn.start != null);
 			}
 
 			return false;
@@ -729,6 +735,7 @@ public class NBTStructure {
 	
 		@Override
 		protected StructureStart getStructureStart(int chunkX, int chunkZ) {
+			if(nextSpawn.start != null) return nextSpawn.start.apply(new Quartet<World, Random, Integer, Integer>(this.worldObj, this.rand, chunkX, chunkZ));
 			return new Start(this.worldObj, this.rand, nextSpawn, chunkX, chunkZ);
 		}
 

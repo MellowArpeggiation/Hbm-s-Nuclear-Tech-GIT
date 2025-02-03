@@ -876,6 +876,7 @@ public class MainRegistry {
 		ClientConfig.initConfig();
 
 		// gotta init AFTER loot pools
+		HbmWorld.registerWorldGen();
 		PlanetGen.init();
 
 		TileEntityNukeCustom.registerBombItems();
