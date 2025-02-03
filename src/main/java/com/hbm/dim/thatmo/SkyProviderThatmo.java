@@ -333,7 +333,8 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 		BeamPronter.prontBeam(Vec3.createVectorHelper(0, 5, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0xFF9000, 0xFF9000, 0, 1, 0F, 6, (float)0.2 * 0.2F, 0.5F);
 		}
 		GL11.glPopMatrix();
-		
+		GL11.glEnable(GL11.GL_CULL_FACE);
+
 		
 	}
 	

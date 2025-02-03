@@ -68,7 +68,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 	private static final ResourceLocation flash = new ResourceLocation("hbm:textures/misc/space/flare.png");
 	
 	private static final ResourceLocation noise = new ResourceLocation(RefStrings.MODID, "shaders/iChannel1.png");
-
+	
 	protected static final Shader planetShader = new Shader(new ResourceLocation(RefStrings.MODID, "shaders/crescent.frag"));
 
 	private static final String[] GL_SKY_LIST = new String[] { "glSkyList", "field_72771_w", "G" };

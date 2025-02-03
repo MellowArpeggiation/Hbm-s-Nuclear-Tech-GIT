@@ -93,7 +93,7 @@ public class EntityAIBehemothGun extends EntityAIBase {
 	    bullet.motionZ = targetZ * 0.5D;
 
 	    owner.worldObj.spawnEntityInWorld(bullet);
-	    owner.playSound("hbm:weapon.calShoot", 1.0F, 1.0F);
+	    owner.playSound("hbm:weapon.calShoot", 15.0F, 1.0F);
 	}
 
 	private void fireArtilleryShell() {

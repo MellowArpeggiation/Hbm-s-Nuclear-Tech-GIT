@@ -6,9 +6,11 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import com.hbm.dim.SolarSystem;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.shader.Shader;
 import com.hbm.render.util.HorsePronter;
 import com.hbm.wiaj.WorldInAJar;
 
@@ -32,7 +34,8 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 	private static RenderBlocks renderer;
 	private static WorldInAJar world;
 	private static ResourceLocation extra = new ResourceLocation(RefStrings.MODID, "textures/models/horse/dyx.png");
-	
+	private static final ResourceLocation noise = new ResourceLocation(RefStrings.MODID, "shaders/iChannel1.png");
+	private static final Shader shaeder =  new Shader(new ResourceLocation(RefStrings.MODID, "shaders/fle.frag"));
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {		
 		GL11.glPushMatrix();
@@ -44,6 +47,47 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		double sin2 = Math.sin(time * 0.05 + Math.PI);
 		double insine = Math.sin(time * 0.05) * -15;
 
+		Shader shader = shaeder;
+		double shaderSize = 2;
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+		shader.use();
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+		int textureUnit = 0;
+
+		bindTexture(noise);
+
+		GL11.glPushMatrix();
+
+		// Fix orbital plane
+		GL11.glRotatef(-90.0F, 0, 1, 0);
+		
+		shader.setTime((time * 0.05F));
+		shader.setTextureUnit(textureUnit);
+		Tessellator tessellator = Tessellator.instance;
+
+		tessellator.startDrawingQuads();
+		tessellator.addVertexWithUV(-shaderSize, 100.0D, -shaderSize, 0.0D, 0.0D);
+		tessellator.addVertexWithUV(shaderSize, 100.0D, -shaderSize, 1.0D, 0.0D);
+		tessellator.addVertexWithUV(shaderSize, 100.0D, shaderSize, 1.0D, 1.0D);
+		tessellator.addVertexWithUV(-shaderSize, 100.0D, shaderSize, 0.0D, 1.0D);
+		tessellator.draw();
+		ResourceManager.sphere_v2.renderAll();
+
+		GL11.glColor4d(1, 0, 0, 1);
+
+		shader.stop();
+
+		GL11.glPopMatrix();
+
+		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
+		
+		
+
+		GL11.glPopMatrix();
+
+		
+		/*
 		bindTexture(ResourceManager.b2x_tex_mex_sex);
 
 		ResourceManager.b2x.renderAll();

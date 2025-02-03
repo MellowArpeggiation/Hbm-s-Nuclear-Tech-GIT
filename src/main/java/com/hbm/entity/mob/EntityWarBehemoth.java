@@ -46,7 +46,7 @@ public class EntityWarBehemoth extends EntityMob implements IMob, IAnimals {
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLiving.class, 0, true, true, selector));
         //this.tasks.addTask(3, new EntityAIStepTowardsTarget(this, 4, 0.18, 20, 60, 0.6));
-		this.tasks.addTask(3, new EntityAIStepTowardsTarget(this, 50, 0.27D, 50, 20, 0.6));
+		this.tasks.addTask(3, new EntityAIStepTowardsTarget(this, 50, 0.3D, 50, 10, 0.6));
         //this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 0.2D, false));
 		this.tasks.addTask(4, new EntityAIBehemothGun(this, true, true, 3, 35, 30));
 		this.targetTasks.addTask(5, new EntityAIHurtByTarget(this, false));

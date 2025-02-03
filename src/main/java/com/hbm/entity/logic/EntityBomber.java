@@ -113,7 +113,12 @@ public class EntityBomber extends EntityPlaneBase {
 		this.motionX = vector.xCoord;
 		this.motionZ = vector.zCoord;
 		this.motionY = 0.0D;
-
+			
+		if(type == 9) {
+			this.motionX = vector.xCoord * 1.5;
+			this.motionZ = vector.zCoord * 1.5;
+		}
+		
 		this.rotation();
 
 		int i = 1;
@@ -269,11 +274,12 @@ public class EntityBomber extends EntityPlaneBase {
 		bomber.bombStart = 10;
 		bomber.bombStop = 70;
 		bomber.bombRate = 3;
-		bomber.fac(world, x, y, z);
-		bomber.addVelocity(0.6, 0, 0.6);
-		
-    	bomber.getDataWatcher().updateObject(16, (byte)10);
 		bomber.type = 9;
+
+		bomber.fac(world, x, y, z);
+		//bomber.addVelocity(0.6, 0, 0.6);
+
+    	bomber.getDataWatcher().updateObject(16, (byte)10);
 		return bomber;
 	}
 

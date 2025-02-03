@@ -64,10 +64,10 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 			if(!worldObj.isRemote) {
 				for (Object p : worldObj.playerEntities) {
 			        long currentTime = System.currentTimeMillis();
-			        if(currentTime % 5000 < 50){
+			        if(currentTime % 8000 < 50){
 			        	System.out.println("summoned");
 					    BlockPos playerPos = new BlockPos(((EntityPlayer)p).posX, ((EntityPlayer)p).posY, ((EntityPlayer)p).posZ);
-					    int radius = 10;
+					    int radius = 40;
 					    Random rand = worldObj.rand;
 					    int offsetX = rand.nextInt(radius * 2 + 1) - radius;
 					    int offsetY = 60 + rand.nextInt(9); 
