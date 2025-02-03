@@ -51,6 +51,7 @@ import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureComponent.BlockSelector;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraftforge.common.util.Constants.NBT;
 
@@ -354,10 +355,10 @@ public class NBTStructure {
 	}
 
 	public void build(World world, int x, int y, int z) {
-		build(world, x, y, z, null, 0);
+		build(world, null, x, y, z, 0);
 	}
 
-	public void build(World world, int x, int y, int z, Map<Block, Loot> lootTable, int coordBaseMode) {
+	public void build(World world, Map<Block, Loot> lootTable, int x, int y, int z, int coordBaseMode) {
 		if(!isLoaded) {
 			MainRegistry.logger.info("NBTStructure is invalid");
 			return;
@@ -382,7 +383,7 @@ public class NBTStructure {
 					int rz = rotateZ(bx, bz, coordBaseMode) + z;
 					int ry = by + y;
 
-					Block block = transformBlock(state.definition);
+					Block block = transformBlock(state.definition, null, world.rand);
 					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
 
 					world.setBlock(rx, ry, rz, block, meta, 2);
@@ -396,7 +397,7 @@ public class NBTStructure {
 		}
 	}
 
-	protected boolean build(World world, Map<Block, Loot> lootTable, StructureBoundingBox totalBounds, StructureBoundingBox generatingBounds, int coordBaseMode) {
+	protected boolean build(World world, SpawnCondition spawn, StructureBoundingBox totalBounds, StructureBoundingBox generatingBounds, int coordBaseMode) {
 		if(!isLoaded) {
 			MainRegistry.logger.info("NBTStructure is invalid");
 			return false;
@@ -431,13 +432,13 @@ public class NBTStructure {
 					int rz = rotateZ(bx, bz, coordBaseMode) + totalBounds.minZ;
 					int ry = by + totalBounds.minY;
 
-					Block block = transformBlock(state.definition);
+					Block block = transformBlock(state.definition, spawn.blockTable, world.rand);
 					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
 
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, block, lootTable, worldItemPalette, state.nbt);
+						TileEntity te = buildTileEntity(world, block, spawn.lootTable, worldItemPalette, state.nbt);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -476,8 +477,15 @@ public class NBTStructure {
 		}
 	}
 
-	private Block transformBlock(BlockDefinition definition) {
+	private Block transformBlock(BlockDefinition definition, Map<Block, BlockSelector> blockTable, Random rand) {
+		if(blockTable != null && blockTable.containsKey(definition.block)) {
+			final BlockSelector selector = blockTable.get(definition.block);
+			selector.selectBlocks(rand, 0, 0, 0, false); // fuck the vanilla shit idc
+			return selector.func_151561_a();
+		}
+
 		if(definition.block instanceof INBTTransformable) return ((INBTTransformable) definition.block).transformBlock(definition.block);
+
 		return definition.block;
 	}
 
@@ -573,7 +581,6 @@ public class NBTStructure {
 	public static class SpawnCondition {
 
 		public NBTStructure structure;
-		public Map<Block, Loot> lootTable;
 
 		// If defined, will spawn in a non-nbt structure component
 		public Function<Quartet<World, Random, Integer, Integer>, StructureStart> start;
@@ -587,6 +594,10 @@ public class NBTStructure {
 		public int minHeight = 0;
 		public int maxHeight = 128;
 		public int heightOffset = 0;
+
+		// Block modifiers, for randomization and adding loot
+		public Map<Block, Loot> lootTable;
+		public Map<Block, BlockSelector> blockTable;
 
 		// Used for serializing/deserializing in Component
 		private int dimensionId;
@@ -644,7 +655,7 @@ public class NBTStructure {
 				boundingBox.maxY = y + spawn.structure.size.y;
 			}
 
-			return spawn.structure.build(world, spawn.lootTable, boundingBox, box, coordBaseMode);
+			return spawn.structure.build(world, spawn, boundingBox, box, coordBaseMode);
 		}
 
 		private int getAverageHeight(World world, StructureBoundingBox box) {
