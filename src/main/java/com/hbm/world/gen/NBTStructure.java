@@ -380,12 +380,13 @@ public class NBTStructure {
 					int rz = rotateZ(bx, bz, coordBaseMode) + z;
 					int ry = by + y;
 
+					Block block = transformBlock(state.definition);
 					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
 
-					world.setBlock(rx, ry, rz, state.definition.block, meta, 2);
+					world.setBlock(rx, ry, rz, block, meta, 2);
 		
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, state.definition.block, lootTable, worldItemPalette, state.nbt);
+						TileEntity te = buildTileEntity(world, block, lootTable, worldItemPalette, state.nbt);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -428,12 +429,13 @@ public class NBTStructure {
 					int rz = rotateZ(bx, bz, coordBaseMode) + totalBounds.minZ;
 					int ry = by + totalBounds.minY;
 
+					Block block = transformBlock(state.definition);
 					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
 
-					world.setBlock(rx, ry, rz, state.definition.block, meta, 2);
+					world.setBlock(rx, ry, rz, block, meta, 2);
 
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, state.definition.block, lootTable, worldItemPalette, state.nbt);
+						TileEntity te = buildTileEntity(world, block, lootTable, worldItemPalette, state.nbt);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -472,18 +474,23 @@ public class NBTStructure {
 		}
 	}
 
+	private Block transformBlock(BlockDefinition definition) {
+		if(definition.block instanceof INBTTransformable) return ((INBTTransformable) definition.block).transformBlock(definition.block);
+		return definition.block;
+	}
+
 	private int transformMeta(BlockDefinition definition, int coordBaseMode) {
 		// Our shit
-		if(definition.block instanceof IRotatable) return ((IRotatable) definition.block).transformMeta(definition.meta, coordBaseMode);
+		if(definition.block instanceof INBTTransformable) return ((INBTTransformable) definition.block).transformMeta(definition.meta, coordBaseMode);
 
 		// Vanilla shit
-		if(definition.block instanceof BlockStairs) return IRotatable.transformMetaStairs(definition.meta, coordBaseMode);
-		if(definition.block instanceof BlockRotatedPillar) return IRotatable.transformMetaPillar(definition.meta, coordBaseMode);
-		if(definition.block instanceof BlockDirectional) return IRotatable.transformMetaDirectional(definition.meta, coordBaseMode);
-		if(definition.block instanceof BlockTorch) return IRotatable.transformMetaTorch(definition.meta, coordBaseMode);
-		if(definition.block instanceof BlockButton) return IRotatable.transformMetaTorch(definition.meta, coordBaseMode);
-		if(definition.block instanceof BlockDoor) return IRotatable.transformMetaDoor(definition.meta, coordBaseMode);
-		if(definition.block instanceof BlockLever) return IRotatable.transformMetaLever(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockStairs) return INBTTransformable.transformMetaStairs(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockRotatedPillar) return INBTTransformable.transformMetaPillar(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockDirectional) return INBTTransformable.transformMetaDirectional(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockTorch) return INBTTransformable.transformMetaTorch(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockButton) return INBTTransformable.transformMetaTorch(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockDoor) return INBTTransformable.transformMetaDoor(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockLever) return INBTTransformable.transformMetaLever(definition.meta, coordBaseMode);
 
 		return definition.meta;
 	}

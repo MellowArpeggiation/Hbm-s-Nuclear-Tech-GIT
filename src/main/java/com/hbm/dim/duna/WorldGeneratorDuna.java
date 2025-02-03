@@ -28,6 +28,7 @@ public class WorldGeneratorDuna implements IWorldGenerator {
 		NBTStructure.registerStructure(SpaceConfig.dunaDimension, new SpawnCondition() {{
 			structure = StructureManager.duna_comms;
 			canSpawn = biome -> biome.heightVariation < 0.1F;
+			heightOffset = -1;
 			lootTable = new HashMap<Block, Loot>() {{
 				put(ModBlocks.crate_iron, new Loot(ItemPool.getPool(ItemPoolsComponent.POOL_MACHINE_PARTS), 8, 12));
 				put(ModBlocks.filing_cabinet, new Loot(ItemPool.getPool(ItemPoolsComponent.POOL_OFFICE_TRASH), 0, 6));
