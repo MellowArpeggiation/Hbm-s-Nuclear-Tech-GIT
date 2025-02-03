@@ -14,8 +14,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.hbm.blocks.generic.BlockWand;
-import com.hbm.blocks.generic.BlockBobble.BobbleType;
-import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.StructureConfig;
 import com.hbm.handler.ThreeInts;
@@ -347,8 +345,8 @@ public class NBTStructure {
 			WeightedRandomChestContent.generateChestContents(world.rand, entry.table, (IInventory) te, world.rand.nextInt(entry.maxLoot - entry.minLoot) + entry.minLoot);
 		}
 
-		if(te instanceof TileEntityBobble) {
-			((TileEntityBobble) te).type = BobbleType.values()[world.rand.nextInt(BobbleType.values().length - 1) + 1];
+		if(te instanceof INBTTileEntityTransformable) {
+			((INBTTileEntityTransformable) te).transformTE(world);
 		}
 
 		return te;

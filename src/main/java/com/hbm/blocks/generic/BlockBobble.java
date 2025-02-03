@@ -4,6 +4,8 @@ import com.hbm.inventory.gui.GUIScreenBobble;
 import com.hbm.items.special.ItemPlasticScrap.ScrapType;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.IGUIProvider;
+import com.hbm.world.gen.INBTTileEntityTransformable;
+
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -141,7 +143,7 @@ public class BlockBobble extends BlockContainer implements IGUIProvider {
 		return new TileEntityBobble();
 	}
 
-	public static class TileEntityBobble extends TileEntity {
+	public static class TileEntityBobble extends TileEntity implements INBTTileEntityTransformable {
 
 		public BobbleType type = BobbleType.NONE;
 
@@ -172,6 +174,11 @@ public class BlockBobble extends BlockContainer implements IGUIProvider {
 		public void writeToNBT(NBTTagCompound nbt) {
 			super.writeToNBT(nbt);
 			nbt.setByte("type", (byte) type.ordinal());
+		}
+
+		@Override
+		public void transformTE(World world) {
+			type = BobbleType.values()[world.rand.nextInt(BobbleType.values().length - 1) + 1];
 		}
 	}
 
