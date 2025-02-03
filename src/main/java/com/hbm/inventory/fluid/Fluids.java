@@ -24,6 +24,7 @@ import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
 import com.hbm.inventory.fluid.trait.FT_Combustible.FuelGrade;
 import com.hbm.inventory.fluid.trait.FT_Coolable.CoolingType;
+import com.hbm.inventory.fluid.trait.FT_Gaseous;
 import com.hbm.inventory.fluid.trait.FT_Heatable.HeatingType;
 import com.hbm.inventory.fluid.trait.FT_Toxin.*;
 import com.hbm.render.util.EnumSymbol;
@@ -258,6 +259,10 @@ public class Fluids {
 	public static FluidType STELLAR_FLUX;
 	public static FluidType VITRIOL;
 	public static FluidType SLOP;
+	public static FluidType LYE;
+	public static FluidType SODIUM_ALUMINATE;
+	public static FluidType BAUXITE_SOLUTION;
+	public static FluidType ALUMINA;
 
 	/* Lagacy names for compatibility purposes */
 	@Deprecated public static FluidType ACID;	//JAOPCA uses this, apparently
@@ -521,6 +526,10 @@ public class Fluids {
 		PERFLUOROMETHYL =		new FluidType("PERFLUOROMETHYL",	0xBDC8DC, 1, 0, 1, EnumSymbol.NONE).setTemp(15).addTraits(LIQUID);
 		PERFLUOROMETHYL_COLD =	new FluidType("PERFLUOROMETHYL_COLD",0x99DADE, 1, 0, 1, EnumSymbol.NONE).setTemp(-150).addTraits(LIQUID);
 		PERFLUOROMETHYL_HOT =	new FluidType("PERFLUOROMETHYL_HOT",0xB899DE, 1, 0, 1, EnumSymbol.NONE).setTemp(250).addTraits(LIQUID);
+		LYE =					new FluidType("LYE",				0xFFECCC, 3, 0, 1, EnumSymbol.ACID).addTraits(new FT_Corrosive(40), LIQUID);
+		SODIUM_ALUMINATE =		new FluidType("SODIUM_ALUMINATE",	0xFFD191, 3, 0, 1, EnumSymbol.ACID).addTraits(new FT_Corrosive(30), LIQUID);
+		BAUXITE_SOLUTION =		new FluidType("BAUXITE_SOLUTION",	0xE2560F, 3, 0, 3, EnumSymbol.ACID).addTraits(new FT_Corrosive(40), LIQUID, VISCOUS);
+		ALUMINA =				new FluidType("ALUMINA",		0xDDFFFF, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
@@ -672,6 +681,7 @@ public class Fluids {
 		metaOrder.add(POLYTHYLENE);
 		metaOrder.add(METHYLENE); //oh yeah this is meant to be that inbetween step for making the cast fluid
 		//airs
+		metaOrder.add(DUNAAIR);
 		metaOrder.add(EVEAIR); //iodine, mercury, potassium permenganate
 		metaOrder.add(JOOLGAS);
 		metaOrder.add(KMnO4);
@@ -704,10 +714,12 @@ public class Fluids {
 		metaOrder.add(POTASSIUM_CHLORIDE);
 		metaOrder.add(CALCIUM_CHLORIDE);
 		metaOrder.add(CALCIUM_SOLUTION);
-		metaOrder.add(PHEROMONE);
-		metaOrder.add(PHEROMONE_M);
+		metaOrder.add(SODIUM_ALUMINATE);
+		metaOrder.add(BAUXITE_SOLUTION);
+		metaOrder.add(ALUMINA);
 		//solutions and working fluids
 		metaOrder.add(FRACKSOL);
+		metaOrder.add(LYE);
 		//the fun guys
 		metaOrder.add(PHOSGENE);
 		metaOrder.add(MUSTARDGAS);
@@ -754,8 +766,9 @@ public class Fluids {
 		metaOrder.add(SMOKE);
 		metaOrder.add(SMOKE_LEADED);
 		metaOrder.add(SMOKE_POISON);
-
-		metaOrder.add(DUNAAIR);
+		//bug meth
+		metaOrder.add(PHEROMONE);
+		metaOrder.add(PHEROMONE_M);
 		
 		//ANY INTERNAL RENAMING MUST BE REFLECTED HERE - DON'T FORGET TO CHANGE: LANG FILES + TYPE'S STRING ID + NAME OF TANK/GUI TEXTURE FILES!
 		// V

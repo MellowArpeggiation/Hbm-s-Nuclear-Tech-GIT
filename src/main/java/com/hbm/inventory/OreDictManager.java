@@ -48,7 +48,7 @@ import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 //the more i optimize this, the more it starts looking like gregtech
 @NotableComments
 public class OreDictManager {
-	
+
 	/** Alternate, additional names for ore dict registration. Used mostly for DictGroups */
 	private static final HashMap<String, HashSet<String>> reRegistration = new HashMap<>();
 
@@ -71,7 +71,7 @@ public class OreDictManager {
 	public static final String KEY_SAND = "sand";
 	public static final String KEY_STONE = "stone";
 	public static final String KEY_COBBLESTONE = "cobblestone";
-	
+
 	public static final String KEY_BLACK = "dyeBlack";
 	public static final String KEY_RED = "dyeRed";
 	public static final String KEY_GREEN = "dyeGreen";
@@ -172,48 +172,48 @@ public class OreDictManager {
 	/*
 	 * STABLE
 	 */
-	/** TITANIUM */ 
+	/** TITANIUM */
 	public static final DictFrame TI = new DictFrame("Titanium");
-	/** COPPER */ 
+	/** COPPER */
 	public static final DictFrame CU = new DictFrame("Copper");
 	public static final DictFrame MINGRADE = new DictFrame("Mingrade");
 	public static final DictFrame ALLOY = new DictFrame("AdvancedAlloy");
 	/** NICKEL */ 
 	public static final DictFrame NI = new DictFrame("Nickel");
-	/** TUNGSTEN */ 
+	/** TUNGSTEN */
 	public static final DictFrame W = new DictFrame("Tungsten");
-	/** ALUMINUM */ 
+	/** ALUMINUM */
 	public static final DictFrame AL = new DictFrame("Aluminum");
 	public static final DictFrame STEEL = new DictFrame("Steel");
 	public static final DictFrame STAINLESS = new DictFrame("StainlessSteel");
-	/** TECHNETIUM STEEL */ 
+	/** TECHNETIUM STEEL */
 	public static final DictFrame TCALLOY = new DictFrame("TcAlloy");
 	/** CADMIUM STEEL */
 	public static final DictFrame CDALLOY = new DictFrame("CdAlloy");
-	/** BISMUTH BRONZE */ 
+	/** BISMUTH BRONZE */
 	public static final DictFrame BBRONZE = new DictFrame("BismuthBronze");
 	/** ARSENIC BRONZE */
 	public static final DictFrame ABRONZE = new DictFrame("ArsenicBronze");
 	/** BISMUTH STRONTIUM CALCIUM COPPER OXIDE */
 	public static final DictFrame BSCCO = new DictFrame("BSCCO");
-	/** LEAD */ 
+	/** LEAD */
 	public static final DictFrame PB = new DictFrame("Lead");
 	public static final DictFrame BI = new DictFrame("Bismuth");
 	public static final DictFrame AS = new DictFrame("Arsenic");
 	public static final DictFrame CA = new DictFrame("Calcium");
 	public static final DictFrame CD = new DictFrame("Cadmium");
-	/** TANTALUM */ 
+	/** TANTALUM */
 	public static final DictFrame TA = new DictFrame("Tantalum");
 	public static final DictFrame COLTAN = new DictFrame("Coltan");
-	/** NIOBIUM */ 
+	/** NIOBIUM */
 	public static final DictFrame NB = new DictFrame("Niobium");
-	/** BERYLLIUM */ 
+	/** BERYLLIUM */
 	public static final DictFrame BE = new DictFrame("Beryllium");
-	/** COBALT */ 
+	/** COBALT */
 	public static final DictFrame CO = new DictFrame("Cobalt");
-	/** BORON */ 
+	/** BORON */
 	public static final DictFrame B = new DictFrame("Boron");
-	/** SILICON */ 
+	/** SILICON */
 	public static final DictFrame SI = new DictFrame("Silicon");
 	public static final DictFrame GRAPHITE = new DictFrame("Graphite");
 	public static final DictFrame CARBON = new DictFrame("Carbon");
@@ -249,11 +249,11 @@ public class OreDictManager {
 	/*
 	 * DUST AND GEM ORES
 	 */
-	/** SULFUR */ 
+	/** SULFUR */
 	public static final DictFrame S = new DictFrame("Sulfur");
-	/** SALTPETER/NITER */ 
+	/** SALTPETER/NITER */
 	public static final DictFrame KNO = new DictFrame("Saltpeter");
-	/** FLUORITE */ 
+	/** FLUORITE */
 	public static final DictFrame F = new DictFrame("Fluorite");
 	public static final DictFrame LIGNITE = new DictFrame("Lignite");
 	public static final DictFrame COALCOKE = new DictFrame("CoalCoke");
@@ -270,10 +270,12 @@ public class OreDictManager {
 	public static final DictFrame MALACHITE = new DictFrame("Malachite");
 	public static final DictFrame LIMESTONE = new DictFrame("Limestone");
 	public static final DictFrame SLAG = new DictFrame("Slag");
+	public static final DictFrame BAUXITE = new DictFrame("Bauxite");
+	public static final DictFrame CRYOLITE = new DictFrame("Cryolite");
 	/*
 	 * HAZARDS, MISC
 	 */
-	/** LITHIUM */ 
+	/** LITHIUM */
 	public static final DictFrame LI = new DictFrame("Lithium");
 	/** SODIUM */
 	public static final DictFrame NA = new DictFrame("Sodium");
@@ -298,28 +300,28 @@ public class OreDictManager {
 	 * RARE EARTHS
 	 */
 	public static final DictFrame RAREEARTH = new DictFrame("RareEarth");
-	/** LANTHANUM */ 
+	/** LANTHANUM */
 	public static final DictFrame LA = new DictFrame("Lanthanum");
-	/** ZIRCONIUM */ 
+	/** ZIRCONIUM */
 	public static final DictFrame ZR = new DictFrame("Zirconium");
-	/** NEODYMIUM */ 
+	/** NEODYMIUM */
 	public static final DictFrame ND = new DictFrame("Neodymium");
-	/** CERIUM */ 
+	/** CERIUM */
 	public static final DictFrame CE = new DictFrame("Cerium");
 	/*
 	 * NITAN
 	 */
-	/** IODINE */ 
+	/** IODINE */
 	public static final DictFrame I = new DictFrame("Iodine");
-	/** ASTATINE */ 
+	/** ASTATINE */
 	public static final DictFrame AT = new DictFrame("Astatine");
-	/** CAESIUM */ 
+	/** CAESIUM */
 	public static final DictFrame CS = new DictFrame("Caesium");
-	/** STRONTIUM */ 
+	/** STRONTIUM */
 	public static final DictFrame ST = new DictFrame("Strontium");
-	/** BROMINE */ 
+	/** BROMINE */
 	public static final DictFrame BR = new DictFrame("Bromine");
-	/** TENNESSINE */ 
+	/** TENNESSINE */
 	public static final DictFrame TS = new DictFrame("Tennessine") ;
 	/*
 	 * FISSION FRAGMENTS
@@ -330,12 +332,12 @@ public class OreDictManager {
 	public static final DictFrame XE135 = new DictFrame("Xenon135", "Xe135");
 	public static final DictFrame CS137 = new DictFrame("Caesium137", "Cs137");
 	public static final DictFrame AT209 = new DictFrame("Astatine209", "At209");
-	
+
 	/*
 	 * COLLECTIONS
 	 */
 	/** Any form of elastic polymer */
-	public static final DictGroup ANY_RUBBER = new DictGroup("AnyRubber", LATEX, RUBBER);	
+	public static final DictGroup ANY_RUBBER = new DictGroup("AnyRubber", LATEX, RUBBER);
 	/** Any post oil polymer like teflon ("polymer") or bakelite */
 	public static final DictGroup ANY_PLASTIC = new DictGroup("AnyPlastic", POLYMER, BAKELITE);		//using the Any prefix means that it's just the secondary prefix, and that shape prefixes are applicable
 	/** Any post vacuum polymer like PET or PVC */
@@ -360,7 +362,7 @@ public class OreDictManager {
 	public static final DictFrame ANY_BISMOID = new DictFrame("AnyBismoid");
 	public static final DictFrame ANY_ASH = new DictFrame("Ash");
 
-	
+
 	public static void registerOres() {
 
 		/*
@@ -376,7 +378,7 @@ public class OreDictManager {
 		DIAMOND.dust(powder_diamond).ore(gravel_diamond, ore_sellafield_diamond).oreAll(ore_diamond);
 		EMERALD.dust(powder_emerald).ore(ore_sellafield_emerald).oreAll(ore_emerald);
 		GLOWSTONE.dust(Items.glowstone_dust);
-		
+
 		/*
 		 * RADIOACTIVE
 		 */
@@ -422,7 +424,7 @@ public class OreDictManager {
 		GH336	.rad(HazardRegistry.gh336)							.nugget(nugget_gh336)		.billet(billet_gh336)		.ingot(ingot_gh336);
 		MUD		.rad(HazardRegistry.mud)																					.ingot(ingot_mud);
 		CN989   .rad(HazardRegistry.cn989)  .hot(4F)                .nugget(nugget_cn989)       .billet(billet_cn989)       .ingot(ingot_cn989)         .dust(powder_cn989)         .plate(plate_cn989);
-		
+
 		/*
 		 * STABLE
 		 */
@@ -504,8 +506,11 @@ public class OreDictManager {
 		HEMATITE																														.ore(fromOne(stone_resource, EnumStoneType.HEMATITE));
 		MALACHITE						.ingot(DictFrame.fromOne(chunk_ore, EnumChunkType.MALACHITE))									.ore(fromOne(stone_resource, EnumStoneType.MALACHITE));
 		LIMESTONE																		.dust(powder_limestone)							.ore(fromOne(stone_resource, EnumStoneType.LIMESTONE));
+		BAUXITE																															.gem(fromOne(stone_resource, EnumStoneType.BAUXITE));
+		CRYOLITE	.crystal(fromOne(chunk_ore, EnumChunkType.CRYOLITE));
 		SLAG																									.block(block_slag);
 		CONGLOMERATE																													.ore(fromOne(stone_resource, EnumStoneType.CONGLOMERATE));
+
 		/*
 		 * HAZARDS, MISC
 		 */
@@ -517,7 +522,7 @@ public class OreDictManager {
 		 */
 		P_WHITE	.hot(5)	.ingot(ingot_phosphorus)	.block(block_white_phosphorus);
 		P_RED			.dust(powder_fire)			.block(block_red_phosphorus) .oreAll(ore_fire);
-		
+
 		/*
 		 * RARE METALS
 		 */
@@ -539,7 +544,7 @@ public class OreDictManager {
 		ZR	.nugget(nugget_zirconium)		.ingot(ingot_zirconium)		.billet(billet_zirconium)												.dust(powder_zirconium)		.block(block_zirconium)		.ore(ore_depth_zirconium);
 		ND	.nugget(fragment_neodymium)																		.dustSmall(powder_neodymium_tiny)	.dust(powder_neodymium)									.ore(ore_depth_nether_neodymium)	.oreNether(ore_depth_nether_neodymium);
 		CE	.nugget(fragment_cerium)																		.dustSmall(powder_cerium_tiny)		.dust(powder_cerium);
-		
+
 		/*
 		 * NITAN
 		 */
@@ -559,7 +564,7 @@ public class OreDictManager {
 		XE135	.rad(HazardRegistry.xe135)	.hot(10F)				.dustSmall(powder_xe135_tiny)	.dust(powder_xe135);
 		CS137	.rad(HazardRegistry.cs137)	.hot(3F)	.hydro(3F)	.dustSmall(powder_cs137_tiny)	.dust(powder_cs137);
 		AT209	.rad(HazardRegistry.at209)	.hot(20F)												.dust(powder_at209);
-		
+
 		/*
 		 * COLLECTIONS
 		 */
@@ -629,7 +634,7 @@ public class OreDictManager {
 			if(mat.autogen.contains(MaterialShapes.STOCK)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.STOCK.name() + name, new ItemStack(ModItems.part_stock, 1, mat.id));
 			if(mat.autogen.contains(MaterialShapes.GRIP)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.GRIP.name() + name, new ItemStack(ModItems.part_grip, 1, mat.id));
 		}
-		
+
 		for(EnumBedrockOre ore : EnumBedrockOre.values()) {
 			OreDictionary.registerOre("ore" + ore.oreName, new ItemStack(ModItems.ore_enriched, 1, ore.ordinal()));
 		}
@@ -637,17 +642,17 @@ public class OreDictManager {
 		OreDictionary.registerOre("itemRubber", ingot_rubber);
 
 		OreDictionary.registerOre("coalCoke", fromOne(coke, EnumCokeType.COAL));
-		
+
 		for(String name : new String[] {"fuelCoke", "coke"}) {
 			OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.COAL));
 			OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.LIGNITE));
 			OreDictionary.registerOre(name, fromOne(coke, EnumCokeType.PETROLEUM));
 		}
-		
+
 		OreDictionary.registerOre("briquetteCoal", fromOne(briquette, EnumBriquetteType.COAL));
 		OreDictionary.registerOre("briquetteLignite", fromOne(briquette, EnumBriquetteType.LIGNITE));
 		OreDictionary.registerOre("briquetteWood", fromOne(briquette, EnumBriquetteType.WOOD));
-		
+
 		OreDictionary.registerOre(getReflector(), neutron_reflector);
 
 		OreDictionary.registerOre("logWood", pink_log);
@@ -658,13 +663,13 @@ public class OreDictManager {
 		OreDictionary.registerOre("slabWoodPink", pink_slab);
 		OreDictionary.registerOre("stairWood", pink_stairs);
 		OreDictionary.registerOre("stairWoodPink", pink_stairs);
-		
+
 		String[] dyes = { "Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan", "LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "White" };
 		for(int i = 0; i < 16; i++) {
 			String dyeName = "dye" + dyes[i];
-			
+
 			OreDictionary.registerOre(dyeName, new ItemStack(ModItems.chemical_dye, 1, i));
-			
+
 			OreDictionary.registerOre(dyeName, new ItemStack(ModItems.crayon, 1, i));
 		}
 		OreDictionary.registerOre("dye", new ItemStack(chemical_dye, 1, OreDictionary.WILDCARD_VALUE));
@@ -731,7 +736,7 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_COBBLESTONE, minmus_regolith);
 		OreDictionary.registerOre(KEY_STONE, minmus_smooth);
 		OreDictionary.registerOre(KEY_STONE, minmus_stone);
-		
+
 		for(NTMMaterial mat : Mats.orderedList) {
 			if(mat.autogen.contains(MaterialShapes.FRAGMENT)) {
 				String name = mat.names[0];
@@ -743,15 +748,15 @@ public class OreDictManager {
 				else MineralRecipes.add9To1(mat.make(ModItems.bedrock_ore_fragment), new ItemStack(ModItems.nothing));
 			}
 		}
-		
+
 		MaterialShapes.registerCompatShapes();
 		compensateMojangSpaghettiBullshit();
 	}
-	
+
 	public static String getReflector() {
 		return GeneralConfig.enableReflectorCompat ? "plateDenseLead" : "plateTungCar"; //let's just mangle the name into "tungCar" so that it can't conflict with anything ever
 	}
-	
+
 	public static void registerGroups() {
 		ANY_RUBBER.addPrefix(INGOT, true);
 		ANY_PLASTIC.addPrefix(INGOT, true).addPrefix(DUST, true).addPrefix(BLOCK, true).addPrefix(GRIP, true).addPrefix(STOCK, true);
@@ -762,24 +767,24 @@ public class OreDictManager {
 		ANY_TAR.addPrefix(ANY, false);
 		ANY_COAL_COKE.addPrefix(DUST, true);
 	}
-	
+
 	private static boolean recursionBrake = false;
-	
+
 	@SubscribeEvent
 	public void onRegisterOre(OreRegisterEvent event) {
 		if(recursionBrake) return;
-		
+
 		recursionBrake = true;
-		
+
 		HashSet<String> strings = reRegistration.get(event.Name);
-		
+
 		if(strings != null) {
 			for(String name : strings) {
 				OreDictionary.registerOre(name, event.Ore);
 				MainRegistry.logger.info("Re-registration for " + event.Name + " to " + name);
 			}
 		}
-		
+
 		recursionBrake = false;
 
 		if(event.Name.startsWith("ingot") || event.Name.startsWith("ore") || event.Name.startsWith("plate") || event.Name.startsWith("block")) {
@@ -788,7 +793,7 @@ public class OreDictManager {
 	}
 
 	public static final HashSet<ComparableStack> arcSmeltable = new HashSet<>();
-	
+
 	/** Vanilla item ore dict registration events never actually register in the ODM because vanilla items are registered so early that the ODM event handler doesn't exist yet. */
 	public static void compensateMojangSpaghettiBullshit() {
 
@@ -811,12 +816,12 @@ public class OreDictManager {
 		arcSmeltable.add(new ComparableStack(Items.brick));
 		arcSmeltable.add(new ComparableStack(Items.netherbrick));
 	}
-	
+
 	public static class DictFrame {
 		public String[] mats;
 		float hazMult = 1.0F;
 		List<HazardEntry> hazards = new ArrayList<>();
-		
+
 		public DictFrame(String... mats) {
 			this.mats = mats;
 		}
@@ -853,14 +858,14 @@ public class OreDictManager {
 		public String stock() {			return STOCK.name()				+ mats[0]; }
 		public String grip() {			return GRIP.name()				+ mats[0]; }
 		public String[] all(MaterialShapes shape) {				return appendToAll(shape.prefixes); }
-		
+
 		/** Returns cast (triple) plates if 528 mode is enabled or normal plates if not */
 		public String plate528() { return GeneralConfig.enable528 ? plateCast() : plate(); }
-		
+
 		private String[] appendToAll(String... prefix) {
-			
+
 			String[] names = new String[mats.length * prefix.length];
-			
+
 			for(int i = 0; i < mats.length; i++) {
 				for(int j = 0; j < prefix.length; j++) {
 					names[i * prefix.length + j] = prefix[j] + mats[i];
@@ -878,12 +883,12 @@ public class OreDictManager {
 		public DictFrame coal(float time) { 	return this.haz(new HazardEntry(HazardRegistry.COAL, time)); }
 		public DictFrame explosive(float e) { 	return this.haz(new HazardEntry(HazardRegistry.EXPLOSIVE, e)); }
 		public DictFrame neutron(float neut) {		return this.haz(new HazardEntry(HazardRegistry.NEUTRON, neut)); }
-		
+
 		public DictFrame haz(HazardEntry hazard) {
 			hazards.add(hazard);
 			return this;
 		}
-		
+
 		/** Returns an ItemStack composed of the supplied item with the meta being the enum's ordinal. Purely syntactic candy */
 		public static ItemStack fromOne(Item item, Enum en) {
 			return new ItemStack(item, 1, en.ordinal());
@@ -901,7 +906,7 @@ public class OreDictManager {
 		public static Object[] fromAll(Item item, Class<? extends Enum> en) {
 			Enum[] vals = en.getEnumConstants();
 			Object[] stacks = new Object[vals.length];
-			
+
 			for(int i = 0; i < vals.length; i++) {
 				stacks[i] = new ItemStack(item, 1, vals[i].ordinal());
 			}
@@ -910,13 +915,13 @@ public class OreDictManager {
 		public static Object[] fromAll(Block block, Class<? extends Enum> en) {
 			Enum[] vals = en.getEnumConstants();
 			Object[] stacks = new Object[vals.length];
-			
+
 			for(int i = 0; i < vals.length; i++) {
 				stacks[i] = new ItemStack(block, 1, vals[i].ordinal());
 			}
 			return stacks;
 		}
-		
+
 		public DictFrame any(Object... thing) {
 			return makeObject(ANY, thing);
 		}
@@ -956,7 +961,7 @@ public class OreDictManager {
 			hazMult = HazardRegistry.billet;
 			return makeObject(BILLET, billet);
 		}
-		
+
 		public DictFrame block(Object... block) {
 			hazMult = HazardRegistry.block;
 			return makeObject(BLOCK, block);
@@ -980,17 +985,17 @@ public class OreDictManager {
 		}
 
 		public DictFrame makeObject(MaterialShapes shape, int meta, Object... objects) {
-			
+
 			String tag = shape.name();
 			for(Object o : objects) {
 				if(o instanceof Item)		registerStack(tag, new ItemStack((Item) o, 1, meta));
 				if(o instanceof Block)		registerStack(tag, new ItemStack((Block) o, 1, meta));
 				if(o instanceof ItemStack)	registerStack(tag, (ItemStack) o);
 			}
-			
+
 			return this;
 		}
-		
+
 		public DictFrame makeItem(String tag, Item... items) {
 			for(Item i : items) registerStack(tag, new ItemStack(i));
 			return this;
@@ -1003,26 +1008,26 @@ public class OreDictManager {
 			for(Block b : blocks) registerStack(tag, new ItemStack(b));
 			return this;
 		}
-		
+
 		public static void registerHazards(List<HazardEntry> hazards, float hazMult, String dictKey) {
-			
+
 			if(!hazards.isEmpty() && hazMult > 0F) {
 				HazardData data = new HazardData().setMutex(0b1);
-				
+
 				for(HazardEntry hazard : hazards) {
 					data.addEntry(hazard.clone(hazMult));
 				}
-				
+
 				HazardSystem.register(dictKey, data);
 			}
 		}
-		
+
 		public void registerStack(String tag, ItemStack stack) {
 			for(String mat : mats) {
 				OreDictionary.registerOre(tag + mat, stack);
 				registerHazards(hazards, hazMult, tag + mat);
 			}
-			
+
 			/*
 			 * Fix for a small oddity in nuclearcraft: many radioactive elements do not have an ore prefix and the sizes
 			 * seem generally inconsistent (TH and U are 20 "tiny"s per ingot while boron is 12), so we assume those to be ingots.
@@ -1034,12 +1039,12 @@ public class OreDictManager {
 			}
 		}
 	}
-	
+
 	public static class DictGroup {
-		
+
 		private String groupName;
 		private HashSet<String> names = new HashSet<>();
-		
+
 		public DictGroup(String groupName) {
 			this.groupName = groupName;
 		}
@@ -1051,7 +1056,7 @@ public class OreDictManager {
 			this(groupName);
 			this.addFrames(frames);
 		}
-		
+
 		public DictGroup addNames(String... names) {
 			for(String mat : names) this.names.add(mat);
 			return this;
@@ -1060,22 +1065,22 @@ public class OreDictManager {
 			for(DictFrame frame : frames) this.addNames(frame.mats);
 			return this;
 		}
-		
+
 		/**
 		 * Will add a reregistration entry for every mat name of every added DictFrame for the given prefix
 		 * @param prefix The prefix of both the input and result of the reregistration
 		 * @return
 		 */
 		public DictGroup addPrefix(MaterialShapes shape, boolean inputPrefix) {
-			
+
 			String prefix = shape.name();
 			String group = prefix + groupName;
-			
+
 			for(String name : names) {
 				String original = (inputPrefix ? prefix : "") + name;
 				addReRegistration(original, group);
 			}
-			
+
 			return this;
 		}
 		/**
@@ -1085,12 +1090,12 @@ public class OreDictManager {
 		 * @return
 		 */
 		public DictGroup addFixed(String prefix, String original) {
-			
+
 			String group = prefix + groupName;
 			addReRegistration(original, group);
 			return this;
 		}
-		
+
 		public String any() {			return ANY.name()				+ groupName; }
 		public String nugget() {		return NUGGET.name()			+ groupName; }
 		public String tiny() {			return TINY.name()				+ groupName; }
@@ -1117,16 +1122,16 @@ public class OreDictManager {
 		public String stock() {			return STOCK.name()				+ groupName; }
 		public String grip() {			return GRIP.name()				+ groupName; }
 	}
-	
+
 	private static void addReRegistration(String original, String additional) {
-		
+
 		HashSet<String> strings = reRegistration.get(original);
-		
+
 		if(strings == null)
 			strings = new HashSet<>();
-		
+
 		strings.add(additional);
-		
+
 		reRegistration.put(original, strings);
 	}
 }

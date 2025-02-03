@@ -27,7 +27,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 public class ChemplantRecipes extends SerializableRecipe {
-	
+
 	/**
 	 * Nice order: The order in which the ChemRecipe are added to the recipes list
 	 * Meta order: Fixed using the id param, saved in indexMapping
@@ -35,10 +35,10 @@ public class ChemplantRecipes extends SerializableRecipe {
 
 	public static HashMap<Integer, ChemRecipe> indexMapping = new HashMap<>();
 	public static List<ChemRecipe> recipes = new ArrayList<>();
-	
+
 	@Override
 	public void registerDefaults() {
-		
+
 		//6-30, formerly oil cracking, coal liquefaction and solidifciation
 		registerOtherOil();
 
@@ -70,7 +70,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 			        new OreDictStack(ASBESTOS.ingot(), 1))
 		        .inputFluids(new FluidStack(Fluids.HYDROGEN, 4000))
 		        .outputFluids(new FluidStack(Fluids.THORIUM_BROMIDE, 4000)));
-		
+
 		recipes.add(new ChemRecipe(36, "COOLANT", 50)
 				.inputItems(new OreDictStack(KNO.dust()))
 				.inputFluids(new FluidStack(Fluids.WATER, 1800))
@@ -127,7 +127,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 						new FluidStack(Fluids.XYLENE, 500),
 						new FluidStack(Fluids.OXYGEN, 100))
 				.outputItems(new ItemStack(ModItems.ingot_pet)));*/
-		
+
 		//Laminate Glass going here
 		recipes.add(new ChemRecipe(97, "LAMINATE", 100)
 				.inputFluids(
@@ -454,6 +454,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 		recipes.add(new ChemRecipe(118, "CC_CENTRIFUGE", 200)
 				.inputFluids(new FluidStack(Fluids.CHLOROCALCITE_CLEANED, 500), new FluidStack(Fluids.SULFURIC_ACID, 8_000))
 				.outputFluids(new FluidStack(Fluids.POTASSIUM_CHLORIDE, 250), new FluidStack(Fluids.CALCIUM_CHLORIDE, 250)));
+
 		recipes.add(new ChemRecipe(119, "THORIUM_SALT", 60)
 				.inputFluids(new FluidStack(Fluids.THORIUM_SALT_DEPLETED, 16_000))
 				.inputItems(new OreDictStack(TH232.nugget(), 2))
@@ -514,7 +515,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 				.inputFluids(new FluidStack(1000, Fluids.BITUMEN))
 				.outputItems(new ItemStack(ModBlocks.asphalt, 16)));
 	}
-	
+
 	public static class ChemRecipe {
 
 		public int listing;
@@ -526,18 +527,18 @@ public class ChemplantRecipes extends SerializableRecipe {
 		public FluidStack[] outputFluids;
 		private int duration;
 		public int oxygenConsumption = 0; // How much oxygen the recipe consumes from the atmosphere per tick while processing
-		
+
 		public ChemRecipe(int index, String name, int duration) {
 			this.id = index;
 			this.name = name;
 			this.duration = duration;
 			this.listing = recipes.size();
-			
+
 			this.inputs = new AStack[4];
 			this.outputs = new ItemStack[4];
 			this.inputFluids = new FluidStack[2];
 			this.outputFluids = new FluidStack[2];
-			
+
 			if(!indexMapping.containsKey(id)) {
 				indexMapping.put(id, this);
 			} else {
@@ -549,31 +550,31 @@ public class ChemplantRecipes extends SerializableRecipe {
 			this(index, name, duration);
 			this.oxygenConsumption = oxygenConsumption;
 		}
-		
+
 		public ChemRecipe inputItems(AStack... in) {
 			for(int i = 0; i < in.length; i++) this.inputs[i] = in[i];
 			return this;
 		}
-		
+
 		public ChemRecipe inputFluids(FluidStack... in) {
 			for(int i = 0; i < in.length; i++) this.inputFluids[i] = in[i];
 			return this;
 		}
-		
+
 		public ChemRecipe outputItems(ItemStack... out) {
 			for(int i = 0; i < out.length; i++) this.outputs[i] = out[i];
 			return this;
 		}
-		
+
 		public ChemRecipe outputFluids(FluidStack... out) {
 			for(int i = 0; i < out.length; i++) this.outputFluids[i] = out[i];
 			return this;
 		}
-		
+
 		public int getId() {
 			return this.id;
 		}
-		
+
 		public int getDuration() {
 			return this.duration;
 		}
@@ -595,7 +596,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 		int id = obj.get("id").getAsInt();
 		String name = obj.get("name").getAsString();
 		int duration = obj.get("duration").getAsInt();
-		
+
 		recipes.add(new ChemRecipe(id, name, duration)
 				.inputFluids(	readFluidArray(		(JsonArray) obj.get("fluidInput")))
 				.inputItems(	readAStackArray(		(JsonArray) obj.get("itemInput")))
@@ -631,7 +632,7 @@ public class ChemplantRecipes extends SerializableRecipe {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public String getComment() {
 		return "Rules: All in- and output arrays need to be present, even if empty. IDs need to be unique, but not sequential. It's safe if you add your own"
 				+ " recipes starting with ID 1000. Template order depends on the order of the recipes in this JSON file. The 'name' field is responsible for"
