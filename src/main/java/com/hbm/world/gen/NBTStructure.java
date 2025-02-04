@@ -57,7 +57,7 @@ public class NBTStructure {
 
 	/**
 	 * Now with structure support!
-	 * 
+	 *
 	 * the type of structure to generate is saved into the Component,
 	 * meaning this can generate all sorts of different structures,
 	 * without having to define and register each structure manually
@@ -156,7 +156,7 @@ public class NBTStructure {
 
 						NBTTagCompound nbtBlock = new NBTTagCompound();
 						nbtBlock.setString("Name", GameRegistry.findUniqueIdentifierFor(block.key).toString());
-						
+
 						NBTTagCompound nbtProp = new NBTTagCompound();
 						nbtProp.setString("meta", block.value.toString());
 
@@ -248,7 +248,7 @@ public class NBTStructure {
 			// GET SIZE (for offsetting to center)
 			size = parsePos(data.getTagList("size", NBT.TAG_INT));
 
-			
+
 			// PARSE BLOCK PALETTE
 			NBTTagList paletteList = data.getTagList("palette", NBT.TAG_COMPOUND);
 			palette = new BlockDefinition[paletteList.tagCount()];
@@ -269,7 +269,7 @@ public class NBTStructure {
 
 				palette[i] = new BlockDefinition(blockName, meta);
 			}
-			
+
 
 			// PARSE ITEM PALETTE (custom shite)
 			if(data.hasKey("itemPalette")) {
@@ -299,7 +299,7 @@ public class NBTStructure {
 				ThreeInts pos = parsePos(block.getTagList("pos", NBT.TAG_INT));
 
 				blockArray[pos.x][pos.y][pos.z] = new BlockState(palette[state]);
-				
+
 				if(block.hasKey("nbt")) {
 					blockArray[pos.x][pos.y][pos.z].nbt = block.getCompoundTag("nbt");
 				}
@@ -333,7 +333,7 @@ public class NBTStructure {
 		return worldItemPalette;
 	}
 
-	private TileEntity buildTileEntity(World world, Block block, Map<Block, Loot> lootTable, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt) {
+	private TileEntity buildTileEntity(World world, Block block, Map<Block, Loot> lootTable, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt, int coordBaseMode) {
 		nbt = (NBTTagCompound)nbt.copy();
 
 		if(worldItemPalette != null) relinkItems(worldItemPalette, nbt);
@@ -346,7 +346,7 @@ public class NBTStructure {
 		}
 
 		if(te instanceof INBTTileEntityTransformable) {
-			((INBTTileEntityTransformable) te).transformTE(world);
+			((INBTTileEntityTransformable) te).transformTE(world, coordBaseMode);
 		}
 
 		return te;
@@ -361,9 +361,9 @@ public class NBTStructure {
 			MainRegistry.logger.info("NBTStructure is invalid");
 			return;
 		}
-		
+
 		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
-		
+
 		boolean swizzle = coordBaseMode == 1 || coordBaseMode == 3;
 		x -= (swizzle ? size.z : size.x) / 2;
 		z -= (swizzle ? size.x : size.z) / 2;
@@ -385,9 +385,9 @@ public class NBTStructure {
 					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
 
 					world.setBlock(rx, ry, rz, block, meta, 2);
-		
+
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, block, lootTable, worldItemPalette, state.nbt);
+						TileEntity te = buildTileEntity(world, block, lootTable, worldItemPalette, state.nbt, coordBaseMode);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -436,7 +436,7 @@ public class NBTStructure {
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, block, spawn.lootTable, worldItemPalette, state.nbt);
+						TileEntity te = buildTileEntity(world, block, spawn.lootTable, worldItemPalette, state.nbt, coordBaseMode);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -575,7 +575,7 @@ public class NBTStructure {
 		}
 
 	}
-	
+
 	public static class SpawnCondition {
 
 		public NBTStructure structure;
@@ -614,7 +614,7 @@ public class NBTStructure {
 		SpawnCondition spawn;
 
 		public Component() {}
-		
+
 		public Component(SpawnCondition spawn, Random rand, int x, int z) {
 			super(0);
 			this.coordBaseMode = rand.nextInt(4);
@@ -659,30 +659,30 @@ public class NBTStructure {
 		private int getAverageHeight(World world, StructureBoundingBox box) {
 			int total = 0;
 			int iterations = 0;
-			
+
 			for(int z = box.minZ; z <= box.maxZ; z++) {
 				for(int x = box.minX; x <= box.maxX; x++) {
 					total += world.getTopSolidOrLiquidBlock(x, z);
 					iterations++;
 				}
 			}
-			
+
 			if(iterations == 0)
 				return 64;
-			
+
 			return total / iterations;
 		}
-		
+
 	}
 
 	public static class Start extends StructureStart {
-		
+
 		public Start() {}
-		
+
 		@SuppressWarnings("unchecked")
 		public Start(World world, Random rand, SpawnCondition spawn, int chunkX, int chunkZ) {
 			super(chunkX, chunkZ);
-			
+
 			int x = chunkX << 4;
 			int z = chunkZ << 4;
 
@@ -712,17 +712,17 @@ public class NBTStructure {
 		public String func_143025_a() {
 			return "NBTStructures";
 		}
-	
+
 		@Override
 		protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
 			if(!dimensionMap.containsKey(worldObj.provider.dimensionId)) return false;
 
 			int x = chunkX;
 			int z = chunkZ;
-			
+
 			if(x < 0) x -= StructureConfig.structureMaxChunks - 1;
 			if(z < 0) z -= StructureConfig.structureMaxChunks - 1;
-			
+
 			x /= StructureConfig.structureMaxChunks;
 			z /= StructureConfig.structureMaxChunks;
 			rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L + this.worldObj.getWorldInfo().getSeed() + (long)996996996 - worldObj.provider.dimensionId);
@@ -730,18 +730,18 @@ public class NBTStructure {
 			z *= StructureConfig.structureMaxChunks;
 			x += rand.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
 			z += rand.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
-			
+
 			if(chunkX == x && chunkZ == z) {
 				BiomeGenBase biome = this.worldObj.getWorldChunkManager().getBiomeGenAt(chunkX * 16 + 8, chunkZ * 16 + 8);
 
 				nextSpawn = findSpawn(biome);
-				
+
 				return nextSpawn != null && (nextSpawn.structure != null || nextSpawn.start != null);
 			}
 
 			return false;
 		}
-	
+
 		@Override
 		protected StructureStart getStructureStart(int chunkX, int chunkZ) {
 			if(nextSpawn.start != null) return nextSpawn.start.apply(new Quartet<World, Random, Integer, Integer>(this.worldObj, this.rand, chunkX, chunkZ));
