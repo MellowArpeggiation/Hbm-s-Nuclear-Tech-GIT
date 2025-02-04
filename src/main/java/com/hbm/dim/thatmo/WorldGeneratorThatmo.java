@@ -1,16 +1,21 @@
 package com.hbm.dim.thatmo;
 
+import java.util.HashMap;
 import java.util.Random;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.main.StructureManager;
 import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.component.Component.ConcreteBricks;
 
 import cpw.mods.fml.common.IWorldGenerator;
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.structure.StructureComponent.BlockSelector;
 
 public class WorldGeneratorThatmo implements IWorldGenerator {
 
@@ -26,8 +31,11 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
 			structure = StructureManager.trenches;
 			conformToTerrain = true;
-			heightOffset = -3;
+			heightOffset = -2;
 			spawnWeight = 2;
+			blockTable = new HashMap<Block, BlockSelector>() {{
+				put(ModBlocks.brick_concrete_cracked, new ConcreteBricks());
+			}};
 		}});
 	}
 
