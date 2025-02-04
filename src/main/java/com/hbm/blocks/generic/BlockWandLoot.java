@@ -19,6 +19,7 @@ import com.hbm.world.gen.INBTTileEntityTransformable;
 import com.mojang.authlib.GameProfile;
 
 import api.hbm.block.IToolable;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -290,7 +291,8 @@ public class BlockWandLoot extends BlockContainer implements ILookOverlay, ITool
 		@Override
 		public void writeToNBT(NBTTagCompound nbt) {
 			super.writeToNBT(nbt);
-			nbt.setInteger("block", Block.getIdFromBlock(replaceBlock));
+			Block writeBlock = replaceBlock == null ? ModBlocks.deco_loot : replaceBlock;
+			nbt.setString("block", GameRegistry.findUniqueIdentifierFor(writeBlock).toString());
 			nbt.setInteger("meta", replaceMeta);
 			nbt.setInteger("min", minItems);
 			nbt.setInteger("max", maxItems);
@@ -301,12 +303,14 @@ public class BlockWandLoot extends BlockContainer implements ILookOverlay, ITool
 		@Override
 		public void readFromNBT(NBTTagCompound nbt) {
 			super.readFromNBT(nbt);
-			replaceBlock = Block.getBlockById(nbt.getInteger("block"));
+			replaceBlock = Block.getBlockFromName(nbt.getString("block"));
 			replaceMeta = nbt.getInteger("meta");
 			minItems = nbt.getInteger("min");
 			maxItems = nbt.getInteger("max");
 			poolName = nbt.getString("pool");
 			placedRotation = nbt.getFloat("rot");
+
+			if(replaceBlock == null) replaceBlock = ModBlocks.deco_loot;
 		}
 
 		@Override

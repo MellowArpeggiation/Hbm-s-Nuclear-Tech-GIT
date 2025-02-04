@@ -31,7 +31,6 @@ import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
@@ -41,7 +40,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -180,9 +178,9 @@ public class NBTStructure {
 						NBTTagCompound nbt = new NBTTagCompound();
 						te.writeToNBT(nbt);
 
-						nbt.setInteger("x", nbt.getInteger("x") - ox);
-						nbt.setInteger("y", nbt.getInteger("y") - oy);
-						nbt.setInteger("z", nbt.getInteger("z") - oz);
+						nbt.removeTag("x");
+						nbt.removeTag("y");
+						nbt.removeTag("z");
 
 						nbtBlock.setTag("nbt", nbt);
 
@@ -333,17 +331,16 @@ public class NBTStructure {
 		return worldItemPalette;
 	}
 
-	private TileEntity buildTileEntity(World world, Block block, Map<Block, Loot> lootTable, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt, int coordBaseMode) {
+	private TileEntity buildTileEntity(World world, Block block, int x, int y, int z, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt, int coordBaseMode) {
 		nbt = (NBTTagCompound)nbt.copy();
+
+		nbt.setInteger("x", x);
+		nbt.setInteger("y", y);
+		nbt.setInteger("z", z);
 
 		if(worldItemPalette != null) relinkItems(worldItemPalette, nbt);
 
 		TileEntity te = TileEntity.createAndLoadEntity(nbt);
-
-		if(lootTable != null && te instanceof IInventory && lootTable.containsKey(block)) {
-			Loot entry = lootTable.get(block);
-			WeightedRandomChestContent.generateChestContents(world.rand, entry.table, (IInventory) te, world.rand.nextInt(entry.maxLoot - entry.minLoot) + entry.minLoot);
-		}
 
 		if(te instanceof INBTTileEntityTransformable) {
 			((INBTTileEntityTransformable) te).transformTE(world, coordBaseMode);
@@ -353,10 +350,10 @@ public class NBTStructure {
 	}
 
 	public void build(World world, int x, int y, int z) {
-		build(world, null, x, y, z, 0);
+		build(world, x, y, z, 0);
 	}
 
-	public void build(World world, Map<Block, Loot> lootTable, int x, int y, int z, int coordBaseMode) {
+	public void build(World world, int x, int y, int z, int coordBaseMode) {
 		if(!isLoaded) {
 			MainRegistry.logger.info("NBTStructure is invalid");
 			return;
@@ -387,7 +384,7 @@ public class NBTStructure {
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, block, lootTable, worldItemPalette, state.nbt, coordBaseMode);
+						TileEntity te = buildTileEntity(world, block, rx, ry, rz, worldItemPalette, state.nbt, coordBaseMode);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -436,7 +433,7 @@ public class NBTStructure {
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, block, spawn.lootTable, worldItemPalette, state.nbt, coordBaseMode);
+						TileEntity te = buildTileEntity(world, block, rx, ry, rz, worldItemPalette, state.nbt, coordBaseMode);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -562,20 +559,6 @@ public class NBTStructure {
 
 	}
 
-	public static class Loot {
-
-		private final WeightedRandomChestContent[] table;
-		private final int minLoot;
-		private final int maxLoot;
-
-		public Loot(WeightedRandomChestContent[] table, int minLoot, int maxLoot) {
-			this.table = table;
-			this.minLoot = minLoot;
-			this.maxLoot = maxLoot;
-		}
-
-	}
-
 	public static class SpawnCondition {
 
 		public NBTStructure structure;
@@ -593,8 +576,7 @@ public class NBTStructure {
 		public int maxHeight = 128;
 		public int heightOffset = 0;
 
-		// Block modifiers, for randomization and adding loot
-		public Map<Block, Loot> lootTable;
+		// Block modifiers, for randomization
 		public Map<Block, BlockSelector> blockTable;
 
 		// Used for serializing/deserializing in Component
