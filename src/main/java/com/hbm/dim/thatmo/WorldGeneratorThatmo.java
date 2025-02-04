@@ -23,6 +23,12 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 			structure = StructureManager.thatmo2;
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 		}});
+		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
+			structure = StructureManager.trenches;
+			conformToTerrain = true;
+			heightOffset = -3;
+			spawnWeight = 2;
+		}});
 	}
 
 	@Override
