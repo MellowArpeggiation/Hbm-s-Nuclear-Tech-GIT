@@ -331,12 +331,8 @@ public class NBTStructure {
 		return worldItemPalette;
 	}
 
-	private TileEntity buildTileEntity(World world, Block block, int x, int y, int z, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt, int coordBaseMode) {
+	private TileEntity buildTileEntity(World world, Block block, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt, int coordBaseMode) {
 		nbt = (NBTTagCompound)nbt.copy();
-
-		nbt.setInteger("x", x);
-		nbt.setInteger("y", y);
-		nbt.setInteger("z", z);
 
 		if(worldItemPalette != null) relinkItems(worldItemPalette, nbt);
 
@@ -384,7 +380,7 @@ public class NBTStructure {
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, block, rx, ry, rz, worldItemPalette, state.nbt, coordBaseMode);
+						TileEntity te = buildTileEntity(world, block, worldItemPalette, state.nbt, coordBaseMode);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -433,7 +429,7 @@ public class NBTStructure {
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, block, rx, ry, rz, worldItemPalette, state.nbt, coordBaseMode);
+						TileEntity te = buildTileEntity(world, block, worldItemPalette, state.nbt, coordBaseMode);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
