@@ -2,7 +2,7 @@ package com.hbm.blocks.generic;
 
 import com.hbm.blocks.BlockMulti;
 import com.hbm.lib.RefStrings;
-import com.hbm.world.gen.IRotatable;
+import com.hbm.world.gen.INBTTransformable;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -17,7 +17,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockDecoToaster extends BlockMulti implements IRotatable {
+public class BlockDecoToaster extends BlockMulti implements INBTTransformable {
 
 	protected String[] variants = new String[] {"toaster_iron", "toaster_steel", "toaster_wood"};
 	@SideOnly(Side.CLIENT) protected IIcon[] icons;
@@ -94,6 +94,7 @@ public class BlockDecoToaster extends BlockMulti implements IRotatable {
 
 	@Override
 	public int transformMeta(int meta, int coordBaseMode) {
-		return (meta & 12) + coordBaseMode;
+		return INBTTransformable.transformMetaDecoModel(meta, coordBaseMode);
 	}
+
 }

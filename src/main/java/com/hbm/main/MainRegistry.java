@@ -42,7 +42,6 @@ import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.tileentity.TileMappings;
 import com.hbm.tileentity.bomb.TileEntityLaunchPadBase;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
-import com.hbm.tileentity.machine.TileEntityNukeFurnace;
 import com.hbm.tileentity.machine.rbmk.RBMKDials;
 import com.hbm.util.*;
 import com.hbm.world.biome.BiomeGenCraterBase;
@@ -828,6 +827,8 @@ public class MainRegistry {
 		IMCHandler.registerHandler("crystallizer", new IMCCrystallizer());
 		IMCHandler.registerHandler("centrifuge", new IMCCentrifuge());
 
+		PlanetGen.init();
+
 		if (Loader.isModLoaded("NotEnoughItems")){
 			if (Loader.instance().getIndexedModList().get("NotEnoughItems").getVersion().contains("GTNH")) {
 				proxy.handleNHNEICompat();
@@ -854,7 +855,6 @@ public class MainRegistry {
 
 	@EventHandler
 	public static void PostLoad(FMLPostInitializationEvent PostEvent) {
-		TileEntityNukeFurnace.registerFuels();
 		MagicRecipes.register();
 		LemegetonRecipes.register();
 		SILEXRecipes.register();
@@ -876,9 +876,6 @@ public class MainRegistry {
 		FalloutConfigJSON.initialize();
 		ItemPoolConfigJSON.initialize();
 		ClientConfig.initConfig();
-
-		// gotta init AFTER loot pools
-		PlanetGen.init();
 
 		TileEntityNukeCustom.registerBombItems();
 		ArmorUtil.register();
@@ -905,24 +902,24 @@ public class MainRegistry {
 		new OreLayer3D(ModBlocks.stone_resource, EnumStoneType.BAUXITE.ordinal()).setGlobal(true).setScaleH(0.03D).setScaleV(0.15D).setThreshold(300);
 		new OreLayer3D(ModBlocks.stone_resource, EnumStoneType.MALACHITE.ordinal()).setGlobal(true).setScaleH(0.1D).setScaleV(0.15D).setThreshold(275);
 
-		
+
 		// Earth caves + layers
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20).withFluid(ModBlocks.sulfuric_acid_block);
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.ASBESTOS.ordinal()).setThreshold(1.75D).setRangeMult(20).setYLevel(25).setMaxRange(20);
-		
+
 		// Moon caves + layers
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setDimension(SpaceConfig.moonDimension).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20);
 		new OreLayer3D(ModBlocks.stone_resource, EnumStoneType.CONGLOMERATE.ordinal()).setDimension(SpaceConfig.moonDimension).setScaleH(0.04D).setScaleV(0.25D).setThreshold(220);
-		
+
 		// Duna caves + layers
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setDimension(SpaceConfig.dunaDimension).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20);
-		
+
 		// Ike caves + layers
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setDimension(SpaceConfig.ikeDimension).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20);
-		
+
 		// Eve caves + layers
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setDimension(SpaceConfig.eveDimension).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20).withFluid(ModBlocks.sulfuric_acid_block);
-		
+
 		// Moho caves + layers
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setDimension(SpaceConfig.mohoDimension).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20);
 
@@ -930,7 +927,7 @@ public class MainRegistry {
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setDimension(SpaceConfig.minmusDimension).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20);
 		new OreLayer3D(ModBlocks.minmus_regolith, 0).setDimension(SpaceConfig.minmusDimension).setScaleH(0.06D).setScaleV(0.25D).setThreshold(220);
 		new OreLayer3D(ModBlocks.minmus_smooth, 0).setDimension(SpaceConfig.minmusDimension).setScaleH(0.05D).setScaleV(0.15D).setThreshold(280);
-		
+
 		// Laythe caves + layers
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.SULFUR.ordinal()).setDimension(SpaceConfig.laytheDimension).setThreshold(1.5D).setRangeMult(20).setYLevel(30).setMaxRange(20).withFluid(ModBlocks.sulfuric_acid_block);
 		new OreCave(ModBlocks.stone_resource, EnumStoneType.ASBESTOS.ordinal()).setDimension(SpaceConfig.laytheDimension).setThreshold(1.75D).setRangeMult(20).setYLevel(25).setMaxRange(20);
@@ -1736,6 +1733,11 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.assembly_calamity");
 		ignoreMappings.add("hbm:item.assembly_lacunae");
 		ignoreMappings.add("hbm:item.assembly_luna");
+		ignoreMappings.add("hbm:item.pellet_chlorophyte");
+		ignoreMappings.add("hbm:item.pellet_canister");
+		ignoreMappings.add("hbm:item.pellet_claws");
+		ignoreMappings.add("hbm:item.pellet_flechette");
+		ignoreMappings.add("hbm:item.alloy_knife");
 
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);

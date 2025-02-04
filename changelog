@@ -1,24 +1,10 @@
-Includes all content and the latest bugfixes from the latest upstream NTMain update - [X5224](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5224)
+Includes PA tweaks and the latest bugfixes from the latest upstream NTMain update - [X5230 - "greg" \<canned laughter\>](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5230)
 
 ## Added
-* New structure generation system!
-  * Loads from .nbt structures that can be authored in game and saved with the structure wand
-  * Does not cause cascading generation lag, utilising the vanilla `MapGenStructure` system
+* Structure wand loot blocks, for .nbt structure designers
 
 ## Changed
-* Laythe generation vastly improved
-  * Reefs with coral now generate, and oceans are now deeper and more interesting
-  * Oceans now generate with Glowgrass, helping illuminate the seafloor, and sunken nuclear submarines with rare loot can be found
-* Scutterfish are now fully animated
-* Vacuum solderer now has effects
-* Most particles now react to vacuums and lack of gravity
+* Comms Dome on Duna now has more different types of loot
 
 ## Fixed
 * All fixes from upstream NTM
-* Added missing HTR-F4 recipe
-* Fix alkys not being powered by connectors
-* Fix Earth not showing on StarDars in orbit
-* Prevent water plants being placed outside of water
-* Fix space station gravity not applying even when enabled
-* Fix oxygen bubbles not showing when suffocating
-* Fix an `=` in `Block of Starmetal`

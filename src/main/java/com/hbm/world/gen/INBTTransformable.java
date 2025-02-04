@@ -1,15 +1,21 @@
 package com.hbm.world.gen;
 
-public interface IRotatable {
+import net.minecraft.block.Block;
+
+public interface INBTTransformable {
 
 	/**
-	 * Defines this block as something that has a rotation, which needs transformations applied
-	 * when building from an .nbt structure file
+	 * Defines this block as something that has a rotation or some other blockstate
+	 * which needs transformations applied when building from an .nbt structure file
 	 */
 
 	// Takes the block current meta and translates it into a rotated meta
 	public int transformMeta(int meta, int coordBaseMode);
 
+	// Takes the block and turns it into a different block entirely, to turn off lights, shit like that
+	public default Block transformBlock(Block block) {
+		return block;
+	}
 
 
 	/**
@@ -41,6 +47,13 @@ public interface IRotatable {
 			}
 		}
 		return meta;
+	}
+
+	public static int transformMetaDecoModel(int meta, int coordBaseMode) {
+		int rot = (meta + coordBaseMode) % 4;
+		int type = (meta / 4) * 4;
+
+		return rot | type;
 	}
 
 	public static int transformMetaStairs(int meta, int coordBaseMode) {
