@@ -16,6 +16,7 @@ import com.hbm.blocks.generic.BlockPedestal.TileEntityPedestal;
 import com.hbm.blocks.generic.BlockPlushie.TileEntityPlushie;
 import com.hbm.blocks.generic.BlockSnowglobe.TileEntitySnowglobe;
 import com.hbm.blocks.generic.BlockSupplyCrate.TileEntitySupplyCrate;
+import com.hbm.blocks.generic.BlockWandJigsaw.TileEntityWandJigsaw;
 import com.hbm.blocks.generic.BlockWandLoot.TileEntityWandLoot;
 import com.hbm.blocks.generic.PartEmitter.TileEntityPartEmitter;
 import com.hbm.blocks.machine.BlockAtmosphereEditor.TileEntityAtmosphereEditor;
@@ -257,6 +258,7 @@ public class TileMappings {
 		put(TileEntityData.class, "tileentity_data");
 
 		put(TileEntityWandLoot.class, "tileentity_wand_loot");
+		put(TileEntityWandJigsaw.class, "tileentity_wand_jigsaw");
 
 		putNetwork();
 		putBombs();
