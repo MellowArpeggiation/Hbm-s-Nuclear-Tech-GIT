@@ -23,16 +23,13 @@ public class HbmWorld {
 		MapGenStructureIO.registerStructure(BunkerStart.class, "NTMBunker");
 		registerNTMFeatures();
 
-		NBTStructure.register();
-	}
-
-	// Must be done after item pools are loaded
-	public static void registerWorldGen() {
 		registerWorldGen(new HbmWorldGen(), 1);
 
 		worldGenerator = new NTMWorldGenerator();
 		registerWorldGen(worldGenerator, 1); //Ideally, move everything over from HbmWorldGen to NTMWorldGenerator
 		MinecraftForge.EVENT_BUS.register(worldGenerator);
+
+		NBTStructure.register();
 	}
 
 	private static void registerWorldGen(IWorldGenerator nukerWorldGen, int weightedProbability) {

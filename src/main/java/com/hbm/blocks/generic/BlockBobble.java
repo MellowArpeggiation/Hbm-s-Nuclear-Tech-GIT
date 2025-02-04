@@ -4,6 +4,9 @@ import com.hbm.inventory.gui.GUIScreenBobble;
 import com.hbm.items.special.ItemPlasticScrap.ScrapType;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.IGUIProvider;
+import com.hbm.world.gen.INBTTileEntityTransformable;
+import com.hbm.world.gen.INBTTransformable;
+
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,7 +34,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
-public class BlockBobble extends BlockContainer implements IGUIProvider {
+public class BlockBobble extends BlockContainer implements IGUIProvider, INBTTransformable {
 
 	public BlockBobble() {
 		super(Material.iron);
@@ -137,11 +140,16 @@ public class BlockBobble extends BlockContainer implements IGUIProvider {
 	}
 
 	@Override
+	public int transformMeta(int meta, int coordBaseMode) {
+		return (meta + coordBaseMode * 4) % 16;
+	}
+
+	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityBobble();
 	}
 
-	public static class TileEntityBobble extends TileEntity {
+	public static class TileEntityBobble extends TileEntity implements INBTTileEntityTransformable {
 
 		public BobbleType type = BobbleType.NONE;
 
@@ -173,10 +181,15 @@ public class BlockBobble extends BlockContainer implements IGUIProvider {
 			super.writeToNBT(nbt);
 			nbt.setByte("type", (byte) type.ordinal());
 		}
+
+		@Override
+		public void transformTE(World world, int coordBaseMode) {
+			type = BobbleType.values()[world.rand.nextInt(BobbleType.values().length - 1) + 1];
+		}
 	}
 
 	public static enum BobbleType {
-		
+
 		NONE(			"null",								"null",			null,														null,																								false,	ScrapType.BOARD_BLANK),
 		STRENGTH(		"Strength",							"Strength",		null,														"It's essential to give your arguments impact.",													false,	ScrapType.BRIDGE_BIOS),
 		PERCEPTION(		"Perception",						"Perception",	null,														"Only through observation will you perceive weakness.",												false,	ScrapType.BRIDGE_NORTH),

@@ -1367,6 +1367,7 @@ public class ModBlocks {
 
 	// NBT Structure wand blocks
 	public static Block wand_air;
+	public static Block wand_loot;
 
 	public static Material materialGas = new MaterialGas();
 
@@ -2629,6 +2630,7 @@ public class ModBlocks {
 		propulsion_creative = new BlockStationPropulsionCreative(Material.iron).setBlockName("propulsion_creative").setHardness(1.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 
 		wand_air = new BlockWand(Blocks.air).setBlockName("wand_air").setBlockTextureName(RefStrings.MODID + ":wand_air");
+		wand_loot = new BlockWandLoot().setBlockName("wand_loot").setBlockTextureName(RefStrings.MODID + ":wand_loot");
 	}
 
 	private static void registerBlock() {
@@ -3872,6 +3874,7 @@ public class ModBlocks {
 		register(propulsion_creative);
 
 		register(wand_air);
+		register(wand_loot);
 	}
 
 	private static void register(Block b) {

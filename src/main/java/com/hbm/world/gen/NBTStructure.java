@@ -14,8 +14,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.hbm.blocks.generic.BlockWand;
-import com.hbm.blocks.generic.BlockBobble.BobbleType;
-import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.StructureConfig;
 import com.hbm.handler.ThreeInts;
@@ -33,7 +31,6 @@ import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
@@ -43,7 +40,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -59,7 +55,7 @@ public class NBTStructure {
 
 	/**
 	 * Now with structure support!
-	 * 
+	 *
 	 * the type of structure to generate is saved into the Component,
 	 * meaning this can generate all sorts of different structures,
 	 * without having to define and register each structure manually
@@ -158,7 +154,7 @@ public class NBTStructure {
 
 						NBTTagCompound nbtBlock = new NBTTagCompound();
 						nbtBlock.setString("Name", GameRegistry.findUniqueIdentifierFor(block.key).toString());
-						
+
 						NBTTagCompound nbtProp = new NBTTagCompound();
 						nbtProp.setString("meta", block.value.toString());
 
@@ -182,9 +178,9 @@ public class NBTStructure {
 						NBTTagCompound nbt = new NBTTagCompound();
 						te.writeToNBT(nbt);
 
-						nbt.setInteger("x", nbt.getInteger("x") - ox);
-						nbt.setInteger("y", nbt.getInteger("y") - oy);
-						nbt.setInteger("z", nbt.getInteger("z") - oz);
+						nbt.removeTag("x");
+						nbt.removeTag("y");
+						nbt.removeTag("z");
 
 						nbtBlock.setTag("nbt", nbt);
 
@@ -250,7 +246,7 @@ public class NBTStructure {
 			// GET SIZE (for offsetting to center)
 			size = parsePos(data.getTagList("size", NBT.TAG_INT));
 
-			
+
 			// PARSE BLOCK PALETTE
 			NBTTagList paletteList = data.getTagList("palette", NBT.TAG_COMPOUND);
 			palette = new BlockDefinition[paletteList.tagCount()];
@@ -271,7 +267,7 @@ public class NBTStructure {
 
 				palette[i] = new BlockDefinition(blockName, meta);
 			}
-			
+
 
 			// PARSE ITEM PALETTE (custom shite)
 			if(data.hasKey("itemPalette")) {
@@ -301,7 +297,7 @@ public class NBTStructure {
 				ThreeInts pos = parsePos(block.getTagList("pos", NBT.TAG_INT));
 
 				blockArray[pos.x][pos.y][pos.z] = new BlockState(palette[state]);
-				
+
 				if(block.hasKey("nbt")) {
 					blockArray[pos.x][pos.y][pos.z].nbt = block.getCompoundTag("nbt");
 				}
@@ -335,37 +331,36 @@ public class NBTStructure {
 		return worldItemPalette;
 	}
 
-	private TileEntity buildTileEntity(World world, Block block, Map<Block, Loot> lootTable, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt) {
+	private TileEntity buildTileEntity(World world, Block block, int x, int y, int z, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt, int coordBaseMode) {
 		nbt = (NBTTagCompound)nbt.copy();
+
+		nbt.setInteger("x", x);
+		nbt.setInteger("y", y);
+		nbt.setInteger("z", z);
 
 		if(worldItemPalette != null) relinkItems(worldItemPalette, nbt);
 
 		TileEntity te = TileEntity.createAndLoadEntity(nbt);
 
-		if(lootTable != null && te instanceof IInventory && lootTable.containsKey(block)) {
-			Loot entry = lootTable.get(block);
-			WeightedRandomChestContent.generateChestContents(world.rand, entry.table, (IInventory) te, world.rand.nextInt(entry.maxLoot - entry.minLoot) + entry.minLoot);
-		}
-
-		if(te instanceof TileEntityBobble) {
-			((TileEntityBobble) te).type = BobbleType.values()[world.rand.nextInt(BobbleType.values().length - 1) + 1];
+		if(te instanceof INBTTileEntityTransformable) {
+			((INBTTileEntityTransformable) te).transformTE(world, coordBaseMode);
 		}
 
 		return te;
 	}
 
 	public void build(World world, int x, int y, int z) {
-		build(world, null, x, y, z, 0);
+		build(world, x, y, z, 0);
 	}
 
-	public void build(World world, Map<Block, Loot> lootTable, int x, int y, int z, int coordBaseMode) {
+	public void build(World world, int x, int y, int z, int coordBaseMode) {
 		if(!isLoaded) {
 			MainRegistry.logger.info("NBTStructure is invalid");
 			return;
 		}
-		
+
 		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
-		
+
 		boolean swizzle = coordBaseMode == 1 || coordBaseMode == 3;
 		x -= (swizzle ? size.z : size.x) / 2;
 		z -= (swizzle ? size.x : size.z) / 2;
@@ -387,9 +382,9 @@ public class NBTStructure {
 					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
 
 					world.setBlock(rx, ry, rz, block, meta, 2);
-		
+
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, block, lootTable, worldItemPalette, state.nbt);
+						TileEntity te = buildTileEntity(world, block, rx, ry, rz, worldItemPalette, state.nbt, coordBaseMode);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -438,7 +433,7 @@ public class NBTStructure {
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, block, spawn.lootTable, worldItemPalette, state.nbt);
+						TileEntity te = buildTileEntity(world, block, rx, ry, rz, worldItemPalette, state.nbt, coordBaseMode);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -564,20 +559,6 @@ public class NBTStructure {
 
 	}
 
-	public static class Loot {
-
-		private final WeightedRandomChestContent[] table;
-		private final int minLoot;
-		private final int maxLoot;
-
-		public Loot(WeightedRandomChestContent[] table, int minLoot, int maxLoot) {
-			this.table = table;
-			this.minLoot = minLoot;
-			this.maxLoot = maxLoot;
-		}
-
-	}
-	
 	public static class SpawnCondition {
 
 		public NBTStructure structure;
@@ -595,8 +576,7 @@ public class NBTStructure {
 		public int maxHeight = 128;
 		public int heightOffset = 0;
 
-		// Block modifiers, for randomization and adding loot
-		public Map<Block, Loot> lootTable;
+		// Block modifiers, for randomization
 		public Map<Block, BlockSelector> blockTable;
 
 		// Used for serializing/deserializing in Component
@@ -616,7 +596,7 @@ public class NBTStructure {
 		SpawnCondition spawn;
 
 		public Component() {}
-		
+
 		public Component(SpawnCondition spawn, Random rand, int x, int z) {
 			super(0);
 			this.coordBaseMode = rand.nextInt(4);
@@ -661,30 +641,30 @@ public class NBTStructure {
 		private int getAverageHeight(World world, StructureBoundingBox box) {
 			int total = 0;
 			int iterations = 0;
-			
+
 			for(int z = box.minZ; z <= box.maxZ; z++) {
 				for(int x = box.minX; x <= box.maxX; x++) {
 					total += world.getTopSolidOrLiquidBlock(x, z);
 					iterations++;
 				}
 			}
-			
+
 			if(iterations == 0)
 				return 64;
-			
+
 			return total / iterations;
 		}
-		
+
 	}
 
 	public static class Start extends StructureStart {
-		
+
 		public Start() {}
-		
+
 		@SuppressWarnings("unchecked")
 		public Start(World world, Random rand, SpawnCondition spawn, int chunkX, int chunkZ) {
 			super(chunkX, chunkZ);
-			
+
 			int x = chunkX << 4;
 			int z = chunkZ << 4;
 
@@ -714,17 +694,17 @@ public class NBTStructure {
 		public String func_143025_a() {
 			return "NBTStructures";
 		}
-	
+
 		@Override
 		protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
 			if(!dimensionMap.containsKey(worldObj.provider.dimensionId)) return false;
 
 			int x = chunkX;
 			int z = chunkZ;
-			
+
 			if(x < 0) x -= StructureConfig.structureMaxChunks - 1;
 			if(z < 0) z -= StructureConfig.structureMaxChunks - 1;
-			
+
 			x /= StructureConfig.structureMaxChunks;
 			z /= StructureConfig.structureMaxChunks;
 			rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L + this.worldObj.getWorldInfo().getSeed() + (long)996996996 - worldObj.provider.dimensionId);
@@ -732,18 +712,18 @@ public class NBTStructure {
 			z *= StructureConfig.structureMaxChunks;
 			x += rand.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
 			z += rand.nextInt(StructureConfig.structureMaxChunks - StructureConfig.structureMinChunks);
-			
+
 			if(chunkX == x && chunkZ == z) {
 				BiomeGenBase biome = this.worldObj.getWorldChunkManager().getBiomeGenAt(chunkX * 16 + 8, chunkZ * 16 + 8);
 
 				nextSpawn = findSpawn(biome);
-				
+
 				return nextSpawn != null && (nextSpawn.structure != null || nextSpawn.start != null);
 			}
 
 			return false;
 		}
-	
+
 		@Override
 		protected StructureStart getStructureStart(int chunkX, int chunkZ) {
 			if(nextSpawn.start != null) return nextSpawn.start.apply(new Quartet<World, Random, Integer, Integer>(this.worldObj, this.rand, chunkX, chunkZ));
