@@ -21,21 +21,21 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorLaythe implements IWorldGenerator {
 
 	public WorldGeneratorLaythe() {
-		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
-			structure = StructureManager.nuke_sub;
-			canSpawn = biome -> biome == BiomeGenBaseLaythe.laytheOcean;
-			maxHeight = 54;
-		}});
-		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
-			structure = StructureManager.vertibird;
-			canSpawn = biome -> biome.rootHeight > 0;
-			heightOffset = -3;
-		}});
-		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
-			structure = StructureManager.crashed_vertibird;
-			canSpawn = biome -> biome.rootHeight > 0;
-			heightOffset = -10;
-		}});
+		// NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
+		// 	structure = StructureManager.nuke_sub;
+		// 	canSpawn = biome -> biome == BiomeGenBaseLaythe.laytheOcean;
+		// 	maxHeight = 54;
+		// }});
+		// NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
+		// 	structure = StructureManager.vertibird;
+		// 	canSpawn = biome -> biome.rootHeight > 0;
+		// 	heightOffset = -3;
+		// }});
+		// NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
+		// 	structure = StructureManager.crashed_vertibird;
+		// 	canSpawn = biome -> biome.rootHeight > 0;
+		// 	heightOffset = -10;
+		// }});
 	}
 
 	@Override

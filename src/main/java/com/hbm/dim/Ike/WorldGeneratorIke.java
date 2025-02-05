@@ -1,12 +1,18 @@
 package com.hbm.dim.Ike;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.main.StructureManager;
 import com.hbm.world.dungeon.AncientTomb;
+import com.hbm.world.gen.NBTStructure;
+import com.hbm.world.gen.NBTStructure.JigsawPiece;
+import com.hbm.world.gen.NBTStructure.JigsawPool;
+import com.hbm.world.gen.NBTStructure.SpawnCondition;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -14,6 +20,19 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
 public class WorldGeneratorIke implements IWorldGenerator {
+
+	public WorldGeneratorIke() {
+		NBTStructure.registerStructure(SpaceConfig.ikeDimension, new SpawnCondition() {{
+			startPool = "default";
+			pools = new HashMap<String, NBTStructure.JigsawPool>() {{
+				put("default", new JigsawPool() {{
+					add(new JigsawPiece("ike_piece_test") {{
+						structure = StructureManager.test_jigsaw;
+					}}, 1);
+				}});
+			}};
+		}});
+	}
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {

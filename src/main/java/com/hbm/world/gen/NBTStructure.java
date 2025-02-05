@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockWand;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.StructureConfig;
@@ -49,6 +50,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureComponent.BlockSelector;
 import net.minecraft.world.gen.structure.StructureStart;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class NBTStructure {
@@ -61,8 +63,10 @@ public class NBTStructure {
 	 * without having to define and register each structure manually
 	 */
 
-	protected static Map<Integer, List<SpawnCondition>> dimensionMap = new HashMap<>();
 	protected static Map<Integer, List<SpawnCondition>> weightedMap = new HashMap<>();
+
+	// serialization data
+	protected static Map<String, JigsawPiece> jigsawMap = new HashMap<>();
 
 	private String name;
 
@@ -71,6 +75,7 @@ public class NBTStructure {
 	private BlockDefinition[] palette;
 	private List<Pair<Short, String>> itemPalette;
 	private BlockState[][][] blockArray;
+	private List<JigsawConnection> connections;
 
 	public NBTStructure(ResourceLocation resource) {
 		// Can't use regular resource loading, servers don't know how!
@@ -88,13 +93,8 @@ public class NBTStructure {
 		MapGenStructureIO.func_143031_a(Component.class, "NBTComponents");
 	}
 
-	// REGISTRATION ORDER MATTERS, make sure new structures are registered AFTER older ones
+	// Register a new structure for a given dimension
 	public static void registerStructure(int dimensionId, SpawnCondition spawn) {
-		List<SpawnCondition> list = dimensionMap.computeIfAbsent(dimensionId, integer -> new ArrayList<SpawnCondition>());
-		spawn.dimensionId = dimensionId;
-		spawn.conditionId = list.size();
-		list.add(spawn);
-
 		List<SpawnCondition> weightedList = weightedMap.computeIfAbsent(dimensionId, integer -> new ArrayList<SpawnCondition>());
 		for(int i = 0; i < spawn.spawnWeight; i++) {
 			weightedList.add(spawn);
@@ -295,12 +295,26 @@ public class NBTStructure {
 				NBTTagCompound block = blockData.getCompoundTagAt(i);
 				int state = block.getInteger("state");
 				ThreeInts pos = parsePos(block.getTagList("pos", NBT.TAG_INT));
-
-				blockArray[pos.x][pos.y][pos.z] = new BlockState(palette[state]);
+				
+				BlockState blockState = new BlockState(palette[state]);
 
 				if(block.hasKey("nbt")) {
-					blockArray[pos.x][pos.y][pos.z].nbt = block.getCompoundTag("nbt");
+					NBTTagCompound nbt = block.getCompoundTag("nbt");
+					blockState.nbt = nbt;
+
+					// Load in connection points for jigsaws
+					if(blockState.definition.block == ModBlocks.wand_jigsaw) {
+						// int priority = nbt.getInteger("priority");
+						ForgeDirection direction = ForgeDirection.getOrientation(nbt.getInteger("direction"));
+						String poolName = nbt.getString("pool");
+
+						// List<DirPos> positions = connections.computeIfAbsent(priority, integer -> new ArrayList<>());
+						if(connections == null) connections = new ArrayList<>();
+						connections.add(new JigsawConnection(pos, direction, poolName));
+					}
 				}
+
+				blockArray[pos.x][pos.y][pos.z] = blockState;
 			}
 
 
@@ -389,7 +403,7 @@ public class NBTStructure {
 		}
 	}
 
-	protected boolean build(World world, SpawnCondition spawn, StructureBoundingBox totalBounds, StructureBoundingBox generatingBounds, int coordBaseMode) {
+	protected boolean build(World world, JigsawPiece piece, StructureBoundingBox totalBounds, StructureBoundingBox generatingBounds, int coordBaseMode, int heightOffset) {
 		if(!isLoaded) {
 			MainRegistry.logger.info("NBTStructure is invalid");
 			return false;
@@ -418,7 +432,7 @@ public class NBTStructure {
 			for(int bz = minZ; bz <= maxZ; bz++) {
 				int rx = rotateX(bx, bz, coordBaseMode) + totalBounds.minX;
 				int rz = rotateZ(bx, bz, coordBaseMode) + totalBounds.minZ;
-				int oy = spawn.conformToTerrain ? world.getTopSolidOrLiquidBlock(rx, rz) + spawn.heightOffset : totalBounds.minY;
+				int oy = piece.conformToTerrain ? world.getTopSolidOrLiquidBlock(rx, rz) + heightOffset : totalBounds.minY;
 
 				for(int by = 0; by < size.y; by++) {
 					BlockState state = blockArray[bx][by][bz];
@@ -426,7 +440,7 @@ public class NBTStructure {
 
 					int ry = by + oy;
 
-					Block block = transformBlock(state.definition, spawn.blockTable, world.rand);
+					Block block = transformBlock(state.definition, piece.blockTable, world.rand);
 					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
 
 					world.setBlock(rx, ry, rz, block, meta, 2);
@@ -560,29 +574,26 @@ public class NBTStructure {
 
 	public static class SpawnCondition {
 
-		public NBTStructure structure;
-
 		// If defined, will spawn in a non-nbt structure component
 		public Function<Quartet<World, Random, Integer, Integer>, StructureStart> start;
 
 		public Predicate<BiomeGenBase> canSpawn;
 		public int spawnWeight = 1;
 
-		// Height modifiers, will apply offset and clamp height generated at, allowing for:
+		// Named jigsaw pools that are referenced within the structure
+		public Map<String, JigsawPool> pools;
+		public String startPool;
+
+		// Maximum amount of components in this structure
+		public int sizeLimit = 8;
+
+		// Height modifiers, will apply offset and clamp height that the start generates at, allowing for:
 		//  * Submarines that must spawn under the ocean surface
 		//  * Bunkers that sit underneath the ground
 		//  * Conforming structures will adjust height to match terrain automatically
-		public int minHeight = 0;
+		public int minHeight = 1;
 		public int maxHeight = 128;
 		public int heightOffset = 0;
-		public boolean conformToTerrain = false;
-
-		// Block modifiers, for randomization
-		public Map<Block, BlockSelector> blockTable;
-
-		// Used for serializing/deserializing in Component
-		private int dimensionId;
-		private int conditionId;
 
 		// Can this spawn in the current biome
 		protected boolean isValid(BiomeGenBase biome) {
@@ -592,24 +603,84 @@ public class NBTStructure {
 
 	}
 
+	// A set of pieces with weights
+	public static class JigsawPool {
+
+		// Weighted list of pieces to pick from
+		private List<JigsawPiece> pieces = new ArrayList<>();
+
+		public void add(JigsawPiece piece, int weight) {
+			for(int i = 0; i < weight; i++) {
+				pieces.add(piece);
+			}
+		}
+
+		public JigsawPiece get(Random rand) {
+			return pieces.get(rand.nextInt(pieces.size()));
+		}
+
+	}
+
+	// Assigned to a Component to build
+	public static class JigsawPiece {
+
+		public final String name;
+
+		public NBTStructure structure;
+
+		public boolean conformToTerrain = false;
+
+		// Block modifiers, for randomization
+		public Map<Block, BlockSelector> blockTable;
+
+		public JigsawPiece(String name) {
+			this.name = name;
+		}
+
+	}
+
+	// Each jigsaw block in a structure will instance one of these
+	private static class JigsawConnection {
+
+		private final ThreeInts pos;
+		private final ForgeDirection dir;
+
+		// what pool should we look through to find a connection
+		private final String poolName;
+
+		private JigsawConnection(ThreeInts pos, ForgeDirection dir, String poolName) {
+			this.pos = pos;
+			this.dir = dir;
+			this.poolName = poolName;
+		}
+
+	}
+
 	public static class Component extends StructureComponent {
 
-		SpawnCondition spawn;
+		JigsawPiece piece;
+
+		int heightOffset;
+		int minHeight = 1;
+		int maxHeight = 128;
 
 		public Component() {}
 
-		public Component(SpawnCondition spawn, Random rand, int x, int z) {
+		public Component(SpawnCondition spawn, JigsawPiece piece, Random rand, int x, int z) {
 			super(0);
 			this.coordBaseMode = rand.nextInt(4);
-			this.spawn = spawn;
+			this.piece = piece;
+			this.heightOffset = spawn.heightOffset;
+			this.minHeight = spawn.minHeight;
+			this.maxHeight = spawn.maxHeight;
 
 			switch(this.coordBaseMode) {
 			case 1:
 			case 3:
-				this.boundingBox = new StructureBoundingBox(x, 0, z, x + spawn.structure.size.z, 255, z + spawn.structure.size.x);
+				this.boundingBox = new StructureBoundingBox(x, 0, z, x + piece.structure.size.z, 255, z + piece.structure.size.x);
 				break;
 			default:
-				this.boundingBox = new StructureBoundingBox(x, 0, z, x + spawn.structure.size.x, 255, z + spawn.structure.size.z);
+				this.boundingBox = new StructureBoundingBox(x, 0, z, x + piece.structure.size.x, 255, z + piece.structure.size.z);
 				break;
 			}
 		}
@@ -617,26 +688,33 @@ public class NBTStructure {
 		// Save to NBT
 		@Override
 		protected void func_143012_a(NBTTagCompound nbt) {
-			nbt.setInteger("dim", spawn.dimensionId);
-			nbt.setInteger("con", spawn.conditionId);
+			nbt.setString("piece", piece.name);
+			nbt.setInteger("offset", heightOffset);
+			nbt.setInteger("min", minHeight);
+			nbt.setInteger("max", maxHeight);
 		}
 
 		// Load from NBT
 		@Override
 		protected void func_143011_b(NBTTagCompound nbt) {
-			spawn = dimensionMap.get(nbt.getInteger("dim")).get(nbt.getInteger("con"));
+			piece = jigsawMap.get(nbt.getString("piece"));
+			heightOffset = nbt.getInteger("offset");
+			minHeight = nbt.getInteger("min");
+			maxHeight = nbt.getInteger("max");
 		}
 
 		@Override
 		public boolean addComponentParts(World world, Random rand, StructureBoundingBox box) {
+			if(piece == null) return false;
+
 			// now we're in the world, update minY/maxY
-			if(!spawn.conformToTerrain && boundingBox.minY == 0) {
-				int y = MathHelper.clamp_int(getAverageHeight(world, box) + spawn.heightOffset, spawn.minHeight, spawn.maxHeight);
+			if(!piece.conformToTerrain && boundingBox.minY == 0) {
+				int y = MathHelper.clamp_int(getAverageHeight(world, box) + heightOffset, minHeight, maxHeight);
 				boundingBox.minY = y;
-				boundingBox.maxY = y + spawn.structure.size.y;
+				boundingBox.maxY = y + piece.structure.size.y;
 			}
 
-			return spawn.structure.build(world, spawn, boundingBox, box, coordBaseMode);
+			return piece.structure.build(world, piece, boundingBox, box, coordBaseMode, heightOffset);
 		}
 
 		private int getAverageHeight(World world, StructureBoundingBox box) {
@@ -660,6 +738,8 @@ public class NBTStructure {
 
 	public static class Start extends StructureStart {
 
+		private List<Component> queuedComponents = new ArrayList<>();
+
 		public Start() {}
 
 		@SuppressWarnings("unchecked")
@@ -669,10 +749,48 @@ public class NBTStructure {
 			int x = chunkX << 4;
 			int z = chunkZ << 4;
 
-			this.components.add(new Component(spawn, rand, x, z));
+			JigsawPiece startPiece = spawn.pools.get(spawn.startPool).get(rand);
+
+			Component startComponent = new Component(spawn, startPiece, rand, x, z);
+
+			this.components.add(startComponent);
+			queuedComponents.add(startComponent);
+
+			// Iterate through and build out all the components we intend to spawn
+			while(!queuedComponents.isEmpty()) {
+				final int i = rand.nextInt(queuedComponents.size());
+				Component component = queuedComponents.remove(i);
+
+				if(this.components.size() > spawn.sizeLimit) continue;
+				if(component.piece.structure.connections == null) continue;
+
+				for(JigsawConnection connection : component.piece.structure.connections) {
+					int nextX = component.getBoundingBox().minX;
+					int nextZ = component.getBoundingBox().minZ;
+
+					switch(connection.dir) {
+					case NORTH: nextZ += component.getBoundingBox().getZSize(); break;
+					case SOUTH: nextZ -= component.getBoundingBox().getZSize(); break;
+					case EAST: nextX += component.getBoundingBox().getXSize(); break;
+					case WEST: nextX -= component.getBoundingBox().getXSize(); break;
+					default: break;
+					}
+
+					JigsawPiece nextPiece = spawn.pools.get(connection.poolName).get(rand);
+					Component nextComponent = new Component(spawn, nextPiece, rand, nextX, nextZ);
+
+					this.components.add(nextComponent);
+					queuedComponents.add(nextComponent);
+				}
+			}
 
 			if(GeneralConfig.enableDebugMode) {
-				MainRegistry.logger.info("[Debug] Spawning NBT structure: " + spawn.structure.name + " - at: " + chunkX * 16 + ", " + chunkZ * 16);
+				MainRegistry.logger.info("[Debug] Spawning NBT structure at: " + chunkX * 16 + ", " + chunkZ * 16);
+				String componentList = "[Debug] Components: ";
+				for(Object component : this.components) {
+					componentList += ((Component) component).piece.structure.name + " ";
+				}
+				MainRegistry.logger.info(componentList);
 			}
 
 			updateBoundingBox();
@@ -698,7 +816,7 @@ public class NBTStructure {
 
 		@Override
 		protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
-			if(!dimensionMap.containsKey(worldObj.provider.dimensionId)) return false;
+			if(!weightedMap.containsKey(worldObj.provider.dimensionId)) return false;
 
 			int x = chunkX;
 			int z = chunkZ;
@@ -719,7 +837,7 @@ public class NBTStructure {
 
 				nextSpawn = findSpawn(biome);
 
-				return nextSpawn != null && (nextSpawn.structure != null || nextSpawn.start != null);
+				return nextSpawn != null && (nextSpawn.pools != null || nextSpawn.start != null);
 			}
 
 			return false;

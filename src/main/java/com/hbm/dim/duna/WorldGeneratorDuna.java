@@ -20,12 +20,12 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorDuna implements IWorldGenerator {
 
 	public WorldGeneratorDuna() {
-		NBTStructure.registerStructure(SpaceConfig.dunaDimension, new SpawnCondition() {{
-			structure = StructureManager.duna_comms;
-			canSpawn = biome -> biome.heightVariation < 0.1F;
-			heightOffset = -1;
-		}});
-		NBTStructure.registerNullWeight(SpaceConfig.dunaDimension, 2);
+		// NBTStructure.registerStructure(SpaceConfig.dunaDimension, new SpawnCondition() {{
+		// 	structure = StructureManager.duna_comms;
+		// 	canSpawn = biome -> biome.heightVariation < 0.1F;
+		// 	heightOffset = -1;
+		// }});
+		// NBTStructure.registerNullWeight(SpaceConfig.dunaDimension, 2);
 	}
 
 	@Override
