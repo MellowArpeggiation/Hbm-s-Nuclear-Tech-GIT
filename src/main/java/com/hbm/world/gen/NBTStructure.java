@@ -22,14 +22,7 @@ import com.hbm.util.Tuple.Pair;
 import com.hbm.util.Tuple.Quartet;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockButton;
-import net.minecraft.block.BlockDirectional;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockRotatedPillar;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -495,6 +488,7 @@ public class NBTStructure {
 		if(definition.block instanceof BlockButton) return INBTTransformable.transformMetaTorch(definition.meta, coordBaseMode);
 		if(definition.block instanceof BlockDoor) return INBTTransformable.transformMetaDoor(definition.meta, coordBaseMode);
 		if(definition.block instanceof BlockLever) return INBTTransformable.transformMetaLever(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockSign) return INBTTransformable.transformMetaDeco(definition.meta, coordBaseMode);
 
 		return definition.meta;
 	}
