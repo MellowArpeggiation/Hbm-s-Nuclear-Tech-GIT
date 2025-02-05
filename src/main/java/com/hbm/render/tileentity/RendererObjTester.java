@@ -36,6 +36,9 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 	private static ResourceLocation extra = new ResourceLocation(RefStrings.MODID, "textures/models/horse/dyx.png");
 	private static final ResourceLocation noise = new ResourceLocation(RefStrings.MODID, "shaders/iChannel1.png");
 	private static final Shader shaeder =  new Shader(new ResourceLocation(RefStrings.MODID, "shaders/fle.frag"));
+	private static final Shader shadeder =  new Shader(new ResourceLocation(RefStrings.MODID, "shaders/blackholed.frag"));
+	private static final Shader supern =  new Shader(new ResourceLocation(RefStrings.MODID, "shaders/supernovae.frag"));
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {		
 		GL11.glPushMatrix();
@@ -47,34 +50,28 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		double sin2 = Math.sin(time * 0.05 + Math.PI);
 		double insine = Math.sin(time * 0.05) * -15;
 
-		Shader shader = shaeder;
-		double shaderSize = 2;
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		Shader shader = shadeder;
 
 		shader.use();
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		int textureUnit = 0;
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		bindTexture(noise);
 
 		GL11.glPushMatrix();
 
 		// Fix orbital plane
-		GL11.glRotatef(-90.0F, 0, 1, 0);
-		
-		shader.setTime((time * 0.05F));
+		GL11.glRotatef(0.0F, 0, 1, 0);
+		GL11.glScalef(4, 14, 4);
+		shader.setTime((time * 0.5F));
+
+		GL11.glColor4d(0, 0, 0, 0.5);
 		shader.setTextureUnit(textureUnit);
-		Tessellator tessellator = Tessellator.instance;
 
-		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV(-shaderSize, 100.0D, -shaderSize, 0.0D, 0.0D);
-		tessellator.addVertexWithUV(shaderSize, 100.0D, -shaderSize, 1.0D, 0.0D);
-		tessellator.addVertexWithUV(shaderSize, 100.0D, shaderSize, 1.0D, 1.0D);
-		tessellator.addVertexWithUV(-shaderSize, 100.0D, shaderSize, 0.0D, 1.0D);
-		tessellator.draw();
-		ResourceManager.sphere_v2.renderAll();
 
-		GL11.glColor4d(1, 0, 0, 1);
+		ResourceManager.hemisphere.renderAll();
+
 
 		shader.stop();
 
