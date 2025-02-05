@@ -331,12 +331,8 @@ public class NBTStructure {
 		return worldItemPalette;
 	}
 
-	private TileEntity buildTileEntity(World world, Block block, int x, int y, int z, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt, int coordBaseMode) {
+	private TileEntity buildTileEntity(World world, Block block, HashMap<Short, Short> worldItemPalette, NBTTagCompound nbt, int coordBaseMode) {
 		nbt = (NBTTagCompound)nbt.copy();
-
-		nbt.setInteger("x", x);
-		nbt.setInteger("y", y);
-		nbt.setInteger("z", z);
 
 		if(worldItemPalette != null) relinkItems(worldItemPalette, nbt);
 
@@ -370,12 +366,13 @@ public class NBTStructure {
 
 		for(int bx = 0; bx < maxX; bx++) {
 			for(int bz = 0; bz < maxZ; bz++) {
+				int rx = rotateX(bx, bz, coordBaseMode) + x;
+				int rz = rotateZ(bx, bz, coordBaseMode) + z;
+
 				for(int by = 0; by < size.y; by++) {
 					BlockState state = blockArray[bx][by][bz];
 					if(state == null) continue;
 
-					int rx = rotateX(bx, bz, coordBaseMode) + x;
-					int rz = rotateZ(bx, bz, coordBaseMode) + z;
 					int ry = by + y;
 
 					Block block = transformBlock(state.definition, null, world.rand);
@@ -384,7 +381,7 @@ public class NBTStructure {
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, block, rx, ry, rz, worldItemPalette, state.nbt, coordBaseMode);
+						TileEntity te = buildTileEntity(world, block, worldItemPalette, state.nbt, coordBaseMode);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -419,13 +416,15 @@ public class NBTStructure {
 
 		for(int bx = minX; bx <= maxX; bx++) {
 			for(int bz = minZ; bz <= maxZ; bz++) {
+				int rx = rotateX(bx, bz, coordBaseMode) + totalBounds.minX;
+				int rz = rotateZ(bx, bz, coordBaseMode) + totalBounds.minZ;
+				int oy = spawn.conformToTerrain ? world.getTopSolidOrLiquidBlock(rx, rz) + spawn.heightOffset : totalBounds.minY;
+
 				for(int by = 0; by < size.y; by++) {
 					BlockState state = blockArray[bx][by][bz];
 					if(state == null) continue;
 
-					int rx = rotateX(bx, bz, coordBaseMode) + totalBounds.minX;
-					int rz = rotateZ(bx, bz, coordBaseMode) + totalBounds.minZ;
-					int ry = by + totalBounds.minY;
+					int ry = by + oy;
 
 					Block block = transformBlock(state.definition, spawn.blockTable, world.rand);
 					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
@@ -433,7 +432,7 @@ public class NBTStructure {
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
 					if(state.nbt != null) {
-						TileEntity te = buildTileEntity(world, block, rx, ry, rz, worldItemPalette, state.nbt, coordBaseMode);
+						TileEntity te = buildTileEntity(world, block, worldItemPalette, state.nbt, coordBaseMode);
 						world.setTileEntity(rx, ry, rz, te);
 					}
 				}
@@ -572,9 +571,11 @@ public class NBTStructure {
 		// Height modifiers, will apply offset and clamp height generated at, allowing for:
 		//  * Submarines that must spawn under the ocean surface
 		//  * Bunkers that sit underneath the ground
+		//  * Conforming structures will adjust height to match terrain automatically
 		public int minHeight = 0;
 		public int maxHeight = 128;
 		public int heightOffset = 0;
+		public boolean conformToTerrain = false;
 
 		// Block modifiers, for randomization
 		public Map<Block, BlockSelector> blockTable;
@@ -629,7 +630,7 @@ public class NBTStructure {
 		@Override
 		public boolean addComponentParts(World world, Random rand, StructureBoundingBox box) {
 			// now we're in the world, update minY/maxY
-			if(boundingBox.minY == 0) {
+			if(!spawn.conformToTerrain && boundingBox.minY == 0) {
 				int y = MathHelper.clamp_int(getAverageHeight(world, box) + spawn.heightOffset, spawn.minHeight, spawn.maxHeight);
 				boundingBox.minY = y;
 				boundingBox.maxY = y + spawn.structure.size.y;

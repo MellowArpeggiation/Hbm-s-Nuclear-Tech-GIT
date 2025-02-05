@@ -379,17 +379,17 @@ public class AssemblerRecipes extends SerializableRecipe {
 				new ComparableStack(ModItems.centrifuge_element, 4),
 				new ComparableStack(ModBlocks.machine_lithium_battery, 1)
 			},600);
-		makeRecipe(new ComparableStack(ModItems.sat_lunar_miner, 1), new AStack[] {
-				new ComparableStack(ModItems.ingot_meteorite, 4),
-				new ComparableStack(ModItems.plate_desh, 4),
-				new ComparableStack(ModItems.motor, 2),
-				new ComparableStack(ModItems.drill_titanium, 2),
-				new ComparableStack(ModItems.circuit, 8, EnumCircuitType.ADVANCED),
-				new ComparableStack(ModItems.fluid_barrel_full, 1, Fluids.KEROSENE.getID()),
-				new ComparableStack(ModItems.thruster_small, 1),
-				new ComparableStack(ModItems.photo_panel, 12),
-				new ComparableStack(ModBlocks.machine_lithium_battery, 1)
-			},600);
+		// makeRecipe(new ComparableStack(ModItems.sat_lunar_miner, 1), new AStack[] {
+		// 		new ComparableStack(ModItems.ingot_meteorite, 4),
+		// 		new ComparableStack(ModItems.plate_desh, 4),
+		// 		new ComparableStack(ModItems.motor, 2),
+		// 		new ComparableStack(ModItems.drill_titanium, 2),
+		// 		new ComparableStack(ModItems.circuit, 8, EnumCircuitType.ADVANCED),
+		// 		new ComparableStack(ModItems.fluid_barrel_full, 1, Fluids.KEROSENE.getID()),
+		// 		new ComparableStack(ModItems.thruster_small, 1),
+		// 		new ComparableStack(ModItems.photo_panel, 12),
+		// 		new ComparableStack(ModBlocks.machine_lithium_battery, 1)
+		// 	},600);
 
 		makeRecipe(new ComparableStack(ModItems.upgrade_overdrive_1, 1), new AStack[] {
 				new ComparableStack(ModItems.upgrade_speed_3, 1),

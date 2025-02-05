@@ -1,15 +1,10 @@
-Includes new Particle Accelerator and the latest bugfixes from the latest upstream NTMain update - [X5229 - sharticle accelerator](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5229)
+Includes PA tweaks and the latest bugfixes from the latest upstream NTMain update - [X5230 - "greg" \<canned laughter\>](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5230)
 
 ## Added
-* New structure on Duna - Comms Dome
-* Updated Chinese localization
+* Structure wand loot blocks, for .nbt structure designers
 
 ## Changed
-* Laythe now generates half as much glowgrass, which should reduce chunk generation times
-* Vertibirds now generate on Laythe using the new cascadeless NBT generation
-* NBT structures now generate in any rotation
+* Comms Dome on Duna now has more different types of loot
 
 ## Fixed
 * All fixes from upstream NTM
-* Conveyor sorters crashing when setting filters
-* NBT structure chest content not sufficiently randomised
