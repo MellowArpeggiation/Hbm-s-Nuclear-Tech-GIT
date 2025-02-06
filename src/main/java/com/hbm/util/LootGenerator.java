@@ -17,6 +17,43 @@ import java.util.Random;
 
 public class LootGenerator {
 
+	public static final String LOOT_BOOKLET = "LOOT_BOOKLET";
+	public static final String LOOT_CAPNUKE = "LOOT_CAPNUKE";
+	public static final String LOOT_MEDICINE = "LOOT_MEDICINE";
+	public static final String LOOT_CAPSTASH = "LOOT_CAPSTASH";
+	public static final String LOOT_MAKESHIFT_GUN = "LOOT_MAKESHIFT_GUN";
+	public static final String LOOT_NUKE_STORAGE = "LOOT_NUKE_STORAGE";
+	public static final String LOOT_BONES = "LOOT_BONES";
+	public static final String LOOT_GLYPHID_HIVE = "LOOT_GLYPHID_HIVE";
+
+	public static void applyLoot(World world, int x, int y, int z, String name) {
+		switch(name) {
+			case LOOT_BOOKLET: lootBooklet(world, x, y, z);
+			case LOOT_CAPNUKE: lootCapNuke(world, x, y, z);
+			case LOOT_MEDICINE: lootMedicine(world, x, y, z);
+			case LOOT_CAPSTASH: lootCapStash(world, x, y, z);
+			case LOOT_MAKESHIFT_GUN: lootMakeshiftGun(world, x, y, z);
+			case LOOT_NUKE_STORAGE: lootNukeStorage(world, x, y, z);
+			case LOOT_BONES: lootBones(world, x, y, z);
+			case LOOT_GLYPHID_HIVE: lootGlyphidHive(world, x, y, z);
+			default: lootBones(world, x, y, z); break;
+			// lore books handled separately
+		}
+	}
+
+	public static String[] getLootNames() {
+		return new String[] {
+			LOOT_BOOKLET,
+			LOOT_CAPNUKE,
+			LOOT_MEDICINE,
+			LOOT_CAPSTASH,
+			LOOT_MAKESHIFT_GUN,
+			LOOT_NUKE_STORAGE,
+			LOOT_BONES,
+			LOOT_GLYPHID_HIVE,
+		};
+	}
+
 	public static void setBlock(World world, int x, int y, int z) {
 		world.setBlock(x, y, z, ModBlocks.deco_loot);
 	}

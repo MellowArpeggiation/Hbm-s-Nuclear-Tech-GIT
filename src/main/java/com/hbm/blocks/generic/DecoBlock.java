@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.deco.TileEntityDecoBlock;
+import com.hbm.world.gen.INBTTransformable;
 
 import api.hbm.block.IToolable;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -24,7 +25,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class DecoBlock extends BlockContainer implements IToolable {
+public class DecoBlock extends BlockContainer implements IToolable, INBTTransformable {
 	
 	Random rand = new Random();
 
@@ -180,5 +181,10 @@ public class DecoBlock extends BlockContainer implements IToolable {
 		} else {
 			super.addCollisionBoxesToList(world, x, y, z, aabb, list, collider);
 		}
+	}
+
+	@Override
+	public int transformMeta(int meta, int coordBaseMode) {
+		return INBTTransformable.transformMetaDeco(meta, coordBaseMode);
 	}
 }
