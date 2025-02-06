@@ -26,7 +26,7 @@ public class WorldGeneratorIke implements IWorldGenerator {
 			startPool = "start";
 			minHeight = 80;
 			maxHeight = 80;
-			sizeLimit = 2;
+			sizeLimit = 32;
 			pools = new HashMap<String, NBTStructure.JigsawPool>() {{
 				put("start", new JigsawPool() {{
 					add(new JigsawPiece("ike_core_test") {{
@@ -37,9 +37,9 @@ public class WorldGeneratorIke implements IWorldGenerator {
 					add(new JigsawPiece("ike_piece_test") {{
 						structure = StructureManager.test_jigsaw;
 					}}, 1);
-					// add(new JigsawPiece("ike_hall_test") {{
-					// 	structure = StructureManager.test_jigsaw_hall;
-					// }}, 1);
+					add(new JigsawPiece("ike_hall_test") {{
+						structure = StructureManager.test_jigsaw_hall;
+					}}, 1);
 				}});
 			}};
 		}});

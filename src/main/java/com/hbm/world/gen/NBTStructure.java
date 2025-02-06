@@ -420,8 +420,8 @@ public class NBTStructure {
 
 		HashMap<Short, Short> worldItemPalette = getWorldItemPalette();
 
-		int sizeX = totalBounds.maxX - totalBounds.minX - 1;
-		int sizeZ = totalBounds.maxZ - totalBounds.minZ - 1;
+		int sizeX = totalBounds.maxX - totalBounds.minX;
+		int sizeZ = totalBounds.maxZ - totalBounds.minZ;
 
 		// voxel grid transforms can fuck you up
 		// you have my respect, vaer
@@ -708,10 +708,10 @@ public class NBTStructure {
 			switch(this.coordBaseMode) {
 			case 1:
 			case 3:
-				this.boundingBox = new StructureBoundingBox(x, 0, z, x + piece.structure.size.z, piece.structure.size.y, z + piece.structure.size.x);
+				this.boundingBox = new StructureBoundingBox(x, 0, z, x + piece.structure.size.z - 1, piece.structure.size.y - 1, z + piece.structure.size.x - 1);
 				break;
 			default:
-				this.boundingBox = new StructureBoundingBox(x, 0, z, x + piece.structure.size.x, piece.structure.size.y, z + piece.structure.size.z);
+				this.boundingBox = new StructureBoundingBox(x, 0, z, x + piece.structure.size.x - 1, piece.structure.size.y - 1, z + piece.structure.size.z - 1);
 				break;
 			}
 		}
