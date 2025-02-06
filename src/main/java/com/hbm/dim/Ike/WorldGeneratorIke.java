@@ -23,12 +23,23 @@ public class WorldGeneratorIke implements IWorldGenerator {
 
 	public WorldGeneratorIke() {
 		NBTStructure.registerStructure(SpaceConfig.ikeDimension, new SpawnCondition() {{
-			startPool = "default";
+			startPool = "start";
+			minHeight = 80;
+			maxHeight = 80;
+			sizeLimit = 2;
 			pools = new HashMap<String, NBTStructure.JigsawPool>() {{
+				put("start", new JigsawPool() {{
+					add(new JigsawPiece("ike_core_test") {{
+						structure = StructureManager.test_jigsaw_core;
+					}}, 1);
+				}});
 				put("default", new JigsawPool() {{
 					add(new JigsawPiece("ike_piece_test") {{
 						structure = StructureManager.test_jigsaw;
 					}}, 1);
+					// add(new JigsawPiece("ike_hall_test") {{
+					// 	structure = StructureManager.test_jigsaw_hall;
+					// }}, 1);
 				}});
 			}};
 		}});
@@ -49,14 +60,14 @@ public class WorldGeneratorIke implements IWorldGenerator {
 		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.ironClusterSpawn,  8, 1, 33, ModBlocks.ore_iron, meta, ModBlocks.ike_stone);
 		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.lithiumSpawn,  6, 4, 8, ModBlocks.ore_lithium, meta, ModBlocks.ike_stone);
 		DungeonToolbox.generateOre(world, rand, i, j, 2, 4, 15, 40, ModBlocks.ore_coltan, meta, ModBlocks.ike_stone);
-		
+
 		//okay okay okay, lets say on duna you DO make solvent, this is now awesome because you can now make gallium arsenide to then head to
 		//dres and the likes :)
-	
-		
+
+
 		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.mineralSpawn, 10, 12, 32, ModBlocks.ore_mineral, meta, ModBlocks.ike_stone);
 
-		
+
 
 		if(WorldConfig.pyramidStructure > 0 && rand.nextInt(WorldConfig.pyramidStructure) == 0) {
 			int x = i + rand.nextInt(16);

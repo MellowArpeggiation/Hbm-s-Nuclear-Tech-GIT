@@ -2,6 +2,7 @@ package com.hbm.blocks.generic;
 
 import com.hbm.blocks.IBlockSideRotation;
 import com.hbm.lib.RefStrings;
+import com.hbm.world.gen.INBTTransformable;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,7 +18,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockWandJigsaw extends BlockContainer implements IBlockSideRotation {
+public class BlockWandJigsaw extends BlockContainer implements IBlockSideRotation, INBTTransformable {
 
 	private IIcon iconTop;
 	private IIcon iconSide;
@@ -91,24 +92,38 @@ public class BlockWandJigsaw extends BlockContainer implements IBlockSideRotatio
 		return IBlockSideRotation.getRenderType();
 	}
 
+	@Override
+	public int transformMeta(int meta, int coordBaseMode) {
+		return INBTTransformable.transformMetaDeco(meta, coordBaseMode);
+	}
+
+
 	public static class TileEntityWandJigsaw extends TileEntity {
 
 		private int priority;
 		private String pool = "default";
+		private String name = "default";
+		private String target = "default";
 
 		@Override
 		public void writeToNBT(NBTTagCompound nbt) {
 			super.writeToNBT(nbt);
+			nbt.setInteger("direction", this.getBlockMetadata());
+
 			nbt.setInteger("priority", priority);
 			nbt.setString("pool", pool);
-			nbt.setInteger("direction", this.getBlockMetadata());
+			nbt.setString("name", name);
+			nbt.setString("target", target);
 		}
 
 		@Override
 		public void readFromNBT(NBTTagCompound nbt) {
 			super.readFromNBT(nbt);
+
 			priority = nbt.getInteger("priority");
 			pool = nbt.getString("pool");
+			name = nbt.getString("name");
+			target = nbt.getString("target");
 		}
 
 	}
