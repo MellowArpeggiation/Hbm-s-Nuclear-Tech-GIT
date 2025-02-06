@@ -66,7 +66,8 @@ public class SkyProviderCelestial extends IRenderHandler {
 	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/particle/shockwave.png");
 	private static final ResourceLocation ThatmoShield = new ResourceLocation("hbm:textures/particle/cens.png");
 	private static final ResourceLocation flash = new ResourceLocation("hbm:textures/misc/space/flare.png");
-	
+	private static final Shader shaeder =  new Shader(new ResourceLocation(RefStrings.MODID, "shaders/fle.frag"));
+
 	private static final ResourceLocation noise = new ResourceLocation(RefStrings.MODID, "shaders/iChannel1.png");
 	
 	protected static final Shader planetShader = new Shader(new ResourceLocation(RefStrings.MODID, "shaders/crescent.frag"));
@@ -364,6 +365,41 @@ public class SkyProviderCelestial extends IRenderHandler {
 		
 		renderSpecialEffects(partialTicks, world, mc);
 
+		/*
+		GL11.glPushMatrix();
+		float time = ((float)world.getWorldTime() + partialTicks) * 0.2F;
+
+		Shader shader = shaeder;
+		double size = 2;
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glDisable(GL11.GL_CULL_FACE);
+
+		shader.use();
+		GL11.glScaled(194.5, 70.5, 94.5);
+		GL11.glRotated(90, 0, 0, 1);
+		int textureUnit = 0;
+		
+		mc.renderEngine.bindTexture(noise);
+		ResourceManager.sphere_v2.renderAll();
+
+		GL11.glPushMatrix();
+
+		// Fix orbital plane
+		GL11.glRotatef(-90.0F, 0, 1, 0);
+		
+		shader.setTime((time * 0.05F));
+		shader.setTextureUnit(textureUnit);
+
+
+		shader.stop();
+
+		GL11.glPopMatrix();
+
+		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
+		
+		GL11.glPopMatrix();
+		*/
+		
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);

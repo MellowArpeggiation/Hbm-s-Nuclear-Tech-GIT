@@ -244,6 +244,7 @@ public class EntityMappings {
 
 		addMob(EntityMoonCow.class, "entity_moon_cow", 0xECD376, 0x262A44);
 		addMob(EntityScutterfish.class, "entity_scutterfish", 0xC8C9CD, 0x858894);
+		addMob(EntitySifterEel.class, "entity_siftereel", 0xC8C9CD, 0x858894);
 
 		addMob(EntityFBI.class, "entity_ntm_fbi", 0x008000, 0x404040);
 		addMob(EntityFBIDrone.class, "entity_ntm_fbi_drone", 0x008000, 0x404040);

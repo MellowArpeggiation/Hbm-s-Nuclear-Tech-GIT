@@ -46,46 +46,88 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		double sin3 = Math.sin(time * 0.05 + Math.PI * 0.5) * 15;
 		double sin2 = Math.sin(time * 0.05 + Math.PI);
 		double insine = Math.sin(time * 0.05) * -15;
+		double cy0 = Math.sin(time % (Math.PI * 2));
+		double cy1 = Math.sin(time % (Math.PI * 2) - Math.PI * 0.2);
+		double cy2 = Math.sin(time % (Math.PI * 2) - Math.PI * 0.4);
+		double cy3 = Math.sin(time % (Math.PI * 2) - Math.PI * 0.6);
 
-		Shader shader = shaeder;
-		double shaderSize = 2;
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glTranslatef(0, 0.5F, 0);
+		bindTexture(ResourceManager.eel_tex);
 
-		shader.use();
-		GL11.glShadeModel(GL11.GL_SMOOTH);
-		int textureUnit = 0;
 
-		bindTexture(noise);
+		ResourceManager.sifter_eel.renderPart("jaw");
 
+
+
+
+
+		// Head
 		GL11.glPushMatrix();
-
-		// Fix orbital plane
-		GL11.glRotatef(-90.0F, 0, 1, 0);
-		
-		shader.setTime((time * 0.05F));
-		shader.setTextureUnit(textureUnit);
-		Tessellator tessellator = Tessellator.instance;
-
-		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV(-shaderSize, 100.0D, -shaderSize, 0.0D, 0.0D);
-		tessellator.addVertexWithUV(shaderSize, 100.0D, -shaderSize, 1.0D, 0.0D);
-		tessellator.addVertexWithUV(shaderSize, 100.0D, shaderSize, 1.0D, 1.0D);
-		tessellator.addVertexWithUV(-shaderSize, 100.0D, shaderSize, 0.0D, 1.0D);
-		tessellator.draw();
-		ResourceManager.sphere_v2.renderAll();
-
-		GL11.glColor4d(1, 0, 0, 1);
-
-		shader.stop();
-
+		{
+			GL11.glRotatef(1 * 0.5F, -1, 0, 0);
+			GL11.glRotatef(0, 0, 0, 0);
+			ResourceManager.sifter_eel.renderPart("head");
+		}
 		GL11.glPopMatrix();
 
-		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
-		
-		
-
+		// Side fins
+		GL11.glPushMatrix();
+		{
+			GL11.glRotated(cy0 * 20, 0, 1, 0);
+			ResourceManager.sifter_eel.renderPart("finL");
+		}
+		GL11.glPopMatrix();
+		GL11.glPushMatrix();
+		{
+			GL11.glRotated(cy0 * -20, 0, 1, 0);
+			ResourceManager.sifter_eel.renderPart("finR");
+		}
 		GL11.glPopMatrix();
 
+		// Tail fin
+		GL11.glPushMatrix();
+		{
+			bindTexture(ResourceManager.eel_tex);
+			ResourceManager.sifter_eel.renderPart("frontbodyseg");
+
+			GL11.glRotated(cy1 * 10, 0, 1, 0);
+			GL11.glRotated(cy2 * -2, 0, 1, 0);
+			ResourceManager.sifter_eel.renderPart("topfinfront");
+
+
+			ResourceManager.sifter_eel.renderPart("midbodyseg");
+			GL11.glRotated(cy3 * -2 * 0.5, 0, 1, 0);
+			ResourceManager.sifter_eel.renderPart("topfinmid");
+			ResourceManager.sifter_eel.renderPart("topfinmidlast");
+			GL11.glRotated(cy1 * -6 * 0.5, 0, 1, 0);
+
+			ResourceManager.sifter_eel.renderPart("midbodysegtwo");
+
+			ResourceManager.sifter_eel.renderPart("bottomfinfront");
+			ResourceManager.sifter_eel.renderPart("bottomfinmid");
+			ResourceManager.sifter_eel.renderPart("bottomfinmidlast");
+			GL11.glRotated(cy2 * -4 * 0.5, 0, 1, 0);
+			ResourceManager.sifter_eel.renderPart("topfinlast");
+			ResourceManager.sifter_eel.renderPart("bottomfinlast");
+			ResourceManager.sifter_eel.renderPart("endbodyseg");
+			GL11.glRotated(cy3 * -6 * 0.5, 0, 1, 0);
+			ResourceManager.sifter_eel.renderPart("tail");
+
+			ResourceManager.sifter_eel.renderPart("tailbodyseg");
+
+			GL11.glRotated(cy1 * -3 * 0.5, 0, 1, 0);
+			ResourceManager.sifter_eel.renderPart("tailtipseg");
+
+
+
+
+			bindTexture(ResourceManager.eel_tex);
+
+		}
+		GL11.glPopMatrix();
+		GL11.glPopMatrix();
+
+	
 		
 		/*
 		bindTexture(ResourceManager.b2x_tex_mex_sex);

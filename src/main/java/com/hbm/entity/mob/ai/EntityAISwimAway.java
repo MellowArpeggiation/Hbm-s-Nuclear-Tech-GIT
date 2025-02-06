@@ -4,20 +4,22 @@ import java.util.List;
 
 import com.hbm.entity.mob.EntityScutterfish;
 
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 
 public class EntityAISwimAway extends EntityAIBase {
-    private EntityScutterfish fish;
+    private EntityCreature fish;
     private double speed;
     private EntityPlayer closestPlayer;
 	private double randPosY;
 	private double randPosX;
 	private double randPosZ;
 
-    public EntityAISwimAway(EntityScutterfish fish, double speed) {
+    public EntityAISwimAway(EntityCreature fish, double speed) {
         this.fish = fish;
         this.speed = speed;
     }

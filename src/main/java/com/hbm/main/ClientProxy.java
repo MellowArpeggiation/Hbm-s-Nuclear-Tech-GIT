@@ -72,6 +72,7 @@ import com.hbm.render.item.ItemRenderMissileGeneric.RenderMissileType;
 import com.hbm.render.item.block.ItemRenderDecoBlock;
 import com.hbm.render.item.weapon.*;
 import com.hbm.render.loader.HmfModelLoader;
+import com.hbm.render.model.ModelEel;
 import com.hbm.render.model.ModelMoonCow;
 import com.hbm.render.model.ModelPigeon;
 import com.hbm.render.model.ModelScutter;
@@ -801,6 +802,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityScutterfish.class, new RenderScutter(new ModelScutter(), 0.3F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityTankbot.class, new RenderTankbot());
 		RenderingRegistry.registerEntityRenderingHandler(EntityWarBehemoth.class, new RenderBehemoth());
+		RenderingRegistry.registerEntityRenderingHandler(EntitySifterEel.class, new RenderSifterEel(new ModelEel(), 0.3F));
 
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, new RenderDummy());
