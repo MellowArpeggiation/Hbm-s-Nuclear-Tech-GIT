@@ -68,8 +68,9 @@ public class BlockWandLoot extends BlockContainer implements ILookOverlay, ITool
 
 	@Override
 	public int getRotationFromSide(IBlockAccess world, int x, int y, int z, int side) {
-		if(side > 1) return 0;
-		return world.getBlockMetadata(x, y, z);
+		if(side == 0) return IBlockSideRotation.topToBottom(world.getBlockMetadata(x, y, z));
+		if(side == 1) return world.getBlockMetadata(x, y, z);
+		return 0;
 	}
 
 	@Override
