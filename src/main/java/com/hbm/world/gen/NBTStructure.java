@@ -4,13 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -675,6 +669,8 @@ public class NBTStructure {
 		// Weighted list of pieces to pick from
 		private List<JigsawPiece> pieces = new ArrayList<>();
 
+		public String fallback;
+
 		public void add(JigsawPiece piece, int weight) {
 			for(int i = 0; i < weight; i++) {
 				pieces.add(piece);
@@ -881,9 +877,22 @@ public class NBTStructure {
 			return coordBaseMode;
 		}
 
+		protected boolean hasIntersectionIgnoringSelf(LinkedList<StructureComponent> components, StructureBoundingBox box) {
+			for(StructureComponent component : components) {
+				if(component == this) continue;
+				if(component.getBoundingBox() == null) continue;
+
+				if(component.getBoundingBox().intersectsWith(box)) return true;
+			}
+
+			return false;
+		}
+
 	}
 
 	public static class Start extends StructureStart {
+
+		private List<Component> queuedComponents;
 
 		public Start() {}
 
@@ -899,9 +908,9 @@ public class NBTStructure {
 			Component startComponent = new Component(spawn, startPiece, rand, x, z);
 			startComponent.parent = this;
 
-			this.components.add(startComponent);
+			components.add(startComponent);
 
-			List<Component> queuedComponents = new ArrayList<>();
+			queuedComponents = new ArrayList<>();
 			if(spawn.structure == null) queuedComponents.add(startComponent);
 
 			// Iterate through and build out all the components we intend to spawn
@@ -916,36 +925,16 @@ public class NBTStructure {
 					Collections.shuffle(connectionList, rand);
 
 					for(JigsawConnection fromConnection : connectionList) {
-						JigsawPiece nextPiece = spawn.pools.get(fromConnection.poolName).get(rand);
-
-						List<JigsawConnection> connectionPool = getConnectionPool(nextPiece, fromConnection);
-						JigsawConnection toConnection = connectionPool.get(rand.nextInt(connectionPool.size()));
-
-						// The direction this component is extending towards in ABSOLUTE direction
-						ForgeDirection extendDir = fromComponent.rotateDir(fromConnection.dir);
-
-						// Rotate our incoming piece to plug it in
-						int nextCoordBase = fromComponent.getNextCoordBase(fromConnection, toConnection, rand);
-
-						// Set the starting point for the next structure to the location of the connector block
-						int nextX = fromComponent.getXWithOffset(fromConnection.pos.x, fromConnection.pos.z) + extendDir.offsetX;
-						int nextY = fromComponent.getYWithOffset(fromConnection.pos.y) + extendDir.offsetY;
-						int nextZ = fromComponent.getZWithOffset(fromConnection.pos.x, fromConnection.pos.z) + extendDir.offsetZ;
-
-						// offset the starting point to the connecting point
-						nextX -= nextPiece.structure.rotateX(toConnection.pos.x, toConnection.pos.z, nextCoordBase);
-						nextY -= toConnection.pos.y;
-						nextZ -= nextPiece.structure.rotateZ(toConnection.pos.x, toConnection.pos.z, nextCoordBase);
+						JigsawPool nextPool = spawn.pools.get(fromConnection.poolName);
 
 						// Build the new component and validate that it fits
-						Component nextComponent = new Component(spawn, nextPiece, rand, nextX, nextY, nextZ, nextCoordBase);
-						StructureComponent intersects = StructureComponent.findIntersecting(components, nextComponent.getBoundingBox());
-						if(intersects == null) {
-							this.components.add(nextComponent);
-							queuedComponents.add(nextComponent);
-
-							nextComponent.parent = this;
-							nextComponent.priority = fromConnection.placementPriority;
+						// if it doesn't, fill in with a fallback if applicable
+						Component nextComponent = buildNextComponent(rand, spawn, nextPool, fromComponent, fromConnection);
+						if(nextComponent != null && !fromComponent.hasIntersectionIgnoringSelf(components, nextComponent.getBoundingBox())) {
+							addComponent(nextComponent, fromConnection.placementPriority);
+						} else if(nextPool.fallback != null) {
+							nextComponent = buildNextComponent(rand, spawn, spawn.pools.get(nextPool.fallback), fromComponent, fromConnection);
+							if(nextComponent != null) addComponent(nextComponent, fromConnection.placementPriority);
 						}
 					}
 				}
@@ -961,6 +950,42 @@ public class NBTStructure {
 			}
 
 			updateBoundingBox();
+		}
+
+		@SuppressWarnings("unchecked")
+		private void addComponent(Component component, int placementPriority) {
+			components.add(component);
+			queuedComponents.add(component);
+
+			component.parent = this;
+			component.priority = placementPriority;
+		}
+
+		private Component buildNextComponent(Random rand, SpawnCondition spawn, JigsawPool pool, Component fromComponent, JigsawConnection fromConnection) {
+			JigsawPiece nextPiece = pool.get(rand);
+
+			List<JigsawConnection> connectionPool = getConnectionPool(nextPiece, fromConnection);
+			if(connectionPool == null) return null;
+
+			JigsawConnection toConnection = connectionPool.get(rand.nextInt(connectionPool.size()));
+
+			// The direction this component is extending towards in ABSOLUTE direction
+			ForgeDirection extendDir = fromComponent.rotateDir(fromConnection.dir);
+
+			// Rotate our incoming piece to plug it in
+			int nextCoordBase = fromComponent.getNextCoordBase(fromConnection, toConnection, rand);
+
+			// Set the starting point for the next structure to the location of the connector block
+			int nextX = fromComponent.getXWithOffset(fromConnection.pos.x, fromConnection.pos.z) + extendDir.offsetX;
+			int nextY = fromComponent.getYWithOffset(fromConnection.pos.y) + extendDir.offsetY;
+			int nextZ = fromComponent.getZWithOffset(fromConnection.pos.x, fromConnection.pos.z) + extendDir.offsetZ;
+
+			// offset the starting point to the connecting point
+			nextX -= nextPiece.structure.rotateX(toConnection.pos.x, toConnection.pos.z, nextCoordBase);
+			nextY -= toConnection.pos.y;
+			nextZ -= nextPiece.structure.rotateZ(toConnection.pos.x, toConnection.pos.z, nextCoordBase);
+
+			return new Component(spawn, nextPiece, rand, nextX, nextY, nextZ, nextCoordBase);
 		}
 
 		private List<JigsawConnection> getConnectionPool(JigsawPiece nextPiece, JigsawConnection fromConnection) {
