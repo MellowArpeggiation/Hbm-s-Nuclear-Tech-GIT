@@ -1009,6 +1009,7 @@ public class NBTStructure {
 		public void offsetYHeight(int y) {
 			for(Object o : components) {
 				Component component = (Component) o;
+				if(component.heightUpdated || component.piece.conformToTerrain || component.piece.alignToTerrain) continue;
 				component.offsetYHeight(y);
 			}
 		}
