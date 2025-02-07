@@ -9,6 +9,7 @@ import com.hbm.blocks.IBlockSideRotation;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.StructureConfig;
 import com.hbm.itempool.ItemPool;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.TileEntityLoadedBase;
@@ -285,7 +286,7 @@ public class BlockWandLoot extends BlockContainer implements ILookOverlay, ITool
 
 		@Override
 		public void transformTE(World world, int coordBaseMode) {
-			triggerReplace = true;
+			triggerReplace = !StructureConfig.debugStructures;
 			placedRotation = MathHelper.wrapAngleTo180_float(placedRotation + coordBaseMode * 90);
 		}
 
