@@ -10,6 +10,7 @@ import com.hbm.dim.laythe.biome.BiomeGenBaseLaythe;
 import com.hbm.main.StructureManager;
 import com.hbm.world.feature.OilBubble;
 import com.hbm.world.gen.NBTStructure;
+import com.hbm.world.gen.NBTStructure.JigsawPiece;
 import com.hbm.world.gen.NBTStructure.SpawnCondition;
 import com.hbm.world.generator.DungeonToolbox;
 
@@ -22,19 +23,17 @@ public class WorldGeneratorLaythe implements IWorldGenerator {
 
 	public WorldGeneratorLaythe() {
 		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
-			structure = StructureManager.nuke_sub;
+			structure = new JigsawPiece("laythe_nuke_sub", StructureManager.nuke_sub);
 			canSpawn = biome -> biome == BiomeGenBaseLaythe.laytheOcean;
 			maxHeight = 54;
 		}});
 		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
-			structure = StructureManager.vertibird;
+			structure = new JigsawPiece("laythe_vertibird", StructureManager.vertibird, -3);
 			canSpawn = biome -> biome.rootHeight > 0;
-			heightOffset = -3;
 		}});
 		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
-			structure = StructureManager.crashed_vertibird;
+			structure = new JigsawPiece("laythe_crashed_vertibird", StructureManager.crashed_vertibird, -10);
 			canSpawn = biome -> biome.rootHeight > 0;
-			heightOffset = -10;
 		}});
 	}
 
