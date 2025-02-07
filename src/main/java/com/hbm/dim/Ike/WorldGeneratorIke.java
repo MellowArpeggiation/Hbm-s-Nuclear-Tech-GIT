@@ -23,23 +23,17 @@ public class WorldGeneratorIke implements IWorldGenerator {
 
 	public WorldGeneratorIke() {
 		NBTStructure.registerStructure(SpaceConfig.ikeDimension, new SpawnCondition() {{
-			startPool = "start";
 			minHeight = 80;
 			maxHeight = 80;
 			sizeLimit = 32;
+			startPool = "start";
 			pools = new HashMap<String, NBTStructure.JigsawPool>() {{
 				put("start", new JigsawPool() {{
-					add(new JigsawPiece("ike_core_test") {{
-						structure = StructureManager.test_jigsaw_core;
-					}}, 1);
+					add(new JigsawPiece("ike_core_test", StructureManager.test_jigsaw_core), 1);
 				}});
 				put("default", new JigsawPool() {{
-					add(new JigsawPiece("ike_piece_test") {{
-						structure = StructureManager.test_jigsaw;
-					}}, 1);
-					add(new JigsawPiece("ike_hall_test") {{
-						structure = StructureManager.test_jigsaw_hall;
-					}}, 1);
+					add(new JigsawPiece("ike_piece_test", StructureManager.test_jigsaw), 1);
+					add(new JigsawPiece("ike_hall_test", StructureManager.test_jigsaw_hall), 1);
 				}});
 			}};
 		}});
