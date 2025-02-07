@@ -742,6 +742,8 @@ public class NBTStructure {
 		int minHeight = 1;
 		int maxHeight = 128;
 
+		boolean heightUpdated = false;
+
 		int priority; // placement priority not yet implemented because selection priority is far more useful whatever
 
 		// this is fucking hacky but we need a way to update ALL component bounds once a Y-level is determined
@@ -777,6 +779,7 @@ public class NBTStructure {
 			nbt.setString("piece", piece.name);
 			nbt.setInteger("min", minHeight);
 			nbt.setInteger("max", maxHeight);
+			nbt.setBoolean("hasHeight", heightUpdated);
 		}
 
 		// Load from NBT
@@ -785,6 +788,7 @@ public class NBTStructure {
 			piece = jigsawMap.get(nbt.getString("piece"));
 			minHeight = nbt.getInteger("min");
 			maxHeight = nbt.getInteger("max");
+			heightUpdated = nbt.getBoolean("hasHeight");
 		}
 
 		@Override
@@ -792,22 +796,24 @@ public class NBTStructure {
 			if(piece == null) return false;
 
 			// now we're in the world, update minY/maxY
-			if(!piece.conformToTerrain && boundingBox.minY == 0) {
+			if(!piece.conformToTerrain && !heightUpdated) {
 				int y = MathHelper.clamp_int(getAverageHeight(world, box) + piece.heightOffset, minHeight, maxHeight);
 
 				if(!piece.alignToTerrain && parent != null) {
-					parent.setYHeight(y);
+					parent.offsetYHeight(y);
 				} else {
-					setYHeight(y);
+					offsetYHeight(y);
 				}
 			}
 
 			return piece.structure.build(world, piece, boundingBox, box, coordBaseMode);
 		}
 
-		public void setYHeight(int y) {
-			boundingBox.minY = y;
-			boundingBox.maxY = y + piece.structure.size.y - 1;
+		public void offsetYHeight(int y) {
+			boundingBox.minY += y;
+			boundingBox.maxY += y;
+
+			heightUpdated = true;
 		}
 
 		// Overrides to fix Mojang's fucked rotations which FLIP instead of rotating in two instances
@@ -1000,10 +1006,10 @@ public class NBTStructure {
 			}
 		}
 
-		public void setYHeight(int y) {
+		public void offsetYHeight(int y) {
 			for(Object o : components) {
 				Component component = (Component) o;
-				component.setYHeight(y);
+				component.offsetYHeight(y);
 			}
 		}
 
