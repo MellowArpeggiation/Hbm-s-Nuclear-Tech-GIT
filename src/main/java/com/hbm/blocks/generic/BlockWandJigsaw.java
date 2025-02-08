@@ -293,6 +293,8 @@ public class BlockWandJigsaw extends BlockContainer implements IBlockSideRotatio
 
 		@Override
 		public void initGui() {
+			Keyboard.enableRepeatEvents(true);
+
 			textPool = new GuiTextField(fontRendererObj, this.width / 2 - 150, 50, 300, 20);
 			textPool.setText(jigsaw.pool);
 
