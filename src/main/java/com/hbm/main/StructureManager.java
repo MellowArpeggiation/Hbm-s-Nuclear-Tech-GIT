@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 public class StructureManager {
 
 	// METEOR DUNGEON
+	public static final NBTStructure meteor_spike = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/meteor-spike.nbt"));
 	public static final NBTStructure meteor_core = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/meteor-core.nbt"));
 	public static final NBTStructure meteor_corner = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/meteor-corner.nbt"));
 	public static final NBTStructure meteor_t = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/meteor-t.nbt"));

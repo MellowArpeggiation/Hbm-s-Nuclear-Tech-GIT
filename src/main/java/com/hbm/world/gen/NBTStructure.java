@@ -94,6 +94,12 @@ public class NBTStructure {
 		}
 	}
 
+	public static void registerStructure(SpawnCondition spawn, int... dimensionIds) {
+		for(int dimensionId : dimensionIds) {
+			registerStructure(dimensionId, spawn);
+		}
+	}
+
 	// Add a chance for nothing to spawn at a given valid spawn location
 	public static void registerNullWeight(int dimensionId, int weight) {
 		registerNullWeight(dimensionId, weight, null);
