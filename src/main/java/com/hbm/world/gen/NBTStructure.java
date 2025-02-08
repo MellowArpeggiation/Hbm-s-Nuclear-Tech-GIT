@@ -655,24 +655,59 @@ public class NBTStructure {
 			return canSpawn.test(biome);
 		}
 
+		protected JigsawPool getPool(String name) {
+			return pools.get(name).clone();
+		}
+
 	}
 
 	// A set of pieces with weights
 	public static class JigsawPool {
 
 		// Weighted list of pieces to pick from
-		private List<JigsawPiece> pieces = new ArrayList<>();
+		private List<Pair<JigsawPiece, Integer>> pieces = new ArrayList<>();
+		private int totalWeight = 0;
 
 		public String fallback;
 
+		private boolean isClone;
+
 		public void add(JigsawPiece piece, int weight) {
-			for(int i = 0; i < weight; i++) {
-				pieces.add(piece);
-			}
+			if(weight <= 0) throw new IllegalStateException("JigsawPool spawn weight must be positive!");
+			pieces.add(new Pair<>(piece, weight));
+			totalWeight += weight;
 		}
 
+		protected JigsawPool clone() {
+			JigsawPool clone = new JigsawPool();
+			clone.pieces = new ArrayList<>(this.pieces);
+			clone.fallback = this.fallback;
+			clone.totalWeight = this.totalWeight;
+			clone.isClone = true;
+
+			return clone;
+		}
+
+		// If from a clone, will remove from the pool
 		public JigsawPiece get(Random rand) {
-			return pieces.get(rand.nextInt(pieces.size()));
+			if(totalWeight <= 0) return null;
+			int weight = rand.nextInt(totalWeight);
+
+			for(int i = 0; i < pieces.size(); i++) {
+				Pair<JigsawPiece, Integer> pair = pieces.get(i);
+				weight -= pair.getValue();
+
+				if(weight < 0) {
+					if(isClone) {
+						pieces.remove(i);
+						totalWeight -= pair.getValue();
+					}
+
+					return pair.getKey();
+				}
+			}
+
+			return null;
 		}
 
 	}
@@ -749,6 +784,8 @@ public class NBTStructure {
 		// this is fucking hacky but we need a way to update ALL component bounds once a Y-level is determined
 		private Start parent;
 
+		private JigsawConnection connectedFrom;
+
 		public Component() {}
 
 		public Component(SpawnCondition spawn, JigsawPiece piece, Random rand, int x, int z) {
@@ -771,6 +808,11 @@ public class NBTStructure {
 				this.boundingBox = new StructureBoundingBox(x, y, z, x + piece.structure.size.x - 1, y + piece.structure.size.y - 1, z + piece.structure.size.z - 1);
 				break;
 			}
+		}
+
+		public Component connectedFrom(JigsawConnection connection) {
+			this.connectedFrom = connection;
+			return this;
 		}
 
 		// Save to NBT
@@ -892,8 +934,6 @@ public class NBTStructure {
 
 	public static class Start extends StructureStart {
 
-		private List<Component> queuedComponents;
-
 		public Start() {}
 
 		@SuppressWarnings("unchecked")
@@ -910,7 +950,7 @@ public class NBTStructure {
 
 			components.add(startComponent);
 
-			queuedComponents = new ArrayList<>();
+			List<Component> queuedComponents = new ArrayList<>();
 			if(spawn.structure == null) queuedComponents.add(startComponent);
 
 			// Iterate through and build out all the components we intend to spawn
@@ -918,23 +958,48 @@ public class NBTStructure {
 				final int i = rand.nextInt(queuedComponents.size());
 				Component fromComponent = queuedComponents.remove(i);
 
-				if(this.components.size() >= spawn.sizeLimit) continue;
 				if(fromComponent.piece.structure.fromConnections == null) continue;
 
-				for(List<JigsawConnection> connectionList : fromComponent.piece.structure.fromConnections) {
+				boolean fallbacksOnly = this.components.size() >= spawn.sizeLimit;
+
+				for(List<JigsawConnection> unshuffledList : fromComponent.piece.structure.fromConnections) {
+					List<JigsawConnection> connectionList = new ArrayList<>(unshuffledList);
 					Collections.shuffle(connectionList, rand);
 
 					for(JigsawConnection fromConnection : connectionList) {
-						JigsawPool nextPool = spawn.pools.get(fromConnection.poolName);
+						if(fromComponent.connectedFrom == fromConnection) continue; // if we already connected to this piece, don't process
 
-						// Build the new component and validate that it fits
-						// if it doesn't, fill in with a fallback if applicable
-						Component nextComponent = buildNextComponent(rand, spawn, nextPool, fromComponent, fromConnection);
-						if(nextComponent != null && !fromComponent.hasIntersectionIgnoringSelf(components, nextComponent.getBoundingBox())) {
+						if(fallbacksOnly) {
+							String fallback = spawn.pools.get(fromConnection.poolName).fallback;
+
+							if(fallback != null) {
+								Component fallbackComponent = buildNextComponent(rand, spawn, spawn.pools.get(fallback), fromComponent, fromConnection);
+								addComponent(fallbackComponent, fromConnection.placementPriority);
+							}
+
+							continue;
+						}
+
+						JigsawPool nextPool = spawn.getPool(fromConnection.poolName);
+
+						Component nextComponent = null;
+
+						// Iterate randomly through the pool, attempting each piece until one fits
+						while(nextPool.totalWeight > 0) {
+							nextComponent = buildNextComponent(rand, spawn, nextPool, fromComponent, fromConnection);
+							if(nextComponent != null && !fromComponent.hasIntersectionIgnoringSelf(components, nextComponent.getBoundingBox())) break;
+							nextComponent = null;
+						}
+
+						if(nextComponent != null) {
 							addComponent(nextComponent, fromConnection.placementPriority);
-						} else if(nextPool.fallback != null) {
-							nextComponent = buildNextComponent(rand, spawn, spawn.pools.get(nextPool.fallback), fromComponent, fromConnection);
-							if(nextComponent != null) addComponent(nextComponent, fromConnection.placementPriority);
+							queuedComponents.add(nextComponent);
+						} else {
+							// If we failed to fit anything in, grab something from the fallback pool, ignoring bounds check
+							if(nextPool.fallback != null) {
+								nextComponent = buildNextComponent(rand, spawn, spawn.pools.get(nextPool.fallback), fromComponent, fromConnection);
+								addComponent(nextComponent, fromConnection.placementPriority); // don't add to queued list, we don't want to try continue from fallback
+							}
 						}
 					}
 				}
@@ -955,7 +1020,6 @@ public class NBTStructure {
 		@SuppressWarnings("unchecked")
 		private void addComponent(Component component, int placementPriority) {
 			components.add(component);
-			queuedComponents.add(component);
 
 			component.parent = this;
 			component.priority = placementPriority;
@@ -963,6 +1027,7 @@ public class NBTStructure {
 
 		private Component buildNextComponent(Random rand, SpawnCondition spawn, JigsawPool pool, Component fromComponent, JigsawConnection fromConnection) {
 			JigsawPiece nextPiece = pool.get(rand);
+			if(nextPiece == null) return null;
 
 			List<JigsawConnection> connectionPool = getConnectionPool(nextPiece, fromConnection);
 			if(connectionPool == null) return null;
@@ -985,7 +1050,7 @@ public class NBTStructure {
 			nextY -= toConnection.pos.y;
 			nextZ -= nextPiece.structure.rotateZ(toConnection.pos.x, toConnection.pos.z, nextCoordBase);
 
-			return new Component(spawn, nextPiece, rand, nextX, nextY, nextZ, nextCoordBase);
+			return new Component(spawn, nextPiece, rand, nextX, nextY, nextZ, nextCoordBase).connectedFrom(toConnection);
 		}
 
 		private List<JigsawConnection> getConnectionPool(JigsawPiece nextPiece, JigsawConnection fromConnection) {
