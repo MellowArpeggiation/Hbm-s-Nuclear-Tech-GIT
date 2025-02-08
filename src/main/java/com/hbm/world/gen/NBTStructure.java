@@ -729,7 +729,7 @@ public class NBTStructure {
 		}
 
 		public JigsawPiece(String name, NBTStructure structure, int heightOffset) {
-			if(name == null)
+			if(name == null) throw new IllegalStateException("A severe error has occurred in NBTStructure! A jigsaw piece has been registered without a valid name!");
 			if(jigsawMap.containsKey(name)) throw new IllegalStateException("A severe error has occurred in NBTStructure! A jigsaw piece has been registered with the same name as another: " + name);
 
 			this.name = name;
