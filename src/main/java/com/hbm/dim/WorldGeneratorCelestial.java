@@ -275,12 +275,12 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
 		public void selectBlocks(Random rand, int posX, int posY, int posZ, boolean notInterior) {
 			float chance = rand.nextFloat();
 
-            if(chance < 0.7F) {
+            if(chance < 0.6F) {
                 this.field_151562_a = Blocks.air;
             } else if(chance < 0.8F) {
-                this.field_151562_a = ModBlocks.crate_can;
-            } else if(chance < 0.9F) {
                 this.field_151562_a = ModBlocks.crate_ammo;
+            } else if(chance < 0.9F) {
+                this.field_151562_a = ModBlocks.crate_can;
             } else {
                 this.field_151562_a = ModBlocks.crate;
             }

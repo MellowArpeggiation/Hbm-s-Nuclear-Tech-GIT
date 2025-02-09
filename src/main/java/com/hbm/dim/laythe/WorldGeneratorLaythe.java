@@ -26,14 +26,17 @@ public class WorldGeneratorLaythe implements IWorldGenerator {
 			structure = new JigsawPiece("laythe_nuke_sub", StructureManager.nuke_sub);
 			canSpawn = biome -> biome == BiomeGenBaseLaythe.laytheOcean;
 			maxHeight = 54;
+			spawnWeight = 6;
 		}});
 		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
 			structure = new JigsawPiece("laythe_vertibird", StructureManager.vertibird, -3);
-			canSpawn = biome -> biome.rootHeight > 0;
+			canSpawn = biome -> biome.rootHeight >= 0;
+			spawnWeight = 6;
 		}});
 		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
 			structure = new JigsawPiece("laythe_crashed_vertibird", StructureManager.crashed_vertibird, -10);
-			canSpawn = biome -> biome.rootHeight > 0;
+			canSpawn = biome -> biome.rootHeight >= 0;
+			spawnWeight = 6;
 		}});
 	}
 

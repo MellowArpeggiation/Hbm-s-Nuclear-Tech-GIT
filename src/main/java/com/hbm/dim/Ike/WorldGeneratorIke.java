@@ -7,6 +7,7 @@ import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.world.dungeon.AncientTomb;
+import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -14,6 +15,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
 public class WorldGeneratorIke implements IWorldGenerator {
+
+	public WorldGeneratorIke() {
+		NBTStructure.registerNullWeight(SpaceConfig.ikeDimension, 8);
+	}
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
