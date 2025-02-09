@@ -69,7 +69,7 @@ public class PlanetGen {
 		DimensionManager.registerProviderType(dimensionId, clazz, false);
 		DimensionManager.registerDimension(dimensionId, dimensionId);
 
-		spaceDimensions.add(dimensionId);
+		if(dimensionId != SpaceConfig.orbitDimension) spaceDimensions.add(dimensionId);
 	}
 
 }
