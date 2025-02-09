@@ -565,6 +565,7 @@ public class NBTStructure {
 		if(definition.block instanceof BlockDoor) return INBTTransformable.transformMetaDoor(definition.meta, coordBaseMode);
 		if(definition.block instanceof BlockLever) return INBTTransformable.transformMetaLever(definition.meta, coordBaseMode);
 		if(definition.block instanceof BlockSign) return INBTTransformable.transformMetaDeco(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockLadder) return INBTTransformable.transformMetaDeco(definition.meta, coordBaseMode);
 
 		return definition.meta;
 	}

@@ -27,6 +27,9 @@ public class StructureManager {
 	public static final NBTStructure meteor_3_pillar = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/loot3x3/meteor-3-pillar.nbt"));
 	public static final NBTStructure meteor_3_star = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/loot3x3/meteor-3-star.nbt"));
 	public static final NBTStructure meteor_3_tesla = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/loot3x3/meteor-3-tesla.nbt"));
+	public static final NBTStructure meteor_3_book = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/loot3x3/meteor-3-book.nbt"));
+	public static final NBTStructure meteor_3_mku = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/loot3x3/meteor-3-mku.nbt"));
+	public static final NBTStructure meteor_3_statue = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/loot3x3/meteor-3-statue.nbt"));
 
 	public static final NBTStructure meteor_room_base_end = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/room-base-end.nbt"));
 	public static final NBTStructure meteor_room_base_thru = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/room-base-thru.nbt"));
@@ -34,6 +37,11 @@ public class StructureManager {
 	public static final NBTStructure meteor_room_balcony = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/room-balcony.nbt"));
 	public static final NBTStructure meteor_room_basic = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/room-basic.nbt"));
 	public static final NBTStructure meteor_room_dragon = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/room-dragon.nbt"));
+	public static final NBTStructure meteor_room_ladder = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/room-ladder.nbt"));
+	public static final NBTStructure meteor_room_ooze = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/room-ooze.nbt"));
+	public static final NBTStructure meteor_room_split = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/room-split.nbt"));
+	public static final NBTStructure meteor_room_stairs = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/room-stairs.nbt"));
+	public static final NBTStructure meteor_room_triple = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/room-triple.nbt"));
 	public static final NBTStructure meteor_room_fallback = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/room-fallback.nbt"));
 
 	public static final NBTStructure meteor_dragon_chest = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/headloot/loot-chest.nbt"));

@@ -46,11 +46,15 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
             put(ModBlocks.crate, new SupplyCrates());
             put(ModBlocks.meteor_spawner, new CrabSpawners());
         }};
+        Map<Block, BlockSelector> ooze = new HashMap<Block, BlockSelector>() {{
+            put(ModBlocks.meteor_brick, new MeteorBricks());
+            put(ModBlocks.concrete_colored, new GreenOoze());
+        }};
 
         NBTStructure.registerStructure(new SpawnCondition() {{
 			minHeight = 32;
 			maxHeight = 32;
-			sizeLimit = 64;
+			sizeLimit = 128;
             canSpawn = biome -> biome.rootHeight >= 0;
 			startPool = "start";
 			pools = new HashMap<String, NBTStructure.JigsawPool>() {{
@@ -62,16 +66,21 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
 				}});
 				put("default", new JigsawPool() {{
 					add(new JigsawPiece("meteor_corner", StructureManager.meteor_corner) {{ blockTable = bricks; }}, 2);
-					add(new JigsawPiece("meteor_t", StructureManager.meteor_t) {{ blockTable = bricks; }}, 2);
+					add(new JigsawPiece("meteor_t", StructureManager.meteor_t) {{ blockTable = bricks; }}, 3);
 					add(new JigsawPiece("meteor_stairs", StructureManager.meteor_stairs) {{ blockTable = bricks; }}, 1);
-					add(new JigsawPiece("meteor_room_base_thru", StructureManager.meteor_room_base_thru) {{ blockTable = bricks; }}, 2);
-					add(new JigsawPiece("meteor_room_base_end", StructureManager.meteor_room_base_end) {{ blockTable = bricks; }}, 3);
+					add(new JigsawPiece("meteor_room_base_thru", StructureManager.meteor_room_base_thru) {{ blockTable = bricks; }}, 3);
+					add(new JigsawPiece("meteor_room_base_end", StructureManager.meteor_room_base_end) {{ blockTable = bricks; }}, 4);
 					fallback = "fallback";
 				}});
 				put("10room", new JigsawPool() {{
 					add(new JigsawPiece("meteor_room_basic", StructureManager.meteor_room_basic) {{ blockTable = bricks; }}, 1);
 					add(new JigsawPiece("meteor_room_balcony", StructureManager.meteor_room_balcony) {{ blockTable = bricks; }}, 1);
 					add(new JigsawPiece("meteor_room_dragon", StructureManager.meteor_room_dragon) {{ blockTable = bricks; }}, 1);
+					add(new JigsawPiece("meteor_room_ladder", StructureManager.meteor_room_ladder) {{ blockTable = bricks; }}, 1);
+					add(new JigsawPiece("meteor_room_ooze", StructureManager.meteor_room_ooze) {{ blockTable = ooze; }}, 1);
+					add(new JigsawPiece("meteor_room_split", StructureManager.meteor_room_split) {{ blockTable = bricks; }}, 1);
+					add(new JigsawPiece("meteor_room_stairs", StructureManager.meteor_room_stairs) {{ blockTable = bricks; }}, 1);
+					add(new JigsawPiece("meteor_room_triple", StructureManager.meteor_room_triple) {{ blockTable = bricks; }}, 1);
 					fallback = "roomback";
 				}});
 				put("3x3loot", new JigsawPool() {{
@@ -87,6 +96,9 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
 					add(new JigsawPiece("meteor_3_pillar", StructureManager.meteor_3_pillar), 1);
 					add(new JigsawPiece("meteor_3_star", StructureManager.meteor_3_star), 1);
 					add(new JigsawPiece("meteor_3_tesla", StructureManager.meteor_3_tesla), 1);
+					add(new JigsawPiece("meteor_3_book", StructureManager.meteor_3_book), 1);
+					add(new JigsawPiece("meteor_3_mku", StructureManager.meteor_3_mku), 1);
+					add(new JigsawPiece("meteor_3_statue", StructureManager.meteor_3_statue), 1);
 				}});
 				put("headloot", new JigsawPool() {{
 					add(new JigsawPiece("meteor_dragon_chest", StructureManager.meteor_dragon_chest) {{ blockTable = crates; }}, 1);
@@ -277,6 +289,7 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
     }
 
     private static class CrabSpawners extends BlockSelector {
+
         @Override
 		public void selectBlocks(Random rand, int posX, int posY, int posZ, boolean notInterior) {
 			float chance = rand.nextFloat();
@@ -287,6 +300,22 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
                 this.field_151562_a = ModBlocks.meteor_spawner;
             }
         }
+
+    }
+
+    private static class GreenOoze extends BlockSelector {
+
+        @Override
+		public void selectBlocks(Random rand, int posX, int posY, int posZ, boolean notInterior) {
+			float chance = rand.nextFloat();
+
+            if(chance < 0.8F) {
+                this.field_151562_a = ModBlocks.toxic_block;
+            } else {
+                this.field_151562_a = ModBlocks.meteor_polished;
+            }
+        }
+
     }
 
 }
