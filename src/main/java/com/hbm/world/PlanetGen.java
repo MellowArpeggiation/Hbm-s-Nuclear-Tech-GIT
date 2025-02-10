@@ -1,5 +1,7 @@
 package com.hbm.world;
 
+import java.util.ArrayList;
+
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.dres.WorldGeneratorDres;
 import com.hbm.dim.WorldGeneratorCelestial;
@@ -21,8 +23,7 @@ import com.hbm.dim.moon.WorldProviderMoon;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.tekto.WorldGeneratorTekto;
 import com.hbm.dim.tekto.WorldProviderTekto;
-import com.hbm.dim.thatmo.WorldGeneratorThatmo;
-import com.hbm.dim.thatmo.WorldProviderThatmo;
+import com.hbm.util.BobMathUtil;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.world.WorldProvider;
@@ -60,10 +61,18 @@ public class PlanetGen {
 
     }
 
+	private static ArrayList<Integer> spaceDimensions = new ArrayList<>();
+
+	public static int[] getSpaceDimensions() {
+		return BobMathUtil.intCollectionToArray(spaceDimensions);
+	}
+
 	private static void registerDimension(int dimensionId, Class<? extends WorldProvider> clazz) {
 		DimensionManager.registerProviderType(dimensionId, clazz, false);
 		DimensionManager.registerDimension(dimensionId, dimensionId);
+
+		if(dimensionId != SpaceConfig.orbitDimension) spaceDimensions.add(dimensionId);
 	}
-	
+
 }
 

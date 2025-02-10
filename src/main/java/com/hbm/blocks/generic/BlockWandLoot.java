@@ -9,6 +9,7 @@ import com.hbm.blocks.IBlockSideRotation;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.StructureConfig;
 import com.hbm.itempool.ItemPool;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.TileEntityLoadedBase;
@@ -68,8 +69,9 @@ public class BlockWandLoot extends BlockContainer implements ILookOverlay, ITool
 
 	@Override
 	public int getRotationFromSide(IBlockAccess world, int x, int y, int z, int side) {
-		if(side > 1) return 0;
-		return world.getBlockMetadata(x, y, z);
+		if(side == 0) return IBlockSideRotation.topToBottom(world.getBlockMetadata(x, y, z));
+		if(side == 1) return world.getBlockMetadata(x, y, z);
+		return 0;
 	}
 
 	@Override
@@ -284,7 +286,7 @@ public class BlockWandLoot extends BlockContainer implements ILookOverlay, ITool
 
 		@Override
 		public void transformTE(World world, int coordBaseMode) {
-			triggerReplace = true;
+			triggerReplace = !StructureConfig.debugStructures;
 			placedRotation = MathHelper.wrapAngleTo180_float(placedRotation + coordBaseMode * 90);
 		}
 

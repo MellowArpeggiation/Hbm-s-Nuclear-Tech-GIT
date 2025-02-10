@@ -2,6 +2,7 @@ package com.hbm.util;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockLoot.TileEntityLoot;
+import com.hbm.crafting.handlers.MKUCraftingHandler;
 import com.hbm.inventory.OreDictManager.DictFrame;
 import com.hbm.itempool.ItemPool;
 import com.hbm.itempool.ItemPoolsPile;
@@ -10,6 +11,7 @@ import com.hbm.items.special.ItemBookLore;
 import com.hbm.items.weapon.sedna.factory.GunFactory.EnumAmmo;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -25,6 +27,7 @@ public class LootGenerator {
 	public static final String LOOT_NUKE_STORAGE = "LOOT_NUKE_STORAGE";
 	public static final String LOOT_BONES = "LOOT_BONES";
 	public static final String LOOT_GLYPHID_HIVE = "LOOT_GLYPHID_HIVE";
+	public static final String LOOT_METEOR = "LOOT_METEOR";
 
 	public static void applyLoot(World world, int x, int y, int z, String name) {
 		switch(name) {
@@ -36,8 +39,8 @@ public class LootGenerator {
 			case LOOT_NUKE_STORAGE: lootNukeStorage(world, x, y, z);
 			case LOOT_BONES: lootBones(world, x, y, z);
 			case LOOT_GLYPHID_HIVE: lootGlyphidHive(world, x, y, z);
+			case LOOT_METEOR: lootBookMeteor(world, x, y, z);
 			default: lootBones(world, x, y, z); break;
-			// lore books handled separately
 		}
 	}
 
@@ -51,6 +54,7 @@ public class LootGenerator {
 			LOOT_NUKE_STORAGE,
 			LOOT_BONES,
 			LOOT_GLYPHID_HIVE,
+			LOOT_METEOR,
 		};
 	}
 
@@ -176,6 +180,19 @@ public class LootGenerator {
 			for(int i = 0; i < limit; i++) {
 				addItemWithDeviation(loot, world.rand, ItemPool.getStack(ItemPool.getPool(ItemPoolsPile.POOL_PILE_HIVE), world.rand), world.rand.nextDouble() - 0.5, i * 0.03125, world.rand.nextDouble() - 0.5);
 			}
+		}
+	}
+
+	public static void lootBookMeteor(World world, int x, int y, int z) {
+
+		TileEntityLoot loot = (TileEntityLoot) world.getTileEntity(x, y, z);
+
+		if(loot != null && loot.items.isEmpty()) {
+			Item mkuItem = MKUCraftingHandler.getMKUItem(world);
+			ItemStack mkuBook = MKUCraftingHandler.generateBook(world, mkuItem);
+
+			addItemWithDeviation(loot, world.rand, new ItemStack(mkuItem), 0, 0, 0.25);
+			addItemWithDeviation(loot, world.rand, mkuBook, 0, 0, -0.25);
 		}
 	}
 

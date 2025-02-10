@@ -6,6 +6,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -14,10 +15,14 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 public class WorldGeneratorMoon implements IWorldGenerator {
 
+	public WorldGeneratorMoon() {
+		NBTStructure.registerNullWeight(SpaceConfig.moonDimension, 12);
+	}
+
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if(world.provider.dimensionId == SpaceConfig.moonDimension) {
-			generateMoon(world, random, chunkX * 16, chunkZ * 16); 
+			generateMoon(world, random, chunkX * 16, chunkZ * 16);
 		}
 	}
 

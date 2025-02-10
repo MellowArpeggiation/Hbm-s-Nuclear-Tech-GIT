@@ -1396,6 +1396,7 @@ public class ModBlocks {
 	// NBT Structure wand blocks
 	public static Block wand_air;
 	public static Block wand_loot;
+	public static Block wand_jigsaw;
 
 	public static Material materialGas = new MaterialGas();
 
@@ -1891,7 +1892,7 @@ public class ModBlocks {
 		laythe_coral = new BlockCoral().setBlockName("laythe_coral").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":laythe_coral");
 		laythe_coral_block = new BlockEnumMulti(Material.coral, BlockCoral.EnumCoral.class, false, true).setHardness(0.5F).setBlockName("laythe_coral_block").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setBlockTextureName(RefStrings.MODID + ":laythe_coral_block");
 		vine_phosphor = new BlockHangingVine(thick_foliage).setBlockName("vine_phosphor").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.5F);
-		
+
 		waste_earth = new WasteEarth(Material.ground, true).setBlockName("waste_earth").setStepSound(Block.soundTypeGrass).setCreativeTab(MainRegistry.blockTab).setHardness(0.6F).setBlockTextureName(RefStrings.MODID + ":waste_earth");
 		waste_mycelium = new WasteEarth(Material.ground, true).setBlockName("waste_mycelium").setStepSound(Block.soundTypeGrass).setLightLevel(1F).setCreativeTab(MainRegistry.blockTab).setHardness(0.6F).setBlockTextureName(RefStrings.MODID + ":waste_mycelium_side");
 		waste_trinitite = new BlockStepEffect(Material.sand).noFortune().setBlockName("waste_trinitite").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F).setBlockTextureName(RefStrings.MODID + ":waste_trinitite");
@@ -2080,7 +2081,7 @@ public class ModBlocks {
 		pa_quadrupole = new BlockPAQuadrupole().setStepSound(Block.soundTypeMetal).setBlockName("pa_quadrupole").setHardness(5.0F).setResistance(10.0F);
 		pa_dipole = new BlockPADipole().setStepSound(Block.soundTypeMetal).setBlockName("pa_dipole").setHardness(5.0F).setResistance(10.0F);
 		pa_detector = new BlockPADetector().setStepSound(Block.soundTypeMetal).setBlockName("pa_detector").setHardness(5.0F).setResistance(10.0F);
-		
+
 		machine_electric_furnace_off = new MachineElectricFurnace(false).setBlockName("machine_electric_furnace_off").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 		machine_electric_furnace_on = new MachineElectricFurnace(true).setBlockName("machine_electric_furnace_on").setHardness(5.0F).setLightLevel(1.0F).setResistance(10.0F);
 		machine_arc_furnace_off = new MachineArcFurnace(false).setBlockName("machine_arc_furnace_off").setHardness(5.0F).setResistance(10.0F);
@@ -2642,13 +2643,13 @@ public class ModBlocks {
 
 		ntm_dirt = new BlockNTMDirt().setBlockName("ntm_dirt").setHardness(0.5F).setStepSound(Block.soundTypeGravel).setCreativeTab(null).setBlockTextureName("dirt");
 
-		pink_log = new BlockPinkLog().setBlockName("pink_log").setHardness(0.5F).setStepSound(Block.soundTypeWood).setCreativeTab(null);
+		pink_log = new BlockLogNT("log_oak", RefStrings.MODID + ":pink_log").setBlockName("pink_log").setHardness(0.5F).setStepSound(Block.soundTypeWood).setCreativeTab(null);
 		pink_planks = new BlockGeneric(Material.wood).setBlockName("pink_planks").setStepSound(Block.soundTypeWood).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":pink_planks");
 		pink_slab = new BlockPinkSlab(false, Material.wood).setBlockName("pink_slab").setStepSound(Block.soundTypeWood).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":pink_planks");
 		pink_double_slab = new BlockPinkSlab(true, Material.wood).setBlockName("pink_double_slab").setStepSound(Block.soundTypeWood).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":pink_planks");
 		pink_stairs = new BlockGenericStairs(pink_planks, 0).setBlockName("pink_stairs").setStepSound(Block.soundTypeWood).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":pink_planks");
 
-		pvc_log = new BlockLogTest().setBlockName("pvc_log").setStepSound(Block.soundTypeWood).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F);
+		pvc_log = new BlockLogNT(RefStrings.MODID + ":pvc_log_side", RefStrings.MODID + ":pvc_log_top").setBlockName("pvc_log").setStepSound(Block.soundTypeWood).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F);
 		rubber_leaves = new BlockRubberLeaves(Material.leaves).setBlockName("rubber_leaves").setStepSound(Block.soundTypeGrass).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F).setBlockTextureName(RefStrings.MODID + ":rubber_leaves");
 		rubber_grass = new RubberGrass(Material.grass, false).setBlockName("rubber_grass").setStepSound(Block.soundTypeGrass).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F);
 		rubber_silt = new BlockGeneric(Material.sand).setBlockName("rubber_silt").setStepSound(Block.soundTypeGravel).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(1.0F).setBlockTextureName(RefStrings.MODID + ":rubber_silt");
@@ -2657,11 +2658,11 @@ public class ModBlocks {
 		vinyl_sand = new BlockFalling(Material.sand).setBlockName("vinyl_sand").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(1.0F).setBlockTextureName(RefStrings.MODID + ":sand_vinyl");
 		vinyl_vines = new BlockVinylVine().setBlockName("vinyl_vine").setStepSound(Block.soundTypeGrass).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setResistance(1.0F).setBlockTextureName(RefStrings.MODID + ":vine");
 
-		//I MADE A NEW CLASS FOR FUCKING EACH OF THESE??? WHAT THE FUCK IS WRONG WITH YOU
-		lattice_log = new BlockLatticeLog().setBlockName("lattice_log").setStepSound(Block.soundTypeWood).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F);
-		bf_log = new BlockBfLog().setBlockName("bf_log").setStepSound(Block.soundTypeWood).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F);
-		primed_log = new BlockPrimedLog().setBlockName("primed_log").setStepSound(Block.soundTypeWood).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F);
-		eu_log = new BlockEuLog().setBlockName("eu_log").setStepSound(Block.soundTypeWood).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F);
+		// stop self flagellating and do something about it
+		lattice_log = new BlockLogNT(RefStrings.MODID + ":rad_log_side", RefStrings.MODID + ":rad_log_top").setBlockName("lattice_log").setStepSound(Block.soundTypeWood).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F);
+		bf_log = new BlockLogNT(RefStrings.MODID + ":bf_log_side", RefStrings.MODID + ":bf_log_top").setBlockName("bf_log").setStepSound(Block.soundTypeWood).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F);
+		primed_log = new BlockLogNT(RefStrings.MODID + ":primed_log_side", RefStrings.MODID + ":primed_log_top").setBlockName("primed_log").setStepSound(Block.soundTypeWood).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F);
+		eu_log = new BlockLogNT(RefStrings.MODID + ":eu_log_side", RefStrings.MODID + ":eu_log_top").setBlockName("eu_log").setStepSound(Block.soundTypeWood).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setResistance(2.5F);
 
 		ff = new BlockFF(Material.iron).setBlockName("ff").setHardness(0.5F).setStepSound(Block.soundTypeGravel).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":code");
 
@@ -2675,6 +2676,7 @@ public class ModBlocks {
 
 		wand_air = new BlockWand(Blocks.air).setBlockName("wand_air").setBlockTextureName(RefStrings.MODID + ":wand_air");
 		wand_loot = new BlockWandLoot().setBlockName("wand_loot").setBlockTextureName(RefStrings.MODID + ":wand_loot");
+		wand_jigsaw = new BlockWandJigsaw().setBlockName("wand_jigsaw").setBlockTextureName(RefStrings.MODID + ":wand_jigsaw");
 	}
 
 	private static void registerBlock() {
@@ -3931,6 +3933,7 @@ public class ModBlocks {
 
 		register(wand_air);
 		register(wand_loot);
+		register(wand_jigsaw);
 	}
 
 	private static void register(Block b) {

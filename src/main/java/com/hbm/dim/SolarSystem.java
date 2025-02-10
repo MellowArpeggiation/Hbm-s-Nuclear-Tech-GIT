@@ -23,7 +23,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class SolarSystem {
-	
+
 	public static CelestialBody kerbol;
 
 	// How much to scale celestial objects when rendering
@@ -47,7 +47,6 @@ public class SolarSystem {
 					.withColor(0.4863F, 0.4F, 0.3456F)
 					.withBlockTextures(RefStrings.MODID + ":moho_stone", "", "", "")
 					.withAxialTilt(30F)
-					.withProcessingLevel(1)
 					.withTraits(new CBT_Temperature(200)),
 
 				new CelestialBody("eve", SpaceConfig.eveDimension, Body.EVE)
@@ -56,10 +55,10 @@ public class SolarSystem {
 					.withRotationalPeriod(80_500)
 					.withColor(0.408F, 0.298F, 0.553F)
 					.withBlockTextures(RefStrings.MODID + ":eve_stone_2", "", "", "")
-					.withProcessingLevel(2)
+					.withMinProcessingLevel(2)
 					.withTraits(new CBT_Atmosphere(Fluids.EVEAIR, 5D), new CBT_Temperature(400), new CBT_Water(Fluids.MERCURY))
 					.withSatellites(
-						
+
 						new CelestialBody("gilly")
 							.withMassRadius(1.242e17F, 13)
 							.withSemiMajorAxis(31_500)
@@ -99,19 +98,15 @@ public class SolarSystem {
 					.withTidalLockingTo("ike")
 					.withColor(0.6471f, 0.2824f, 0.1608f)
 					.withBlockTextures(RefStrings.MODID + ":duna_rock", "", "", "")
-					.withProcessingLevel(1)
 					.withTraits(new CBT_Atmosphere(Fluids.DUNAAIR, 0.1D))
-					.withProcessingLevel(1)
 					.withSatellites(
 
 						new CelestialBody("ike", SpaceConfig.ikeDimension, Body.IKE)
 							.withMassRadius(2.782e20F, 130)
 							.withSemiMajorAxis(3_200)
 							.withBlockTextures(RefStrings.MODID + ":ike_stone", "", "", "")
-							.withProcessingLevel(1)
 							.withRotationalPeriod(65_518)
 							.withTidalLockingTo("duna")
-							.withProcessingLevel(1)
 							.withTraits(new CBT_Water(Fluids.BROMINE))
 
 					),
@@ -121,8 +116,8 @@ public class SolarSystem {
 					.withSemiMajorAxis(40_839_348)
 					.withRotationalPeriod(34_800)
 					.withBlockTextures(RefStrings.MODID + ":dresbase", "", "", "")
-					.withProcessingLevel(2),
-					
+					.withMinProcessingLevel(2),
+
 
 				new CelestialBody("jool")
 					.withMassRadius(4.233e24F, 6_000)
@@ -136,7 +131,7 @@ public class SolarSystem {
 							.withSemiMajorAxis(27_184)
 							.withRotationalPeriod(52_981)
 							.withTidalLockingTo("jool")
-							.withProcessingLevel(3)
+							.withMinProcessingLevel(3)
 							.withTraits(new CBT_Atmosphere(Fluids.AIR, 0.45D).and(Fluids.XENON, 0.15D), new CBT_Water()),
 
 						new CelestialBody("vall") //probably
@@ -160,7 +155,7 @@ public class SolarSystem {
 							.withRotationalPeriod(901_902)
 
 					),
-					
+
 				new CelestialBody("sarnus")
 					.withMassRadius(1.223e24F, 5_300)
 					.withSemiMajorAxis(125_798_522)
@@ -168,7 +163,7 @@ public class SolarSystem {
 					.withColor(1f, 0.6862f, 0.5882f)
 					.withRings(10.0F, 3, 0.6F, 0.4F, 0.3F)
 					.withSatellites(
-							
+
 					new CelestialBody("hale") //no
 						.withMassRadius(1.2166e16F, 6)
 						.withSemiMajorAxis(10_488)
@@ -256,9 +251,9 @@ public class SolarSystem {
 			return body;
 		}
 
-		public int getProcessingLevel() {
+		public int getProcessingLevel(CelestialBody from) {
 			if(this == ORBIT) return 0;
-			return getBody().processingLevel;
+			return getBody().getProcessingLevel(from);
 		}
 
 		public String getStoneTexture() {
@@ -323,7 +318,7 @@ public class SolarSystem {
 		List<AstroMetric> metrics = new ArrayList<AstroMetric>();
 
 		double ticks = ((double)world.getTotalWorldTime() + partialTicks) * (double)AstronomyUtil.TIME_MULTIPLIER;
-		
+
 		// Get our XYZ coordinates of all bodies
 		calculatePositionsRecursive(metrics, null, orbiting.getStar(), ticks);
 
@@ -351,7 +346,7 @@ public class SolarSystem {
 		List<AstroMetric> metrics = new ArrayList<AstroMetric>();
 
 		double ticks = ((double)world.getTotalWorldTime() + partialTicks) * (double)AstronomyUtil.TIME_MULTIPLIER;
-		
+
 		// Get our XYZ coordinates of all bodies
 		calculatePositionsRecursive(metrics, null, from.getStar(), ticks);
 
@@ -385,7 +380,7 @@ public class SolarSystem {
 		List<AstroMetric> metrics = new ArrayList<AstroMetric>();
 
 		double ticks = (double)world.getTotalWorldTime() * (double)AstronomyUtil.TIME_MULTIPLIER;
-		
+
 		// Get our XYZ coordinates of all bodies
 		calculatePositionsRecursive(metrics, null, from.getStar(), ticks);
 
@@ -473,7 +468,7 @@ public class SolarSystem {
 	private static void calculateMetric(AstroMetric metric, Vec3 position) {
 		// Calculate distance between bodies, for sorting
 		metric.distance = position.distanceTo(metric.position);
-		
+
 		// Calculate apparent size, for scaling in render
 		metric.apparentSize = getApparentSize(metric.body.radiusKm, metric.distance);
 
@@ -532,7 +527,7 @@ public class SolarSystem {
 		List<AstroMetric> metrics = new ArrayList<AstroMetric>();
 
 		double ticks = ((double)world.getTotalWorldTime() + partialTicks) * (double)AstronomyUtil.TIME_MULTIPLIER;
-		
+
 		// Get our XYZ coordinates of all bodies
 		calculatePositionsRecursive(metrics, null, orbiting.getStar(), ticks);
 
@@ -563,7 +558,7 @@ public class SolarSystem {
 		double launchDV = fromOrbit ? 0 : SolarSystem.getLiftoffDeltaV(from, mass, thrust, fromDrag);
 		double travelDV = SolarSystem.getDeltaVBetween(from, to);
 		double landerDV = toOrbit ? 0 : SolarSystem.getLandingDeltaV(to, mass, thrust, toDrag);
-		
+
 		double totalDV = launchDV + travelDV + landerDV;
 
 		return getFuelCost(totalDV, mass, isp);
@@ -691,7 +686,7 @@ public class SolarSystem {
 
 	private static CelestialBody getCommonParent(CelestialBody start, CelestialBody end) {
 		CelestialBody startParent = start.parent;
-			
+
 		while(startParent != null) {
 			CelestialBody endParent = end.parent;
 			while(endParent != null) {
@@ -706,7 +701,7 @@ public class SolarSystem {
 		throw new InvalidParameterException("Bodies aren't in the same solar system");
 	}
 
-	
+
 	// All transfer math is commutative, injection burn (getting onto the transfer orbit) takes the exact same dV as
 	// the insertion burn (entering the target orbit)
 
