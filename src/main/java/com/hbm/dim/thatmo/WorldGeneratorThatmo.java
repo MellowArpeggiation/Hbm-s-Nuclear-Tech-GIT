@@ -8,6 +8,7 @@ import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.main.StructureManager;
 import com.hbm.world.gen.NBTStructure;
+import com.hbm.world.gen.NBTStructure.JigsawPiece;
 import com.hbm.world.gen.NBTStructure.SpawnCondition;
 import com.hbm.world.gen.component.Component.ConcreteBricks;
 
@@ -21,19 +22,18 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 
 	public WorldGeneratorThatmo() {
 		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
-			structure = StructureManager.THATMOTESTMO;
+			structure = new JigsawPiece("duna_comms", StructureManager.THATMOTESTMO, -1);
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 		}});
 		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
-			structure = StructureManager.thatmo2;
+			structure = new JigsawPiece("duna_comms", StructureManager.thatmo2, -1);
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 		}});
 		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
-			structure = StructureManager.trenches;
-			conformToTerrain = true;
-			heightOffset = -2;
+			JigsawPiece rupture = new JigsawPiece("duna_comms", StructureManager.trenches, -1);
+			rupture.conformToTerrain = true;
 			spawnWeight = 2;
-			blockTable = new HashMap<Block, BlockSelector>() {{
+			rupture.blockTable = new HashMap<Block, BlockSelector>() {{
 				put(ModBlocks.brick_concrete_cracked, new ConcreteBricks());
 			}};
 		}});

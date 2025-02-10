@@ -23,6 +23,8 @@ import com.hbm.dim.moon.WorldProviderMoon;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.tekto.WorldGeneratorTekto;
 import com.hbm.dim.tekto.WorldProviderTekto;
+import com.hbm.dim.thatmo.WorldGeneratorThatmo;
+import com.hbm.dim.thatmo.WorldProviderThatmo;
 import com.hbm.util.BobMathUtil;
 
 import cpw.mods.fml.common.registry.GameRegistry;

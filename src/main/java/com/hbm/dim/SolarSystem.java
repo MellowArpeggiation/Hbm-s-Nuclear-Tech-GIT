@@ -189,7 +189,7 @@ public class SolarSystem {
 						.withSemiMajorAxis(67_355)
 						.withRotationalPeriod(57_915)
 						.withAxialTilt(25F)
-						.withProcessingLevel(3)
+						.withMinProcessingLevel(3)
 						.withTraits(new CBT_Atmosphere(Fluids.TEKTOAIR, 1.5F), new CBT_Water(Fluids.CCL)) // :)
 
 				),
@@ -211,7 +211,7 @@ public class SolarSystem {
 						.withMassRadius(5.951e18F, 30)
 						.withSemiMajorAxis(487_744)
 						.withRotationalPeriod(27_924)
-						.withProcessingLevel(3)
+						.withMinProcessingLevel(3)
 					)
 			);
 
