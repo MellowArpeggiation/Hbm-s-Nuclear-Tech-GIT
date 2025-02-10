@@ -22,15 +22,15 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 
 	public WorldGeneratorThatmo() {
 		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
-			structure = new JigsawPiece("duna_comms", StructureManager.THATMOTESTMO, -1);
+			structure = new JigsawPiece("thatmotest", StructureManager.THATMOTESTMO, -1);
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 		}});
 		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
-			structure = new JigsawPiece("duna_comms", StructureManager.thatmo2, -1);
+			structure = new JigsawPiece("thatmotest2", StructureManager.thatmo2, -1);
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 		}});
 		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
-			JigsawPiece rupture = new JigsawPiece("duna_comms", StructureManager.trenches, -1);
+			JigsawPiece rupture = new JigsawPiece("trenches", StructureManager.trenches, -1);
 			rupture.conformToTerrain = true;
 			spawnWeight = 2;
 			rupture.blockTable = new HashMap<Block, BlockSelector>() {{
