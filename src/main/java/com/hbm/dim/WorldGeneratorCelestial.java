@@ -105,6 +105,7 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
 					add(new JigsawPiece("meteor_dragon_tesla", StructureManager.meteor_dragon_tesla) {{ blockTable = crates; }}, 1);
 					add(new JigsawPiece("meteor_dragon_trap", StructureManager.meteor_dragon_trap) {{ blockTable = crates; }}, 1);
 					add(new JigsawPiece("meteor_dragon_crate_crab", StructureManager.meteor_dragon_crate_crab) {{ blockTable = crates; }}, 1);
+                    fallback = "headback";
 				}});
 				put("fallback", new JigsawPool() {{
 					add(new JigsawPiece("meteor_fallback", StructureManager.meteor_fallback) {{ blockTable = bricks; }}, 1);
@@ -112,6 +113,9 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
 				put("roomback", new JigsawPool() {{
 					add(new JigsawPiece("meteor_room_fallback", StructureManager.meteor_room_fallback) {{ blockTable = bricks; }}, 1);
 				}});
+                put("headback", new JigsawPool() {{
+                    add(new JigsawPiece("meteor_loot_fallback", StructureManager.meteor_dragon_fallback) {{ blockTable = crates; }}, 1);
+                }});
 			}};
 		}}, PlanetGen.getSpaceDimensions());
     }
