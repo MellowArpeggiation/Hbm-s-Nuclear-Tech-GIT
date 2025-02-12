@@ -2254,6 +2254,7 @@ item.assembly_smg.name=9mm Assembly
 item.assembly_steel.name=Lead Bullet Assembly
 item.assembly_template.name=Assembly Template:
 item.assembly_uzi.name=.22 LR Assembly
+item.atmosphere_scanner.name=Atmosphere Scanner
 item.attachment_mask.name=Gas Mask Attachable
 item.attachment_mask_mono.name=Half Mask Attachable
 item.australium_iii.name=Mark III Life Extender

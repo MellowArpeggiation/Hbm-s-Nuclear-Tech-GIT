@@ -94,7 +94,7 @@ public class NBTStructure {
 		}
 	}
 
-	public static void registerStructure(SpawnCondition spawn, int... dimensionIds) {
+	public static void registerStructure(SpawnCondition spawn, int[] dimensionIds) {
 		for(int dimensionId : dimensionIds) {
 			registerStructure(dimensionId, spawn);
 		}
