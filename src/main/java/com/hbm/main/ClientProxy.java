@@ -451,6 +451,9 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDoorGeneric.class, new RenderDoorGeneric());
 		//dyson
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonReceiver.class, new RenderDysonReceiver());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonConverterAnatmogenesis.class, new RenderDysonConverterAnatmogenesis());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonConverterHE.class, new RenderDysonConverterHE());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonConverterTU.class, new RenderDysonConverterTU());
 	}
 
 	@Override
@@ -1004,14 +1007,14 @@ public class ClientProxy extends ServerProxy {
 		}
 
 		if("missileContrailf".equals(type)) {
-			
+
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
-			
+
 			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
 			double mX = data.getDouble("moX");
 			double mY = data.getDouble("moY");
 			double mZ = data.getDouble("moZ");
-			
+
 			ParticleRocketFusion fx = new ParticleRocketFusion(man, world, x, y, z);
 			fx.setScale(scale);
 			fx.motionX = mX;
@@ -1023,14 +1026,14 @@ public class ClientProxy extends ServerProxy {
 		}
 
 		if("missileContrailbf".equals(type)) {
-			
+
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
-			
+
 			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
 			double mX = data.getDouble("moX");
 			double mY = data.getDouble("moY");
 			double mZ = data.getDouble("moZ");
-			
+
 			ParticleRocketBF fx = new ParticleRocketBF(man, world, x, y, z);
 			fx.setScale(scale);
 			fx.motionX = mX;
@@ -1042,14 +1045,14 @@ public class ClientProxy extends ServerProxy {
 		}
 
 		if("missileContrailMUD".equals(type)) {
-			
+
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
-			
+
 			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
 			double mX = data.getDouble("moX");
 			double mY = data.getDouble("moY");
 			double mZ = data.getDouble("moZ");
-			
+
 			ParticleRocketMUD fx = new ParticleRocketMUD(man, world, x, y, z);
 			fx.setScale(scale);
 			fx.motionX = mX;
@@ -1061,14 +1064,14 @@ public class ClientProxy extends ServerProxy {
 		}
 
 		if("missileContrailSCH".equals(type)) {
-			
+
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
-			
+
 			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
 			double mX = data.getDouble("moX");
 			double mY = data.getDouble("moY");
 			double mZ = data.getDouble("moZ");
-			
+
 			ParticleRocketSCH fx = new ParticleRocketSCH(man, world, x, y, z);
 			fx.setScale(scale);
 			fx.motionX = mX;
@@ -1080,14 +1083,14 @@ public class ClientProxy extends ServerProxy {
 		}
 
 		if("missileContrailUP".equals(type)) {
-			
+
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
-			
+
 			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
 			double mX = data.getDouble("moX");
 			double mY = data.getDouble("moY");
 			double mZ = data.getDouble("moZ");
-			
+
 			ParticleRocketUP fx = new ParticleRocketUP(man, world, x, y, z);
 			fx.setScale(scale);
 			fx.motionX = mX;
@@ -1890,12 +1893,12 @@ public class ClientProxy extends ServerProxy {
 
 			EntityFX fx = new net.minecraft.client.particle.EntityCritFX(world, x, y, z, mX, mY, mZ);
 			fx.nextTextureIndexX();
-				
+
 			if(data.hasKey("color")) {
 				Color color = new Color(data.getInteger("color"));
 				fx.setRBGColorF(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
 			}
-				
+
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 		}
 
@@ -2150,7 +2153,7 @@ public class ClientProxy extends ServerProxy {
 			for(int i = 0; i < ejector.getAmount(); i++) {
 				ejector.spawnCasing(man, casingConfig, world, x, y, z, data.getFloat("pitch"), data.getFloat("yaw"), data.getBoolean("crouched"));
 			}
-			
+
 		}
 		if("radSmoke".equals(type)) {
 			ParticleRadiationFog contrail = new ParticleRadiationFog(man, world, x, y, z);
@@ -2280,7 +2283,7 @@ public class ClientProxy extends ServerProxy {
 	public boolean getImpact(World world) {
 		return ImpactWorldHandler.getImpactForClient(world);
 	}
-	
+
 	@Override
 	public void playSoundClient(double x, double y, double z, String sound, float volume, float pitch) {
 		Minecraft.getMinecraft().getSoundHandler().playSound(new PositionedSoundRecord(new ResourceLocation(sound), volume, pitch, (float) x, (float) y, (float) z));

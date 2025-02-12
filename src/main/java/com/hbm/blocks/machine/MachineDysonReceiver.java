@@ -22,7 +22,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay, ITooltipProvider {
-	
+
 	public MachineDysonReceiver(Material mat) {
 		super(mat);
 	}
@@ -33,14 +33,14 @@ public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay
 		if(meta >= 6) return new TileEntityProxyCombo(false, false, false);
 		return null;
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if(world.isRemote) {
 			return true;
 		} else if(!player.isSneaking()) {
 			int[] pos = this.findCore(world, x, y, z);
-	
+
 			if(pos == null)
 				return false;
 
@@ -91,7 +91,7 @@ public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay
 
 		// Main structure
 		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {1, 0, 8, -4, 1, 1}, this, dir);
-		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {3, 0, 4, 0, 1, 1}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {4, 0, 4, 0, 1, 1}, this, dir);
 
 		// Dish
 		MultiblockHandlerXR.fillSpace(world, x, y + 10, z, new int[] {1, 0, 6, 6, 6, 6}, this, dir);
@@ -103,20 +103,20 @@ public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay
 	@Override
 	public void printHook(Pre event, World world, int x, int y, int z) {
 		int[] pos = this.findCore(world, x, y, z);
-		
+
 		if(pos == null) return;
-		
+
 		TileEntity te = world.getTileEntity(pos[0], pos[1], pos[2]);
-		
+
 		if(!(te instanceof TileEntityDysonReceiver)) return;
-		
+
 		TileEntityDysonReceiver receiver = (TileEntityDysonReceiver) te;
 
 		long energyOutput = 0;
 		if(receiver.isReceiving) {
 			energyOutput = TileEntityDysonReceiver.getEnergyOutput(receiver.swarmCount) / receiver.swarmConsumers * 20;
 		}
-		
+
 		List<String> text = new ArrayList<String>();
 
 		if(receiver.swarmId > 0) {
@@ -127,7 +127,7 @@ public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay
 		} else {
 			text.add("No Satellite ID-Chip installed!");
 		}
-		
+
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
 	}
 

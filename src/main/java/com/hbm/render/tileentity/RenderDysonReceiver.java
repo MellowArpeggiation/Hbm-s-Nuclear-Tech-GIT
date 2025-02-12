@@ -28,28 +28,28 @@ public class RenderDysonReceiver extends TileEntitySpecialRenderer implements II
 			GL11.glTranslated(x + 0.5D, y, z + 0.5D);
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glEnable(GL11.GL_CULL_FACE);
-			
+
 			TileEntityDysonReceiver receiver = (TileEntityDysonReceiver) tileEntity;
-			
+
 			switch(tileEntity.getBlockMetadata() - BlockDummyable.offset) {
 			case 2: GL11.glRotatef(0, 0F, 1F, 0F); break;
 			case 4: GL11.glRotatef(90, 0F, 1F, 0F); break;
 			case 3: GL11.glRotatef(180, 0F, 1F, 0F); break;
 			case 5: GL11.glRotatef(270, 0F, 1F, 0F); break;
 			}
-			
+
 			GL11.glShadeModel(GL11.GL_SMOOTH);
 			bindTexture(ResourceManager.dyson_receiver_tex);
 			ResourceManager.dyson_receiver.renderPart("DysonReceiver");
 
 			float t = tileEntity.getWorldObj().getTotalWorldTime() + f;
 
-			GL11.glTranslatef(0.0F, 1.0F, 0.0F);
+			GL11.glTranslatef(0.0F, 1.5F, 0.0F);
 
 			GL11.glPushMatrix();
 			{
 				GL11.glRotatef(t, 0, 0, 1);
-				GL11.glTranslated(0.0F, -1.0F, 0.0F);
+				GL11.glTranslated(0.0F, -1.5F, 0.0F);
 				ResourceManager.dyson_receiver.renderPart("Coil1");
 				ResourceManager.dyson_receiver.renderPart("Coil3");
 			}
@@ -58,7 +58,7 @@ public class RenderDysonReceiver extends TileEntitySpecialRenderer implements II
 			GL11.glPushMatrix();
 			{
 				GL11.glRotatef(t, 0, 0, -1);
-				GL11.glTranslated(0.0F, -1.0F, 0.0F);
+				GL11.glTranslated(0.0F, -1.5F, 0.0F);
 				ResourceManager.dyson_receiver.renderPart("Coil2");
 			}
 			GL11.glPopMatrix();
@@ -71,16 +71,16 @@ public class RenderDysonReceiver extends TileEntitySpecialRenderer implements II
 				GL11.glDisable(GL11.GL_LIGHTING);
 
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-				
+
 				BeamPronter.prontBeamwithDepth(Vec3.createVectorHelper(0, 0, length), EnumWaveType.SPIRAL, EnumBeamType.SOLID, color, color, 0, 1, 0F, 2, 0.4F, 0.5F);
 				BeamPronter.prontBeamwithDepth(Vec3.createVectorHelper(0, 0, length), EnumWaveType.RANDOM, EnumBeamType.SOLID, color, color, (int)(tileEntity.getWorldObj().getTotalWorldTime() % 1000), (length / 2), 0.0625F, 2, 0.4F, 0.5F);
-				
+
 				GL11.glEnable(GL11.GL_LIGHTING);
 				GL11.glPopAttrib();
 			}
 
 			GL11.glShadeModel(GL11.GL_FLAT);
-			
+
 		}
 		GL11.glPopMatrix();
 	}
@@ -106,5 +106,5 @@ public class RenderDysonReceiver extends TileEntitySpecialRenderer implements II
 	public Item getItemForRenderer() {
 		return Item.getItemFromBlock(ModBlocks.dyson_receiver);
 	}
-	
+
 }

@@ -1,13 +1,18 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.trait.FT_Gaseous;
 import com.hbm.tileentity.IDysonConverter;
 import com.hbm.tileentity.TileEntityMachineBase;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityDysonConverterAnatmogenesis extends TileEntityMachineBase implements IDysonConverter {
 
@@ -52,7 +57,14 @@ public class TileEntityDysonConverterAnatmogenesis extends TileEntityMachineBase
 	}
 
 	@Override
-	public void provideEnergy(int x, int y, int z, long energy) {
+	public boolean provideEnergy(int x, int y, int z, long energy) {
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+		int rx = xCoord + dir.offsetX * 5;
+		int ry = yCoord + 1;
+		int rz = zCoord + dir.offsetZ * 5;
+
+		if(x != rx || y != ry || z != rz) return false;
+
 		long volume = energy / HE_TO_MB;
 		gasProduced += volume;
 
@@ -61,6 +73,8 @@ public class TileEntityDysonConverterAnatmogenesis extends TileEntityMachineBase
 		} else {
 			FT_Gaseous.capture(worldObj, fluid, volume);
 		}
+
+		return true;
 	}
 
 	@Override
@@ -97,5 +111,30 @@ public class TileEntityDysonConverterAnatmogenesis extends TileEntityMachineBase
 		nbt.setInteger("fluid", fluid.getID());
 		nbt.setBoolean("emit", isEmitting);
 	}
-	
+
+	AxisAlignedBB bb = null;
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+
+		if(bb == null) {
+			bb = AxisAlignedBB.getBoundingBox(
+				xCoord - 6,
+				yCoord,
+				zCoord - 6,
+				xCoord + 7,
+				yCoord + 6,
+				zCoord + 7
+			);
+		}
+
+		return bb;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared() {
+		return 65536.0D;
+	}
+
 }

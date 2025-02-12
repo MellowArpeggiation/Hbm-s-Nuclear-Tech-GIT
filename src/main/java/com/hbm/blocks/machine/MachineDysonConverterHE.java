@@ -7,6 +7,7 @@ import com.hbm.tileentity.machine.TileEntityDysonConverterHE;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class MachineDysonConverterHE extends BlockDummyable {
 
@@ -17,33 +18,28 @@ public class MachineDysonConverterHE extends BlockDummyable {
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		if(meta >= 12) return new TileEntityDysonConverterHE();
-		if(meta >= 6) return new TileEntityProxyCombo(false, false, false);
+		if(meta >= 6) return new TileEntityProxyCombo(false, true, false);
 		return null;
 	}
 
 	@Override
 	public int[] getDimensions() {
-		return new int[] {0, 0, 0, 0, 0, 0};
+		return new int[] {2, 0, 4, 4, 1, 1};
 	}
 
 	@Override
 	public int getOffset() {
-		return 0;
+		return 4;
 	}
 
-	//. TEMP .//
 	@Override
-	public int getRenderType() {
-		return 0;
+	public void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {
+		super.fillSpace(world, x, y, z, dir, o);
+
+		x = x + dir.offsetX * o;
+		z = z + dir.offsetZ * o;
+
+		this.makeExtra(world, x - dir.offsetX * 4, y, z - dir.offsetZ * 4);
 	}
-	@Override
-	public boolean isOpaqueCube() {
-		return true;
-	}
-	@Override
-	public boolean renderAsNormalBlock() {
-		return true;
-	}
-	//. TEMP .//
-	
+
 }

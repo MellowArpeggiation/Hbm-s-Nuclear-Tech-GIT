@@ -76,10 +76,10 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 	@Override
 	public void updateEntity() {
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
-		
+
 		if(!worldObj.isRemote) {
 			swarmId = ISatChip.getFreqS(slots[0]);
-			
+
 			SatelliteSavedData data = SatelliteSavedData.getData(worldObj);
 			Satellite sat = data.getSatFromFreq(swarmId);
 			int sun = worldObj.getSavedLightValue(EnumSkyBlock.Sky, xCoord, yCoord, zCoord) - worldObj.skylightSubtracted - 11;
@@ -93,7 +93,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 					}
 				}
 			}
-			
+
 			swarmCount = CBT_Dyson.count(worldObj, swarmId);
 			swarmConsumers = CBT_Dyson.consumers(worldObj, swarmId);
 
@@ -106,12 +106,13 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 				beamLength = maxLength;
 				for(int i = 9; i < maxLength; i++) {
 					int x = xCoord + dir.offsetX * i;
-					int y = yCoord;
+					int y = yCoord + 1;
 					int z = zCoord + dir.offsetZ * i;
 
 					Block block = worldObj.getBlock(x, y, z);
-					
+
 					// two block gap minimum
+					boolean detonate = false;
 					TileEntity te = null;
 					if(i > 10) {
 						if(block instanceof BlockDummyable) {
@@ -124,12 +125,14 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 						}
 
 						if(te instanceof IDysonConverter) {
-							((IDysonConverter) te).provideEnergy(x, y, z, energyOutput);
+							detonate = !((IDysonConverter) te).provideEnergy(x, y, z, energyOutput);
+						} else if(te != null || block.isOpaqueCube()) {
+							detonate = true;
 						}
 					}
 
 					if(block.isOpaqueCube() || te != null) {
-						if(!(te instanceof IDysonConverter)) {
+						if(detonate) {
 							worldObj.setBlockToAir(x, y, z);
 
 							ExplosionVNT vnt = new ExplosionVNT(worldObj, x, y, z, 3, null);
@@ -146,17 +149,17 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 					}
 				}
 
-				
+
 				double blx = Math.min(xCoord, xCoord + dir.offsetX * beamLength) + 0.2;
 				double bux = Math.max(xCoord, xCoord + dir.offsetX * beamLength) + 0.8;
 				double bly = Math.min(yCoord, 1 + yCoord + dir.offsetY * beamLength) + 0.2;
 				double buy = Math.max(yCoord, 1 + yCoord + dir.offsetY * beamLength) + 0.8;
 				double blz = Math.min(zCoord, zCoord + dir.offsetZ * beamLength) + 0.2;
 				double buz = Math.max(zCoord, zCoord + dir.offsetZ * beamLength) + 0.8;
-				
+
 				@SuppressWarnings("unchecked")
 				List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(blx, bly, blz, bux, buy, buz));
-				
+
 				for(EntityLivingBase entity : list) {
 					ExplosionVNT vnt = new ExplosionVNT(worldObj, entity.posX - dir.offsetX, entity.posY + 1.5, entity.posZ - dir.offsetZ, 3, null);
 					vnt.setBlockAllocator(new BlockAllocatorStandard());
@@ -168,14 +171,15 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 				}
 			}
 
-			networkPackNT(250);			
+			networkPackNT(250);
 		} else {
 			if(isReceiving) {
 				if(audio == null) {
-					audio = MainRegistry.proxy.getLoopedSound("hbm:block.dysonBeam", xCoord + dir.offsetX * 8, yCoord, zCoord + dir.offsetZ * 8, 0.75F, 20F, 1.0F);
+					audio = MainRegistry.proxy.getLoopedSound("hbm:block.dysonBeam", xCoord + dir.offsetX * 8, yCoord, zCoord + dir.offsetZ * 8, 0.75F, 20F, 1.0F, 20);
 					audio.startSound();
 				}
 
+				audio.keepAlive();
 				audio.updatePitch(0.85F);
 
 				if(worldObj.rand.nextInt(10) == 0) {
@@ -209,7 +213,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 		swarmConsumers = buf.readInt();
 		beamLength = buf.readInt();
 	}
-	
+
 	@Override
 	public void onChunkUnload() {
 		super.onChunkUnload();
@@ -229,12 +233,12 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 			audio = null;
 		}
 	}
-	
+
 	AxisAlignedBB bb = null;
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		
+
 		if(bb == null) {
 			bb = AxisAlignedBB.getBoundingBox(
 				xCoord - 25,
@@ -245,10 +249,10 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 				zCoord + 25
 			);
 		}
-		
+
 		return bb;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared() {
@@ -260,5 +264,5 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 			MainRegistry.logger.info(i + " dyson swarm members produces: " + BobMathUtil.getShortNumber(getEnergyOutput(i) * 20) + "HE/s");
 		}
 	}
-	
+
 }
