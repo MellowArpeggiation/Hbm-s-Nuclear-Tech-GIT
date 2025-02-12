@@ -25,12 +25,12 @@ public class CBT_Destroyed extends CelestialBodyTrait {
 
 	@Override
 	public void writeToBytes(ByteBuf buf) {
-		buf.writeFloat(interp);
+		//buf.writeFloat(interp);
 	}
 
 	@Override
 	public void readFromBytes(ByteBuf buf) {
-		interp = buf.readFloat();
+		//interp = buf.readFloat();
 	}
 	
 	public void updatefloat() {

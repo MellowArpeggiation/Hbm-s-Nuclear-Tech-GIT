@@ -10,6 +10,7 @@ import com.hbm.dim.SolarSystem.AstroMetric;
 import com.hbm.dim.thatmo.WorldProviderThatmo;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
+import com.hbm.dim.trait.CelestialBodyTrait.CBT_COMPROMISED;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.extprop.HbmLivingProps;
@@ -364,42 +365,42 @@ public class SkyProviderCelestial extends IRenderHandler {
 		}
 		
 		renderSpecialEffects(partialTicks, world, mc);
+		CBT_COMPROMISED compromised = body.getTrait(CBT_COMPROMISED.class);
+		if(compromised != null) {
+			GL11.glPushMatrix();
+			float time = ((float)world.getWorldTime() + partialTicks) * 0.2F;
 
-		/*
-		GL11.glPushMatrix();
-		float time = ((float)world.getWorldTime() + partialTicks) * 0.2F;
+			Shader shader = shaeder;
+			double size = 2;
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glDisable(GL11.GL_CULL_FACE);
 
-		Shader shader = shaeder;
-		double size = 2;
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glDisable(GL11.GL_CULL_FACE);
+			shader.use();
+			GL11.glScaled(194.5, 70.5, 94.5);
+			GL11.glRotated(90, 0, 0, 1);
+			int textureUnit = 0;
+			
+			mc.renderEngine.bindTexture(noise);
+			ResourceManager.sphere_v2.renderAll();
 
-		shader.use();
-		GL11.glScaled(194.5, 70.5, 94.5);
-		GL11.glRotated(90, 0, 0, 1);
-		int textureUnit = 0;
-		
-		mc.renderEngine.bindTexture(noise);
-		ResourceManager.sphere_v2.renderAll();
+			GL11.glPushMatrix();
 
-		GL11.glPushMatrix();
-
-		// Fix orbital plane
-		GL11.glRotatef(-90.0F, 0, 1, 0);
-		
-		shader.setTime((time * 0.05F));
-		shader.setTextureUnit(textureUnit);
+			// Fix orbital plane
+			GL11.glRotatef(-90.0F, 0, 1, 0);
+			
+			shader.setTime((time * 0.05F));
+			shader.setTextureUnit(textureUnit);
 
 
-		shader.stop();
+			shader.stop();
 
-		GL11.glPopMatrix();
+			GL11.glPopMatrix();
 
-		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
-		
-		GL11.glPopMatrix();
-		*/
-		
+			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
+			
+			GL11.glPopMatrix();
+		}
+
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -760,7 +761,11 @@ public class SkyProviderCelestial extends IRenderHandler {
 				    CBT_Destroyed d = CelestialBody.getBody(metric.body.dimensionId).getTrait(CBT_Destroyed.class);
 				    
 					if(d != null) {
-						double interpr = d.interp + partialTicks;
+						
+						double interpr = d.interp;
+						d.updatefloat();
+						//interpr = Math.min(100.0f,interpr + 0.01f * (100.0f - interpr) * 0.15f);
+
 		                float alpd = (float) (1.0F - Math.min(1.0F, interpr / 100));
 
 

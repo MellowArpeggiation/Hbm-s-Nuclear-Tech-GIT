@@ -71,6 +71,10 @@ public class StructureManager {
 
 	public static final NBTStructure trenches = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/trenches.nbt"));
 
+	public static final NBTStructure tr1 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/tr1.nbt"));
+	public static final NBTStructure tr2 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/tr2.nbt"));
+	public static final NBTStructure tr3 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/tr3.nbt"));
+	public static final NBTStructure tr4 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/tr4.nbt"));
 
 	// public static final NBTStructure test_rot = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-rot.nbt"));
 	// public static final NBTStructure test_jigsaw = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-jigsaw.nbt"));

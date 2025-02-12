@@ -94,22 +94,34 @@ public class ItemWandD extends Item {
 					player.addChatMessage(new ChatComponentText("Atmosphere: NEAR VACUUM"));
 			} else {
 				
-				CelestialBody star = CelestialBody.getStar(world);
+				//something broke here....
+				//i might split the war trait and the projectiles trait and have it be its own.
+				//when all projectiles return zero and finish damaging the planet the trait deletes itself
+				//problem right now is that if both planets have war data the projectile list conflates the two
+				
+				
+				// TESTING: END OF LIFE
+				//World targetdBody = DimensionManager.getWorld(SpaceConfig.dunaDimension);
+				World targetdBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.dunaDimension);
+				CelestialBody target = CelestialBody.getBody(targetdBody);
+				System.out.println(target);
 
-				if(!star.hasTrait(CBT_Destroyed.class)) {
-
+				if(!target.hasTrait(targetdBody, CBT_War.class)) {
 					// TESTING: END OF TIME
-					star.modifyTraits(new CBT_Destroyed());
-		
-					// TESTING: END OF LIFE
-					CelestialBody.degas(world);
-		
-					// GOD
-					// DAMN
-					player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "GOD"));
-					player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "DAMN"));
-					player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "THE"));
-					player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "" + EnumChatFormatting.OBFUSCATED + "SUN"));
+					target.modifyTraits(targetdBody, new CBT_War());		
+				} else {
+					CBT_War war = CelestialBody.getTrait(targetdBody, CBT_War.class);
+					if(war != null) {
+						float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat();
+						System.out.println(rand);
+						//war.launchProjectile(100, 20, 1, 28 * rand * 5, 33, 20, ProjectileType.SPLITSHOT);
+						Projectile projectile = new Projectile(100, 20, 50, 28 * rand * 5, 55, 20, ProjectileType.SMALL, SpaceConfig.dunaDimension);
+						projectile.GUIangle = (int) (rand * 360);
+						war.launchProjectile(projectile);
+						System.out.println(war.health);
+
+						player.addChatMessage(new ChatComponentText("projectile launched"));
+					}
 				} 
 			}
 		}

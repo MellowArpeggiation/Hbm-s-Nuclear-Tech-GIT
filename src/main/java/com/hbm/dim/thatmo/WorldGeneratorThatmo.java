@@ -7,8 +7,10 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.main.StructureManager;
+import com.hbm.world.PlanetGen;
 import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.gen.NBTStructure.JigsawPiece;
+import com.hbm.world.gen.NBTStructure.JigsawPool;
 import com.hbm.world.gen.NBTStructure.SpawnCondition;
 import com.hbm.world.gen.component.Component.ConcreteBricks;
 
@@ -33,11 +35,26 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 			JigsawPiece rupture = new JigsawPiece("trenches", StructureManager.trenches, -1);
 			rupture.conformToTerrain = true;
 			spawnWeight = 2;
+			canSpawn = biome -> biome.heightVariation < 0.1F;
 			rupture.blockTable = new HashMap<Block, BlockSelector>() {{
 				put(ModBlocks.brick_concrete_cracked, new ConcreteBricks());
 			}};
 		}});
-	}
+        NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
+			sizeLimit = 128;
+			canSpawn = biome -> biome.heightVariation < 0.1F;
+			startPool = "default";
+			pools = new HashMap<String, NBTStructure.JigsawPool>() {{
+				put("default", new JigsawPool() {{
+					add(new JigsawPiece("tr1", StructureManager.tr1, -3){{ conformToTerrain = true; }}, 2);
+					add(new JigsawPiece("tr2", StructureManager.tr2, -3){{ conformToTerrain = true; }}, 2);
+					add(new JigsawPiece("tr3", StructureManager.tr3, -3){{ conformToTerrain = true; }}, 2);
+					add(new JigsawPiece("tr4", StructureManager.tr4, -3){{ conformToTerrain = true; }}, 2);
+				}});
+				
+			}};
+		}});
+    }
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
