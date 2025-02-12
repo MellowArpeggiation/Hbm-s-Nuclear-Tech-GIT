@@ -113,7 +113,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		}
 
         CBT_War war = CelestialBody.getTrait(worldObj, CBT_War.class);
-        if(!worldObj.isRemote) {
+
         	
 	        if (war != null) {
 	            for (int i = 0; i < war.getProjectiles().size(); i++) {
@@ -150,7 +150,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	                }
 	            }
 	        }
-        }
+        
 		
 		if(atmosphere != null && atmosphere.getPressure() > 0.5F) {
 			super.updateWeather();
