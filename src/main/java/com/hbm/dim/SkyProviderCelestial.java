@@ -2,8 +2,8 @@ package com.hbm.dim;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.MathHelper;
@@ -22,10 +22,13 @@ import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.lib.RefStrings;
+import com.hbm.main.ModEventHandlerRenderer;
 import com.hbm.render.shader.Shader;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.util.BobMathUtil;
+
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class SkyProviderCelestial extends IRenderHandler {
 	
@@ -39,6 +42,9 @@ public class SkyProviderCelestial extends IRenderHandler {
 	protected static final Shader planetShader = new Shader(new ResourceLocation(RefStrings.MODID, "shaders/crescent.frag"));
 	protected static final Shader swarmShader = new Shader(new ResourceLocation(RefStrings.MODID, "shaders/swarm.vert"), new ResourceLocation(RefStrings.MODID, "shaders/swarm.frag"));
 
+	private static final String[] GL_SKY_LIST = new String[] { "glSkyList", "field_72771_w", "G" };
+	private static final String[] GL_SKY_LIST2 = new String[] { "glSkyList2", "field_72781_x", "H" };
+
 	public static boolean displayListsInitialized = false;
 	public static int glSkyList;
 	public static int glSkyList2;
@@ -50,48 +56,9 @@ public class SkyProviderCelestial extends IRenderHandler {
 	}
 
 	private void initializeDisplayLists() {
-		glSkyList = GLAllocation.generateDisplayLists(2);
-		glSkyList2 = glSkyList + 1;
-
-		final Tessellator tessellator = Tessellator.instance;
-		final byte byte2 = 64;
-		final int i = 256 / byte2 + 2;
-
-		GL11.glNewList(glSkyList, GL11.GL_COMPILE);
-		{
-			float f = 16F;
-			tessellator.startDrawingQuads();
-
-			for(int j = -byte2 * i; j <= byte2 * i; j += byte2) {
-				for(int l = -byte2 * i; l <= byte2 * i; l += byte2) {
-					tessellator.addVertex(j + 0, f, l + 0);
-					tessellator.addVertex(j + byte2, f, l + 0);
-					tessellator.addVertex(j + byte2, f, l + byte2);
-					tessellator.addVertex(j + 0, f, l + byte2);
-				}
-			}
-
-			tessellator.draw();
-		}
-		GL11.glEndList();
-
-		GL11.glNewList(glSkyList2, GL11.GL_COMPILE);
-		{
-			float f = -16F;
-			tessellator.startDrawingQuads();
-
-			for(int k = -byte2 * i; k <= byte2 * i; k += byte2) {
-				for(int i1 = -byte2 * i; i1 <= byte2 * i; i1 += byte2) {
-					tessellator.addVertex(k + byte2, f, i1 + 0);
-					tessellator.addVertex(k + 0, f, i1 + 0);
-					tessellator.addVertex(k + 0, f, i1 + byte2);
-					tessellator.addVertex(k + byte2, f, i1 + byte2);
-				}
-			}
-
-			tessellator.draw();
-		}
-		GL11.glEndList();
+		Minecraft mc = Minecraft.getMinecraft();
+		glSkyList = ReflectionHelper.getPrivateValue(RenderGlobal.class, mc.renderGlobal, GL_SKY_LIST);
+		glSkyList2 = ReflectionHelper.getPrivateValue(RenderGlobal.class, mc.renderGlobal, GL_SKY_LIST2);
 
 		displayListsInitialized = true;
 	}
@@ -113,7 +80,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 				lastBrightestPixel = mc.entityRenderer.lightmapColors[255] + mc.entityRenderer.lightmapColors[250];
 			}
 
-			fogIntensity = ((WorldProviderCelestial) world.provider).fogDensity() * 30;
+			fogIntensity = ModEventHandlerRenderer.lastFogDensity * 30;
 		}
 
 		CelestialBody body = CelestialBody.getBody(world);
@@ -165,7 +132,17 @@ public class SkyProviderCelestial extends IRenderHandler {
 		GL11.glDepthMask(false);
 		GL11.glEnable(GL11.GL_FOG);
 		GL11.glColor3f(skyR, skyG, skyB);
-		GL11.glCallList(glSkyList);
+
+		GL11.glPushMatrix();
+		{
+
+			GL11.glTranslatef(0.0F, mc.gameSettings.renderDistanceChunks - 12.0F, 0.0F);
+
+			GL11.glCallList(glSkyList);
+
+		}
+		GL11.glPopMatrix();
+
 		GL11.glDisable(GL11.GL_FOG);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);

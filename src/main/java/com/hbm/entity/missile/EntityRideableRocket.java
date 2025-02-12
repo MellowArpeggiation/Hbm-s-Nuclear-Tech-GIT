@@ -96,7 +96,7 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 		super(world);
 		setSize(2, 8);
 		sizeSet = false;
-		targetX = (int)posX + 10000;
+		targetX = (int)posX - 10000;
 		targetZ = (int)posZ;
 	}
 
@@ -160,6 +160,8 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 		EntityPlayer rider = (EntityPlayer) this.riddenByEntity;
 
 		if(!worldObj.isRemote) {
+			rotationYaw = -90.0F;
+
 			if(navDrive != null && navDrive.getItem() instanceof ItemVOTVdrive) {
 				ItemVOTVdrive.getTarget(navDrive, worldObj);
 				setDrive(navDrive);
@@ -172,7 +174,7 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 
 				RocketState transitionTo = from.inOrbit ? RocketState.UNDOCKING : RocketState.LAUNCHING;
 
-				targetX = (int)posX + 10000;
+				targetX = (int)posX - 10000;
 				targetZ = (int)posZ;
 
 				// To another body

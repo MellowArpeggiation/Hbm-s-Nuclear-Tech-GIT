@@ -1,12 +1,13 @@
 package com.hbm.tileentity.machine;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
+import com.hbm.inventory.UpgradeManagerNT;
 import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.container.ContainerVacuumCircuit;
 import com.hbm.inventory.gui.GUIVacuumCircuit;
 import com.hbm.inventory.recipes.VacuumCircuitRecipes;
@@ -14,6 +15,8 @@ import com.hbm.inventory.recipes.VacuumCircuitRecipes.VacuumCircuitRecipe;
 import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.lib.Library;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.IUpgradeInfoProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -21,6 +24,7 @@ import com.hbm.util.I18nUtil;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.energymk2.IEnergyReceiverMK2;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -32,6 +36,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implements IEnergyReceiverMK2, IGUIProvider, IUpgradeInfoProvider {
 
@@ -46,6 +51,8 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 	public ItemStack display;
 
 	public boolean canOperate = true;
+
+	public UpgradeManagerNT upgradeManager = new UpgradeManagerNT();
 	
 	public TileEntityMachineVacuumCircuit() {
 		super(8);
@@ -77,10 +84,12 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 			this.updateConnections();
 			recipe = VacuumCircuitRecipes.getRecipe(new ItemStack[] {slots[0], slots[1], slots[2], slots[3]});
 			long intendedMaxPower;
+
 			
-			UpgradeManager.eval(slots, 6, 7);
-			int redLevel = Math.min(UpgradeManager.getLevel(UpgradeType.SPEED), 3);
-			int blueLevel = Math.min(UpgradeManager.getLevel(UpgradeType.POWER), 3);
+
+			upgradeManager.checkSlots(this, slots, 4, 4);
+			int redLevel = upgradeManager.getLevel(UpgradeType.SPEED);
+			int blueLevel = upgradeManager.getLevel(UpgradeType.POWER);
 			
 			if(recipe != null) {
 				this.processTime = recipe.duration - (recipe.duration * redLevel / 6) + (recipe.duration * blueLevel / 3);
@@ -103,8 +112,15 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 						
 						this.markDirty();
 					}
-					
-					
+
+					if(worldObj.getTotalWorldTime() % 20 == 0) {
+						ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10);
+						ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
+						NBTTagCompound dPart = new NBTTagCompound();
+						dPart.setString("type", "tau");
+						dPart.setByte("count", (byte) 3);
+						PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(dPart, xCoord + 0.5 + dir.offsetX * 0.625 + rot.offsetX * 0.5, yCoord + 1.25, zCoord + 0.5 + dir.offsetZ * 0.625 + rot.offsetZ * 0.5), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 25));
+					}
 				} else {
 					this.progress = 0;
 				}
@@ -323,10 +339,11 @@ public class TileEntityMachineVacuumCircuit extends TileEntityMachineBase implem
 	}
 
 	@Override
-	public int getMaxLevel(UpgradeType type) {
-		if(type == UpgradeType.SPEED) return 3;
-		if(type == UpgradeType.POWER) return 3;
-		return 0;
+	public HashMap<UpgradeType, Integer> getValidUpgrades() {
+		HashMap<UpgradeType, Integer> upgrades = new HashMap<>();
+		upgrades.put(UpgradeType.SPEED, 3);
+		upgrades.put(UpgradeType.POWER, 3);
+		return upgrades;
 	}
 
 }

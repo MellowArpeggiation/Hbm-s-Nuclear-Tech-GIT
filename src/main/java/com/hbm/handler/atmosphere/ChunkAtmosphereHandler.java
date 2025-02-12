@@ -2,6 +2,7 @@ package com.hbm.handler.atmosphere;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +15,10 @@ import com.hbm.handler.ThreeInts;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.trait.FT_Corrosive;
 import com.hbm.main.MainRegistry;
+import com.hbm.util.Tuple.Pair;
 
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockTorch;
@@ -23,10 +27,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class ChunkAtmosphereHandler {
@@ -89,6 +95,8 @@ public class ChunkAtmosphereHandler {
 		ThreeInts pos = new ThreeInts(x, y, z);
 		HashMap<IAtmosphereProvider, AtmosphereBlob> blobs = worldBlobs.get(world.provider.dimensionId);
 
+		if(blobs == null) return inBlobs;
+
 		for(AtmosphereBlob blob : blobs.values()) {
 			if(blob.contains(pos)) {
 				inBlobs.add(blob);
@@ -101,6 +109,8 @@ public class ChunkAtmosphereHandler {
 	public boolean hasAtmosphere(World world, int x, int y, int z) {
 		ThreeInts pos = new ThreeInts(x, y, z);
 		HashMap<IAtmosphereProvider, AtmosphereBlob> blobs = worldBlobs.get(world.provider.dimensionId);
+
+		if(blobs == null) return false;
 
 		for(AtmosphereBlob blob : blobs.values()) {
 			if(blob.contains(pos)) {
@@ -115,8 +125,12 @@ public class ChunkAtmosphereHandler {
 		HashMap<IAtmosphereProvider, AtmosphereBlob> blobs = worldBlobs.get(world.provider.dimensionId);
 		List<AtmosphereBlob> list = new LinkedList<AtmosphereBlob>();
 
+		if(blobs == null) return list;
+
+		double radiusSqr = radius * radius;
+
 		for(AtmosphereBlob blob : blobs.values()) {
-			if(blob.getRootPosition().getDistanceSquared(pos) <= radius * radius) {
+			if(blob.getRootPosition().getDistanceSquared(pos) <= radiusSqr) {
 				list.add(blob);
 			}
 		}
@@ -258,7 +272,7 @@ public class ChunkAtmosphereHandler {
 		for(AtmosphereBlob blob : nearbyBlobs) {
 			// Make sure that a block can actually be attached to the blob
 			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-				if(blob.contains(pos.getPositionAtOffset(dir.offsetX, dir.offsetY, dir.offsetZ))) {
+				if(blob.contains(pos.getPositionAtOffset(dir))) {
 					blob.addBlock(pos);
 					break;
 				}
@@ -288,6 +302,53 @@ public class ChunkAtmosphereHandler {
 	public void receiveBlockBroken(BlockEvent.BreakEvent event) {
 		if(event.world.isRemote) return;
 		onBlockRemoved(event.world, new ThreeInts(event.x, event.y, event.z));
+	}
+
+	// Stores explosion events to execute unsealing after they complete, and the blocks that actually unseal from the explosion
+	private static List<Pair<ExplosionEvent.Detonate, List<ThreeInts>>> explosions = new ArrayList<>();
+
+	// For every affected blob, attempt addBlock once for the first valid position only
+	// This just stores the affected blocks, since the explosion hasn't actually occurred yet
+	public void receiveDetonate(ExplosionEvent.Detonate event) {
+		if(event.world.isRemote) return;
+		List<ThreeInts> unsealingBlocks = new ArrayList<ThreeInts>();
+		for(ChunkPosition block : event.getAffectedBlocks()) {
+			if(AtmosphereBlob.isBlockSealed(event.world, block.chunkPosX, block.chunkPosY, block.chunkPosZ)) {
+				unsealingBlocks.add(new ThreeInts(block.chunkPosX, block.chunkPosY, block.chunkPosZ));
+			}
+		}
+		explosions.add(new Pair<>(event, unsealingBlocks));
+	}
+
+	// If we stored any explosions, process them now
+	public void receiveServerTick(TickEvent.ServerTickEvent tick) {
+		if(tick.phase == Phase.END) return;
+		if(explosions.isEmpty()) return;
+
+		for(Pair<ExplosionEvent.Detonate, List<ThreeInts>> pair : explosions) {
+			ExplosionEvent.Detonate event = pair.key;
+			ThreeInts explosion = new ThreeInts(MathHelper.floor_double(event.explosion.explosionX), MathHelper.floor_double(event.explosion.explosionY), MathHelper.floor_double(event.explosion.explosionZ));
+			List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(event.world, explosion, MAX_BLOB_RADIUS + MathHelper.ceiling_float_int(event.explosion.explosionSize));
+	
+			for(ThreeInts pos : pair.value) {
+				if(nearbyBlobs.size() == 0) break;
+	
+				Iterator<AtmosphereBlob> iterator = nearbyBlobs.iterator();
+	
+				while(iterator.hasNext()) {
+					AtmosphereBlob blob = iterator.next();
+					for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+						if(blob.contains(pos.getPositionAtOffset(dir))) {
+							blob.addBlock(pos);
+							iterator.remove();
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		explosions.clear();
 	}
 	
 }

@@ -29,6 +29,7 @@ public class Vertibird extends WorldGenerator
 		{
 			Blocks.sand,
 			Blocks.sandstone,
+			ModBlocks.laythe_silt,
 		};
 	}
 

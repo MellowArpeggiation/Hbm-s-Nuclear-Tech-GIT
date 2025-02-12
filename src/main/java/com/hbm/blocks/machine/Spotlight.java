@@ -7,6 +7,7 @@ import java.util.Random;
 import com.hbm.blocks.BlockEnums.LightType;
 import com.hbm.blocks.ISpotlight;
 import com.hbm.main.ResourceManager;
+import com.hbm.world.gen.INBTTransformable;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -14,6 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -22,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.obj.WavefrontObject;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class Spotlight extends Block implements ISpotlight {
+public class Spotlight extends Block implements ISpotlight, INBTTransformable {
 
 	// I'd be extending the ReinforcedLamp class if it wasn't for the inverted behaviour of these specific lights
 	// I want these blocks to be eminently useful, so removing the need for redstone by default is desired,
@@ -123,6 +125,8 @@ public class Spotlight extends Block implements ISpotlight {
 	}
 
 	private boolean updatePower(World world, int x, int y, int z) {
+		if(isBroken(world.getBlockMetadata(x, y, z))) return false;
+
 		boolean isPowered = world.isBlockIndirectlyGettingPowered(x, y, z);
 		if(isOn && isPowered) {
 			world.scheduleBlockUpdate(x, y, z, this, 4);
@@ -159,6 +163,7 @@ public class Spotlight extends Block implements ISpotlight {
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighborBlock) {
 		if(world.isRemote) return;
 		if(neighborBlock instanceof SpotlightBeam) return;
+		if(neighborBlock == Blocks.air) return;
 
 		ForgeDirection dir = getDirection(world, x, y, z);
 
@@ -213,6 +218,10 @@ public class Spotlight extends Block implements ISpotlight {
 
 	public ForgeDirection getDirection(int metadata) {
 		return ForgeDirection.getOrientation(metadata >> 1);
+	}
+
+	public boolean isBroken(int metadata) {
+		return (metadata & 1) == 1;
 	}
 
 	@Override
@@ -313,4 +322,19 @@ public class Spotlight extends Block implements ISpotlight {
 	public int getBeamLength() {
 		return this.beamLength;
 	}
+
+	@Override
+	public int transformMeta(int meta, int coordBaseMode) {
+		// +1 to set as broken, won't turn on until broken and replaced
+		return (INBTTransformable.transformMetaDeco(meta >> 1, coordBaseMode) << 1) + 1;
+	}
+
+	@Override
+	public Block transformBlock(Block block) {
+		if(block == ModBlocks.spotlight_incandescent) return ModBlocks.spotlight_incandescent_off;
+		if(block == ModBlocks.spotlight_fluoro) return ModBlocks.spotlight_fluoro_off;
+		if(block == ModBlocks.spotlight_halogen) return ModBlocks.spotlight_halogen_off;
+		return block;
+	}
+
 }

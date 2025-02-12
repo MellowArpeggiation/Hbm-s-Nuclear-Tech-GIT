@@ -30,7 +30,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 
 public class CelestialBody {
-	
+
 	/**
 	 * Stores planet data in a tree structure, allowing for bodies orbiting bodies
 	 * Unit suffixes added when they differ from SI units, for clarity
@@ -49,13 +49,13 @@ public class CelestialBody {
 
 	public float axialTilt = 0;
 
-	public int processingLevel = 0; // What level of technology can locate this body?
+	private int minProcessingLevel = 0; // What level of technology can locate this body? This defines the minimum level, automatically adjusted based on stardar location
 
 	public ResourceLocation texture = null;
 	public float[] color = new float[] {0.4F, 0.4F, 0.4F}; // When too small to render the texture
 
 	public String tidallyLockedTo = null;
-	
+
 	public List<CelestialBody> satellites = new ArrayList<CelestialBody>(); // moon boyes
 	public CelestialBody parent = null;
 
@@ -109,8 +109,8 @@ public class CelestialBody {
 		return this;
 	}
 
-	public CelestialBody withProcessingLevel(int level) {
-		this.processingLevel = level;
+	public CelestialBody withMinProcessingLevel(int level) {
+		this.minProcessingLevel = level;
 		return this;
 	}
 
@@ -150,8 +150,8 @@ public class CelestialBody {
 	public CelestialBody withShader(ResourceLocation fragmentShader) {
 		return withShader(fragmentShader, 1);
 	}
-	
-	
+
+
 	public CelestialBody withShader(ResourceLocation fragmentShader, float scale) {
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) return this;
 
@@ -160,7 +160,7 @@ public class CelestialBody {
 		return this;
 	}
 
-	
+
 	// /Chainables
 
 
@@ -174,7 +174,7 @@ public class CelestialBody {
 
 	public static void setTraits(World world, CelestialBodyTrait... traits) {
 		SolarSystemWorldSavedData traitsData = SolarSystemWorldSavedData.get(world);
-		
+
 		traitsData.setTraits(getBody(world).name, traits);
 	}
 
@@ -224,7 +224,7 @@ public class CelestialBody {
 
 	public static void modifyTraits(World world, CelestialBodyTrait... traits) {
 		HashMap<Class<? extends CelestialBodyTrait>, CelestialBodyTrait> currentTraits = getTraits(world);
-		
+
 		for(CelestialBodyTrait trait : traits) {
 			currentTraits.put(trait.getClass(), trait);
 		}
@@ -234,7 +234,7 @@ public class CelestialBody {
 
 	public void modifyTraits(CelestialBodyTrait... traits) {
 		HashMap<Class<? extends CelestialBodyTrait>, CelestialBodyTrait> currentTraits = getTraits();
-		
+
 		for(CelestialBodyTrait trait : traits) {
 			currentTraits.put(trait.getClass(), trait);
 		}
@@ -414,7 +414,7 @@ public class CelestialBody {
 	public static CelestialBody getStar(World world) {
 		return getBody(world).getStar();
 	}
-	
+
 	public static CelestialBody getPlanet(World world) {
 		return getBody(world).getPlanet();
 	}
@@ -438,7 +438,7 @@ public class CelestialBody {
 	public static boolean hasTrait(World world, Class<? extends CelestialBodyTrait> trait) {
 		return getBody(world).hasTrait(trait);
 	}
-	
+
 	public static <T extends CelestialBodyTrait> T getTrait(World world, Class<? extends T> trait) {
 		return getBody(world).getTrait(trait);
 	}
@@ -446,7 +446,7 @@ public class CelestialBody {
 	public static boolean hasDefaultTrait(World world, Class<? extends CelestialBodyTrait> trait) {
 		return getBody(world).hasDefaultTrait(trait);
 	}
-	
+
 	public static <T extends CelestialBodyTrait> T getDefaultTrait(World world, Class<? extends T> trait) {
 		return getBody(world).getDefaultTrait(trait);
 	}
@@ -504,11 +504,30 @@ public class CelestialBody {
 		return 1 / (distanceAU * distanceAU);
 	}
 
-	
+	// Processing level is based off of where you are processing from, so if you're on Duna, Ike will be tier 0
+	public int getProcessingLevel(CelestialBody from) {
+		int level = 3;
+
+		if(this == from) {
+			// If self, tier 0
+			level = 0;
+		} else if(this == from.parent || this.parent == from) {
+			// If going to/from a moon, tier 0
+			level = 0;
+		} else {
+			// Otherwise, tier 1
+			level = 1;
+		}
+
+		// Unless a minimum processing level is set
+		return Math.max(level, minProcessingLevel);
+	}
+
+
 	public boolean hasTrait(Class<? extends CelestialBodyTrait> trait) {
 		return getTraitsUnsafe().containsKey(trait);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <T extends CelestialBodyTrait> T getTrait(Class<? extends T> trait) {
 		return (T) getTraitsUnsafe().get(trait);
@@ -526,7 +545,7 @@ public class CelestialBody {
 
 		if(traits != null)
 			return traits;
-			
+
 		return this.traits;
 	}
 
@@ -539,7 +558,7 @@ public class CelestialBody {
 		return (T) traits.get(trait);
 	}
 
-	
+
 	// Loads in the heightmap data for a given chunk
 	public int[] getHeightmap(int chunkX, int chunkZ) {
 		WorldServer world = DimensionManager.getWorld(dimensionId);
@@ -551,7 +570,7 @@ public class CelestialBody {
 
 			if(world == null) return null;
 		}
-		
+
 		// Load OR generate the desired chunk
 		Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
 		return chunk.heightMap;

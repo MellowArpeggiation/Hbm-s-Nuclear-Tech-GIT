@@ -6,9 +6,12 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.deco.TileEntityDecoBlock;
+import com.hbm.world.gen.INBTTransformable;
 
 import api.hbm.block.IToolable;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -22,7 +25,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class DecoBlock extends BlockContainer implements IToolable {
+public class DecoBlock extends BlockContainer implements IToolable, INBTTransformable {
 	
 	Random rand = new Random();
 
@@ -51,6 +54,8 @@ public class DecoBlock extends BlockContainer implements IToolable {
 		
 		return true;
 	}
+
+	@Override @SideOnly(Side.CLIENT) public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) { return true; }
 
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
@@ -176,5 +181,10 @@ public class DecoBlock extends BlockContainer implements IToolable {
 		} else {
 			super.addCollisionBoxesToList(world, x, y, z, aabb, list, collider);
 		}
+	}
+
+	@Override
+	public int transformMeta(int meta, int coordBaseMode) {
+		return INBTTransformable.transformMetaDeco(meta, coordBaseMode);
 	}
 }

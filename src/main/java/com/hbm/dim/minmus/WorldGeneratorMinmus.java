@@ -7,6 +7,7 @@ import com.hbm.blocks.BlockEnums.EnumStoneType;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -14,6 +15,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
 public class WorldGeneratorMinmus implements IWorldGenerator {
+
+	public WorldGeneratorMinmus() {
+		NBTStructure.registerNullWeight(SpaceConfig.minmusDimension, 12);
+	}
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
@@ -24,7 +29,7 @@ public class WorldGeneratorMinmus implements IWorldGenerator {
 
 	private void generateMinmus(World world, Random rand, int i, int j) {
 		int meta = CelestialBody.getMeta(world);
-        DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.malachiteSpawn, 16, 6, 40, ModBlocks.stone_resource, EnumStoneType.MALACHITE.ordinal(), ModBlocks.minmus_stone);
+        DungeonToolbox.generateOre(world, rand, i, j, 1, 16, 6, 40, ModBlocks.stone_resource, EnumStoneType.MALACHITE.ordinal(), ModBlocks.minmus_stone);
         DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.copperSpawn * 3, 12, 8, 56, ModBlocks.ore_copper, meta, ModBlocks.minmus_stone);
 	}
 

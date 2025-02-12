@@ -1,20 +1,10 @@
+Includes PA tweaks and the latest bugfixes from the latest upstream NTMain update - [X5230 - "greg" \<canned laughter\>](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5230)
+
 ## Added
-* Mun cows! These rare cows are found on the Mun, they moonwalk and drop cheese. Directly inspired by the 2023 April Fools update
-* Basic atmospheric chemistry
-    * Currently just water table chem, adding 0.2atm of water vapor (steam) to an atmosphere will allow infinite water tanks to function
+* Structure wand loot blocks, for .nbt structure designers
 
 ## Changed
-* Infinite water tanks now check the water table of the celestial body you're on, rather than atmospheric pressure
-    * It was confusing everyone, since most players assumed they could just increase the air pressure of the room they're in to make them function
+* Comms Dome on Duna now has more different types of loot
 
 ## Fixed
-* Missing biome ID configs
-* Mun was called Moon in some places
-* Remove future biomes (they'll be back in the WAR update)
-* No more cascading issues for atmosphere blobs (pressurised rooms should always report correct pressure now)
-* Stations now play space music instead of overworld music
-* Remove duck spawning
-* Fix scutterblood coker recipe
-* Add missing fluid textures
-* Fix groundwater pumps working in space
-* Fix vacuum solderer not receiving power
+* All fixes from upstream NTM

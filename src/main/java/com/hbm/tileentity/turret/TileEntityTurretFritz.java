@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.entity.projectile.EntityBulletBaseNT;
-import com.hbm.handler.BulletConfigSyncingUtil;
-import com.hbm.handler.BulletConfiguration;
+import com.hbm.entity.projectile.EntityBulletBaseMK4;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
@@ -15,6 +13,8 @@ import com.hbm.inventory.fluid.trait.FT_Flammable;
 import com.hbm.inventory.fluid.trait.FluidTraitSimple.FT_Liquid;
 import com.hbm.inventory.gui.GUITurretFritz;
 import com.hbm.items.ModItems;
+import com.hbm.items.weapon.sedna.factory.XFactoryFlamer;
+import com.hbm.items.weapon.sedna.factory.GunFactory.EnumAmmo;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
 
@@ -23,6 +23,7 @@ import com.hbm.tileentity.IFluidCopiable;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,7 +58,7 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 		
 		ammoStacks = new ArrayList();
 
-		ammoStacks.add(new ItemStack(ModItems.ammo_fuel));
+		ammoStacks.add(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.FLAME_DIESEL.ordinal()));
 		
 		for(FluidType type : Fluids.getInNiceOrder()) {
 			if(type.hasTrait(FT_Combustible.class) && type.hasTrait(FT_Liquid.class)) {
@@ -104,7 +105,6 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 		if(this.tank.getTankType().hasTrait(FT_Flammable.class) && this.tank.getTankType().hasTrait(FT_Liquid.class) && this.tank.getFill() >= 2) {
 			
 			FT_Flammable trait = this.tank.getTankType().getTrait(FT_Flammable.class);
-			BulletConfiguration conf = BulletConfigSyncingUtil.pullConfig(BulletConfigSyncingUtil.FLA_NORMAL);
 			this.tank.setFill(this.tank.getFill() - 2);
 			
 			Vec3 pos = this.getTurretPos();
@@ -112,11 +112,8 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 			vec.rotateAroundZ((float) -this.rotationPitch);
 			vec.rotateAroundY((float) -(this.rotationYaw + Math.PI * 0.5));
 			
-			EntityBulletBaseNT proj = new EntityBulletBaseNT(worldObj, BulletConfigSyncingUtil.getKey(conf));
-			proj.setPositionAndRotation(pos.xCoord + vec.xCoord, pos.yCoord + vec.yCoord, pos.zCoord + vec.zCoord, 0.0F, 0.0F);
-			proj.overrideDamage = (float) (trait.getHeatEnergy() / 500_000F);
-			
-			proj.setThrowableHeading(vec.xCoord, vec.yCoord, vec.zCoord, conf.velocity, conf.spread);
+			EntityBulletBaseMK4 proj = new EntityBulletBaseMK4(worldObj, XFactoryFlamer.flame_nograv, (float) (trait.getHeatEnergy() / 500_000F), 0.05F, (float) rotationYaw, (float) rotationPitch);
+			proj.setPositionAndRotation(pos.xCoord + vec.xCoord, pos.yCoord + vec.yCoord, pos.zCoord + vec.zCoord, proj.rotationYaw, proj.rotationPitch);
 			worldObj.spawnEntityInWorld(proj);
 			
 			worldObj.playSoundEffect(xCoord, yCoord, zCoord, "hbm:weapon.flamethrowerShoot", 2F, 1F + worldObj.rand.nextFloat() * 0.5F);
@@ -144,7 +141,7 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 			
 			for(int i = 1; i < 10; i++) {
 				
-				if(slots[i] != null && slots[i].getItem() == ModItems.ammo_fuel) {
+				if(slots[i] != null && slots[i].getItem() == ModItems.ammo_standard && slots[i].getItemDamage() == EnumAmmo.FLAME_DIESEL.ordinal()) {
 					if(this.tank.getTankType() == Fluids.DIESEL && this.tank.getFill() + 1000 <= this.tank.getMaxFill()) {
 						this.tank.setFill(this.tank.getFill() + 1000);
 						this.decrStackSize(i, 1);
@@ -153,18 +150,17 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 			}
 		}
 	}
-	
+
 	@Override
-	protected NBTTagCompound writePacket() {
-		NBTTagCompound data = super.writePacket();
-		tank.writeToNBT(data, "t");
-		return data;
+	public void serialize(ByteBuf buf) {
+		super.serialize(buf);
+		tank.serialize(buf);
 	}
 
 	@Override
-	public void networkUnpack(NBTTagCompound nbt) {
-		super.networkUnpack(nbt);
-		tank.readFromNBT(nbt, "t");
+	public void deserialize(ByteBuf buf) {
+		super.deserialize(buf);
+		tank.deserialize(buf);
 	}
 
 	@Override //TODO: clean this shit up

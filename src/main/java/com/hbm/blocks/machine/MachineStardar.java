@@ -45,6 +45,8 @@ public class MachineStardar extends BlockDummyable implements ITooltipProvider {
 
 	@Override
 	public void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {
+		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
+
 		x += dir.offsetX * o;
 		z += dir.offsetZ * o;
 
@@ -58,6 +60,12 @@ public class MachineStardar extends BlockDummyable implements ITooltipProvider {
 				MultiblockHandlerXR.fillSpace(world, x + ox, y, z + oz, new int[] {0, 3, 0, 0, 0, 0}, this, dir);
 			}
 		}
+
+		// Rack
+		BlockDummyable.safeRem = true;
+		world.setBlock(x - rot.offsetX + dir.offsetX * 2, y - 2, z - rot.offsetZ + dir.offsetZ * 2, this, rot.ordinal(), 3);
+		world.setBlock(x - rot.offsetX + dir.offsetX * 2, y - 3, z - rot.offsetZ + dir.offsetZ * 2, this, rot.ordinal(), 3);
+		BlockDummyable.safeRem = false;
 	}
 	
 	@Override

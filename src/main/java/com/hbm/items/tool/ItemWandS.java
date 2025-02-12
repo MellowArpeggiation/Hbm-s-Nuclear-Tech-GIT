@@ -7,6 +7,7 @@ import java.util.Set;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.Tuple.Pair;
 import com.hbm.world.gen.NBTStructure;
@@ -89,6 +90,7 @@ public class ItemWandS extends Item {
 				
 				Set<Pair<Block, Integer>> blocks = getBlocks(stack);
                 blocks.add(new Pair<Block, Integer>(Blocks.air, 0));
+                blocks.add(new Pair<Block, Integer>(ModBlocks.spotlight_beam, 0));
 
                 String filename = "structure_" + dateFormat.format(new Date()).toString() + ".nbt";
 
