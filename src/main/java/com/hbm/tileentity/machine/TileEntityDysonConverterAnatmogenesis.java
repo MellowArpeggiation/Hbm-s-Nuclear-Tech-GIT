@@ -4,6 +4,7 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.trait.FT_Gaseous;
+import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.IDysonConverter;
 import com.hbm.tileentity.TileEntityMachineBase;
 
@@ -36,6 +37,8 @@ public class TileEntityDysonConverterAnatmogenesis extends TileEntityMachineBase
 
 	public long gasProduced;
 
+	public boolean isConverting;
+
 	// 100THE/s will produce 0.1atm in 8 hours
 	private static final long HE_TO_MB = 28_800_000;
 
@@ -51,8 +54,26 @@ public class TileEntityDysonConverterAnatmogenesis extends TileEntityMachineBase
 	@Override
 	public void updateEntity() {
 		if(!worldObj.isRemote) {
-			networkPackNT(15);
+			isConverting = gasProduced > 0;
+
+			networkPackNT(250);
 			gasProduced = 0;
+		} else {
+			if(isConverting) {
+				NBTTagCompound data = new NBTTagCompound();
+				data.setString("type", "tower");
+				data.setFloat("lift", 0.5F);
+				data.setFloat("base", 0.375F);
+				data.setFloat("max", 3F);
+				data.setInteger("life", 100 + worldObj.rand.nextInt(50));
+
+				data.setInteger("color", fluid.getColor());
+				data.setDouble("posX", xCoord + 0.5);
+				data.setDouble("posZ", zCoord + 0.5);
+				data.setDouble("posY", yCoord + 3.25);
+
+				MainRegistry.proxy.effectNT(data);
+			}
 		}
 	}
 
@@ -85,6 +106,7 @@ public class TileEntityDysonConverterAnatmogenesis extends TileEntityMachineBase
 	@Override
 	public void serialize(ByteBuf buf) {
 		super.serialize(buf);
+		buf.writeBoolean(isConverting);
 		buf.writeLong(gasProduced);
 		buf.writeInt(fluid.getID());
 		buf.writeBoolean(isEmitting);
@@ -93,6 +115,7 @@ public class TileEntityDysonConverterAnatmogenesis extends TileEntityMachineBase
 	@Override
 	public void deserialize(ByteBuf buf) {
 		super.deserialize(buf);
+		isConverting = buf.readBoolean();
 		gasProduced = buf.readLong();
 		fluid = Fluids.fromID(buf.readInt());
 		isEmitting = buf.readBoolean();

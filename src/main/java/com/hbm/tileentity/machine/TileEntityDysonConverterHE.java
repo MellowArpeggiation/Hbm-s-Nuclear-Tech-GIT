@@ -1,13 +1,17 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.tileentity.IDysonConverter;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.energymk2.IEnergyProviderMK2;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -15,6 +19,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class TileEntityDysonConverterHE extends TileEntityMachineBase implements IDysonConverter, IEnergyProviderMK2 {
 
 	public long power;
+
+	public boolean isConverting;
 
 	public TileEntityDysonConverterHE() {
 		super(0);
@@ -29,13 +35,28 @@ public class TileEntityDysonConverterHE extends TileEntityMachineBase implements
 	public void updateEntity() {
 		if(!worldObj.isRemote) {
 			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
+			ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
 			DirPos output = new DirPos(xCoord + dir.offsetX * 5, yCoord, zCoord + dir.offsetZ * 5, dir);
 			tryProvide(worldObj, output.getX(), output.getY(), output.getZ(), output.getDir());
 
+			isConverting = power > 0;
+
+			if(isConverting && worldObj.getTotalWorldTime() % 2 == 0) {
+				NBTTagCompound dPart = new NBTTagCompound();
+				dPart.setString("type", worldObj.getTotalWorldTime() % 10 == 0 ? "tau" : "hadron");
+				dPart.setByte("count", (byte) 1);
+				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(dPart, xCoord + 0.5 + dir.offsetX * 4 + rot.offsetX, yCoord + 2.25, zCoord + 0.5 + dir.offsetZ * 4 + rot.offsetZ), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 25));
+				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(dPart, xCoord + 0.5 + dir.offsetX * 4 - rot.offsetX, yCoord + 2.25, zCoord + 0.5 + dir.offsetZ * 4 - rot.offsetZ), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 25));
+				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(dPart, xCoord + 0.5 + dir.offsetX * 3 + rot.offsetX, yCoord + 2.75, zCoord + 0.5 + dir.offsetZ * 3 + rot.offsetZ), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 25));
+				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(dPart, xCoord + 0.5 + dir.offsetX * 3 - rot.offsetX, yCoord + 2.75, zCoord + 0.5 + dir.offsetZ * 3 - rot.offsetZ), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 25));
+			}
+
 			// To prevent this machine acting like an endgame battery, but still be able to transmit every drop of power
 			// this machine will clear its buffers immediately after transmitting power
 			power = 0;
+
+			networkPackNT(250);
 		}
 	}
 
@@ -57,6 +78,18 @@ public class TileEntityDysonConverterHE extends TileEntityMachineBase implements
 	@Override
 	public long maximumEnergy() {
 		return Long.MAX_VALUE;
+	}
+
+	@Override
+	public void serialize(ByteBuf buf) {
+		super.serialize(buf);
+		buf.writeBoolean(isConverting);
+	}
+
+	@Override
+	public void deserialize(ByteBuf buf) {
+		super.deserialize(buf);
+		isConverting = buf.readBoolean();
 	}
 
 	@Override

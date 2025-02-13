@@ -6,6 +6,7 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
+import com.hbm.tileentity.machine.TileEntityDysonConverterHE;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
@@ -23,6 +24,8 @@ public class RenderDysonConverterHE extends TileEntitySpecialRenderer implements
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 
+			TileEntityDysonConverterHE converter = (TileEntityDysonConverterHE) tileEntity;
+
 			switch(tileEntity.getBlockMetadata() - BlockDummyable.offset) {
 			case 2: GL11.glRotatef(0, 0F, 1F, 0F); break;
 			case 4: GL11.glRotatef(90, 0F, 1F, 0F); break;
@@ -32,7 +35,28 @@ public class RenderDysonConverterHE extends TileEntitySpecialRenderer implements
 
 			GL11.glShadeModel(GL11.GL_SMOOTH);
 			bindTexture(ResourceManager.dyson_he_converter_tex);
-			ResourceManager.dyson_he_converter.renderAll();
+			ResourceManager.dyson_he_converter.renderPart("HE_Converter");
+
+			float t = converter.isConverting ? tileEntity.getWorldObj().getTotalWorldTime() + f : 0;
+
+			GL11.glTranslatef(0.0F, 1.5F, 0.0F);
+
+			GL11.glPushMatrix();
+			{
+				GL11.glRotatef(t, 0, 0, 1);
+				GL11.glTranslated(0.0F, -1.5F, 0.0F);
+				ResourceManager.dyson_he_converter.renderPart("Coil1");
+				ResourceManager.dyson_he_converter.renderPart("Coil3");
+			}
+			GL11.glPopMatrix();
+
+			GL11.glPushMatrix();
+			{
+				GL11.glRotatef(t, 0, 0, -1);
+				GL11.glTranslated(0.0F, -1.5F, 0.0F);
+				ResourceManager.dyson_he_converter.renderPart("Coil2");
+			}
+			GL11.glPopMatrix();
 
 			GL11.glShadeModel(GL11.GL_FLAT);
 

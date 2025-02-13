@@ -58,6 +58,7 @@ public class MachineDysonReceiver extends BlockDummyable implements ILookOverlay
 					return false;
 
 				receiver.slots[0] = heldStack.copy();
+				receiver.markChanged();
 				heldStack.stackSize = 0;
 				world.playSoundEffect(x, y, z, "hbm:item.upgradePlug", 1.0F, 1.0F);
 			} else if(heldStack == null && receiver.slots[0] != null) {

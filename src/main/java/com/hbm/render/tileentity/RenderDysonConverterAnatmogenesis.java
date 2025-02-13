@@ -6,6 +6,7 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
+import com.hbm.tileentity.machine.TileEntityDysonConverterAnatmogenesis;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
@@ -23,6 +24,8 @@ public class RenderDysonConverterAnatmogenesis extends TileEntitySpecialRenderer
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 
+			TileEntityDysonConverterAnatmogenesis converter = (TileEntityDysonConverterAnatmogenesis) tileEntity;
+
 			switch(tileEntity.getBlockMetadata() - BlockDummyable.offset) {
 			case 2: GL11.glRotatef(0, 0F, 1F, 0F); break;
 			case 4: GL11.glRotatef(90, 0F, 1F, 0F); break;
@@ -32,7 +35,15 @@ public class RenderDysonConverterAnatmogenesis extends TileEntitySpecialRenderer
 
 			GL11.glShadeModel(GL11.GL_SMOOTH);
 			bindTexture(ResourceManager.dyson_anatmogenesis_tex);
-			ResourceManager.dyson_anatmogenesis.renderAll();
+			ResourceManager.dyson_anatmogenesis.renderPart("Anatmogenesis");
+
+			if(converter.isConverting) {
+				float t = tileEntity.getWorldObj().getTotalWorldTime() + f;
+
+				GL11.glTranslated(0, Math.sin(t * 0.1) * 0.025 + tileEntity.getWorldObj().rand.nextFloat() * 0.02, 0);
+			}
+
+			ResourceManager.dyson_anatmogenesis.renderPart("Coils");
 
 			GL11.glShadeModel(GL11.GL_FLAT);
 
