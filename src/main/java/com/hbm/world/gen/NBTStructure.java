@@ -265,6 +265,10 @@ public class NBTStructure {
 				}
 
 				palette[i] = new BlockDefinition(blockName, meta);
+
+				if(StructureConfig.debugStructures && palette[i].block == Blocks.air) {
+					palette[i] = new BlockDefinition(ModBlocks.wand_air, meta);
+				}
 			}
 
 
@@ -630,6 +634,11 @@ public class NBTStructure {
 			this.meta = meta;
 		}
 
+		BlockDefinition(Block block, int meta) {
+			this.block = block;
+			this.meta = meta;
+		}
+
 	}
 
 	public static class SpawnCondition {
@@ -668,6 +677,31 @@ public class NBTStructure {
 
 		protected JigsawPool getPool(String name) {
 			return pools.get(name).clone();
+		}
+
+		// Builds all of the pools into neat rows and columns, for editing and debugging!
+		// Make sure structure debug is enabled, or it will no-op
+		// Do not use in generation
+		public void buildAll(World world, int x, int y, int z) {
+			if(!StructureConfig.debugStructures) return;
+
+			int padding = 5;
+			int oz = 0;
+
+			for(JigsawPool pool : pools.values()) {
+				int highestWidth = 0;
+				int ox = 0;
+
+				for(Pair<JigsawPiece, Integer> entry : pool.pieces) {
+					NBTStructure structure = entry.key.structure;
+					structure.build(world, x + ox + (structure.size.x / 2), y, z + oz + (structure.size.z / 2));
+
+					ox += structure.size.x + padding;
+					highestWidth = Math.max(highestWidth, structure.size.z);
+				}
+
+				oz += highestWidth + padding;
+			}
 		}
 
 	}
