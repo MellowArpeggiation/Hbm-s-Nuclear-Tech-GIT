@@ -42,7 +42,7 @@ public class RenderDysonReceiver extends TileEntitySpecialRenderer implements II
 			bindTexture(ResourceManager.dyson_receiver_tex);
 			ResourceManager.dyson_receiver.renderPart("DysonReceiver");
 
-			float t = tileEntity.getWorldObj().getTotalWorldTime() + f;
+			float t = receiver.isReceiving ? tileEntity.getWorldObj().getTotalWorldTime() + f : 0;
 
 			GL11.glTranslatef(0.0F, 1.5F, 0.0F);
 
