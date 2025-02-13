@@ -1852,6 +1852,10 @@ public class ClientProxy extends ServerProxy {
 
 				int life = data.getInteger("life");
 
+				fx.motionX = data.getDouble("mX");
+				fx.motionY = data.getDouble("mY");
+				fx.motionZ = data.getDouble("mZ");
+
 				if(inOrbit) fx.setLift(0);
 				if(pressure < 0.08) {
 					double factor = (0.08 - pressure) * 4;

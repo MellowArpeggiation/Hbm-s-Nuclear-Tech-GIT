@@ -63,14 +63,18 @@ public class TileEntityDysonConverterAnatmogenesis extends TileEntityMachineBase
 				NBTTagCompound data = new NBTTagCompound();
 				data.setString("type", "tower");
 				data.setFloat("lift", 0.5F);
-				data.setFloat("base", 0.375F);
-				data.setFloat("max", 3F);
+				data.setFloat("base", 0.8F);
+				data.setFloat("max", 4F);
 				data.setInteger("life", 100 + worldObj.rand.nextInt(50));
 
 				data.setInteger("color", fluid.getColor());
 				data.setDouble("posX", xCoord + 0.5);
 				data.setDouble("posZ", zCoord + 0.5);
 				data.setDouble("posY", yCoord + 3.25);
+
+				data.setDouble("mX", (worldObj.rand.nextDouble() - 0.5));
+				data.setDouble("mY", (worldObj.rand.nextDouble()) * 2);
+				data.setDouble("mZ", (worldObj.rand.nextDouble() - 0.5));
 
 				MainRegistry.proxy.effectNT(data);
 			}
