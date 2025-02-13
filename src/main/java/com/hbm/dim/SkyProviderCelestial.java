@@ -2,6 +2,7 @@ package com.hbm.dim;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
@@ -307,7 +308,46 @@ public class SkyProviderCelestial extends IRenderHandler {
 		}
 		GL11.glPopMatrix();
 		render3DModel(partialTicks, world, mc);
-	    CBT_War war = CelestialBody.getTrait(mc.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().theWorld, CBT_War.class);
+	    CBT_War war = CelestialBody.getTrait(mc.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft()
+	    		.getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().getMinecraft().theWorld, CBT_War.class);
 	    if (war != null) {
 	        for (int i = 0; i < war.getProjectiles().size(); i++) {
 	            CBT_War.Projectile projectile = war.getProjectiles().get(i);
@@ -761,15 +801,57 @@ public class SkyProviderCelestial extends IRenderHandler {
 				    CBT_Destroyed d = CelestialBody.getBody(metric.body.dimensionId).getTrait(CBT_Destroyed.class);
 				    
 					if(d != null) {
-						
+						Random random = new Random(12);
+
+						int numQuads = 50;
+
+						for (int i = 0; i < numQuads; i++) {
+						    double radius = (random.nextDouble() * size) * d.interp * 2;
+						    double randomTheta = random.nextDouble() * Math.PI * 2;
+						    double randomPhi = random.nextDouble() * Math.PI;
+
+						    double randomX = radius * Math.sin(randomPhi) * Math.cos(randomTheta);
+						    double randomY = radius * Math.sin(randomPhi) * Math.sin(randomTheta);
+						    double randomZ = radius * Math.cos(randomPhi);
+						    float randomRotationX = random.nextFloat() * 360.0F;
+						    float randomRotationY = random.nextFloat() * 360.0F;
+						    float randomRotationZ = random.nextFloat() * 360.0F;
+
+						    double uMin = random.nextDouble();
+						    double vMin = random.nextDouble();
+						    double uMax = Math.min(uMin + (random.nextDouble() * 0.2), 1.0);
+						    double vMax = Math.min(vMin + (random.nextDouble() * 0.2), 1.0);
+
+						    GL11.glPushMatrix();
+						    {
+						        GL11.glDisable(GL11.GL_BLEND);
+
+						        GL11.glTranslated(randomX * -0.05, randomY * 0.00, randomZ * -0.05);
+
+						        GL11.glRotatef(randomRotationY * d.interp * 0.05F, 0.0F, 1.0F, 0.0F);
+
+						        mc.renderEngine.bindTexture(metric.body.texture);
+
+						        tessellator.startDrawingQuads();
+						        double qsize = size * 0.1;
+						        tessellator.addVertexWithUV(-qsize, 100.0D, -qsize, uMin, vMin);
+						        tessellator.addVertexWithUV(qsize, 100.0D, -qsize, uMax, vMin);
+						        tessellator.addVertexWithUV(qsize, 100.0D, qsize, uMax, vMax);
+						        tessellator.addVertexWithUV(-qsize, 100.0D, qsize, uMin, vMax);
+
+						        tessellator.draw();
+						    }
+						    GL11.glEnable(GL11.GL_BLEND);
+
+						    GL11.glPopMatrix();
+						}
 						double interpr = d.interp;
-						d.updatefloat();
+						//d.updatefloat();
 						//interpr = Math.min(100.0f,interpr + 0.01f * (100.0f - interpr) * 0.15f);
 
 		                float alpd = (float) (1.0F - Math.min(1.0F, interpr / 100));
 
-
-		                
+	
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, alpd);
 						mc.renderEngine.bindTexture(texture);
 						
@@ -783,6 +865,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, alpd);
 						mc.renderEngine.bindTexture(flared);
+						
 						interpr = 15 + interpr * 0.5;
 						tessellator.startDrawingQuads();
 						tessellator.addVertexWithUV(-interpr, 100.0D, -interpr, 0.0D + uvOffset, 0.0D);
@@ -790,6 +873,9 @@ public class SkyProviderCelestial extends IRenderHandler {
 						tessellator.addVertexWithUV(interpr, 100.0D, interpr, 1.0D + uvOffset, 1.0D);
 						tessellator.addVertexWithUV(-interpr, 100.0D, interpr, 0.0D + uvOffset, 1.0D);
 						tessellator.draw();
+						
+
+		                
 
 					} else {
 
