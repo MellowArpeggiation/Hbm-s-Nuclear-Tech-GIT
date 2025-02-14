@@ -28,7 +28,7 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 		}});
 		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
-			structure = new JigsawPiece("thatmotest2", StructureManager.thatmo2, -1);
+			structure = new JigsawPiece("thatmotest2", StructureManager.thatmo2, 1);
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 		}});
 		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
@@ -40,6 +40,7 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 				put(ModBlocks.brick_concrete_cracked, new ConcreteBricks());
 			}};
 		}});
+		/*
         NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
 			sizeLimit = 128;
 			canSpawn = biome -> biome.heightVariation < 0.1F;
@@ -54,6 +55,31 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 				
 			}};
 		}});
+        */
+		
+        NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
+			sizeLimit = 128;
+			canSpawn = biome -> biome.heightVariation < 0.1F;
+			startPool = "default";
+			pools = new HashMap<String, NBTStructure.JigsawPool>() {{
+				put("default", new JigsawPool() {{
+					add(new JigsawPiece("intersection", StructureManager.intersection, 0){{ alignToTerrain = true; }}, 1);
+					add(new JigsawPiece("road_1", StructureManager.road, 0){{ conformToTerrain = true; }}, 1);
+					add(new JigsawPiece("curve_1", StructureManager.curve, 0){{ conformToTerrain = true; }}, 1);
+					add(new JigsawPiece("tshape", StructureManager.tshape, 0){{ conformToTerrain = true; }}, 1);
+					add(new JigsawPiece("block1", StructureManager.block1, 0){{ alignToTerrain = true; }}, 1);
+					add(new JigsawPiece("block2", StructureManager.block2, 0){{ alignToTerrain = true; }}, 1);
+					add(new JigsawPiece("pfmfac", StructureManager.pfmfac, 0){{ alignToTerrain = true; }}, 1);
+				}});
+				put("roadsonly", new JigsawPool() {{
+					add(new JigsawPiece("road_2", StructureManager.road, 0){{ conformToTerrain = true; }}, 1);
+					add(new JigsawPiece("curve_2", StructureManager.curve, 0){{ conformToTerrain = true; }}, 1);
+				}});
+
+			}};
+		}});
+        
+
     }
 
 	@Override

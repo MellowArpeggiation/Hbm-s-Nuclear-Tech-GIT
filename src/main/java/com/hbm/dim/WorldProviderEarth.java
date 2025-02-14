@@ -44,7 +44,10 @@ public class WorldProviderEarth extends WorldProviderCelestial {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 		World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
 	    SatelliteSavedData data = (SatelliteSavedData)world.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
+	
 	    
+	    
+
 		if(!worldObj.isRemote) {
 
 		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world).sats;
@@ -69,48 +72,43 @@ public class WorldProviderEarth extends WorldProviderCelestial {
 		}
 
         CBT_War war = CelestialBody.getTrait(worldObj, CBT_War.class);
-        if(!worldObj.isRemote) {
-        	
-	        if (war != null) {
-	            for (int i = 0; i < war.getProjectiles().size(); i++) {
-	                CBT_War.Projectile projectile = war.getProjectiles().get(i);
-	                
-	                projectile.update();
-	                float travel = projectile.getTravel();
-	                System.out.println(travel);
-		            if (projectile.getTravel() >= 18 && projectile.getTravel() <= 18 && worldObj ==  MinecraftServer.getServer().worldServerForDimension(projectile.getTarget())) {
-		            	System.out.println("323");
-		            	  Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
 
-	                }
-		            if (projectile.getTravel() <= 0) {
-		                projectile.impact();
-		            }
-		            
-	                if(projectile.getAnimtime() >= 100) {
-		                    war.destroyProjectile(projectile);
-		    				World targetBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.moonDimension);
-		                    i--;
-		                    System.out.println("damaged: " + targetBody + " health left: " + war.health);
-		                    if(war.health > 0) {
-			    				CelestialBody.damage(projectile.getDamage(), targetBody);		                    
-		                    } else if(war.health <= 0) {
-		        				CelestialBody target = CelestialBody.getPlanet(targetBody);
-		        				target.modifyTraits(targetBody, new CBT_Destroyed());
-		        				war.health = 0;
-		                    }
-	                }
-	                if(projectile.getType() == ProjectileType.SPLITSHOT) {
-	                	if (projectile.getTravel() <= 0) {
-	                		war.split(worldObj, 4, projectile, ProjectileType.SMALL);
-	                		war.destroyProjectile(projectile);
-	                		i--;
-	                	}
-	                	
-	                }
+    	
+        if (war != null) {
+        	
+            for (int i = 0; i < war.getProjectiles().size(); i++) {
+                CBT_War.Projectile projectile = war.getProjectiles().get(i);
+
+                projectile.update();
+                float travel = projectile.getTravel();
+	            if (projectile.getTravel() <= 0) {
+	                projectile.impact();
 	            }
-	        }
+	            
+                if(projectile.getAnimtime() >= 100) {
+	                    war.destroyProjectile(projectile);
+	    				World targetBody = MinecraftServer.getServer().worldServerForDimension(projectile.getTarget());
+	                    i--;
+	                    System.out.println("damaged: " + targetBody + " health left: " + war.health);
+	                    if(war.health > 0) {
+		    				CelestialBody.damage(projectile.getDamage(), targetBody);		                    
+	                    } else if(war.health <= 0) {
+	        				CelestialBody target = CelestialBody.getPlanet(targetBody);
+	        				target.modifyTraits(targetBody, new CBT_Destroyed());
+		                	war.health = 0;
+	                    }
+                }
+                if(projectile.getType() == ProjectileType.SPLITSHOT) {
+                	if (projectile.getTravel() <= 0) {
+                		war.split(worldObj, 4, projectile, ProjectileType.SMALL);
+                		war.destroyProjectile(projectile);
+                		i--;
+                	}
+                	
+                }
+            }
         }
+    
 	}
     
 }

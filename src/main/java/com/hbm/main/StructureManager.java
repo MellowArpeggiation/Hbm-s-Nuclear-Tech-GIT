@@ -76,6 +76,14 @@ public class StructureManager {
 	public static final NBTStructure tr3 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/tr3.nbt"));
 	public static final NBTStructure tr4 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/tr4.nbt"));
 
+	public static final NBTStructure intersection = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/intersection.nbt"));
+	public static final NBTStructure block1 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/block1.nbt"));
+	public static final NBTStructure block2 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/block2.nbt"));
+	public static final NBTStructure pfmfac = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/pfmfactory.nbt"));
+	public static final NBTStructure road = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/road.nbt"));
+	public static final NBTStructure tshape = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/tshapeintersex.nbt"));
+	public static final NBTStructure curve = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/curve.nbt"));
+
 	// public static final NBTStructure test_rot = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-rot.nbt"));
 	// public static final NBTStructure test_jigsaw = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-jigsaw.nbt"));
 	// public static final NBTStructure test_jigsaw_core = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-jigsaw-core.nbt"));

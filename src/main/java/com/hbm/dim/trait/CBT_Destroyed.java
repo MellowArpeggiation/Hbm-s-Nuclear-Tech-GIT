@@ -34,10 +34,8 @@ public class CBT_Destroyed extends CelestialBodyTrait {
 	}
 	
 	public void updatefloat() {
-		interp += 0.05f;
-        interp = Math.min(100.0f,interp + 0.01f * (100.0f - interp) * 0.15f);
-
-        if (interp >= 100) {
+        interp = Math.min(201.0f,interp + 0.2f * (201.0f - interp) * 0.15f);
+        if (interp >= 200) {
         	interp = 0;
         }		
         

@@ -102,10 +102,12 @@ public class ItemWandD extends Item {
 				
 				// TESTING: END OF LIFE
 				//World targetdBody = DimensionManager.getWorld(SpaceConfig.dunaDimension);
-				World targetdBody = MinecraftServer.getServer().worldServerForDimension(SpaceConfig.dunaDimension);
+				World targetdBody = MinecraftServer.getServer().worldServerForDimension(0);
 				CelestialBody target = CelestialBody.getBody(targetdBody);
 				System.out.println(target);
-
+				if(target.hasTrait(targetdBody, CBT_Destroyed.class)){
+					target.clearTraits();
+				}
 				if(!target.hasTrait(targetdBody, CBT_War.class)) {
 					// TESTING: END OF TIME
 					target.modifyTraits(targetdBody, new CBT_War());		
@@ -115,7 +117,7 @@ public class ItemWandD extends Item {
 						float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat();
 						System.out.println(rand);
 						//war.launchProjectile(100, 20, 1, 28 * rand * 5, 33, 20, ProjectileType.SPLITSHOT);
-						Projectile projectile = new Projectile(100, 20, 50, 28 * rand * 5, 55, 20, ProjectileType.SMALL, SpaceConfig.dunaDimension);
+						Projectile projectile = new Projectile(100, 20, 50, 28 * rand * 5, 55, 20, ProjectileType.SMALL, 0);
 						projectile.GUIangle = (int) (rand * 360);
 						war.launchProjectile(projectile);
 						System.out.println(war.health);

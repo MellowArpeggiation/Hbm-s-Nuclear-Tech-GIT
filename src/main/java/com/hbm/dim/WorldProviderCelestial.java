@@ -88,7 +88,9 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		    }
 		}
 
-
+		//todo: move ALL of this shit to a general handler because this is actually lethal.
+		//serverside? tickevent. client side? clientsided tick events.
+		//please
 
 		if(!worldObj.isRemote) {
 

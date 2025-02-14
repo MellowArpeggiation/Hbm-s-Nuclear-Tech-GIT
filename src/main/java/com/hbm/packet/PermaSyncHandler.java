@@ -135,7 +135,7 @@ public class PermaSyncHandler {
             List<Projectile> projectiles = war.getProjectiles();
             for (Projectile projectile : projectiles) {
                 buf.writeFloat(projectile.getFlashtime());
-                //buf.writeFloat(projectile.getTravel());
+                buf.writeFloat(projectile.getTravel());
             }
         }
 		// EFFECTS THAT I DONT KNOW HOW TO GET WORKING ELSEWHERE :P //
@@ -252,7 +252,7 @@ public class PermaSyncHandler {
                     float traveltime = buf.readFloat();
 
                     projectile.setFlashtime(flashtime);
-                    //projectile.setTravel(traveltime);
+                    projectile.setTravel(traveltime);
                 }
             }
 		// EFFECTS THAT I DONT KNOW HOW TO GET WORKING ELSEWHERE :P //
