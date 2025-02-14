@@ -7,6 +7,7 @@ import com.google.common.collect.HashBiMap;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public abstract class CelestialBodyTrait {
 
@@ -47,5 +48,7 @@ public abstract class CelestialBodyTrait {
 
 	public void readFromBytes(ByteBuf buf) { }
 	public void writeToBytes(ByteBuf buf) { }
+	
+	public void update(boolean isremote) { }
 
 }

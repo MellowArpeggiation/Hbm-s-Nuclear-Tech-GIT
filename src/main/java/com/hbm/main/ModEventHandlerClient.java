@@ -9,7 +9,9 @@ import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SkyProviderCelestial;
 import com.hbm.dim.WorldProviderCelestial;
+import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.dim.trait.CBT_War;
+import com.hbm.dim.trait.CelestialBodyTrait;
 import com.hbm.dim.SkyProviderCelestial;
 import com.hbm.dim.WorldProviderCelestial;
 import com.hbm.dim.orbit.WorldProviderOrbit;
@@ -1080,6 +1082,18 @@ public class ModEventHandlerClient {
 		}
 		
 		if (event.phase == Phase.START) {
+			for(CelestialBody body : CelestialBody.getAllBodies()) {
+				for(CelestialBodyTrait trait : body.getTraits().values()) {
+					if(trait != null) {
+						//this needs urgent fixing but im stumped atm
+						CBT_Destroyed destroyed = body.getTrait(CBT_Destroyed.class);
+						if(destroyed!=null) {
+							destroyed.update(true);
+						}
+					}
+				}
+			}
+			
 		    CBT_War war = CelestialBody.getTrait(mc.theWorld, CBT_War.class);
 
 		    if (war != null) {

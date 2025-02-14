@@ -2,6 +2,7 @@ package com.hbm.dim.trait;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
+import scala.reflect.internal.Trees.This;
 
 public class CBT_Destroyed extends CelestialBodyTrait {
 	
@@ -34,11 +35,18 @@ public class CBT_Destroyed extends CelestialBodyTrait {
 	}
 	
 	public void updatefloat() {
-        interp = Math.min(201.0f,interp + 0.2f * (201.0f - interp) * 0.15f);
+        interp = Math.min(201.0f,interp + 0.01f * (201.0f - interp) * 0.15f);
         if (interp >= 200) {
         	interp = 0;
         }		
-        
+
+	}
+	
+	@Override
+	public void update(boolean isremote) {
+		if(isremote) {
+			updatefloat();
+		}
 	}
 
 }

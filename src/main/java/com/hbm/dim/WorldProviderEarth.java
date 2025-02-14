@@ -7,6 +7,7 @@ import com.hbm.config.SpaceConfig;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.dim.trait.CBT_War;
+import com.hbm.dim.trait.CelestialBodyTrait;
 import com.hbm.dim.trait.CBT_War.ProjectileType;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
@@ -44,10 +45,18 @@ public class WorldProviderEarth extends WorldProviderCelestial {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 		World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
 	    SatelliteSavedData data = (SatelliteSavedData)world.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
-	
-	    
-	    
 
+		for(CelestialBody body : CelestialBody.getAllBodies()) {
+			for(CelestialBodyTrait trait : body.getTraits().values()) {
+				//trait.update(false);
+			}
+		}
+		for(CelestialBody body : CelestialBody.getAllBodies()) {
+		    CBT_Destroyed d = CelestialBody.getBody(body.dimensionId).getTrait(CBT_Destroyed.class);
+		    if(d != null) {
+		    	//d.updatefloat();
+		    }
+		}
 		if(!worldObj.isRemote) {
 
 		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world).sats;
@@ -71,44 +80,7 @@ public class WorldProviderEarth extends WorldProviderCelestial {
 			}
 		}
 
-        CBT_War war = CelestialBody.getTrait(worldObj, CBT_War.class);
 
-    	
-        if (war != null) {
-        	
-            for (int i = 0; i < war.getProjectiles().size(); i++) {
-                CBT_War.Projectile projectile = war.getProjectiles().get(i);
-
-                projectile.update();
-                float travel = projectile.getTravel();
-	            if (projectile.getTravel() <= 0) {
-	                projectile.impact();
-	            }
-	            
-                if(projectile.getAnimtime() >= 100) {
-	                    war.destroyProjectile(projectile);
-	    				World targetBody = MinecraftServer.getServer().worldServerForDimension(projectile.getTarget());
-	                    i--;
-	                    System.out.println("damaged: " + targetBody + " health left: " + war.health);
-	                    if(war.health > 0) {
-		    				CelestialBody.damage(projectile.getDamage(), targetBody);		                    
-	                    } else if(war.health <= 0) {
-	        				CelestialBody target = CelestialBody.getPlanet(targetBody);
-	        				target.modifyTraits(targetBody, new CBT_Destroyed());
-		                	war.health = 0;
-	                    }
-                }
-                if(projectile.getType() == ProjectileType.SPLITSHOT) {
-                	if (projectile.getTravel() <= 0) {
-                		war.split(worldObj, 4, projectile, ProjectileType.SMALL);
-                		war.destroyProjectile(projectile);
-                		i--;
-                	}
-                	
-                }
-            }
-        }
-    
 	}
     
 }

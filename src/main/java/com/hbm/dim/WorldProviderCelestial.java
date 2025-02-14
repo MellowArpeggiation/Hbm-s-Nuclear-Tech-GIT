@@ -44,7 +44,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 
 public abstract class WorldProviderCelestial extends WorldProvider {
-
+	
 	private long localTime = -1;
 	
 	@Override
@@ -81,12 +81,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
 		
 		
-		for(CelestialBody body : CelestialBody.getAllBodies()) {
-		    CBT_Destroyed d = CelestialBody.getBody(body.dimensionId).getTrait(CBT_Destroyed.class);
-		    if(d != null) {
-		    	d.updatefloat();
-		    }
-		}
+
 
 		//todo: move ALL of this shit to a general handler because this is actually lethal.
 		//serverside? tickevent. client side? clientsided tick events.
@@ -114,45 +109,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			}
 		}
 
-        CBT_War war = CelestialBody.getTrait(worldObj, CBT_War.class);
-
-        	
-	        if (war != null) {
-	            for (int i = 0; i < war.getProjectiles().size(); i++) {
-	                CBT_War.Projectile projectile = war.getProjectiles().get(i);
-	                
-	                projectile.update();
-	                float travel = projectile.getTravel();
-
-		            if (projectile.getTravel() <= 0) {
-		                projectile.impact();
-		            }
-		            
-	                if(projectile.getAnimtime() >= 100) {
-		                    war.destroyProjectile(projectile);
-		    				World targetBody = MinecraftServer.getServer().worldServerForDimension(projectile.getTarget());
-		                    i--;
-		                    System.out.println("damaged: " + targetBody + " health left: " + war.health);
-		                    if(war.health > 0) {
-			    				CelestialBody.damage(projectile.getDamage(), targetBody);		                    
-		                    } else if(war.health <= 0) {
-		        				CelestialBody target = CelestialBody.getPlanet(targetBody);
-		        				target.modifyTraits(targetBody, new CBT_Destroyed());
-			                	war.health = 0;
-
-		                    }
-	                }
-	                if(projectile.getType() == ProjectileType.SPLITSHOT) {
-	                	if (projectile.getTravel() <= 0) {
-	                		war.split(worldObj, 4, projectile, ProjectileType.SMALL);
-	                		war.destroyProjectile(projectile);
-	                		i--;
-	                	}
-	                	
-	                }
-	            }
-	        }
-        
+ 
 		
 		if(atmosphere != null && atmosphere.getPressure() > 0.5F) {
 			super.updateWeather();

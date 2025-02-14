@@ -51,8 +51,7 @@ public class CBT_War extends CelestialBodyTrait {
 		projectiles.add(projectile);
 	}
 
-	public void split(World world, int amount, Projectile projectile, ProjectileType type) {
-        CBT_War war = CelestialBody.getTrait(world, CBT_War.class);
+	public void split(int amount, Projectile projectile, ProjectileType type) {
                        
                 //currently kind of temp, there might be a better way to generalize this
     	   if (projectile.getTravel() <= 0) {
@@ -60,7 +59,7 @@ public class CBT_War extends CelestialBodyTrait {
     			   float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat() * 160 - 80; 
     			   float randy = Minecraft.getMinecraft().theWorld.rand.nextFloat() * 90 - 80; 
 
-    			   war.launchProjectile(Math.abs(20 + j * 10), 
+    			    this.launchProjectile(Math.abs(20 + j * 10), 
                     projectile.getSize(), 
                     projectile.getDamage(), 
                     (float) (projectile.getTranslateX()), 
@@ -73,11 +72,54 @@ public class CBT_War extends CelestialBodyTrait {
          		   System.out.println(projectile.getTranslateY() + rand * j);
 
     		   }
-            war.destroyProjectile(projectile); 
+            this.destroyProjectile(projectile); 
             
         }
 	}
 	
+	@Override
+	public void update(boolean isremote) {
+		
+		if(!isremote) {
+		    if (this != null) {
+		        for (int i = 0; i < this.getProjectiles().size(); i++) {
+		            CBT_War.Projectile projectile = this.getProjectiles().get(i);
+
+		            projectile.update();
+		            float travel = projectile.getTravel();
+
+		            if (projectile.getTravel() <= 0) {
+		                projectile.impact();
+		            }
+
+		            if (projectile.getAnimtime() >= 100) {
+		                this.destroyProjectile(projectile);
+		                World targetBody = MinecraftServer.getServer().worldServerForDimension(projectile.getTarget());
+		                i--;
+		                System.out.println("damaged: " + targetBody + " health left: " + this.health);
+
+		                if (this.health > 0) {
+		                    CelestialBody.damage(projectile.getDamage(), targetBody);
+		                } else if (this.health <= 0) {
+		                    CelestialBody target = CelestialBody.getPlanet(targetBody);
+		                    target.modifyTraits(targetBody, new CBT_Destroyed());
+		                    this.health = 0;
+		                }
+		            }
+
+		            if (projectile.getType() == ProjectileType.SPLITSHOT) {
+		                if (projectile.getTravel() <= 0) {
+		                    this.split(4, projectile, ProjectileType.SMALL);
+		                    this.destroyProjectile(projectile);
+		                    i--;
+		                }
+		            }
+		        }
+		    }
+		}
+	}
+
+
 	public void destroyProjectile(Projectile proj) {
 		projectiles.remove(proj);
 	}

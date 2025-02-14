@@ -18,6 +18,8 @@ import com.hbm.dim.WorldTypeTeleport;
 import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.dim.trait.CBT_Destroyed;
+import com.hbm.dim.trait.CelestialBodyTrait;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityDuck;
 import com.hbm.entity.missile.EntityRideableRocket;
@@ -1574,7 +1576,11 @@ public class ModEventHandler {
 	public void onServerTick(TickEvent.ServerTickEvent event) {
 
 		if(event.phase == Phase.START) {
-
+			for(CelestialBody body : CelestialBody.getAllBodies()) {
+				for(CelestialBodyTrait trait : body.getTraits().values()) {
+					trait.update(false);
+				}
+			}
 			// do other shit I guess?
 			RTTYSystem.updateBroadcastQueue();
 			RequestNetwork.updateEntries();
@@ -1582,6 +1588,7 @@ public class ModEventHandler {
 			Nodespace.updateNodespace();
 			// bob i beg of you i need fluid nodespace :pray:
 		}
+
 
 		// There is an issue here somewhere...
 		// I cannot, for the life of me, figure out why a single certain bug happens.
