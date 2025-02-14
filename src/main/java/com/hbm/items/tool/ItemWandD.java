@@ -2,7 +2,6 @@ package com.hbm.items.tool;
 
 import java.util.List;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.DebugTeleporter;
@@ -23,28 +22,25 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 
 public class ItemWandD extends Item {
 
-	
+
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		
+
 		if(world.isRemote)
 			return stack;
-		
+
 		MovingObjectPosition pos = Library.rayTrace(player, 500, 1, false, true, false);
-		
+
 		if(pos != null) {
 
 			if(stack.stackTagCompound == null)
 				stack.stackTagCompound = new NBTTagCompound();
-			
+
 			if(!player.isSneaking()) {
 				int targetId = stack.stackTagCompound.getInteger("dim");
 
@@ -53,7 +49,7 @@ public class ItemWandD extends Item {
 					player.addChatMessage(new ChatComponentText("Teleported to: ORBIT"));
 				} else {
 					SolarSystem.Body target = SolarSystem.Body.values()[targetId];
-	
+
 					DebugTeleporter.teleport(player, target.getBody().dimensionId, player.posX, 300, player.posZ, true);
 					player.addChatMessage(new ChatComponentText("Teleported to: " + target.getBody().getUnlocalizedName()));
 				}
@@ -65,7 +61,7 @@ public class ItemWandD extends Item {
 				if(targetId >= SolarSystem.Body.values().length) {
 					targetId = 0;
 				}
-				
+
 				stack.stackTagCompound.setInteger("dim", targetId);
 
 				if(targetId == 0) {
@@ -79,7 +75,7 @@ public class ItemWandD extends Item {
 			if(!player.isSneaking()) {
 				// TESTING: View atmospheric data
 				CBT_Atmosphere atmosphere = CelestialBody.getTrait(world, CBT_Atmosphere.class);
-	
+
 				boolean isVacuum = true;
 				if(atmosphere != null) {
 					for(FluidEntry entry : atmosphere.fluids) {
@@ -89,30 +85,30 @@ public class ItemWandD extends Item {
 						// }
 					}
 				}
-	
+
 				if(isVacuum)
 					player.addChatMessage(new ChatComponentText("Atmosphere: NEAR VACUUM"));
 			} else {
-				
+
 				//something broke here....
 				//i might split the war trait and the projectiles trait and have it be its own.
 				//when all projectiles return zero and finish damaging the planet the trait deletes itself
 				//problem right now is that if both planets have war data the projectile list conflates the two
-				
-				
+
+
 				// TESTING: END OF LIFE
 				//World targetdBody = DimensionManager.getWorld(SpaceConfig.dunaDimension);
 				World targetdBody = MinecraftServer.getServer().worldServerForDimension(0);
 				CelestialBody target = CelestialBody.getBody(targetdBody);
 				System.out.println(target);
-				if(target.hasTrait(targetdBody, CBT_Destroyed.class)){
+				if(target.hasTrait(CBT_Destroyed.class)){
 					target.clearTraits();
 				}
-				if(!target.hasTrait(targetdBody, CBT_War.class)) {
+				if(!target.hasTrait(CBT_War.class)) {
 					// TESTING: END OF TIME
-					target.modifyTraits(targetdBody, new CBT_War());		
+					target.modifyTraits(new CBT_War());
 				} else {
-					CBT_War war = CelestialBody.getTrait(targetdBody, CBT_War.class);
+					CBT_War war = target.getTrait(CBT_War.class);
 					if(war != null) {
 						float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat();
 						System.out.println(rand);
@@ -124,7 +120,7 @@ public class ItemWandD extends Item {
 
 						player.addChatMessage(new ChatComponentText("projectile launched"));
 					}
-				} 
+				}
 			}
 		}
 		return stack;

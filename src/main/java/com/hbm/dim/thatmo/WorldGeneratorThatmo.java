@@ -7,7 +7,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.main.StructureManager;
-import com.hbm.world.PlanetGen;
 import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.gen.NBTStructure.JigsawPiece;
 import com.hbm.world.gen.NBTStructure.JigsawPool;
@@ -41,7 +40,7 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 			}};
 		}});
 		/*
-        NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
 			sizeLimit = 128;
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 			startPool = "default";
@@ -52,12 +51,12 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 					add(new JigsawPiece("tr3", StructureManager.tr3, -3){{ conformToTerrain = true; }}, 2);
 					add(new JigsawPiece("tr4", StructureManager.tr4, -3){{ conformToTerrain = true; }}, 2);
 				}});
-				
+
 			}};
 		}});
-        */
-		
-        NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
+		*/
+
+		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
 			sizeLimit = 128;
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 			startPool = "default";
@@ -78,9 +77,9 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 
 			}};
 		}});
-        
 
-    }
+
+	}
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {

@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class CBT_Destroyed extends CelestialBodyTrait {
-	
+
 	public float interp;
 
 	public CBT_Destroyed() {}
@@ -12,7 +12,7 @@ public class CBT_Destroyed extends CelestialBodyTrait {
 	public CBT_Destroyed(float interp) {
 		this.interp = interp;
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setFloat("interp", interp);
@@ -32,13 +32,13 @@ public class CBT_Destroyed extends CelestialBodyTrait {
 	public void readFromBytes(ByteBuf buf) {
 		//interp = buf.readFloat();
 	}
-	
+
 	public void updatefloat() {
-        interp = Math.min(201.0f,interp + 0.2f * (201.0f - interp) * 0.15f);
-        if (interp >= 200) {
-        	interp = 0;
-        }		
-        
+		interp = Math.min(201.0f,interp + 0.2f * (201.0f - interp) * 0.15f);
+		if(interp >= 200) {
+			interp = 0;
+		}
+
 	}
 
 }
