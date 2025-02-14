@@ -443,7 +443,7 @@ public class NBTStructure {
 					int ry = by + y;
 
 					Block block = transformBlock(state.definition, null, world.rand);
-					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
+					int meta = transformMeta(state.definition, null, coordBaseMode);
 
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
@@ -500,7 +500,7 @@ public class NBTStructure {
 					int ry = by + oy;
 
 					Block block = transformBlock(state.definition, piece.blockTable, world.rand);
-					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
+					int meta = transformMeta(state.definition, piece.blockTable, coordBaseMode);
 
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
@@ -556,7 +556,13 @@ public class NBTStructure {
 		return definition.block;
 	}
 
-	private int transformMeta(BlockDefinition definition, int coordBaseMode) {
+	private int transformMeta(BlockDefinition definition, Map<Block, BlockSelector> blockTable, int coordBaseMode) {
+		if(blockTable != null && blockTable.containsKey(definition.block)) {
+			return blockTable.get(definition.block).getSelectedBlockMetaData();
+		}
+
+		if(coordBaseMode == 0) return definition.meta;
+
 		// Our shit
 		if(definition.block instanceof INBTTransformable) return ((INBTTransformable) definition.block).transformMeta(definition.meta, coordBaseMode);
 
