@@ -9,7 +9,6 @@ import java.util.Map;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystemWorldSavedData;
 import com.hbm.dim.WorldProviderCelestial;
-import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_War.Projectile;
 import com.hbm.dim.trait.CelestialBodyTrait;
@@ -28,7 +27,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
-import scala.reflect.internal.Trees.This;
 
 /**
  * Utility for permanently synchronizing values every tick with a player in the given context of a world.
@@ -127,17 +125,16 @@ public class PermaSyncHandler {
 			buf.writeInt(-1);
 		}
 		/// RIDING DESYNC FIX ///
-		
-		// EFFECTS THAT I DONT KNOW HOW TO GET WORKING ELSEWHERE :P //
 
-        CBT_War war = CelestialBody.getTrait(world, CBT_War.class);
-        if (war != null) {
-            List<Projectile> projectiles = war.getProjectiles();
-            for (Projectile projectile : projectiles) {
-                buf.writeFloat(projectile.getFlashtime());
-                buf.writeFloat(projectile.getTravel());
-            }
-        }
+		// TODO: take out back and shoot
+		CBT_War war = CelestialBody.getTrait(world, CBT_War.class);
+		if (war != null) {
+			List<Projectile> projectiles = war.getProjectiles();
+			for (Projectile projectile : projectiles) {
+				buf.writeFloat(projectile.getFlashtime());
+				buf.writeFloat(projectile.getTravel());
+			}
+		}
 		// EFFECTS THAT I DONT KNOW HOW TO GET WORKING ELSEWHERE :P //
 	}
 
@@ -216,12 +213,12 @@ public class PermaSyncHandler {
 		int satSize = buf.readInt();
 		HashMap<Integer, Satellite> sats = new HashMap<Integer, Satellite>();
 		for(int i = 0; i < satSize; i++) {
-		    int satelliteID = buf.readInt();
+			int satelliteID = buf.readInt();
 
 			Satellite satellite = Satellite.create(buf.readInt());
 
 			sats.put(satelliteID, satellite);
-			
+
 			satellite.deserialize(buf);
 
 		}
@@ -243,20 +240,20 @@ public class PermaSyncHandler {
 			player.mountEntity(entity);
 		}
 		/// RIDING DESYNC FIX ///
-		//this is something i *dont* want to do at all, if theres anyway to make this CLIENTONLY while respecting each instance of a projectile please dm me im so tired of sinking hours into this
-	    CBT_War war = CelestialBody.getTrait(world, CBT_War.class);
-        if (war != null) {
-            List<Projectile> projectiles = war.getProjectiles();
-            for (Projectile projectile : projectiles){
-                    float flashtime = buf.readFloat();
-                    float traveltime = buf.readFloat();
 
-                    projectile.setFlashtime(flashtime);
-                    projectile.setTravel(traveltime);
-                }
-            }
+		// TODO: remove this or lose your leg bone privileges
+		CBT_War war = CelestialBody.getTrait(world, CBT_War.class);
+		if (war != null) {
+			List<Projectile> projectiles = war.getProjectiles();
+			for (Projectile projectile : projectiles){
+					float flashtime = buf.readFloat();
+					float traveltime = buf.readFloat();
+
+					projectile.setFlashtime(flashtime);
+					projectile.setTravel(traveltime);
+				}
+			}
 		// EFFECTS THAT I DONT KNOW HOW TO GET WORKING ELSEWHERE :P //
-    }
-	
-	
+	}
+
 }

@@ -2,11 +2,8 @@ package com.hbm.dim;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import com.hbm.config.SpaceConfig;
-import com.hbm.dim.SolarSystem.AstroMetric;
 import com.hbm.config.GeneralConfig;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
@@ -46,7 +43,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 public abstract class WorldProviderCelestial extends WorldProvider {
 	
 	private long localTime = -1;
-	
+
 	@Override
 	public abstract void registerWorldChunkManager();
 
@@ -79,11 +76,16 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	public void updateWeather() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 		World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
-		
-		
 
 
-		//todo: move ALL of this shit to a general handler because this is actually lethal.
+		for(CelestialBody body : CelestialBody.getAllBodies()) {
+			CBT_Destroyed d = CelestialBody.getBody(body.dimensionId).getTrait(CBT_Destroyed.class);
+			if(d != null) {
+				d.updatefloat();
+			}
+		}
+
+		// TODO: move ALL of this shit to a general handler because this is actually lethal.
 		//serverside? tickevent. client side? clientsided tick events.
 		//please
 
@@ -93,17 +95,17 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
 				if(entry.getValue() instanceof SatelliteWar) {
 					SatelliteWar war = (SatelliteWar) entry.getValue();
-					war.fire();	
+					war.fire();
 				}
-			
+
 			}
-        } else {
+		} else {
 			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
 				if(entry.getValue() instanceof SatelliteWar) {
 
 					SatelliteWar war = (SatelliteWar) entry.getValue();
 					if(war.getInterp() <= 1) {
-				        Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
+						Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
 					}
 				}
 			}
@@ -116,7 +118,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			return;
 		}
 
-    
+
 		this.worldObj.getWorldInfo().setRainTime(0);
 		this.worldObj.getWorldInfo().setRaining(false);
 		this.worldObj.getWorldInfo().setThunderTime(0);
@@ -140,7 +142,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	/**
 	 * Read/write for weather data and anything else you wanna store that is per planet and not for every body
 	 * the serialization function synchronizes weather data to the player
-	 * 
+	 *
 	 * also we don't need to mark the WorldSavedData as dirty because the world time is updated every tick and marks it as such
 	 */
 	public void writeToNBT(NBTTagCompound nbt) {
@@ -189,7 +191,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		colors[2] = color & 255;
 		return colors;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Vec3 getFogColor(float celestialAngle, float y) {
@@ -197,7 +199,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		// The cold hard vacuum of space
 		if(atmosphere == null) return Vec3.createVectorHelper(0, 0, 0);
-		
+
 		float sun = MathHelper.clamp_float(MathHelper.cos(celestialAngle * (float)Math.PI * 2.0F) * 2.0F + 0.5F, 0.0F, 1.0F);
 
 		float sunR = sun;
@@ -259,7 +261,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			color.zCoord *= curvature;
 			color.yCoord *= curvature;
 		}
-		
+
 		return color;
 	}
 
@@ -273,12 +275,12 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			if(entry instanceof SatelliteWar) {
 				SatelliteWar war = (SatelliteWar) entry.getValue();
 				float flame = war.getInterp();
-	            float invertedFlash = flame;
-	            float alpd = 1.0F - Math.min(1.0F, flame / 100);
+				float invertedFlash = flame;
+				float alpd = 1.0F - Math.min(1.0F, flame / 100);
 
 				color.xCoord += alpd * 1.5;
 				color.yCoord += alpd * 1.5;
-				color.zCoord += alpd * 1.5;	
+				color.zCoord += alpd * 1.5;
 			}
 
 		}
@@ -286,7 +288,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		if(atmosphere == null) {
 
 			return color;
-		} 
+		}
 
 		float sun = this.getSunBrightnessFactor(1.0F);
 		float totalPressure = (float)atmosphere.getPressure();
@@ -319,36 +321,36 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		if(CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
 			CBT_War wardat = CelestialBody.getTrait(worldObj, CBT_War.class);
-		        for (int i = 0; i < wardat.getProjectiles().size(); i++) {
-		            CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
-		            float flash = projectile.getFlashtime();
-		            if(projectile.getAnimtime() > 0) {
-			            float invertedFlash = 100 - flash;
+				for(int i = 0; i < wardat.getProjectiles().size(); i++) {
+					CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
+					float flash = projectile.getFlashtime();
+					if(projectile.getAnimtime() > 0) {
+						float invertedFlash = 100 - flash;
 
-			            int anim = projectile.getAnimtime();
-		                float alpd = 1.0F - Math.min(1.0F, flash / 100);
+						int anim = projectile.getAnimtime();
+						float alpd = 1.0F - Math.min(1.0F, flash / 100);
 						color.xCoord += invertedFlash * 0.5;
 						color.yCoord += invertedFlash * 0.5;
-						color.zCoord += invertedFlash * 0.5;	
-		            }
-		        }
-		    }
+						color.zCoord += invertedFlash * 0.5;
+					}
+				}
+			}
 
 
 		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
 			if(entry instanceof SatelliteWar) {
 				SatelliteWar war = (SatelliteWar) entry.getValue();
 				float flame = war.getInterp();
-	            float invertedFlash = flame;
-	            float alpd = 1.0F - Math.min(1.0F, flame / 100);
+				float invertedFlash = flame;
+				float alpd = 1.0F - Math.min(1.0F, flame / 100);
 
 				color.xCoord += alpd * 1.5;
 				color.yCoord += alpd * 1.5;
-				color.zCoord += alpd * 1.5;	
+				color.zCoord += alpd * 1.5;
 			}
 
-			
-		}	
+
+		}
 		// Lower pressure sky renders thinner
 		float pressureFactor = MathHelper.clamp_float(totalPressure, 0.0F, 1.0F);
 		color.xCoord *= pressureFactor;
@@ -373,7 +375,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		float[] colors = super.calcSunriseSunsetColors(celestialAngle, partialTicks);
 		if(colors == null) return null;
-		
+
 		// Mars IRL has inverted blue sunsets, which look cool as
 		// So carbon dioxide rich atmospheres will do the same
 		// for now, it's just a swizzle between red and blue
@@ -381,12 +383,12 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			float tmp = colors[0];
 			colors[0] = colors[2];
 			colors[2] = tmp;
-		} else if (atmosphere.hasFluid(Fluids.EVEAIR)) {
+		} else if(atmosphere.hasFluid(Fluids.EVEAIR)) {
 			float f2 = 0.4F;
 			float f3 = MathHelper.cos((celestialAngle) * (float)Math.PI * 2.0F) - 0.0F;
 			float f4 = -0.0F;
-	
-			if (f3 >= f4 - f2 && f3 <= f4 + f2) {
+
+			if(f3 >= f4 - f2 && f3 <= f4 + f2) {
 				float f5 = (f3 - f4) / f2 * 0.5F + 0.5F;
 				float f6 = 1.0F - (1.0F - MathHelper.sin(f5 * (float)Math.PI)) * 0.99F;
 				f6 *= f6;
@@ -457,27 +459,27 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			if(entry instanceof SatelliteWar) {
 				SatelliteWar war = (SatelliteWar) entry.getValue();
 				float flame = war.getInterp();
-	            float invertedFlash = 100 - flame;
-	            float alpd = 1.0F - Math.min(1.0F, flame / 100);
-				skyflash = alpd;	
+				float invertedFlash = 100 - flame;
+				float alpd = 1.0F - Math.min(1.0F, flame / 100);
+				skyflash = alpd;
 			}
 		}
 		if(atmosphere == null) {
-			return sunBrightness + skyflash;	
+			return sunBrightness + skyflash;
 		}
 		if(CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
 			CBT_War wardat = CelestialBody.getTrait(worldObj, CBT_War.class);
-		        for (int i = 0; i < wardat.getProjectiles().size(); i++) {
-		            CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
-		            float flash = projectile.getFlashtime();
-		            if(projectile.getAnimtime() > 0) {
-			            skyflash = 100 - flash;
+				for(int i = 0; i < wardat.getProjectiles().size(); i++) {
+					CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
+					float flash = projectile.getFlashtime();
+					if(projectile.getAnimtime() > 0) {
+						skyflash = 100 - flash;
 
-		            }
-		        }
-		    }
+					}
+				}
+			}
 
-		
+
 		return sunBrightness * MathHelper.clamp_float(1.0F - ((float)atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F) + skyflash + skyflash;
 	}
 
@@ -551,14 +553,14 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		localTime = time;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getCloudHeight() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 
 		if(atmosphere == null || atmosphere.getPressure() < 0.5F) return -99999;
-		
+
 		return super.getCloudHeight();
 	}
 
@@ -569,9 +571,9 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	public IRenderHandler getSkyRenderer() {
 		// I do not condone this because it WILL confuse your players, but if you absolutely must,
 		// you can uncomment this line below in your fork to get default skybox rendering on Earth.
-		
+
 		// if(dimensionId == 0) return super.getSkyRenderer();
-		
+
 		// Make sure you also uncomment the relevant line in getMoonPhase below too.
 
 		// This is not in a config because it is not a decision you should make lightly, as it will break:
@@ -593,7 +595,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		CelestialBody body = CelestialBody.getBody(worldObj);
 		return body.getRotationalPeriod() / (1 - (1 / body.getPlanet().getOrbitalPeriod()));
 	}
-	
+
 	@Override
 	public float calculateCelestialAngle(long worldTime, float partialTicks) {
 		worldTime = getWorldTime(); // the worldtime passed in is from the fucking overworld
