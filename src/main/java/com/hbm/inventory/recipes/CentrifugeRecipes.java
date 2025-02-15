@@ -14,6 +14,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.imc.IMCCentrifuge;
 import static com.hbm.inventory.OreDictManager.*;
+
 import com.hbm.inventory.OreDictManager.DictFrame;
 import com.hbm.inventory.OreDictManager;
 import com.hbm.inventory.RecipesCommon;
@@ -21,6 +22,7 @@ import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.inventory.material.MaterialShapes;
+import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
 import com.hbm.items.ItemEnums;
 import com.hbm.items.ItemEnums.EnumAshType;
@@ -570,8 +572,8 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(ModItems.powder_iron, 1)});
 
 		recipes.put(new ComparableStack(ModItems.ingot_magma, 1), new ItemStack[] {
-				new ItemStack(ModItems.powder_gallium_tiny, 2),
-				DictFrame.fromOne(ModItems.ore_byproduct, EnumByproduct.B_ARSENIC, 2),
+				Mats.MAT_GALLIUM.make(ModItems.bedrock_ore_fragment, 2),
+				Mats.MAT_ARSENIC.make(ModItems.bedrock_ore_fragment, 2),
 				new ItemStack(ModItems.powder_meteorite_tiny, 2),
 				new ItemStack(ModItems.dust_tiny, 3),
 		});
