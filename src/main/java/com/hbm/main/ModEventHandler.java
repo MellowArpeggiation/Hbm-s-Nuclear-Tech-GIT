@@ -1577,9 +1577,11 @@ public class ModEventHandler {
 
 		if(event.phase == Phase.START) {
 			for(CelestialBody body : CelestialBody.getAllBodies()) {
-				for(CelestialBodyTrait trait : body.getTraits().values()) {
-					trait.update(false);
-				}
+			        Iterator<CelestialBodyTrait> iterator = body.getTraits().values().iterator();
+			        while(iterator.hasNext()) {
+			            CelestialBodyTrait trait = iterator.next();
+			            trait.update(false);
+			        }
 			}
 			// do other shit I guess?
 			RTTYSystem.updateBroadcastQueue();

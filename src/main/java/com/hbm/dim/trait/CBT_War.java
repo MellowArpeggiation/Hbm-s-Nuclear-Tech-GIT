@@ -64,7 +64,7 @@ public class CBT_War extends CelestialBodyTrait {
 				projectile.getTarget());
 				projectile.GUIangle = projectile.GUIangle;
 
-    		   }
+    		   	}
             this.destroyProjectile(projectile); 
             
 		}
