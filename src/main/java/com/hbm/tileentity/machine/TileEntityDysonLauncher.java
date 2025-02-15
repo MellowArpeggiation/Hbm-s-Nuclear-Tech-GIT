@@ -27,11 +27,10 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 	public long power;
 	public static final long MAX_POWER = 20_000_000;
 
-	private static final int SPIN_UP_TIME = 132;
-	private static final int SPIN_DOWN_TIME = 68;
-	private static final long POWER_PER_TICK = MAX_POWER / SPIN_UP_TIME;
-
 	private static final int MEMBERS_PER_LAUNCH = 4;
+
+	// SHAKE IT LIKE IT'S HEAT, OVERDRIVE
+	boolean sunsetOverdrive = false;
 
 	public boolean isOperating;
 	public boolean isSpinningDown;
@@ -58,20 +57,20 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 			swarmId = ISatChip.getFreqS(slots[1]);
 			swarmCount = CBT_Dyson.count(worldObj, swarmId);
 
-			isOperating = !isSpinningDown && power >= POWER_PER_TICK && slots[0] != null && slots[0].getItem() == ModItems.swarm_member && swarmId > 0;
+			isOperating = !isSpinningDown && power >= getPowerPerTick() && slots[0] != null && slots[0].getItem() == ModItems.swarm_member && swarmId > 0;
 
 			if(isSpinningDown) {
 				operatingTime++;
 
-				if(operatingTime > SPIN_DOWN_TIME) {
+				if(operatingTime > getSpinDownTime()) {
 					isSpinningDown = false;
 					operatingTime = 0;
 				}
 			} else if(isOperating) {
 				operatingTime++;
-				power -= POWER_PER_TICK;
+				power -= getPowerPerTick();
 
-				if(operatingTime > SPIN_UP_TIME) {
+				if(operatingTime > getSpinUpTime()) {
 					int toLaunch = Math.min(slots[0].stackSize, MEMBERS_PER_LAUNCH);
 					CBT_Dyson.launch(worldObj, swarmId, toLaunch);
 
@@ -114,9 +113,6 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 
 			networkPackNT(250);
 		} else {
-			// SHAKE IT LIKE IT'S HEAT, OVERDRIVE
-			boolean sunsetOverdrive = false;
-
 			float acceleration = sunsetOverdrive ? 2.5F : 0.75F;
 			float deceleration = sunsetOverdrive ? 15.0F : 3.0F;
 			float resetSpeed = sunsetOverdrive ? 30.0F : 8.0F;
@@ -145,6 +141,10 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 		}
 	}
 
+	private int getSpinUpTime() { return sunsetOverdrive ? 38 : 132; }
+	private int getSpinDownTime() { return sunsetOverdrive ? 12 : 68; }
+	private long getPowerPerTick() { return MAX_POWER / getSpinUpTime(); }
+
 	public DirPos[] getConPos() {
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
@@ -165,6 +165,7 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 		buf.writeLong(power);
 		buf.writeBoolean(isOperating);
 		buf.writeInt(swarmCount);
+		buf.writeBoolean(sunsetOverdrive);
 	}
 
 	@Override
@@ -174,6 +175,7 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 		power = buf.readLong();
 		isOperating = buf.readBoolean();
 		swarmCount = buf.readInt();
+		sunsetOverdrive = buf.readBoolean();
 	}
 
 	@Override
@@ -182,6 +184,7 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 		nbt.setLong("power", power);
 		nbt.setBoolean("spinDown", isSpinningDown);
 		nbt.setInteger("time", operatingTime);
+		nbt.setBoolean("overdrive", sunsetOverdrive);
 	}
 
 	@Override
@@ -190,6 +193,7 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 		power = nbt.getLong("power");
 		isSpinningDown = nbt.getBoolean("spinDown");
 		operatingTime = nbt.getInteger("time");
+		sunsetOverdrive = nbt.getBoolean("overdrive");
 	}
 
 	@Override
