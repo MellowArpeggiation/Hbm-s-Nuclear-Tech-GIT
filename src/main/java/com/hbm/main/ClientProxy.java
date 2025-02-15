@@ -989,6 +989,31 @@ public class ClientProxy extends ServerProxy {
 
 		// End MK2 porting.
 
+		if("spinlaunch".equals(type)) {
+			int count = data.getInteger("count");
+
+			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
+			double mX = data.getDouble("moX");
+			double mY = data.getDouble("moY");
+			double mZ = data.getDouble("moZ");
+
+			int maxAge = data.getInteger("maxAge");
+
+			for(int i = 0; i < count; i++) {
+				double ox = world.rand.nextDouble() * 2 - 1;
+				double oy = world.rand.nextDouble() * 2 - 1;
+				double oz = world.rand.nextDouble() * 2 - 1;
+				double mult = 1.0 - world.rand.nextDouble() * 0.1;
+
+				ParticleRocketFlame fx = new ParticleRocketFlame(man, world, x + ox, y + oy, z + oz).setScale(scale);
+				fx.motionX = mX * mult + ox;
+				fx.motionY = mY * mult + oy;
+				fx.motionZ = mZ * mult + oz;
+				if(maxAge > 0) fx.setMaxAge(maxAge + world.rand.nextInt(5));
+				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+			}
+		}
+
 		if("missileContrail".equals(type)) {
 
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;

@@ -218,7 +218,8 @@ public class MachineDysonLauncher extends BlockDummyable implements ILookOverlay
 
 		if(launcher.swarmId > 0) {
 			text.add("ID: " + launcher.swarmId);
-			text.add((launcher.power < launcher.maxPower ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + "Power: " + BobMathUtil.getShortNumber(launcher.power) + "HE");
+			text.add("Swarm: " + launcher.swarmCount + " members");
+			text.add((launcher.power < TileEntityDysonLauncher.MAX_POWER ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + "Power: " + BobMathUtil.getShortNumber(launcher.power) + "HE");
 		} else {
 			text.add("No Satellite ID-Chip installed!");
 		}

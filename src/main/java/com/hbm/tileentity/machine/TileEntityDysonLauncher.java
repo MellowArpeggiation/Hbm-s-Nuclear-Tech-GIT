@@ -4,6 +4,7 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.items.ISatChip;
 import com.hbm.items.ModItems;
+import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
@@ -12,15 +13,29 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityDysonLauncher extends TileEntityMachineBase implements IEnergyReceiverMK2 {
 
 	public int swarmId;
+	public int swarmCount;
 
 	public long power;
-	public long maxPower = 1_000_000;
+	public static final long MAX_POWER = 5_000_000;
+
+	private static final int SPIN_UP_TIME = 38;
+	private static final int SPIN_DOWN_TIME = 12;
+	private static final long POWER_PER_TICK = MAX_POWER / SPIN_UP_TIME;
+
+	public boolean isOperating;
+	public boolean isSpinningDown;
+	public int operatingTime;
+
+	public float rotation;
+	public float lastRotation;
+	public float speed;
 
 	public TileEntityDysonLauncher() {
 		super(2);
@@ -37,20 +52,76 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 			for(DirPos pos : getConPos()) trySubscribe(worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 
 			swarmId = ISatChip.getFreqS(slots[1]);
+			swarmCount = CBT_Dyson.count(worldObj, swarmId);
 
-			if(power == maxPower && slots[0] != null && slots[0].getItem() == ModItems.swarm_member && swarmId > 0) {
-				CBT_Dyson.launch(worldObj, swarmId);
+			isOperating = !isSpinningDown && power >= POWER_PER_TICK && slots[0] != null && slots[0].getItem() == ModItems.swarm_member && swarmId > 0;
 
-				worldObj.playSoundEffect(xCoord, yCoord, zCoord, "hbm:misc.spinshot", 4.0F, 0.9F + worldObj.rand.nextFloat() * 0.3F);
-				worldObj.playSoundEffect(xCoord, yCoord, zCoord, "hbm:misc.spinshot", 4.0F, 1F + worldObj.rand.nextFloat() * 0.3F);
+			if(isSpinningDown) {
+				operatingTime++;
 
-				slots[0].stackSize--;
-				power = 0;
+				if(operatingTime > SPIN_DOWN_TIME) {
+					isSpinningDown = false;
+					operatingTime = 0;
+				}
+			} else if(isOperating) {
+				operatingTime++;
+				power -= POWER_PER_TICK;
 
-				if(slots[0].stackSize <= 0) slots[0] = null;
+				if(operatingTime > SPIN_UP_TIME) {
+					CBT_Dyson.launch(worldObj, swarmId);
+
+					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "hbm:misc.spinshot", 4.0F, 0.9F + worldObj.rand.nextFloat() * 0.3F);
+					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "hbm:misc.spinshot", 4.0F, 1F + worldObj.rand.nextFloat() * 0.3F);
+
+					ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+					ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
+
+					NBTTagCompound data = new NBTTagCompound();
+					data.setInteger("count", 20);
+					data.setDouble("posX", xCoord + rot.offsetX * 9);
+					data.setDouble("posY", yCoord + 12);
+					data.setDouble("posZ", zCoord + rot.offsetZ * 9);
+					data.setString("type", "spinlaunch");
+					data.setFloat("scale", 3);
+					data.setDouble("moX", dir.offsetX * 10);
+					data.setDouble("moY", 10);
+					data.setDouble("moZ", dir.offsetZ * 10);
+					data.setInteger("maxAge", 20 + worldObj.rand.nextInt(5));
+					MainRegistry.proxy.effectNT(data);
+
+					slots[0].stackSize--;
+					if(slots[0].stackSize <= 0) slots[0] = null;
+
+					operatingTime = 0;
+					isSpinningDown = true;
+				}
+			} else {
+				operatingTime = 0;
 			}
 
-			networkPackNT(15);
+			networkPackNT(250);
+		} else {
+			if(isOperating) {
+				speed += 2.5F;
+				if(speed > 90) speed = 90;
+			} else if(speed > 0.1F) {
+				speed -= 15F;
+				if(speed < 30) speed = 30;
+			}
+
+			lastRotation = rotation;
+			if(!isOperating && speed <= 30 && rotation > 310) {
+				lastRotation -= 360;
+				rotation = 0;
+				speed = 0;
+			} else {
+				rotation += speed;
+			}
+
+			if(rotation >= 360) {
+				rotation -= 360;
+				lastRotation -= 360;
+			}
 		}
 	}
 
@@ -72,6 +143,8 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 		super.serialize(buf);
 		buf.writeInt(swarmId);
 		buf.writeLong(power);
+		buf.writeBoolean(isOperating);
+		buf.writeInt(swarmCount);
 	}
 
 	@Override
@@ -79,6 +152,24 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 		super.deserialize(buf);
 		swarmId = buf.readInt();
 		power = buf.readLong();
+		isOperating = buf.readBoolean();
+		swarmCount = buf.readInt();
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+		nbt.setLong("power", power);
+		nbt.setBoolean("spinDown", isSpinningDown);
+		nbt.setInteger("time", operatingTime);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		power = nbt.getLong("power");
+		isSpinningDown = nbt.getBoolean("spinDown");
+		operatingTime = nbt.getInteger("time");
 	}
 
 	@Override
@@ -99,7 +190,7 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 
 	@Override public long getPower() { return power; }
 	@Override public void setPower(long power) { this.power = power; }
-	@Override public long getMaxPower() { return maxPower; }
+	@Override public long getMaxPower() { return MAX_POWER; }
 
 	AxisAlignedBB bb = null;
 

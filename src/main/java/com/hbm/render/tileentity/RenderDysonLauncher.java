@@ -6,6 +6,7 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
+import com.hbm.tileentity.machine.TileEntityDysonLauncher;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
@@ -18,6 +19,8 @@ public class RenderDysonLauncher extends TileEntitySpecialRenderer implements II
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
 		GL11.glPushMatrix();
 		{
+
+			TileEntityDysonLauncher launcher = (TileEntityDysonLauncher) tileEntity;
 
 			GL11.glTranslated(x + 0.5D, y, z + 0.5D);
 			GL11.glEnable(GL11.GL_LIGHTING);
@@ -32,7 +35,17 @@ public class RenderDysonLauncher extends TileEntitySpecialRenderer implements II
 
 			GL11.glShadeModel(GL11.GL_SMOOTH);
 			bindTexture(ResourceManager.dyson_spinlaunch_tex);
-			ResourceManager.dyson_spinlaunch.renderAll();
+			ResourceManager.dyson_spinlaunch.renderPart("Launch");
+
+			float t = launcher.lastRotation + (launcher.rotation - launcher.lastRotation) * f;
+
+			GL11.glTranslatef(0, 8.5F, 0);
+			GL11.glRotatef(45.0F, 1, 0, 0);
+			GL11.glRotatef(t, 0, 1, 0);
+			GL11.glRotatef(-45.0F, 1, 0, 0);
+			GL11.glTranslatef(0, -8.5F, 0);
+
+			ResourceManager.dyson_spinlaunch.renderPart("The_Thing_That_Rotates");
 
 			GL11.glShadeModel(GL11.GL_FLAT);
 
