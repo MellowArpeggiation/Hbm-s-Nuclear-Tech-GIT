@@ -1,6 +1,8 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.dim.CelestialBody;
+import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.items.ISatChip;
 import com.hbm.items.ModItems;
@@ -23,11 +25,13 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 	public int swarmCount;
 
 	public long power;
-	public static final long MAX_POWER = 5_000_000;
+	public static final long MAX_POWER = 20_000_000;
 
-	private static final int SPIN_UP_TIME = 38;
-	private static final int SPIN_DOWN_TIME = 12;
+	private static final int SPIN_UP_TIME = 132;
+	private static final int SPIN_DOWN_TIME = 68;
 	private static final long POWER_PER_TICK = MAX_POWER / SPIN_UP_TIME;
+
+	private static final int MEMBERS_PER_LAUNCH = 4;
 
 	public boolean isOperating;
 	public boolean isSpinningDown;
@@ -68,16 +72,25 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 				power -= POWER_PER_TICK;
 
 				if(operatingTime > SPIN_UP_TIME) {
-					CBT_Dyson.launch(worldObj, swarmId);
+					int toLaunch = Math.min(slots[0].stackSize, MEMBERS_PER_LAUNCH);
+					CBT_Dyson.launch(worldObj, swarmId, toLaunch);
 
-					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "hbm:misc.spinshot", 4.0F, 0.9F + worldObj.rand.nextFloat() * 0.3F);
-					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "hbm:misc.spinshot", 4.0F, 1F + worldObj.rand.nextFloat() * 0.3F);
+					CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
+					double pressure = atmosphere != null ? atmosphere.getPressure() : 0;
+					double scaledPressure = 1.0 - Math.pow(1.0 - pressure, 3);
+
+					float volume = Math.min((float)scaledPressure * 16.0F, 4.0F);
 
 					ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 					ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
+					worldObj.playSoundEffect(xCoord + rot.offsetX * 6, yCoord + 8, zCoord + rot.offsetZ * 6, "hbm:misc.spinshot", volume, 0.9F + worldObj.rand.nextFloat() * 0.3F);
+					worldObj.playSoundEffect(xCoord + rot.offsetX * 6, yCoord + 8, zCoord + rot.offsetZ * 6, "hbm:misc.spinshot", volume, 1F + worldObj.rand.nextFloat() * 0.3F);
+
+					int count = Math.min(20, (int)(pressure * 80));
+
 					NBTTagCompound data = new NBTTagCompound();
-					data.setInteger("count", 20);
+					data.setInteger("count", count);
 					data.setDouble("posX", xCoord + rot.offsetX * 9);
 					data.setDouble("posY", yCoord + 12);
 					data.setDouble("posZ", zCoord + rot.offsetZ * 9);
@@ -86,10 +99,10 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 					data.setDouble("moX", dir.offsetX * 10);
 					data.setDouble("moY", 10);
 					data.setDouble("moZ", dir.offsetZ * 10);
-					data.setInteger("maxAge", 20 + worldObj.rand.nextInt(5));
+					data.setInteger("maxAge", 10 + count / 2 + worldObj.rand.nextInt(5));
 					MainRegistry.proxy.effectNT(data);
 
-					slots[0].stackSize--;
+					slots[0].stackSize -= toLaunch;
 					if(slots[0].stackSize <= 0) slots[0] = null;
 
 					operatingTime = 0;
@@ -101,16 +114,23 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 
 			networkPackNT(250);
 		} else {
+			// SHAKE IT LIKE IT'S HEAT, OVERDRIVE
+			boolean sunsetOverdrive = false;
+
+			float acceleration = sunsetOverdrive ? 2.5F : 0.75F;
+			float deceleration = sunsetOverdrive ? 15.0F : 3.0F;
+			float resetSpeed = sunsetOverdrive ? 30.0F : 8.0F;
+
 			if(isOperating) {
-				speed += 2.5F;
+				speed += acceleration;
 				if(speed > 90) speed = 90;
 			} else if(speed > 0.1F) {
-				speed -= 15F;
-				if(speed < 30) speed = 30;
+				speed -= deceleration;
+				if(speed < resetSpeed) speed = resetSpeed;
 			}
 
 			lastRotation = rotation;
-			if(!isOperating && speed <= 30 && rotation > 310) {
+			if(!isOperating && speed <= resetSpeed && rotation > 360 - resetSpeed * 1.5) {
 				lastRotation -= 360;
 				rotation = 0;
 				speed = 0;
@@ -174,7 +194,7 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 
 	@Override
 	public int getInventoryStackLimit() {
-		return 1;
+		return 4;
 	}
 
 	@Override

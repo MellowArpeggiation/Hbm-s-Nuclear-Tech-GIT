@@ -30,6 +30,10 @@ public class CBT_Dyson extends CelestialBodyTrait {
 	}
 
 	public static void launch(World world, int id) {
+		launch(world, id, 1);
+	}
+
+	public static void launch(World world, int id, int amount) {
 		CelestialBody star = CelestialBody.getStar(world);
 		CBT_Dyson dyson = star.getTrait(CBT_Dyson.class);
 		if(dyson == null) dyson = new CBT_Dyson();
@@ -40,7 +44,7 @@ public class CBT_Dyson extends CelestialBodyTrait {
 			dyson.swarms.put(id, swarm);
 		}
 
-		swarm.members++;
+		swarm.members += amount;
 
 		star.modifyTraits(dyson);
 	}
