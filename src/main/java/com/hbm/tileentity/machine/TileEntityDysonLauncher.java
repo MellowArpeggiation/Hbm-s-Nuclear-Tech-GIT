@@ -1,13 +1,18 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.items.ISatChip;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.energymk2.IEnergyReceiverMK2;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityDysonLauncher extends TileEntityMachineBase implements IEnergyReceiverMK2 {
@@ -29,7 +34,7 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 	@Override
 	public void updateEntity() {
 		if(!worldObj.isRemote) {
-			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) trySubscribe(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, dir);
+			for(DirPos pos : getConPos()) trySubscribe(worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 
 			swarmId = ISatChip.getFreqS(slots[1]);
 
@@ -41,12 +46,25 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 
 				slots[0].stackSize--;
 				power = 0;
-			
+
 				if(slots[0].stackSize <= 0) slots[0] = null;
 			}
 
 			networkPackNT(15);
 		}
+	}
+
+	public DirPos[] getConPos() {
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
+
+		return new DirPos[] {
+			new DirPos(xCoord - dir.offsetX * 0 - rot.offsetX * 3, yCoord, zCoord - dir.offsetZ * 0 - rot.offsetZ * 3, rot.getOpposite()),
+			new DirPos(xCoord - dir.offsetX * 1 - rot.offsetX * 3, yCoord, zCoord - dir.offsetZ * 1 - rot.offsetZ * 3, rot.getOpposite()),
+			new DirPos(xCoord - dir.offsetX * 2 - rot.offsetX * 3, yCoord, zCoord - dir.offsetZ * 2 - rot.offsetZ * 3, rot.getOpposite()),
+			new DirPos(xCoord - dir.offsetX * 3 - rot.offsetX * 3, yCoord, zCoord - dir.offsetZ * 3 - rot.offsetZ * 3, rot.getOpposite()),
+			new DirPos(xCoord - dir.offsetX * 4 - rot.offsetX * 3, yCoord, zCoord - dir.offsetZ * 4 - rot.offsetZ * 3, rot.getOpposite()),
+		};
 	}
 
 	@Override
@@ -64,6 +82,11 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 	}
 
 	@Override
+	public int getInventoryStackLimit() {
+		return 1;
+	}
+
+	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
 		if(slot == 0) return itemStack.getItem() == ModItems.swarm_member;
 		return false;
@@ -77,5 +100,30 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 	@Override public long getPower() { return power; }
 	@Override public void setPower(long power) { this.power = power; }
 	@Override public long getMaxPower() { return maxPower; }
-	
+
+	AxisAlignedBB bb = null;
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+
+		if(bb == null) {
+			bb = AxisAlignedBB.getBoundingBox(
+				xCoord - 11,
+				yCoord,
+				zCoord - 11,
+				xCoord + 12,
+				yCoord + 18,
+				zCoord + 12
+			);
+		}
+
+		return bb;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared() {
+		return 65536.0D;
+	}
+
 }

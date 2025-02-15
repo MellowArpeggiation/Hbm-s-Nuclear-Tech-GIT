@@ -454,6 +454,7 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonConverterAnatmogenesis.class, new RenderDysonConverterAnatmogenesis());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonConverterHE.class, new RenderDysonConverterHE());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonConverterTU.class, new RenderDysonConverterTU());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonLauncher.class, new RenderDysonLauncher());
 	}
 
 	@Override

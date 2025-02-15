@@ -290,6 +290,7 @@ public class ResourceManager {
 	public static final IModelCustom dyson_anatmogenesis = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/dyson_anatmogenesis.obj")).asVBO();
 	public static final IModelCustom dyson_he_converter = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/dyson_he_converter.obj")).asVBO();
 	public static final IModelCustom dyson_tu_converter = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/dyson_tu_converter.obj")).asVBO();
+	public static final IModelCustom dyson_spinlaunch = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/dyson_spinlaunch.obj")).asVBO();
 	public static final IModelCustom dyson_swarm_member = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/dyson_swarm_satellite.obj"));
 
 	//Bombs
@@ -758,6 +759,7 @@ public class ResourceManager {
 	public static final ResourceLocation dyson_anatmogenesis_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/dyson_anatmogenesis.png");
 	public static final ResourceLocation dyson_he_converter_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/dyson_he_converter.png");
 	public static final ResourceLocation dyson_tu_converter_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/dyson_tu_converter.png");
+	public static final ResourceLocation dyson_spinlaunch_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/dyson_spinlaunch.png");
 	public static final ResourceLocation dyson_swarm_member_tex = new ResourceLocation(RefStrings.MODID, "textures/models/dyson_swarm_satellite.png");
 
 	//Bombs
