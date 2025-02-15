@@ -18,7 +18,7 @@ public class CBT_Dyson extends CelestialBodyTrait {
 
 		int members;
 		int consumers;
-		
+
 		// Incremented whenever another consumer is added
 		// is copied to consumers at the start of a tick
 		private int addedConsumers;
@@ -49,7 +49,7 @@ public class CBT_Dyson extends CelestialBodyTrait {
 		CelestialBody star = CelestialBody.getStar(world);
 		CBT_Dyson dyson = star.getTrait(CBT_Dyson.class);
 		if(dyson == null) return 0;
-		
+
 		Swarm swarm = dyson.swarms.get(id);
 		if(swarm == null) return 0;
 
@@ -62,7 +62,7 @@ public class CBT_Dyson extends CelestialBodyTrait {
 		CelestialBody star = CelestialBody.getStar(world);
 		CBT_Dyson dyson = star.getTrait(CBT_Dyson.class);
 		if(dyson == null) return 0;
-		
+
 		Swarm swarm = dyson.swarms.get(id);
 		if(swarm == null) return 0;
 
@@ -77,14 +77,14 @@ public class CBT_Dyson extends CelestialBodyTrait {
 		return size;
 	}
 
-	// Called once per tick to lower swarm counts from satellite failures,
-	// encouraging continuous automation
+	// Called once per tick to lower swarm counts from satellite failures, encouraging continuous automation
+	// based on total across all swarms, meaning players on servers are encouraged to either annihilate other launchers or work together
 	public void attenuate() {
 		for(Swarm swarm : swarms.values()) {
 			swarm.consumers = swarm.addedConsumers;
 			swarm.addedConsumers = 0;
 
-			double decayChance = (double)swarm.members / (1024 * 5 * 20);
+			double decayChance = (double)size() / (1024 * 5 * 20);
 			if(Math.random() < decayChance) swarm.members--;
 		}
 	}
@@ -130,5 +130,5 @@ public class CBT_Dyson extends CelestialBodyTrait {
 			swarms.put(id, new Swarm(members));
 		}
 	}
-	
+
 }
