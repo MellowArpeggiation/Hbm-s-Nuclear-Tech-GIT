@@ -1082,7 +1082,7 @@ public class ModEventHandlerClient {
 			}
 		}
 		
-		if (event.phase == Phase.START) {
+		if (!mc.isGamePaused() && event.phase == Phase.END) {
 			for(CelestialBody body : CelestialBody.getAllBodies()) {
 				if(SolarSystemWorldSavedData.getClientTraits(body.name) != null) {
 				for(CelestialBodyTrait trait : SolarSystemWorldSavedData.getClientTraits(body.name).values()) {

@@ -259,6 +259,25 @@ public class ItemBedrockOreNew extends Item {
 				T("nonmetal",	o(MAT_CHLOROCALCITE, 24),o(MAT_COAL, 12),				o(MAT_FLUORITE, 6),		o(MAT_SILICON, 3)),
 				T("crystal",		o(MAT_ASBESTOS, 24),		o(MAT_SODALITE, 12),			o(MAT_DIAMOND, 6),		o(MAT_SODALITE, 3))
 			);
+			//TEMP!!!!! THIS IS TEMP!!! THIS IS JUST SO SHIT ISNT BROKEN ANYMORE
+			register(
+				SolarSystem.Body.TEKTO,
+				T("light",		o(MAT_CRYOLITE, 24),		o(MAT_TITANIUM, 12),			o(MAT_GALLIUM, 6),		o(MAT_HAFNIUM, 3)),
+				T("heavy",		o(MAT_BERYLLIUM, 24),	o(MAT_TUNGSTEN, 12),			o(MAT_LEAD, 6),			o(MAT_ARSENIC, 3)),
+				T("rare",		o(MAT_RAREEARTH, 24),	o(MAT_NEODYMIUM, 12),		o(MAT_STRONTIUM, 6),		o(MAT_NIOBIUM, 3)),
+				T("actinide",	o(MAT_URANIUM, 24),		o(MAT_THORIUM, 12),			o(MAT_POLONIUM, 6),		o(MAT_U235, 3)),
+				T("nonmetal",	o(MAT_CHLOROCALCITE, 24),o(MAT_COAL, 12),				o(MAT_FLUORITE, 6),		o(MAT_SILICON, 3)),
+				T("crystal",		o(MAT_ASBESTOS, 24),		o(MAT_SODALITE, 12),			o(MAT_DIAMOND, 6),		o(MAT_SODALITE, 3))
+				);
+			register(
+				SolarSystem.Body.THATMO,
+				T("light",		o(MAT_CRYOLITE, 24),		o(MAT_TITANIUM, 12),			o(MAT_GALLIUM, 6),		o(MAT_HAFNIUM, 3)),
+				T("heavy",		o(MAT_BERYLLIUM, 24),	o(MAT_TUNGSTEN, 12),			o(MAT_LEAD, 6),			o(MAT_ARSENIC, 3)),
+				T("rare",		o(MAT_RAREEARTH, 24),	o(MAT_NEODYMIUM, 12),		o(MAT_STRONTIUM, 6),		o(MAT_NIOBIUM, 3)),
+				T("actinide",	o(MAT_URANIUM, 24),		o(MAT_THORIUM, 12),			o(MAT_POLONIUM, 6),		o(MAT_U235, 3)),
+				T("nonmetal",	o(MAT_CHLOROCALCITE, 24),o(MAT_COAL, 12),				o(MAT_FLUORITE, 6),		o(MAT_SILICON, 3)),
+				T("crystal",		o(MAT_ASBESTOS, 24),		o(MAT_SODALITE, 12),			o(MAT_DIAMOND, 6),		o(MAT_SODALITE, 3))
+				);
 		}
 
 		public CelestialBedrockOreType[] types;
