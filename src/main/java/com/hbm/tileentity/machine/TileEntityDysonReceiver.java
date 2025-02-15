@@ -112,7 +112,7 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 					Block block = worldObj.getBlock(x, y, z);
 
 					// two block gap minimum
-					boolean detonate = false;
+					boolean detonate = true;
 					TileEntity te = null;
 					if(i > 10) {
 						if(block instanceof BlockDummyable) {
@@ -126,8 +126,6 @@ public class TileEntityDysonReceiver extends TileEntityMachineBase {
 
 						if(te instanceof IDysonConverter) {
 							detonate = !((IDysonConverter) te).provideEnergy(x, y, z, energyOutput);
-						} else if(te != null || block.isOpaqueCube()) {
-							detonate = true;
 						}
 					}
 
