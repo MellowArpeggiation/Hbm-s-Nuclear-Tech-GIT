@@ -8,6 +8,7 @@ import com.hbm.dim.CelestialBody;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 public class CBT_War extends CelestialBodyTrait {
@@ -45,8 +46,7 @@ public class CBT_War extends CelestialBodyTrait {
 		projectiles.add(projectile);
 	}
 
-	public void split(World world, int amount, Projectile projectile, ProjectileType type) {
-		CBT_War war = CelestialBody.getTrait(world, CBT_War.class);
+	public void split( int amount, Projectile projectile, ProjectileType type) {
 
 		//currently kind of temp, there might be a better way to generalize this
 		if(projectile.getTravel() <= 0) {
@@ -54,7 +54,7 @@ public class CBT_War extends CelestialBodyTrait {
 				float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat() * 160 - 80;
 				float randy = Minecraft.getMinecraft().theWorld.rand.nextFloat() * 90 - 80;
 
-				war.launchProjectile(Math.abs(20 + j * 10),
+				this.launchProjectile(Math.abs(20 + j * 10),
 				projectile.getSize(),
 				projectile.getDamage(),
 				(float) (projectile.getTranslateX()),
@@ -67,7 +67,7 @@ public class CBT_War extends CelestialBodyTrait {
     		   }
             this.destroyProjectile(projectile); 
             
-        }
+		}
 	}
 	
 	@Override

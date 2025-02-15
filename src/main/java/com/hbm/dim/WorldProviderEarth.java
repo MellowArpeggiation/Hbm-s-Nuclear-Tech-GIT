@@ -46,17 +46,7 @@ public class WorldProviderEarth extends WorldProviderCelestial {
 		World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
 	    SatelliteSavedData data = (SatelliteSavedData)world.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
 
-		for(CelestialBody body : CelestialBody.getAllBodies()) {
-			for(CelestialBodyTrait trait : body.getTraits().values()) {
-				//trait.update(false);
-			}
-		}
-		for(CelestialBody body : CelestialBody.getAllBodies()) {
-		    CBT_Destroyed d = CelestialBody.getBody(body.dimensionId).getTrait(CBT_Destroyed.class);
-		    if(d != null) {
-		    	//d.updatefloat();
-		    }
-		}
+
 		if(!worldObj.isRemote) {
 
 		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world).sats;

@@ -78,12 +78,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
 
 
-		for(CelestialBody body : CelestialBody.getAllBodies()) {
-			CBT_Destroyed d = CelestialBody.getBody(body.dimensionId).getTrait(CBT_Destroyed.class);
-			if(d != null) {
-				d.updatefloat();
-			}
-		}
+
 
 		// TODO: move ALL of this shit to a general handler because this is actually lethal.
 		//serverside? tickevent. client side? clientsided tick events.

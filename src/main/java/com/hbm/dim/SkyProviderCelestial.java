@@ -755,7 +755,6 @@ public class SkyProviderCelestial extends IRenderHandler {
 						Random random = new Random(12);
 
 						int numQuads = 30;
-
 						for (int i = 0; i < numQuads; i++) {
 							double radius = (random.nextDouble() * size) * d.interp;
 
@@ -824,13 +823,12 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, alpd);
 						mc.renderEngine.bindTexture(texture);
-						interpr = interpr * 0.3;
-
+						double interpe = (d.interp * 0.5) * size * 0.1;
 						tessellator.startDrawingQuads();
-						tessellator.addVertexWithUV(-interpr, 100.0D, -interpr, 0.0D + uvOffset, 0.0D);
-						tessellator.addVertexWithUV(interpr, 100.0D, -interpr, 1.0D + uvOffset, 0.0D);
-						tessellator.addVertexWithUV(interpr, 100.0D, interpr, 1.0D + uvOffset, 1.0D);
-						tessellator.addVertexWithUV(-interpr, 100.0D, interpr, 0.0D + uvOffset, 1.0D);
+						tessellator.addVertexWithUV(-interpe, 100.0D, -interpe, 0.0D + uvOffset, 0.0D);
+						tessellator.addVertexWithUV(interpe, 100.0D, -interpe, 1.0D + uvOffset, 0.0D);
+						tessellator.addVertexWithUV(interpe, 100.0D, interpe, 1.0D + uvOffset, 1.0D);
+						tessellator.addVertexWithUV(-interpe, 100.0D, interpe, 0.0D + uvOffset, 1.0D);
 						tessellator.draw();
 
 
