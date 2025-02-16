@@ -57,7 +57,7 @@ public class RenderDysonLauncher extends TileEntitySpecialRenderer implements II
 	public IItemRenderer getRenderer() {
 		return new ItemRenderBase() {
 			public void renderInventory() {
-				GL11.glTranslated(3, 1, 0);
+				GL11.glTranslated(0, -2, 0);
 				GL11.glScaled(3.0D, 3.0D, 3.0D);
 			}
 			public void renderCommon() {
