@@ -1542,9 +1542,9 @@ public class AssemblerRecipes extends SerializableRecipe {
 				new ComparableStack(ModItems.beryllium_mirror, 1),
 				new OreDictStack(GOLD.wireDense(), 2),
 				new OreDictStack(ALLOY.wireFine(), 32),
-				new OreDictStack(STEEL.shell(), 2),
+				new OreDictStack(STAINLESS.plate(), 4),
 				new ComparableStack(ModItems.circuit, 2, EnumCircuitType.CAPACITOR_BOARD),
-				new ComparableStack(ModItems.circuit, 1, EnumCircuitType.GASCHIP),
+				new ComparableStack(ModItems.circuit, 1, EnumCircuitType.HFCHIP),
 		}, 100);
 		//DYSON//
 
