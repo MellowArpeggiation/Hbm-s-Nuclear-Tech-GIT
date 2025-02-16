@@ -67,6 +67,11 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 					operatingTime = 0;
 				}
 			} else if(isOperating) {
+				if(operatingTime == 0) {
+					float pitch = sunsetOverdrive ? 1.0F : 0.25F;
+					worldObj.playSoundEffect(xCoord, yCoord + 8, zCoord, "hbm:misc.spincharge", 1.5F, pitch);
+				}
+
 				operatingTime++;
 				power -= getPowerPerTick();
 
