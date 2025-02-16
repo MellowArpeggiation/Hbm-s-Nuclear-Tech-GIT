@@ -57,8 +57,6 @@ public class CBT_Dyson extends CelestialBodyTrait {
 		Swarm swarm = dyson.swarms.get(id);
 		if(swarm == null) return 0;
 
-		swarm.addedConsumers++;
-
 		return swarm.members;
 	}
 
@@ -69,6 +67,8 @@ public class CBT_Dyson extends CelestialBodyTrait {
 
 		Swarm swarm = dyson.swarms.get(id);
 		if(swarm == null) return 0;
+
+		swarm.addedConsumers++;
 
 		return swarm.consumers;
 	}
