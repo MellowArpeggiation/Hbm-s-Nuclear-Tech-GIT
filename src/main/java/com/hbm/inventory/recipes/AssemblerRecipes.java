@@ -1480,6 +1480,16 @@ public class AssemblerRecipes extends SerializableRecipe {
 		makeRecipe(new ComparableStack(ModBlocks.silo_hatch, 1), new AStack[]{new OreDictStack(STEEL.plateWelded(), 4), new ComparableStack(ModItems.plate_polymer, 4), new ComparableStack(ModItems.motor, 2), new OreDictStack(STEEL.bolt(), 16), new OreDictStack(KEY_GREEN, 4)}, 200);
 		makeRecipe(new ComparableStack(ModBlocks.silo_hatch_large, 1), new AStack[]{new OreDictStack(STEEL.plateWelded(), 6), new ComparableStack(ModItems.plate_polymer, 8), new ComparableStack(ModItems.motor, 2), new OreDictStack(STEEL.bolt(), 16), new OreDictStack(KEY_GREEN, 8)}, 200);
 
+		makeRecipe(new ComparableStack(ModBlocks.machine_magma, 1), new AStack[] {
+				new ComparableStack(ModBlocks.steel_scaffold, 8),
+				new OreDictStack(W.plateWelded(), 2),
+				new ComparableStack(ModItems.pipes_steel, 2),
+				new ComparableStack(ModItems.tank_steel, 4),
+				new OreDictStack(STEEL.plate(), 32),
+				new ComparableStack(ModItems.drill_titanium, 1),
+				new ComparableStack(ModItems.motor_desh)
+		}, 400);
+
 		//DYSON//
 		makeRecipe(new ComparableStack(ModBlocks.dyson_launcher, 1), new AStack[] {
 				new OreDictStack(OSMIRIDIUM.plateWelded(), 4),
