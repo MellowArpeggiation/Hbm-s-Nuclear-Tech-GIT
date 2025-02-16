@@ -14,8 +14,11 @@ import api.hbm.energymk2.IEnergyReceiverMK2;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -53,6 +56,7 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 	public void updateEntity() {
 		if(!worldObj.isRemote) {
 			for(DirPos pos : getConPos()) trySubscribe(worldObj, pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
+			for(DirPos pos : getInvPos()) tryLoad(pos.getX(), pos.getY(), pos.getZ(), pos.getDir());
 
 			swarmId = ISatChip.getFreqS(slots[1]);
 			swarmCount = CBT_Dyson.count(worldObj, swarmId);
@@ -161,6 +165,39 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 			new DirPos(xCoord - dir.offsetX * 3 - rot.offsetX * 3, yCoord, zCoord - dir.offsetZ * 3 - rot.offsetZ * 3, rot.getOpposite()),
 			new DirPos(xCoord - dir.offsetX * 4 - rot.offsetX * 3, yCoord, zCoord - dir.offsetZ * 4 - rot.offsetZ * 3, rot.getOpposite()),
 		};
+	}
+
+	public DirPos[] getInvPos() {
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+
+		return new DirPos[] {
+			new DirPos(xCoord - dir.offsetX * 9, yCoord, zCoord - dir.offsetZ * 9, dir.getOpposite()),
+		};
+	}
+
+	private void tryLoad(int x, int y, int z, ForgeDirection dir) {
+		if(slots[0] != null && slots[0].stackSize >= MEMBERS_PER_LAUNCH) return;
+
+		TileEntity te = worldObj.getTileEntity(x, y, z);
+		if(!(te instanceof IInventory)) return;
+
+		IInventory inv = (IInventory) te;
+		ISidedInventory sided = inv instanceof ISidedInventory ? (ISidedInventory) inv : null;
+		int[] access = sided != null ? sided.getAccessibleSlotsFromSide(dir.ordinal()) : null;
+
+		for(int i = 0; i < (access != null ? access.length : inv.getSizeInventory()); i++) {
+			int slot = access != null ? access[i] : i;
+			ItemStack stack = inv.getStackInSlot(slot);
+			if(stack != null && stack.getItem() == ModItems.swarm_member && (sided == null || sided.canExtractItem(slot, stack, dir.ordinal()))) {
+				ItemStack removed = inv.decrStackSize(slot, 1);
+				if(slots[0] == null) {
+					slots[0] = removed;
+				} else {
+					slots[0].stackSize++;
+				}
+				break;
+			}
+		}
 	}
 
 	@Override
