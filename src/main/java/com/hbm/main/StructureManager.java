@@ -52,6 +52,20 @@ public class StructureManager {
 	public static final NBTStructure meteor_dragon_fallback = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/meteor/room10/headloot/loot-fallback.nbt"));
 
 
+	//MUN//
+	public static final NBTStructure mun_base = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/base.nbt"));
+	public static final NBTStructure mun_flag = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/flag.nbt"));
+	public static final NBTStructure mun_flag_uk = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/flag-uk.nbt"));
+	public static final NBTStructure mun_panels = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/panels.nbt"));
+	public static final NBTStructure mun_stardar = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/stardar.nbt"));
+	public static final NBTStructure mun_tanks = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/tanks.nbt"));
+
+	public static final NBTStructure mun_connector_1 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/connector-1.nbt"));
+	public static final NBTStructure mun_connector_2 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/connector-2.nbt"));
+	public static final NBTStructure mun_connector_3 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/connector-3.nbt"));
+	public static final NBTStructure mun_connector_s = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/connector-s.nbt"));
+	public static final NBTStructure mun_connector_l = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/connector-l.nbt"));
+	public static final NBTStructure mun_connector_t = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/connector-t.nbt"));
 
 
 	public static final NBTStructure martian = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/martian-base.nbt"));

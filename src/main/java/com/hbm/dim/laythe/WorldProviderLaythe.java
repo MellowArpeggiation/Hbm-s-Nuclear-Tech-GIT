@@ -33,7 +33,7 @@ public class WorldProviderLaythe extends WorldProviderCelestial {
 	public String getDimensionName() {
 		return "Laythe";
 	}
-	
+
 	@Override
 	public IChunkProvider createChunkGenerator() {
 		return new ChunkProviderLaythe(this.worldObj, this.getSeed(), false);
@@ -66,8 +66,8 @@ public class WorldProviderLaythe extends WorldProviderCelestial {
 
 	@Override
 	public boolean updateLightmap(int[] lightmap) {
+		float sun = getSunBrightness(1.0F);
 		for(int i = 0; i < 256; i++) {
-			float sun = getSunBrightness(1.0F);
 			float sky = lightBrightnessTable[i / 16];
 			float jool = Math.max(sky - sun, 0);
 
@@ -84,15 +84,15 @@ public class WorldProviderLaythe extends WorldProviderCelestial {
 	private static BiomeGenLayers createBiomeGenerators(long seed) {
 		GenLayer biomes = new GenLayerLaytheBiomes(seed);
 		biomes = new GenLayerLaythePolar(1000L, biomes);
-		
+
 		biomes = new GenLayerZoom(1040L, biomes);
 		biomes = GenLayerZoom.magnify(1000L, biomes, 1);
 		biomes = new GenLayerLaythePolar(1300L, biomes);
-		
+
 		biomes = new GenLayerDiversifyLaythe(1000L, biomes);
 		biomes = new GenLayerLaytheOceans(56000L, biomes);
 		biomes = new GenLayerLaytheIslands(200L, biomes);
-		
+
 		biomes = new GenLayerZoom(1200L, biomes);
 		biomes = new GenLayerZoom(1001L, biomes);
 
@@ -104,7 +104,7 @@ public class WorldProviderLaythe extends WorldProviderCelestial {
 		biomes = new GenLayerSmooth(700L, biomes);
 
 		biomes = new GenLayerZoom(1006L, biomes);
-			
+
 		GenLayer genLayerVoronoiZoom = new GenLayerVoronoiZoom(10L, biomes);
 
 		return new BiomeGenLayers(biomes, genLayerVoronoiZoom, seed);
