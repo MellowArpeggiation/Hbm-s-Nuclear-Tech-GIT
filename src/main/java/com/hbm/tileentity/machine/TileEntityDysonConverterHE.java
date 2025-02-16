@@ -21,6 +21,7 @@ public class TileEntityDysonConverterHE extends TileEntityMachineBase implements
 	public long power;
 
 	public boolean isConverting;
+	private int cooldown;
 
 	public TileEntityDysonConverterHE() {
 		super(0);
@@ -50,11 +51,15 @@ public class TileEntityDysonConverterHE extends TileEntityMachineBase implements
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(dPart, xCoord + 0.5 + dir.offsetX * 4 - rot.offsetX, yCoord + 2.25, zCoord + 0.5 + dir.offsetZ * 4 - rot.offsetZ), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 25));
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(dPart, xCoord + 0.5 + dir.offsetX * 3 + rot.offsetX, yCoord + 2.75, zCoord + 0.5 + dir.offsetZ * 3 + rot.offsetZ), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 25));
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(dPart, xCoord + 0.5 + dir.offsetX * 3 - rot.offsetX, yCoord + 2.75, zCoord + 0.5 + dir.offsetZ * 3 - rot.offsetZ), new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 25));
-			}
 
-			// To prevent this machine acting like an endgame battery, but still be able to transmit every drop of power
-			// this machine will clear its buffers immediately after transmitting power
-			power = 0;
+				cooldown++;
+				if(cooldown > 10) {
+					// To prevent this machine acting like an endgame battery, but still be able to transmit every drop of power
+					// this machine will clear its buffers (almost) immediately after transmitting power
+					power = 0;
+					cooldown = 0;
+				}
+			}
 
 			networkPackNT(250);
 		}
@@ -69,8 +74,8 @@ public class TileEntityDysonConverterHE extends TileEntityMachineBase implements
 
 		if(x != rx || y != ry || z != rz) return false;
 
-		power += energy;
-		if(power < 0) power = Long.MAX_VALUE; // prevent overflow
+		power = energy;
+		cooldown = 0;
 
 		return true;
 	}
@@ -114,7 +119,7 @@ public class TileEntityDysonConverterHE extends TileEntityMachineBase implements
 
 	@Override
 	public long getMaxPower() {
-		return Long.MAX_VALUE;
+		return power;
 	}
 
 	AxisAlignedBB bb = null;
