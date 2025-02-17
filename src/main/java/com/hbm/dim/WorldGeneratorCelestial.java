@@ -20,6 +20,10 @@ import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.gen.NBTStructure.JigsawPiece;
 import com.hbm.world.gen.NBTStructure.JigsawPool;
 import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.component.Component.CrabSpawners;
+import com.hbm.world.gen.component.Component.GreenOoze;
+import com.hbm.world.gen.component.Component.MeteorBricks;
+import com.hbm.world.gen.component.Component.SupplyCrates;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -256,72 +260,6 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
             int genZ = z + rand.nextInt(16);
             worldGenMinable.generate(world, rand, genX, genY, genZ);
         }
-    }
-
-    private static class MeteorBricks extends BlockSelector {
-
-		@Override
-		public void selectBlocks(Random rand, int posX, int posY, int posZ, boolean notInterior) {
-			float chance = rand.nextFloat();
-
-            if(chance < 0.4F) {
-				this.field_151562_a = ModBlocks.meteor_brick;
-			} else if (chance < 0.7F) {
-				this.field_151562_a = ModBlocks.meteor_brick_mossy;
-			} else {
-				this.field_151562_a = ModBlocks.meteor_brick_cracked;
-			}
-        }
-
-    }
-
-    private static class SupplyCrates extends BlockSelector {
-
-		@Override
-		public void selectBlocks(Random rand, int posX, int posY, int posZ, boolean notInterior) {
-			float chance = rand.nextFloat();
-
-            if(chance < 0.6F) {
-                this.field_151562_a = Blocks.air;
-            } else if(chance < 0.8F) {
-                this.field_151562_a = ModBlocks.crate_ammo;
-            } else if(chance < 0.9F) {
-                this.field_151562_a = ModBlocks.crate_can;
-            } else {
-                this.field_151562_a = ModBlocks.crate;
-            }
-        }
-
-    }
-
-    private static class CrabSpawners extends BlockSelector {
-
-        @Override
-		public void selectBlocks(Random rand, int posX, int posY, int posZ, boolean notInterior) {
-			float chance = rand.nextFloat();
-
-            if(chance < 0.8F) {
-                this.field_151562_a = ModBlocks.meteor_brick;
-            } else {
-                this.field_151562_a = ModBlocks.meteor_spawner;
-            }
-        }
-
-    }
-
-    private static class GreenOoze extends BlockSelector {
-
-        @Override
-		public void selectBlocks(Random rand, int posX, int posY, int posZ, boolean notInterior) {
-			float chance = rand.nextFloat();
-
-            if(chance < 0.8F) {
-                this.field_151562_a = ModBlocks.toxic_block;
-            } else {
-                this.field_151562_a = ModBlocks.meteor_polished;
-            }
-        }
-
     }
 
 }

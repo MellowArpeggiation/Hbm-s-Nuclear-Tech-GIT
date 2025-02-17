@@ -25,7 +25,7 @@ public class BlockPipe extends Block implements ITooltipProvider, INBTTransforma
 	public IIcon frameIcon;
 	@SideOnly(Side.CLIENT)
 	public IIcon meshIcon;
-	
+
 	private String sideString;
 	public int rType = 0; //because registering either new renderer classes or making new block classes is a pain in the ass
 
@@ -34,7 +34,7 @@ public class BlockPipe extends Block implements ITooltipProvider, INBTTransforma
 		this.sideString = tex;
 		this.rType = rType;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
@@ -43,7 +43,7 @@ public class BlockPipe extends Block implements ITooltipProvider, INBTTransforma
 		this.frameIcon = iconRegister.registerIcon(RefStrings.MODID + ":pipe_frame");
 		this.meshIcon = iconRegister.registerIcon(RefStrings.MODID + ":pipe_mesh");
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int metadata) {

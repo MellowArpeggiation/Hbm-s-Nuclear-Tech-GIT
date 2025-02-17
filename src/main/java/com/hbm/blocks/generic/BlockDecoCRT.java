@@ -25,17 +25,17 @@ public class BlockDecoCRT extends BlockMulti implements INBTTransformable {
 	}
 
 	public static int renderID = RenderingRegistry.getNextAvailableRenderId();
-	
+
 	@Override
 	public int getRenderType(){
 		return renderID;
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
@@ -46,12 +46,12 @@ public class BlockDecoCRT extends BlockMulti implements INBTTransformable {
 	public void registerBlockIcons(IIconRegister reg) {
 		super.registerBlockIcons(reg);
 		this.icons = new IIcon[variants.length];
-		
+
 		for(int i = 0; i < variants.length; i++) {
 			this.icons[i] = reg.registerIcon(RefStrings.MODID + ":" + variants[i]);
 		}
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
@@ -62,7 +62,7 @@ public class BlockDecoCRT extends BlockMulti implements INBTTransformable {
 	public int damageDropped(int meta) {
 		return (Math.abs(meta) % 16) / 4;
 	}
-	
+
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		int i = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;

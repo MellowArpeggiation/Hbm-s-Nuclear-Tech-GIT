@@ -20,8 +20,6 @@ import net.minecraftforge.event.world.WorldEvent;
 
 public class NTMWorldGenerator implements IWorldGenerator {
 
-	boolean regTest = false;
-
 	public NTMWorldGenerator() {
 		final List<BiomeGenBase> invalidBiomes = Arrays.asList(new BiomeGenBase[] {BiomeGenBase.ocean, BiomeGenBase.river, BiomeGenBase.frozenOcean, BiomeGenBase.frozenRiver, BiomeGenBase.deepOcean});
 
@@ -42,50 +40,62 @@ public class NTMWorldGenerator implements IWorldGenerator {
 
 	private final Random rand = new Random(); //A central random, used to cleanly generate our stuff without affecting vanilla or modded seeds.
 
+
 	/** Inits all MapGen upon the loading of a new world. Hopefully clears out structureMaps and structureData when a different world is loaded. */
 	@SubscribeEvent
 	public void onLoad(WorldEvent.Load event) {
 		nbtGen = (NBTStructure.GenStructure) TerrainGen.getModdedMapGen(new NBTStructure.GenStructure(), EventType.CUSTOM);
-		
+
 		hasPopulationEvent = false;
 	}
 
+
 	/** Called upon the initial population of a chunk. Called in the pre-population event first; called again if pre-population didn't occur (flatland) */
 	private void setRandomSeed(World world, int chunkX, int chunkZ) {
+		rand.setSeed(world.getSeed() + world.provider.dimensionId);
 		rand.setSeed(world.getSeed() + world.provider.dimensionId);
 		final long i = rand.nextLong() / 2L * 2L + 1L;
 		final long j = rand.nextLong() / 2L * 2L + 1L;
 		rand.setSeed((long)chunkX * i + (long)chunkZ * j ^ world.getSeed());
 	}
 
+
 	/*
 	 * Pre-population Events / Structure Generation
 	 * Used to generate structures without unnecessary intrusion by biome decoration, like trees.
 	 */
 
+
 	private boolean hasPopulationEvent = false; // Does the given chunkGenerator have a population event? If not (flatlands), default to using generate.
+
 
 	@SubscribeEvent
 	public void generateStructures(PopulateChunkEvent.Pre event) {
 		hasPopulationEvent = true;
-		
+
 		if(StructureConfig.enableStructures == 0) return;
 		if(StructureConfig.enableStructures == 2 && !event.world.getWorldInfo().isMapFeaturesEnabled()) return;
 
 		setRandomSeed(event.world, event.chunkX, event.chunkZ); //Set random for population down the line.
 
 		nbtGen.generateStructures(event.world, rand, event.chunkProvider, event.chunkX, event.chunkZ);
+
+		setRandomSeed(event.world, event.chunkX, event.chunkZ); //Set random for population down the line.
+
+		nbtGen.generateStructures(event.world, rand, event.chunkProvider, event.chunkX, event.chunkZ);
 	}
+
 
 	/*
 	 * Post-Vanilla / Modded Generation
 	 * Used to generate features that don't care about intrusions (ores, craters, caves, etc.)
 	 */
 
+
 	@Override
 	public void generate(Random unusedRandom, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if(hasPopulationEvent) return; //If we've failed to generate any structures (flatlands)
-		
+
 		if(StructureConfig.enableStructures == 0) return;
 		if(StructureConfig.enableStructures == 2 && !world.getWorldInfo().isMapFeaturesEnabled()) return;
 

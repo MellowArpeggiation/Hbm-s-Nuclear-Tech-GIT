@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 public class ItemWandS extends Item {
 
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-	
+
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool) {
 		list.add("Creative-only item");
@@ -54,14 +54,14 @@ public class ItemWandS extends Item {
             }
         }
 	}
-	
+
     // why the fuck ye'd leave this whole thing obfuscated is beyond me
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float fx, float fy, float fz) {
 		if(stack.stackTagCompound == null) {
 			stack.stackTagCompound = new NBTTagCompound();
 		}
-		
+
 		if(player.isSneaking()) {
             Pair<Block, Integer> target = new Pair<Block, Integer>(world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
             Set<Pair<Block, Integer>> blocks = getBlocks(stack);
@@ -73,7 +73,7 @@ public class ItemWandS extends Item {
                 blocks.add(target);
                 if(world.isRemote) player.addChatMessage(new ChatComponentText("Added to blacklist " + target.key.getUnlocalizedName()));
             }
-            
+
             setBlocks(stack, blocks);
 
 		} else {
@@ -87,7 +87,7 @@ public class ItemWandS extends Item {
 				if(world.isRemote) player.addChatMessage(new ChatComponentText("First position set!"));
 			} else {
                 setPosition(stack, 0, 0, 0);
-				
+
 				Set<Pair<Block, Integer>> blocks = getBlocks(stack);
                 blocks.add(new Pair<Block, Integer>(Blocks.air, 0));
                 blocks.add(new Pair<Block, Integer>(ModBlocks.spotlight_beam, 0));
@@ -99,7 +99,7 @@ public class ItemWandS extends Item {
 				if(world.isRemote) player.addChatMessage(new ChatComponentText("Structure saved to: .minecraft/structures/" + filename));
 			}
 		}
-    	
+
         return true;
     }
 
@@ -149,8 +149,8 @@ public class ItemWandS extends Item {
 				player.addChatMessage(new ChatComponentText("Cleared blacklist"));
             }
 		}
-				
+
 		return stack;
 	}
-	
+
 }

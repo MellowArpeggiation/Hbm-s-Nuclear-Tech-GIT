@@ -199,7 +199,7 @@ public abstract class BlockDummyable extends BlockContainer implements ICustomBl
 		} else {
 			facingDir = placedSide;
 		}
-		
+
 		// The direction the final multiblock will be facing
 		ForgeDirection dir = getDirModified(facingDir);
 
@@ -265,7 +265,7 @@ public abstract class BlockDummyable extends BlockContainer implements ICustomBl
 		int z = MathHelper.floor_double(player.posZ);
 		return world.getBlock(x, y, z) == this || world.getBlock(x, y + 1, z) == this;
 	}
-	
+
 	/**
 	 * A bit more advanced than the dir modifier, but it is important that the resulting direction meta is in the core range.
 	 * Using the "extra" metas is technically possible but requires a bit of tinkering, e.g. preventing a recursive loop
@@ -467,7 +467,7 @@ public abstract class BlockDummyable extends BlockContainer implements ICustomBl
 	public boolean useDetailedHitbox() {
 		return !bounding.isEmpty();
 	}
-	
+
 	public List<AxisAlignedBB> bounding = new ArrayList<>();
 
 	// players currently inside instances of this block
@@ -478,7 +478,7 @@ public abstract class BlockDummyable extends BlockContainer implements ICustomBl
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB entityBounding, List list, Entity entity) {
 		if(!internalPlayers.isEmpty() && internalPlayers.contains(entity))
 			return;
-		
+
 		if(!this.useDetailedHitbox()) {
 			super.addCollisionBoxesToList(world, x, y, z, entityBounding, list, entity);
 			return;
@@ -596,7 +596,7 @@ public abstract class BlockDummyable extends BlockContainer implements ICustomBl
 		} else if(isExtra) {
 			meta -= extra;
 		}
-		
+
 		meta = INBTTransformable.transformMetaDeco(meta, coordBaseMode);
 
 		if(isOffset) {

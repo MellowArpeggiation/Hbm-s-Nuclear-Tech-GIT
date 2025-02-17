@@ -40,7 +40,7 @@ public class Spotlight extends Block implements ISpotlight, INBTTransformable {
 		this.beamLength = beamLength;
 		this.type = type;
 		this.isOn = isOn;
-		
+
 		this.setHardness(1F);
 
 		if(isOn) setLightLevel(1.0F);
@@ -152,7 +152,7 @@ public class Spotlight extends Block implements ISpotlight, INBTTransformable {
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random p_149674_5_) {
 		if (world.isRemote) return;
-		
+
 		if (isOn && world.isBlockIndirectlyGettingPowered(x, y, z)) {
 			world.setBlock(x, y, z, getOff(), world.getBlockMetadata(x, y, z), 2);
 		}
@@ -177,13 +177,13 @@ public class Spotlight extends Block implements ISpotlight, INBTTransformable {
 
 		updateBeam(world, x, y, z);
 	}
-	
+
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side) {
 		if(!super.canPlaceBlockOnSide(world, x, y, z, side)) return false;
-		
+
 		ForgeDirection dir = ForgeDirection.getOrientation(side);
-		
+
 		return canPlace(world, x, y, z, dir);
 	}
 
@@ -301,20 +301,20 @@ public class Spotlight extends Block implements ISpotlight, INBTTransformable {
 
 		backPropagate(world, x, y, z, dir);
 	}
-	
+
 	protected Block getOff() {
 		if(this == ModBlocks.spotlight_incandescent) return ModBlocks.spotlight_incandescent_off;
 		if(this == ModBlocks.spotlight_fluoro) return ModBlocks.spotlight_fluoro_off;
 		if(this == ModBlocks.spotlight_halogen) return ModBlocks.spotlight_halogen_off;
-		
+
 		return this;
 	}
-	
+
 	protected Block getOn() {
 		if(this == ModBlocks.spotlight_incandescent_off) return ModBlocks.spotlight_incandescent;
 		if(this == ModBlocks.spotlight_fluoro_off) return ModBlocks.spotlight_fluoro;
 		if(this == ModBlocks.spotlight_halogen_off) return ModBlocks.spotlight_halogen;
-		
+
 		return this;
 	}
 
