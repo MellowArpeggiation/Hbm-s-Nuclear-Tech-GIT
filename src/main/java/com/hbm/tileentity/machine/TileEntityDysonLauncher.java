@@ -43,6 +43,10 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 	public float lastRotation;
 	public float speed;
 
+	public int payloadTicks;
+
+	public int satCount;
+
 	public TileEntityDysonLauncher() {
 		super(2);
 	}
@@ -147,6 +151,12 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 				rotation -= 360;
 				lastRotation -= 360;
 			}
+
+			if(isSpinningDown) {
+				payloadTicks++;
+			} else {
+				payloadTicks = 0;
+			}
 		}
 	}
 
@@ -206,8 +216,10 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 		buf.writeInt(swarmId);
 		buf.writeLong(power);
 		buf.writeBoolean(isOperating);
+		buf.writeBoolean(isSpinningDown);
 		buf.writeInt(swarmCount);
 		buf.writeBoolean(sunsetOverdrive);
+		buf.writeInt(slots[0] != null ? slots[0].stackSize : 0);
 	}
 
 	@Override
@@ -216,8 +228,10 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 		swarmId = buf.readInt();
 		power = buf.readLong();
 		isOperating = buf.readBoolean();
+		isSpinningDown = buf.readBoolean();
 		swarmCount = buf.readInt();
 		sunsetOverdrive = buf.readBoolean();
+		satCount = buf.readInt();
 	}
 
 	@Override
@@ -263,18 +277,18 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 
-		if(bb == null) {
-			bb = AxisAlignedBB.getBoundingBox(
-				xCoord - 11,
-				yCoord,
-				zCoord - 11,
-				xCoord + 12,
-				yCoord + 18,
-				zCoord + 12
-			);
-		}
+			if(bb == null) {
+				bb = AxisAlignedBB.getBoundingBox(
+					xCoord - 100,
+					yCoord,
+					zCoord - 100,
+					xCoord + 100,
+					yCoord + 100,
+					zCoord + 100
+				);
+			}
 
-		return bb;
+			return bb;
 	}
 
 	@Override

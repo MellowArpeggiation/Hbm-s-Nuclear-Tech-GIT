@@ -39,13 +39,36 @@ public class RenderDysonLauncher extends TileEntitySpecialRenderer implements II
 
 			float t = launcher.lastRotation + (launcher.rotation - launcher.lastRotation) * f;
 
-			GL11.glTranslatef(0, 8.5F, 0);
-			GL11.glRotatef(45.0F, 1, 0, 0);
-			GL11.glRotatef(t, 0, 1, 0);
-			GL11.glRotatef(-45.0F, 1, 0, 0);
-			GL11.glTranslatef(0, -8.5F, 0);
+			GL11.glPushMatrix();
+			{
 
-			ResourceManager.dyson_spinlaunch.renderPart("The_Thing_That_Rotates");
+				GL11.glTranslatef(0, 8.5F, 0);
+				GL11.glRotatef(45.0F, 1, 0, 0);
+				GL11.glRotatef(t, 0, 1, 0);
+				GL11.glRotatef(-45.0F, 1, 0, 0);
+				GL11.glTranslatef(0, -8.5F, 0);
+
+				ResourceManager.dyson_spinlaunch.renderPart("The_Thing_That_Rotates");
+
+				if(launcher.satCount > 0 && !launcher.isSpinningDown) {
+					ResourceManager.dyson_spinlaunch.renderPart("Payload");
+				}
+
+			}
+			GL11.glPopMatrix();
+
+			if(launcher.isSpinningDown) {
+				float p = launcher.payloadTicks + f;
+
+				GL11.glTranslatef(1.0F, 8.5F, 0);
+				GL11.glRotatef(45.0F, 1, 0, 0);
+				GL11.glRotatef(90.0F, 0, 1, 0);
+				GL11.glTranslatef(p * 10.0F, 0, 0);
+				GL11.glRotatef(-45.0F, 1, 0, 0);
+				GL11.glTranslatef(0, -8.5F, 0);
+
+				ResourceManager.dyson_spinlaunch.renderPart("Payload");
+			}
 
 			GL11.glShadeModel(GL11.GL_FLAT);
 
