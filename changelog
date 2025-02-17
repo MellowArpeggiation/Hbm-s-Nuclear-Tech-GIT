@@ -9,6 +9,7 @@ Includes all changes from the latest upstream NTMain update - [X5243 - the secre
   * Dyson Power Converter - receives an energy beam from a receiver and converts it directly into power (HE)
   * Dyson Heat Converter - receives an energy beam from a receiver and converts it directly into heat (TU)
   * Dyson Anatmogenesis Terraformer - receives an energy beam from a receiver and converts the energy into mass, producing atmospheric gases at planetary scales
+  * Satellite Dyson Relay - launch this into orbit in order for a Dyson receiver with a matching ID to be able to operate at night for that planet/moon
 * Magma Drill - extracts mineral-rich magma from Moho, which can be processed into gallium, arsenic, and meteorite dust
 * Atmosphere Scanner - reports on the current atmospheric composition
 
