@@ -1509,7 +1509,6 @@ public class AssemblerRecipes extends SerializableRecipe {
 				new ComparableStack(ModItems.magnet_circular, 16),
 				new ComparableStack(ModItems.circuit, 4, EnumCircuitType.CHIP_QUANTUM),
 				new OreDictStack(BSCCO.wireDense(), 128),
-				new OreDictStack(ALLOY.wireDense(), 64),
 		}, 1200);
 
 		makeRecipe(new ComparableStack(ModBlocks.dyson_converter_he, 1), new AStack[] {
