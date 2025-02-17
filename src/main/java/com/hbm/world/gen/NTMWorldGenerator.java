@@ -53,7 +53,6 @@ public class NTMWorldGenerator implements IWorldGenerator {
 	/** Called upon the initial population of a chunk. Called in the pre-population event first; called again if pre-population didn't occur (flatland) */
 	private void setRandomSeed(World world, int chunkX, int chunkZ) {
 		rand.setSeed(world.getSeed() + world.provider.dimensionId);
-		rand.setSeed(world.getSeed() + world.provider.dimensionId);
 		final long i = rand.nextLong() / 2L * 2L + 1L;
 		final long j = rand.nextLong() / 2L * 2L + 1L;
 		rand.setSeed((long)chunkX * i + (long)chunkZ * j ^ world.getSeed());
@@ -64,10 +63,7 @@ public class NTMWorldGenerator implements IWorldGenerator {
 	 * Pre-population Events / Structure Generation
 	 * Used to generate structures without unnecessary intrusion by biome decoration, like trees.
 	 */
-
-
 	private boolean hasPopulationEvent = false; // Does the given chunkGenerator have a population event? If not (flatlands), default to using generate.
-
 
 	@SubscribeEvent
 	public void generateStructures(PopulateChunkEvent.Pre event) {
@@ -79,10 +75,6 @@ public class NTMWorldGenerator implements IWorldGenerator {
 		setRandomSeed(event.world, event.chunkX, event.chunkZ); //Set random for population down the line.
 
 		nbtGen.generateStructures(event.world, rand, event.chunkProvider, event.chunkX, event.chunkZ);
-
-		setRandomSeed(event.world, event.chunkX, event.chunkZ); //Set random for population down the line.
-
-		nbtGen.generateStructures(event.world, rand, event.chunkProvider, event.chunkX, event.chunkZ);
 	}
 
 
@@ -90,8 +82,6 @@ public class NTMWorldGenerator implements IWorldGenerator {
 	 * Post-Vanilla / Modded Generation
 	 * Used to generate features that don't care about intrusions (ores, craters, caves, etc.)
 	 */
-
-
 	@Override
 	public void generate(Random unusedRandom, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if(hasPopulationEvent) return; //If we've failed to generate any structures (flatlands)
