@@ -17,7 +17,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorIke implements IWorldGenerator {
 
 	public WorldGeneratorIke() {
-		NBTStructure.registerNullWeight(SpaceConfig.ikeDimension, 8);
+		NBTStructure.registerNullWeight(SpaceConfig.ikeDimension, 16);
 	}
 
 	@Override

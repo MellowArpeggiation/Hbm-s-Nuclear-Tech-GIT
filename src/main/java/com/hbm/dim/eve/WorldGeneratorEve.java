@@ -23,7 +23,7 @@ public class WorldGeneratorEve implements IWorldGenerator {
 	WorldGenElectricVolcano volcano = new WorldGenElectricVolcano(30, 22, ModBlocks.eve_silt, ModBlocks.eve_rock);
 
 	public WorldGeneratorEve() {
-		NBTStructure.registerNullWeight(SpaceConfig.eveDimension, 12);
+		NBTStructure.registerNullWeight(SpaceConfig.eveDimension, 24);
 	}
 
 	@Override

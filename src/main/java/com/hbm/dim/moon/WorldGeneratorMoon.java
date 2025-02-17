@@ -24,7 +24,7 @@ public class WorldGeneratorMoon implements IWorldGenerator {
 		JigsawPiece munBase = new JigsawPiece("mun_base", StructureManager.mun_base) {{ alignToTerrain = true; heightOffset = -1; }};
 
 		NBTStructure.registerStructure(SpaceConfig.moonDimension, new SpawnCondition() {{
-			spawnWeight = 4;
+			spawnWeight = 8;
 			sizeLimit = 32;
 			startPool = "start";
 			pools = new HashMap<String, JigsawPool>() {{
@@ -49,7 +49,7 @@ public class WorldGeneratorMoon implements IWorldGenerator {
 			}};
 		}});
 
-		NBTStructure.registerNullWeight(SpaceConfig.moonDimension, 8);
+		NBTStructure.registerNullWeight(SpaceConfig.moonDimension, 16);
 	}
 
 	@Override

@@ -19,7 +19,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorMoho implements IWorldGenerator {
 
 	public WorldGeneratorMoho() {
-		NBTStructure.registerNullWeight(SpaceConfig.mohoDimension, 12);
+		NBTStructure.registerNullWeight(SpaceConfig.mohoDimension, 24);
 	}
 
 	@Override
