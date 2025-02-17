@@ -84,7 +84,7 @@ public class Mats {
 	public static final NTMMaterial MAT_PLUTONIUM	= makeSmeltable(9400,		PU,			0x9AA3A0, 0x111A17, 0x78817E).setAutogen(FRAGMENT, NUGGET, BILLET, DUST, BLOCK).m();
 	public static final NTMMaterial MAT_RGP			= makeSmeltable(9401,		PURG,		0x9AA3A0, 0x111A17, 0x78817E).setAutogen(NUGGET, BILLET, BLOCK).m();
 	public static final NTMMaterial MAT_PU238		= makeSmeltable(9438,		PU238,		0xFFBC59, 0xFF8E2B, 0x78817E).setAutogen(NUGGET, BILLET, BLOCK).m();
-	public static final NTMMaterial MAT_PU239		= makeSmeltable(9439,		PU239,		0x9AA3A0, 0x111A17, 0x78817E).setAutogen(NUGGET, BILLET, BLOCK).m();
+	public static final NTMMaterial MAT_PU239		= makeSmeltable(9439,		PU239,		0x9AA3A0, 0x111A17, 0x78817E).setAutogen(FRAGMENT, NUGGET, BILLET, BLOCK).m();
 	public static final NTMMaterial MAT_PU240		= makeSmeltable(9440,		PU240,		0x9AA3A0, 0x111A17, 0x78817E).setAutogen(NUGGET, BILLET, BLOCK).m();
 	public static final NTMMaterial MAT_PU241		= makeSmeltable(9441,		PU241,		0x9AA3A0, 0x111A17, 0x78817E).setAutogen(NUGGET, BILLET, BLOCK).m();
 	public static final NTMMaterial MAT_RGA			= makeSmeltable(9501,		AMRG,		0xCEB3B9, 0x3A1C21, 0x93767B).setAutogen(NUGGET, BILLET, BLOCK).m();
