@@ -6,11 +6,13 @@ import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.items.ISatChip;
 import com.hbm.items.ModItems;
-import com.hbm.main.MainRegistry;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.energymk2.IEnergyReceiverMK2;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -101,18 +103,19 @@ public class TileEntityDysonLauncher extends TileEntityMachineBase implements IE
 
 					int count = Math.min(20, (int)(pressure * 80));
 
+					double posX = xCoord + rot.offsetX * 9;
+					double posY = yCoord + 12;
+					double posZ = zCoord + rot.offsetZ * 9;
+
 					NBTTagCompound data = new NBTTagCompound();
 					data.setInteger("count", count);
-					data.setDouble("posX", xCoord + rot.offsetX * 9);
-					data.setDouble("posY", yCoord + 12);
-					data.setDouble("posZ", zCoord + rot.offsetZ * 9);
 					data.setString("type", "spinlaunch");
 					data.setFloat("scale", 3);
 					data.setDouble("moX", dir.offsetX * 10);
 					data.setDouble("moY", 10);
 					data.setDouble("moZ", dir.offsetZ * 10);
 					data.setInteger("maxAge", 10 + count / 2 + worldObj.rand.nextInt(5));
-					MainRegistry.proxy.effectNT(data);
+					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, posX, posY, posZ), new TargetPoint(this.worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 150));
 
 					slots[0].stackSize -= toLaunch;
 					if(slots[0].stackSize <= 0) slots[0] = null;
