@@ -37,7 +37,7 @@ public class BlockPlushie extends BlockContainer implements IBlockMulti, IToolti
 	@Override public boolean isOpaqueCube() { return false; }
 	@Override public boolean renderAsNormalBlock() { return false; }
 	@Override public Item getItemDropped(int i, Random rand, int j) { return null; }
-	
+
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
 		TileEntityPlushie entity = (TileEntityPlushie) world.getTileEntity(x, y, z);
@@ -47,7 +47,7 @@ public class BlockPlushie extends BlockContainer implements IBlockMulti, IToolti
 
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
-		
+
 		if(!player.capabilities.isCreativeMode) {
 			harvesters.set(player);
 			if(!world.isRemote) {
@@ -63,7 +63,7 @@ public class BlockPlushie extends BlockContainer implements IBlockMulti, IToolti
 			harvesters.set(null);
 		}
 	}
-	
+
 	@Override
 	public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
 		player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
@@ -80,7 +80,7 @@ public class BlockPlushie extends BlockContainer implements IBlockMulti, IToolti
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
 		int meta = MathHelper.floor_double((double)((player.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
 		world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-		
+
 		TileEntityPlushie plushie = (TileEntityPlushie) world.getTileEntity(x, y, z);
 		plushie.type = PlushieType.values()[Math.abs(stack.getItemDamage()) % PlushieType.values().length];
 		plushie.markDirty();
@@ -93,7 +93,7 @@ public class BlockPlushie extends BlockContainer implements IBlockMulti, IToolti
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		
+
 		if(world.isRemote) {
 			TileEntityPlushie plushie = (TileEntityPlushie) world.getTileEntity(x, y, z);
 			plushie.squishTimer = 11;
@@ -105,7 +105,7 @@ public class BlockPlushie extends BlockContainer implements IBlockMulti, IToolti
 	}
 
 	public static class TileEntityPlushie extends TileEntity {
-		
+
 		public PlushieType type = PlushieType.NONE;
 		public int squishTimer;
 
@@ -120,7 +120,7 @@ public class BlockPlushie extends BlockContainer implements IBlockMulti, IToolti
 			this.writeToNBT(nbt);
 			return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 0, nbt);
 		}
-		
+
 		@Override
 		public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 			this.readFromNBT(pkt.func_148857_g());
@@ -138,16 +138,19 @@ public class BlockPlushie extends BlockContainer implements IBlockMulti, IToolti
 			nbt.setByte("type", (byte) type.ordinal());
 		}
 	}
-	
+
 	public static enum PlushieType {
 		NONE(		"NONE",				null),
 		YOMI(		"Yomi",				"Hi! Can I be your rabbit friend?"),
 		NUMBERNINE(	"Number Nine",		"None of y'all deserve coal."),
-		POOH(		"Winnie the Pooh",	"Beloved children's character with no malicious intent.");
+		POOH(		"Winnie the Pooh",	"Beloved children's character with no malicious intent."),
+		TETO(		"Kasane Teto",		"please help I've been trapped in her basement for da-"),
+		MIKU(		"Hatsune Miku",		"it is a mystery."),
+		NERU(		"Akita Neru",			"Kimi for president 2028");
 
 		public String label;
 		public String inscription;
-		
+
 		private PlushieType(String label, String inscription) {
 			this.label = label;
 			this.inscription = inscription;
