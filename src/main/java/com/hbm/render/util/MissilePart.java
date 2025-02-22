@@ -247,6 +247,8 @@ public class MissilePart {
 		MissilePart.registerPart(ModItems.sat_gerald, PartType.WARHEAD, 7, 5, ResourceManager.mp_w_fairing, ResourceManager.mp_w_fairing_tex).hideInventoryModel();
 		MissilePart.registerPart(ModItems.sat_war, PartType.WARHEAD, 7, 5, ResourceManager.mp_w_fairing, ResourceManager.mp_w_fairing_tex);
 
+		MissilePart.registerPart(ModItems.sat_dyson_relay, PartType.WARHEAD, 7, 5, ResourceManager.mp_w_fairing, ResourceManager.mp_w_fairing_tex).hideInventoryModel();
+		
 	}
 
 	// I'm a huge fucking moron, refactor this later
@@ -431,6 +433,7 @@ public class MissilePart {
 		MissilePart.registerPart(ModItems.sat_war, PartType.WARHEAD, 7, 5);
 
 		
+		MissilePart.registerPart(ModItems.sat_dyson_relay, PartType.WARHEAD, 7, 5);
 		
 	}
 	

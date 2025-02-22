@@ -450,6 +450,12 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVaultDoor.class, new RenderVaultDoor());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlastDoor.class, new RenderBlastDoor());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDoorGeneric.class, new RenderDoorGeneric());
+		//dyson
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonReceiver.class, new RenderDysonReceiver());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonConverterAnatmogenesis.class, new RenderDysonConverterAnatmogenesis());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonConverterHE.class, new RenderDysonConverterHE());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonConverterTU.class, new RenderDysonConverterTU());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonLauncher.class, new RenderDysonLauncher());
 	}
 
 	@Override
@@ -482,7 +488,7 @@ public class ClientProxy extends ServerProxy {
 		double[] sfp = new double[] {1.36, 1.36, 0.68};
 		double[] rir = new double[] {0, 0, 0};
 		double[] tir = new double[] {0, 0, 0};
-		double[] sir = new double[] {1.1, 1.1, 1.1};
+		double[] sir = new double[] {1, 1, 1};
 
 		MinecraftForgeClient.registerItemRenderer(ModItems.titanium_sword, new ItemRenderTransformer(rtp, ttp_high, stp, rfp, tfp, sfp, rir, tir, sir));
 		MinecraftForgeClient.registerItemRenderer(ModItems.alloy_sword, new ItemRenderTransformer(rtp, ttp_high, stp, rfp, tfp, sfp, rir, tir, sir));
@@ -535,7 +541,6 @@ public class ClientProxy extends ServerProxy {
 		MinecraftForgeClient.registerItemRenderer(ModItems.missile_volcano, new ItemRenderMissileGeneric(RenderMissileType.TYPE_NUCLEAR));
 		MinecraftForgeClient.registerItemRenderer(ModItems.missile_doomsday, new ItemRenderMissileGeneric(RenderMissileType.TYPE_NUCLEAR));
 		MinecraftForgeClient.registerItemRenderer(ModItems.missile_doomsday_rusted, new ItemRenderMissileGeneric(RenderMissileType.TYPE_NUCLEAR));
-		MinecraftForgeClient.registerItemRenderer(ModItems.missile_carrier, new ItemRenderMissileGeneric(RenderMissileType.TYPE_CARRIER));
 		MinecraftForgeClient.registerItemRenderer(ModItems.missile_shuttle, new ItemRenderMissileGeneric(RenderMissileType.TYPE_ROBIN));
 
 		//templates
@@ -989,6 +994,31 @@ public class ClientProxy extends ServerProxy {
 
 		// End MK2 porting.
 
+		if("spinlaunch".equals(type)) {
+			int count = data.getInteger("count");
+
+			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
+			double mX = data.getDouble("moX");
+			double mY = data.getDouble("moY");
+			double mZ = data.getDouble("moZ");
+
+			int maxAge = data.getInteger("maxAge");
+
+			for(int i = 0; i < count; i++) {
+				double ox = world.rand.nextDouble() * 2 - 1;
+				double oy = world.rand.nextDouble() * 2 - 1;
+				double oz = world.rand.nextDouble() * 2 - 1;
+				double mult = 1.0 - world.rand.nextDouble() * 0.1;
+
+				ParticleRocketFlame fx = new ParticleRocketFlame(man, world, x + ox, y + oy, z + oz).setScale(scale);
+				fx.motionX = mX * mult + ox;
+				fx.motionY = mY * mult + oy;
+				fx.motionZ = mZ * mult + oz;
+				if(maxAge > 0) fx.setMaxAge(maxAge + world.rand.nextInt(5));
+				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+			}
+		}
+
 		if("missileContrail".equals(type)) {
 
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
@@ -1012,14 +1042,14 @@ public class ClientProxy extends ServerProxy {
 		}
 
 		if("missileContrailf".equals(type)) {
-			
+
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
-			
+
 			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
 			double mX = data.getDouble("moX");
 			double mY = data.getDouble("moY");
 			double mZ = data.getDouble("moZ");
-			
+
 			ParticleRocketFusion fx = new ParticleRocketFusion(man, world, x, y, z);
 			fx.setScale(scale);
 			fx.motionX = mX;
@@ -1031,14 +1061,14 @@ public class ClientProxy extends ServerProxy {
 		}
 
 		if("missileContrailbf".equals(type)) {
-			
+
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
-			
+
 			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
 			double mX = data.getDouble("moX");
 			double mY = data.getDouble("moY");
 			double mZ = data.getDouble("moZ");
-			
+
 			ParticleRocketBF fx = new ParticleRocketBF(man, world, x, y, z);
 			fx.setScale(scale);
 			fx.motionX = mX;
@@ -1050,14 +1080,14 @@ public class ClientProxy extends ServerProxy {
 		}
 
 		if("missileContrailMUD".equals(type)) {
-			
+
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
-			
+
 			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
 			double mX = data.getDouble("moX");
 			double mY = data.getDouble("moY");
 			double mZ = data.getDouble("moZ");
-			
+
 			ParticleRocketMUD fx = new ParticleRocketMUD(man, world, x, y, z);
 			fx.setScale(scale);
 			fx.motionX = mX;
@@ -1069,14 +1099,14 @@ public class ClientProxy extends ServerProxy {
 		}
 
 		if("missileContrailSCH".equals(type)) {
-			
+
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
-			
+
 			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
 			double mX = data.getDouble("moX");
 			double mY = data.getDouble("moY");
 			double mZ = data.getDouble("moZ");
-			
+
 			ParticleRocketSCH fx = new ParticleRocketSCH(man, world, x, y, z);
 			fx.setScale(scale);
 			fx.motionX = mX;
@@ -1088,14 +1118,14 @@ public class ClientProxy extends ServerProxy {
 		}
 
 		if("missileContrailUP".equals(type)) {
-			
+
 			if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
-			
+
 			float scale = data.hasKey("scale") ? data.getFloat("scale") : 1F;
 			double mX = data.getDouble("moX");
 			double mY = data.getDouble("moY");
 			double mZ = data.getDouble("moZ");
-			
+
 			ParticleRocketUP fx = new ParticleRocketUP(man, world, x, y, z);
 			fx.setScale(scale);
 			fx.motionX = mX;
@@ -1857,6 +1887,10 @@ public class ClientProxy extends ServerProxy {
 
 				int life = data.getInteger("life");
 
+				fx.motionX = data.getDouble("mX");
+				fx.motionY = data.getDouble("mY");
+				fx.motionZ = data.getDouble("mZ");
+
 				if(inOrbit) fx.setLift(0);
 				if(pressure < 0.08) {
 					double factor = (0.08 - pressure) * 4;
@@ -1898,12 +1932,12 @@ public class ClientProxy extends ServerProxy {
 
 			EntityFX fx = new net.minecraft.client.particle.EntityCritFX(world, x, y, z, mX, mY, mZ);
 			fx.nextTextureIndexX();
-				
+
 			if(data.hasKey("color")) {
 				Color color = new Color(data.getInteger("color"));
 				fx.setRBGColorF(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
 			}
-				
+
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 		}
 
@@ -1924,8 +1958,16 @@ public class ClientProxy extends ServerProxy {
 			double mY = data.getDouble("mY");
 			double mZ = data.getDouble("mZ");
 			float scale = data.getFloat("scale");
-			ParticleDust text = new ParticleDust(world, x, y, z, mX, mY, mZ);
-			Minecraft.getMinecraft().effectRenderer.addEffect(text);
+			ParticleDust particle = new ParticleDust(world, x, y, z, mX, mY, mZ, scale);
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+		}
+		if("flare".equals(type)) {
+			double mX = data.getDouble("mX");
+			double mY = data.getDouble("mY");
+			double mZ = data.getDouble("mZ");
+			float scale = data.getFloat("scale");
+			ParticleGlow particle = new ParticleGlow(world, x, y, z, mX, mY, mZ, scale);
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
 		if("anim".equals(type)) {
 
@@ -2150,7 +2192,7 @@ public class ClientProxy extends ServerProxy {
 			for(int i = 0; i < ejector.getAmount(); i++) {
 				ejector.spawnCasing(man, casingConfig, world, x, y, z, data.getFloat("pitch"), data.getFloat("yaw"), data.getBoolean("crouched"));
 			}
-			
+
 		}
 		if("radSmoke".equals(type)) {
 			ParticleRadiationFog contrail = new ParticleRadiationFog(man, world, x, y, z);
@@ -2280,7 +2322,7 @@ public class ClientProxy extends ServerProxy {
 	public boolean getImpact(World world) {
 		return ImpactWorldHandler.getImpactForClient(world);
 	}
-	
+
 	@Override
 	public void playSoundClient(double x, double y, double z, String sound, float volume, float pitch) {
 		Minecraft.getMinecraft().getSoundHandler().playSound(new PositionedSoundRecord(new ResourceLocation(sound), volume, pitch, (float) x, (float) y, (float) z));

@@ -265,6 +265,10 @@ public class NBTStructure {
 				}
 
 				palette[i] = new BlockDefinition(blockName, meta);
+
+				if(StructureConfig.debugStructures && palette[i].block == Blocks.air) {
+					palette[i] = new BlockDefinition(ModBlocks.wand_air, meta);
+				}
 			}
 
 
@@ -439,7 +443,7 @@ public class NBTStructure {
 					int ry = by + y;
 
 					Block block = transformBlock(state.definition, null, world.rand);
-					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
+					int meta = transformMeta(state.definition, null, coordBaseMode);
 
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
@@ -496,7 +500,7 @@ public class NBTStructure {
 					int ry = by + oy;
 
 					Block block = transformBlock(state.definition, piece.blockTable, world.rand);
-					int meta = coordBaseMode != 0 ? transformMeta(state.definition, coordBaseMode) : state.definition.meta;
+					int meta = transformMeta(state.definition, piece.blockTable, coordBaseMode);
 
 					world.setBlock(rx, ry, rz, block, meta, 2);
 
@@ -552,7 +556,13 @@ public class NBTStructure {
 		return definition.block;
 	}
 
-	private int transformMeta(BlockDefinition definition, int coordBaseMode) {
+	private int transformMeta(BlockDefinition definition, Map<Block, BlockSelector> blockTable, int coordBaseMode) {
+		if(blockTable != null && blockTable.containsKey(definition.block)) {
+			return blockTable.get(definition.block).getSelectedBlockMetaData();
+		}
+
+		if(coordBaseMode == 0) return definition.meta;
+
 		// Our shit
 		if(definition.block instanceof INBTTransformable) return ((INBTTransformable) definition.block).transformMeta(definition.meta, coordBaseMode);
 
@@ -630,6 +640,11 @@ public class NBTStructure {
 			this.meta = meta;
 		}
 
+		BlockDefinition(Block block, int meta) {
+			this.block = block;
+			this.meta = meta;
+		}
+
 	}
 
 	public static class SpawnCondition {
@@ -668,6 +683,31 @@ public class NBTStructure {
 
 		protected JigsawPool getPool(String name) {
 			return pools.get(name).clone();
+		}
+
+		// Builds all of the pools into neat rows and columns, for editing and debugging!
+		// Make sure structure debug is enabled, or it will no-op
+		// Do not use in generation
+		public void buildAll(World world, int x, int y, int z) {
+			if(!StructureConfig.debugStructures) return;
+
+			int padding = 5;
+			int oz = 0;
+
+			for(JigsawPool pool : pools.values()) {
+				int highestWidth = 0;
+				int ox = 0;
+
+				for(Pair<JigsawPiece, Integer> entry : pool.pieces) {
+					NBTStructure structure = entry.key.structure;
+					structure.build(world, x + ox + (structure.size.x / 2), y, z + oz + (structure.size.z / 2));
+
+					ox += structure.size.x + padding;
+					highestWidth = Math.max(highestWidth, structure.size.z);
+				}
+
+				oz += highestWidth + padding;
+			}
 		}
 
 	}

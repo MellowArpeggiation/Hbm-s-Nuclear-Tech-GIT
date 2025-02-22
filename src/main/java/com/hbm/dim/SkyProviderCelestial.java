@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.dim.SolarSystem.AstroMetric;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
+import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_COMPROMISED;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_Destroyed;
@@ -58,6 +59,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 	private static final ResourceLocation noise = new ResourceLocation(RefStrings.MODID, "shaders/iChannel1.png");
 
 	protected static final Shader planetShader = new Shader(new ResourceLocation(RefStrings.MODID, "shaders/crescent.frag"));
+	protected static final Shader swarmShader = new Shader(new ResourceLocation(RefStrings.MODID, "shaders/swarm.vert"), new ResourceLocation(RefStrings.MODID, "shaders/swarm.frag"));
 
 	private static final String[] GL_SKY_LIST = new String[] { "glSkyList", "field_72771_w", "G" };
 	private static final String[] GL_SKY_LIST2 = new String[] { "glSkyList2", "field_72781_x", "H" };
@@ -101,6 +103,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 		}
 
 		CelestialBody body = CelestialBody.getBody(world);
+		CelestialBody sun = body.getStar();
 		CBT_Atmosphere atmosphere = body.getTrait(CBT_Atmosphere.class);
 
 		boolean hasAtmosphere = atmosphere != null;
@@ -193,7 +196,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 			double coronaSize = sunSize * (3 - MathHelper.clamp_float(pressure, 0.0F, 1.0F));
 
 			renderSun(partialTicks, world, mc, sunSize, coronaSize, visibility, pressure);
-
+			
 			float blendAmount = hasAtmosphere ? MathHelper.clamp_float(1 - world.getSunBrightnessFactor(partialTicks), 0.25F, 1F) : 1F;
 
 			double longitude = 0;
@@ -583,16 +586,19 @@ public class SkyProviderCelestial extends IRenderHandler {
 		}
 	}
 
-	protected void renderSun(float partialTicks, WorldClient world, Minecraft mc, double sunSize, double coronaSize, float visibility, float pressure) {
+	protected void renderSun(float partialTicks, WorldClient world, Minecraft mc, CelestialBody sun, double sunSize, double coronaSize, float visibility, float pressure) {
 		Tessellator tessellator = Tessellator.instance;
 
-		if(SolarSystem.kerbol.shader != null && SolarSystem.kerbol.hasTrait(CBT_Destroyed.class)) {
+		CBT_Dyson dyson = sun.getTrait(CBT_Dyson.class);
+		int swarmCount = dyson != null ? dyson.size() : 0;
+
+		if(sun.shader != null && sun.hasTrait(CBT_Destroyed.class)) {
 			// BLACK HOLE SUN
 			// WON'T YOU COME
 			// AND WASH AWAY THE RAIN
 
-			Shader shader = SolarSystem.kerbol.shader;
-			double shaderSize = sunSize * SolarSystem.kerbol.shaderScale;
+			Shader shader = sun.shader;
+			double shaderSize = sunSize * sun.shaderScale;
 
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -635,31 +641,23 @@ public class SkyProviderCelestial extends IRenderHandler {
 			tessellator.addVertex(-sunSize, 99.9D, sunSize);
 			tessellator.draw();
 
-			// Draw the MIGHTY SUN
+			// Draw the sun to the depth buffer to block swarm members that are behind
+			GL11.glDepthMask(true);
+			GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.0F);
+
+			tessellator.startDrawingQuads();
+			tessellator.addVertexWithUV(-sunSize * 0.25D, 100.1D, -sunSize * 0.25D, 0.0D, 0.0D);
+			tessellator.addVertexWithUV(sunSize * 0.25D, 100.1D, -sunSize * 0.25D, 1.0D, 0.0D);
+			tessellator.addVertexWithUV(sunSize * 0.25D, 100.1D, sunSize * 0.25D, 1.0D, 1.0D);
+			tessellator.addVertexWithUV(-sunSize * 0.25D, 100.1D, sunSize * 0.25D, 0.0D, 1.0D);
+			tessellator.draw();
+
+			GL11.glDepthMask(false);
+
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, visibility);
+
 			mc.renderEngine.bindTexture(SolarSystem.kerbol.texture);
-			CelestialBody body = CelestialBody.getBody(world);
-			CBT_Atmosphere atmosphere = body.getTrait(CBT_Atmosphere.class);
-
-			float[] sunColor = {1.0F, 1.0F, 1.0F};
-
-			// Adjust the sun colour based on atmospheric composition
-			if(atmosphere != null) {
-				for(FluidEntry entry : atmosphere.fluids) {
-					// Chlorines all redden the sun by absorbing blue and green
-					if(entry.fluid == Fluids.TEKTOAIR
-					|| entry.fluid == Fluids.CHLORINE
-					|| entry.fluid == Fluids.CHLOROMETHANE
-					|| entry.fluid == Fluids.RADIOSOLVENT
-					|| entry.fluid == Fluids.CCL) {
-						float absorption = MathHelper.clamp_float(1.0F - (float)entry.pressure * 0.5F, 0.0F, 1.0F);
-						sunColor[1] *= absorption;
-						sunColor[2] *= absorption;
-					}
-				}
-			}
-
-			GL11.glColor4f(sunColor[0], sunColor[1], sunColor[2], visibility);
 
 			tessellator.startDrawingQuads();
 			tessellator.addVertexWithUV(-sunSize, 100.0D, -sunSize, 0.0D, 0.0D);
@@ -673,12 +671,118 @@ public class SkyProviderCelestial extends IRenderHandler {
 			mc.renderEngine.bindTexture(flareTexture);
 
 			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV(-coronaSize, 100.0D, -coronaSize, 0.0D, 0.0D);
-			tessellator.addVertexWithUV(coronaSize, 100.0D, -coronaSize, 1.0D, 0.0D);
-			tessellator.addVertexWithUV(coronaSize, 100.0D, coronaSize, 1.0D, 1.0D);
-			tessellator.addVertexWithUV(-coronaSize, 100.0D, coronaSize, 0.0D, 1.0D);
+			tessellator.addVertexWithUV(-coronaSize, 99.9D, -coronaSize, 0.0D, 0.0D);
+			tessellator.addVertexWithUV(coronaSize, 99.9D, -coronaSize, 1.0D, 0.0D);
+			tessellator.addVertexWithUV(coronaSize, 99.9D, coronaSize, 1.0D, 1.0D);
+			tessellator.addVertexWithUV(-coronaSize, 99.9D, coronaSize, 0.0D, 1.0D);
 			tessellator.draw();
+
+			// Draw the swarm members with depth occlusion
+			// We do this last so we can render transparency against the sun
+			renderSwarm(partialTicks, world, mc, sunSize * 0.5, swarmCount);
+
+			// Clear and disable the depth buffer once again, buffer has to be writable to clear it
+			GL11.glDepthMask(true);
+			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+			GL11.glDepthMask(false);
 		}
+	}
+
+	private void renderSwarm(float partialTicks, WorldClient world, Minecraft mc, double swarmRadius, int swarmCount) {
+		Tessellator tessellator = Tessellator.instance;
+
+		// bloodseeking, parasitic, ecstatically tracing decay
+		// thriving in the glow that death emits, the warm perfume it radiates
+
+		swarmShader.use();
+
+		// swarm members render as pixels, which can vary based on screen resolution
+		// because of this, we make the pixels more transparent based on their apparent size, which varies by a fair few factors
+		// this isn't a foolproof solution, analyzing the projection matrices would be best, but it works for now.
+		float swarmScreenSize = (float)((mc.displayHeight / mc.gameSettings.fovSetting) * swarmRadius * 0.002); 
+		float time = ((float)world.getWorldTime() + partialTicks) / 800.0F;
+		int textureUnit = 0;
+
+		swarmShader.setTime(time);
+		swarmShader.setTextureUnit(textureUnit);
+		
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glColor4f(0.0F, 0.0F, 0.0F, MathHelper.clamp_float(swarmScreenSize, 0, 1));
+
+		GL11.glPushMatrix();
+		{
+
+			GL11.glTranslatef(0.0F, 100.0F, 0.0F);
+			GL11.glScaled(swarmRadius, swarmRadius, swarmRadius);
+
+			GL11.glPushMatrix();
+			{
+	
+				GL11.glRotatef(80.0F, 1, 0, 0);
+	
+				tessellator.startDrawing(GL11.GL_POINTS);
+				for(int i = 0; i < swarmCount; i += 3) {
+					swarmShader.setOffset(i);
+	
+					float t = i + time;
+					double x = Math.cos(t);
+					double z = Math.sin(t);
+	
+					tessellator.addVertex(x, 0, z);
+				}
+				tessellator.draw();
+	
+			}
+			GL11.glPopMatrix();
+	
+			GL11.glPushMatrix();
+			{
+				
+				GL11.glRotatef(60.0F, 0, 1, 0);
+				GL11.glRotatef(80.0F, 1, 0, 0);
+	
+				tessellator.startDrawing(GL11.GL_POINTS);
+				for(int i = 1; i < swarmCount; i += 3) {
+					swarmShader.setOffset(i);
+	
+					float t = i + time;
+					double x = Math.cos(t);
+					double z = Math.sin(t);
+	
+					tessellator.addVertex(x, 0, z);
+				}
+				tessellator.draw();
+	
+			}
+			GL11.glPopMatrix();
+	
+			GL11.glPushMatrix();
+			{
+				
+				GL11.glRotatef(-60.0F, 0, 1, 0);
+				GL11.glRotatef(80.0F, 1, 0, 0);
+	
+				tessellator.startDrawing(GL11.GL_POINTS);
+				for(int i = 2; i < swarmCount; i += 3) {
+					swarmShader.setOffset(i);
+	
+					float t = i + time;
+					double x = Math.cos(t);
+					double z = Math.sin(t);
+	
+					tessellator.addVertex(x, 0, z);
+				}
+				tessellator.draw();
+	
+			}
+			GL11.glPopMatrix();
+
+		}
+		GL11.glPopMatrix();
+
+		swarmShader.stop();
+
+		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
 	}
 
 	protected void renderCelestials(float partialTicks, WorldClient world, Minecraft mc, List<AstroMetric> metrics, float celestialAngle, CelestialBody tidalLockedBody, Vec3 planetTint, float visibility, float blendAmount, CelestialBody orbiting, float maxSize) {

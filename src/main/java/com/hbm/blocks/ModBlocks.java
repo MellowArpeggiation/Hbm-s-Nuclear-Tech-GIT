@@ -1393,6 +1393,12 @@ public class ModBlocks {
 	public static Block orbital_station_computer;
 	public static Block propulsion_creative;
 
+	public static Block dyson_launcher;
+	public static Block dyson_receiver;
+	public static Block dyson_converter_tu;
+	public static Block dyson_converter_he;
+	public static Block dyson_converter_anatmogenesis;
+
 	// NBT Structure wand blocks
 	public static Block wand_air;
 	public static Block wand_loot;
@@ -2451,7 +2457,7 @@ public class ModBlocks {
 		machine_pyrooven = new MachinePyroOven(Material.iron).setBlockName("machine_pyrooven").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		machine_autosaw = new MachineAutosaw().setBlockName("machine_autosaw").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		machine_excavator = new MachineExcavator().setBlockName("machine_excavator").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
-		machine_magma = new MachineMagma().setBlockName("machine_magnma").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
+		machine_magma = new MachineMagma().setBlockName("machine_magma").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		machine_ore_slopper = new MachineOreSlopper().setBlockName("machine_ore_slopper").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		machine_mining_laser = new MachineMiningLaser(Material.iron).setBlockName("machine_mining_laser").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":machine_mining_laser");
 		barricade = new BlockNoDrop(Material.sand).setBlockName("barricade").setHardness(1.0F).setResistance(2.5F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":barricade");
@@ -2673,6 +2679,12 @@ public class ModBlocks {
 		orbital_station_port = new BlockOrbitalStation(Material.iron).setBlockName("orbital_station_port").setHardness(1.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		orbital_station_computer = new BlockOrbitalStationComputer(Material.iron).setBlockName("orbital_station_computer").setHardness(1.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		propulsion_creative = new BlockStationPropulsionCreative(Material.iron).setBlockName("propulsion_creative").setHardness(1.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
+
+		dyson_launcher = new MachineDysonLauncher(Material.iron).setBlockName("dyson_launcher").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel_machine");
+		dyson_receiver = new MachineDysonReceiver(Material.iron).setBlockName("dyson_receiver").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel_machine");
+		dyson_converter_tu = new MachineDysonConverterTU(Material.iron).setBlockName("dyson_converter_tu").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel_machine");
+		dyson_converter_he = new MachineDysonConverterHE(Material.iron).setBlockName("dyson_converter_he").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel_machine");
+		dyson_converter_anatmogenesis = new MachineDysonConverterAnatmogenesis(Material.iron).setBlockName("dyson_converter_anatmogenesis").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel_machine");
 
 		wand_air = new BlockWand(Blocks.air).setBlockName("wand_air").setBlockTextureName(RefStrings.MODID + ":wand_air");
 		wand_loot = new BlockWandLoot().setBlockName("wand_loot").setBlockTextureName(RefStrings.MODID + ":wand_loot");
@@ -3923,13 +3935,19 @@ public class ModBlocks {
 		GameRegistry.registerBlock(pink_stairs, pink_stairs.getUnlocalizedName());
 
 		// Terraforming
-		GameRegistry.registerBlock(atmosphere_editor, ItemBlockBase.class, atmosphere_editor.getUnlocalizedName());
+		register(atmosphere_editor);
 
 		register(transporter_rocket);
 		register(orbital_station);
 		register(orbital_station_port);
 		register(orbital_station_computer);
 		register(propulsion_creative);
+
+		register(dyson_launcher);
+		register(dyson_receiver);
+		register(dyson_converter_tu);
+		register(dyson_converter_he);
+		register(dyson_converter_anatmogenesis);
 
 		register(wand_air);
 		register(wand_loot);

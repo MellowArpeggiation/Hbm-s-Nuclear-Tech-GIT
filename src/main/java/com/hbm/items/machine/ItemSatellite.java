@@ -70,6 +70,10 @@ public class ItemSatellite extends ItemCustomMissilePart implements ISatChip {
 		if(this == ModItems.sat_war)
 			list.add("Single shot railcannon designed to be used on other planets");
 		
+
+		if(this == ModItems.sat_dyson_relay)
+			list.add("Allows a Dyson Receiver to function at night");
+
 		if(CelestialBody.inOrbit(player.worldObj))
 			list.add(EnumChatFormatting.BOLD + "Interact to deploy into orbit");
 	}

@@ -17,7 +17,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorDres implements IWorldGenerator {
 
 	public WorldGeneratorDres() {
-		NBTStructure.registerNullWeight(SpaceConfig.dresDimension, 12);
+		NBTStructure.registerNullWeight(SpaceConfig.dresDimension, 24);
 	}
 
 	@Override

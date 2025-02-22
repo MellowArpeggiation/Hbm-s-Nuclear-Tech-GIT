@@ -33,8 +33,7 @@ public abstract class CelestialBodyTrait {
 		registerTrait("water", CBT_Water.class);
 		registerTrait("battle", CBT_BATTLEFIELD.class);
 		registerTrait("infected", CBT_COMPROMISED.class);
-
-
+		registerTrait("dyson", CBT_Dyson.class);
 	};
 
 	private static void registerTrait(String name, Class<? extends CelestialBodyTrait> clazz) {

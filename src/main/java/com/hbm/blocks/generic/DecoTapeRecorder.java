@@ -21,28 +21,28 @@ public class DecoTapeRecorder extends BlockContainer implements INBTTransformabl
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 		return null;
 	}
-    
+
     public static int renderID = RenderingRegistry.getNextAvailableRenderId();
-	
+
 	@Override
 	public int getRenderType(){
 		return renderID;
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
-	
+
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack itemStack) {
 		int i = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		
+
 		if(i == 0)
 		{
 			world.setBlockMetadataWithNotify(x, y, z, 2, 2);

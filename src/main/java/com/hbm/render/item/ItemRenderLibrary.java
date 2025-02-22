@@ -1431,6 +1431,20 @@ public class ItemRenderLibrary {
 				bindTexture(ResourceManager.sat_rail_tex);
 				ResourceManager.sat_rail.renderAll();;
 			}});
+
+		renderers.put(ModItems.swarm_member, new ItemRenderBase( ) {
+			public void renderInventory() {
+				GL11.glTranslated(0, 3, 0);
+				GL11.glScaled(1.8D, 1.8D, 1.8D);
+				GL11.glRotated(-45, 0, 0, 1);
+				GL11.glRotated(30, 1, 0, 0);
+				GL11.glRotated(System.currentTimeMillis() % 7200 * -0.05F, 0, 1, 0);
+			}
+			public void renderCommonWithStack(ItemStack item) {
+				bindTexture(ResourceManager.dyson_swarm_member_tex);
+				ResourceManager.dyson_swarm_member.renderAll();
+			}});
+		
 		renderers.put(ModItems.ammo_himars, new ItemRenderBase( ) {
 			public void renderInventory() {
 				GL11.glTranslated(0, -2, 0);

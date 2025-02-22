@@ -74,7 +74,6 @@ public interface INBTTransformable {
 				meta = meta ^ 2;
 			break;
 		}
-		
 		return meta;
 	}
 

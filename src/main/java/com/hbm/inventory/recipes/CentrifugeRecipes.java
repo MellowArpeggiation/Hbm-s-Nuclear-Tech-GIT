@@ -14,6 +14,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.imc.IMCCentrifuge;
 import static com.hbm.inventory.OreDictManager.*;
+
 import com.hbm.inventory.OreDictManager.DictFrame;
 import com.hbm.inventory.OreDictManager;
 import com.hbm.inventory.RecipesCommon;
@@ -21,6 +22,7 @@ import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.inventory.material.MaterialShapes;
+import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
 import com.hbm.items.ItemEnums;
 import com.hbm.items.ItemEnums.EnumAshType;
@@ -525,33 +527,33 @@ public class CentrifugeRecipes extends SerializableRecipe {
 		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 0), new ItemStack[] { //peroxide, easy to use and get
 				new ItemStack(ModItems.powder_niobium, 4),
 				new ItemStack(ModItems.powder_cobalt, 2),
-				new ItemStack(ModItems.powder_zirconium, 1), 
+				new ItemStack(ModItems.powder_zirconium, 1),
 				new ItemStack(ModItems.powder_beryllium, 1) });
-		
+
 		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 1), new ItemStack[] { //nitric acid, harder and energy expensive
 				new ItemStack(ModItems.powder_gallium, 4),
 				new ItemStack(ModItems.powder_beryllium, 2),
-				new ItemStack(ModItems.powder_niobium, 1), 
+				new ItemStack(ModItems.powder_niobium, 1),
 				new ItemStack(ModItems.fragment_lanthanium, 1) });
-		
+
 		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 2), new ItemStack[] { //sulfuric acid, less harder
 				new ItemStack(ModItems.powder_beryllium, 4),
 				new ItemStack(ModItems.powder_niobium, 2),
-				new ItemStack(ModItems.powder_gallium, 1), 
+				new ItemStack(ModItems.powder_gallium, 1),
 				new ItemStack(ModItems.fragment_lanthanium, 1) });
-		
+
 		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 3), new ItemStack[] {// solvent uses *oil* something that sulfuric doesnt
 				new ItemStack(ModItems.powder_cobalt, 4),
 				new ItemStack(ModItems.powder_gallium, 2),
 				new ItemStack(ModItems.powder_niobium, 1),
 				new ItemStack(ModItems.powder_coltan, 1) });
-		
+
 		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 4), new ItemStack[] {  // chlorine is important mid-lategame. since it makes Plastics
 				new ItemStack(ModItems.powder_zirconium, 4),
 				new ItemStack(ModItems.powder_neodymium, 2),
-				new ItemStack(ModItems.powder_niobium, 1), 
+				new ItemStack(ModItems.powder_niobium, 1),
 				new ItemStack(ModItems.powder_cobalt, 1) });
-		
+
 		recipes.put(new ComparableStack(ModItems.mineral_fragment, 1, 5), new ItemStack[] { // shchrab acid can go fuck itself
 				new ItemStack(ModItems.powder_co60, 1),
 				new ItemStack(ModItems.nugget_bismuth, 1),
@@ -568,6 +570,13 @@ public class CentrifugeRecipes extends SerializableRecipe {
 				new ItemStack(Items.clay_ball, 1),
 				new ItemStack(ModItems.powder_iron, 1), //temp
 				new ItemStack(ModItems.powder_iron, 1)});
+
+		recipes.put(new ComparableStack(ModItems.ingot_magma, 1), new ItemStack[] {
+				Mats.MAT_GALLIUM.make(ModItems.bedrock_ore_fragment, 2),
+				Mats.MAT_ARSENIC.make(ModItems.bedrock_ore_fragment, 2),
+				new ItemStack(ModItems.powder_meteorite_tiny, 2),
+				new ItemStack(ModItems.dust_tiny, 3),
+		});
 
 		for(EnumBedrockOre ore : EnumBedrockOre.values()) {
 			int i = ore.ordinal();

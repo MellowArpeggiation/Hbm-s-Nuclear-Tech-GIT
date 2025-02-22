@@ -14,6 +14,7 @@ import com.hbm.dim.trait.CelestialBodyTrait.CBT_BATTLEFIELD;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+import com.hbm.tileentity.machine.TileEntityDysonReceiver;
 import com.hbm.util.AstronomyUtil;
 import com.hbm.util.BobMathUtil;
 
@@ -778,6 +779,8 @@ public class SolarSystem {
 		MainRegistry.logger.info("Kerbin orbital period: " + kerbin.getOrbitalPeriod() + " - should be: " + 426);
 		MainRegistry.logger.info("Eve orbital period: " + eve.getOrbitalPeriod() + " - should be: " + 261);
 		MainRegistry.logger.info("Mun orbital period: " + mun.getOrbitalPeriod() + " - should be: " + 6);
+
+		TileEntityDysonReceiver.runTests();
 	}
 
 }
