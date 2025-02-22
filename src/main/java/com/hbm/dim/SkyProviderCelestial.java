@@ -195,7 +195,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 			double sunSize = SolarSystem.calculateSunSize(body);
 			double coronaSize = sunSize * (3 - MathHelper.clamp_float(pressure, 0.0F, 1.0F));
 
-			renderSun(partialTicks, world, mc, sunSize, coronaSize, visibility, pressure);
+			renderSun(partialTicks, world, mc, sun, sunSize, coronaSize, visibility, pressure);
 			
 			float blendAmount = hasAtmosphere ? MathHelper.clamp_float(1 - world.getSunBrightnessFactor(partialTicks), 0.25F, 1F) : 1F;
 
@@ -658,7 +658,28 @@ public class SkyProviderCelestial extends IRenderHandler {
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, visibility);
 
 			mc.renderEngine.bindTexture(SolarSystem.kerbol.texture);
+			CelestialBody body = CelestialBody.getBody(world);
+			CBT_Atmosphere atmosphere = body.getTrait(CBT_Atmosphere.class);
+			
+			float[] sunColor = {1.0F, 1.0F, 1.0F};
 
+			// Adjust the sun colour based on atmospheric composition
+			if(atmosphere != null) {
+				for(FluidEntry entry : atmosphere.fluids) {
+					// Chlorines all redden the sun by absorbing blue and green
+					if(entry.fluid == Fluids.TEKTOAIR
+					|| entry.fluid == Fluids.CHLORINE
+					|| entry.fluid == Fluids.CHLOROMETHANE
+					|| entry.fluid == Fluids.RADIOSOLVENT
+					|| entry.fluid == Fluids.CCL) {
+						float absorption = MathHelper.clamp_float(1.0F - (float)entry.pressure * 0.5F, 0.0F, 1.0F);
+						sunColor[1] *= absorption;
+						sunColor[2] *= absorption;
+					}
+				}
+			}
+
+			GL11.glColor4f(sunColor[0], sunColor[1], sunColor[2], visibility);
 			tessellator.startDrawingQuads();
 			tessellator.addVertexWithUV(-sunSize, 100.0D, -sunSize, 0.0D, 0.0D);
 			tessellator.addVertexWithUV(sunSize, 100.0D, -sunSize, 1.0D, 0.0D);

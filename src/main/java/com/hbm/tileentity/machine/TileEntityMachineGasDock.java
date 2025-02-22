@@ -83,7 +83,7 @@ public class TileEntityMachineGasDock extends TileEntityMachineBase implements I
 					collectGas();
 				}
 			}
-			if(body == CelestialBody.getBody("sarnus"))
+			if(planet == CelestialBody.getBody("sarnus"))
 			{
 				this.tanks[0].setTankType(Fluids.SARNUSGAS);
 			}
