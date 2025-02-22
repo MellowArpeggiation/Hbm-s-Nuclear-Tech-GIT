@@ -71,7 +71,7 @@ public class ItemWandD extends Item {
 					player.addChatMessage(new ChatComponentText("Set teleport target to: " + target.getBody().getUnlocalizedName()));
 				}
 			}
-		} else if(!(world.provider instanceof WorldProviderOrbit)) {
+		}
 			if(!player.isSneaking()) {
 				// TESTING: View atmospheric data
 				CBT_Atmosphere atmosphere = CelestialBody.getTrait(world, CBT_Atmosphere.class);
@@ -98,7 +98,7 @@ public class ItemWandD extends Item {
 
 				// TESTING: END OF LIFE
 				//World targetdBody = DimensionManager.getWorld(SpaceConfig.dunaDimension);
-				CelestialBody target = CelestialBody.getBody(SpaceConfig.dunaDimension);
+				CelestialBody target = CelestialBody.getBody(SpaceConfig.minmusDimension);
 				int dimid = target.dimensionId;
 				if(target.hasTrait(CBT_Destroyed.class)){
 					target.clearTraits();
@@ -121,7 +121,7 @@ public class ItemWandD extends Item {
 					}
 				}
 			}
-		}
+		
 		return stack;
 	}
 
