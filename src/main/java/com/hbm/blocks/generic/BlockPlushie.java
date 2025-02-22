@@ -149,8 +149,8 @@ public class BlockPlushie extends BlockContainer implements IBlockMulti, IToolti
 		NUMBERNINE(	"Number Nine",		"None of y'all deserve coal.", "hbm:block.squeakyToy"),
 		POOH(		"Winnie the Pooh",	"Beloved children's character with no malicious intent.", "hbm:block.squeakyToy"),
 		TETO(		"Kasane Teto",		"please help I've been trapped in her basement for da-", "hbm:block.teto"),
-		MIKU(		"Hatsune Miku",		"it is a mystery.", "hbm:block.squeakyToy"),
-		NERU(		"Akita Neru",			"Kimi for president 2028", "hbm:block.squeakyToy");
+		MIKU(		"Hatsune Miku",		"it is a mystery.", "hbm:block.miku"),
+		NERU(		"Akita Neru",			"Kimi for president 2028", "hbm:block.akita");
 
 		public String label;
 		public String inscription;

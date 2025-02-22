@@ -77,6 +77,8 @@
     "block.pyroOperate": {"category": "block", "sounds": [{"name": "block/pyroOperate", "stream": false}]},
 	"block.dysonBeam": {"category": "block", "sounds": [{"name": "block/dysonBeam", "stream": false}]},
     "block.teto": {"category": "block", "sounds": [{"name": "block/teto", "stream": false}]},
+    "block.akita": {"category": "block", "sounds": [{"name": "block/akita", "stream": false}]},
+    "block.miku": {"category": "block", "sounds": [{"name": "block/miku", "stream": false}]},
 
     "door.TransitionSealOpen": {"category": "block", "sounds": [{"name": "block/door/transition_seal_open", "stream": true}]},
     "door.wghStart": {"category": "block", "sounds": [{"name": "block/door/wgh_start", "stream": true}]},
