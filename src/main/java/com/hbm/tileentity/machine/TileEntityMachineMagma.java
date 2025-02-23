@@ -38,7 +38,7 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 
 	// TODO: probably to handle cooling fluids, remove me if we don't do that
 	public FluidTank[] tanks;
-	
+
 	public static final int maxLiquid = MaterialShapes.BLOCK.q(16);
 	public List<MaterialStack> liquids = new ArrayList<>();
 
@@ -51,7 +51,7 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 
 	protected MaterialStack[] defaultOutputs = new MaterialStack[] {
 		new MaterialStack(Mats.MAT_SLAG, MaterialShapes.INGOT.q(1)),
-		new MaterialStack(Mats.MAT_RICH_MAGMA, MaterialShapes.QUANTUM.q(2)),
+		new MaterialStack(Mats.MAT_RICH_MAGMA, MaterialShapes.QUANTUM.q(4)),
 	};
 
 	public TileEntityMachineMagma() {
@@ -77,9 +77,9 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 					for(MaterialStack mat : getOutputs()) {
 						int totalLiquid = 0;
 						for(MaterialStack m : liquids) totalLiquid += m.amount;
-			
+
 						int toAdd = mat.amount;
-			
+
 						if(totalLiquid + toAdd <= maxLiquid) {
 							addToStack(mat);
 						} else {
@@ -92,7 +92,7 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 			// pour me a drink, barkeep
 			if(!liquids.isEmpty()) {
 				ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10);
-				
+
 				Vec3 impact = Vec3.createVectorHelper(0, 0, 0);
 				MaterialStack didPour = CrucibleUtil.pourFullStack(worldObj, xCoord + 0.5D + dir.offsetX * 3.875D, yCoord + 1.25D, zCoord + 0.5D + dir.offsetZ * 3.875D, 6, true, liquids, MaterialShapes.INGOT.q(1), impact);
 
@@ -107,7 +107,7 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, xCoord + 0.5D + dir.offsetX * 3.875D, yCoord + 1, zCoord + 0.5D + dir.offsetZ * 3.875D), new TargetPoint(worldObj.provider.dimensionId, xCoord + 0.5, yCoord + 1, zCoord + 0.5, 50));
 				}
 			}
-			
+
 			liquids.removeIf(o -> o.amount <= 0);
 
 			networkPackNT(250);
@@ -124,7 +124,7 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 			} else {
 				drillSpeed -= 0.3F;
 				if(drillSpeed < 0F) drillSpeed = 0F;
-				
+
 				lavaHeight = (float)BobMathUtil.lerp(0.02D, lavaHeight, 0D);
 			}
 
@@ -178,7 +178,7 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 				return;
 			}
 		}
-		
+
 		liquids.add(matStack.copy());
 	}
 
@@ -188,7 +188,7 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 
 		buf.writeBoolean(operating);
 		buf.writeLong(power);
-		
+
 		for(int i = 0; i < tanks.length; i++) tanks[i].serialize(buf);
 
 		buf.writeShort(liquids.size());
@@ -229,13 +229,13 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 			liquids.add(new MaterialStack(mat, liquidData[i * 2 + 1]));
 		}
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 
 		nbt.setLong("power", power);
-		
+
 		for(int i = 0; i < tanks.length; i++) tanks[i].writeToNBT(nbt, "t" + i);
 
 		int[] liquidData = new int[liquids.size() * 2];
@@ -279,10 +279,10 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 	}
 
 	AxisAlignedBB bb = null;
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		
+
 		if(bb == null) {
 			bb = AxisAlignedBB.getBoundingBox(
 				xCoord - 4,
@@ -293,10 +293,10 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 				zCoord + 5
 			);
 		}
-		
+
 		return bb;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared() {

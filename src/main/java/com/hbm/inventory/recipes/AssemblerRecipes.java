@@ -1516,7 +1516,7 @@ public class AssemblerRecipes extends SerializableRecipe {
 				new ComparableStack(ModBlocks.steel_scaffold, 32),
 				new ComparableStack(ModItems.crystal_xen),
 				new ComparableStack(ModItems.magnet_circular, 16),
-				new ComparableStack(ModItems.circuit, 4, EnumCircuitType.CHIP_QUANTUM),
+				new ComparableStack(ModItems.circuit, 4, EnumCircuitType.QUANTUM),
 				new OreDictStack(BSCCO.wireDense(), 128),
 		}, 1200);
 
@@ -1525,14 +1525,14 @@ public class AssemblerRecipes extends SerializableRecipe {
 				new OreDictStack(ALLOY.wireDense(), 64),
 				new OreDictStack(GOLD.wireDense(), 16),
 				new ComparableStack(ModBlocks.machine_transformer_dnt, 4),
-				new ComparableStack(ModItems.circuit, 8, EnumCircuitType.CHIP_BISMOID),
+				new ComparableStack(ModItems.circuit, 8, EnumCircuitType.BISMOID),
 		}, 1200);
 
 		makeRecipe(new ComparableStack(ModBlocks.dyson_converter_tu, 1), new AStack[] {
 				new OreDictStack(OSMIRIDIUM.plateWelded(), 2),
 				new OreDictStack(W.plateWelded(), 8),
 				new ComparableStack(ModBlocks.machine_transformer_dnt, 4),
-				new ComparableStack(ModItems.circuit, 8, EnumCircuitType.CHIP_BISMOID),
+				new ComparableStack(ModItems.circuit, 8, EnumCircuitType.BISMOID),
 				new OreDictStack(STEEL.pipe(), 12),
 		}, 1200);
 
@@ -1541,7 +1541,7 @@ public class AssemblerRecipes extends SerializableRecipe {
 				new ComparableStack(ModItems.turbine_syngas, 16),
 				new OreDictStack(W.plateWelded(), 8),
 				new ComparableStack(ModBlocks.machine_transformer_dnt, 4),
-				new ComparableStack(ModItems.circuit, 8, EnumCircuitType.CHIP_BISMOID),
+				new ComparableStack(ModItems.circuit, 8, EnumCircuitType.BISMOID),
 		}, 1200);
 
 		makeRecipe(new ComparableStack(ModItems.swarm_member, 1), new AStack[] {
