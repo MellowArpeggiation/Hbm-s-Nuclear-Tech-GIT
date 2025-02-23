@@ -49,6 +49,8 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 	public float lavaHeight;
 	public float prevLavaHeight;
 
+	public boolean validPosition = true;
+
 	protected MaterialStack[] defaultOutputs = new MaterialStack[] {
 		new MaterialStack(Mats.MAT_SLAG, MaterialShapes.INGOT.q(1)),
 		new MaterialStack(Mats.MAT_RICH_MAGMA, MaterialShapes.QUANTUM.q(4)),
@@ -155,8 +157,15 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 		CelestialBody body = CelestialBody.getBody(worldObj);
 		if(body.name != "moho") return false;
 
+		validPosition = isValidPosition();
+		if(!validPosition) return false;
+
 		if(power < consumption) return false;
 
+		return true;
+	}
+
+	private boolean isValidPosition() {
 		for(int x = -1; x <= 1; x++) {
 			for(int z = -1; z <= 1; z++) {
 				if(worldObj.getBlock(xCoord + x, yCoord - 4, zCoord + z) != Blocks.lava) return false;
@@ -188,6 +197,7 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 
 		buf.writeBoolean(operating);
 		buf.writeLong(power);
+		buf.writeBoolean(validPosition);
 
 		for(int i = 0; i < tanks.length; i++) tanks[i].serialize(buf);
 
@@ -204,6 +214,7 @@ public class TileEntityMachineMagma extends TileEntityMachineBase implements IEn
 
 		operating = buf.readBoolean();
 		power = buf.readLong();
+		validPosition = buf.readBoolean();
 
 		for(int i = 0; i < tanks.length; i++) tanks[i].deserialize(buf);
 
