@@ -36,7 +36,7 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 			spawnWeight = 2;
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 			rupture.blockTable = new HashMap<Block, BlockSelector>() {{
-				put(ModBlocks.brick_concrete_cracked, new C());
+				put(ModBlocks.brick_concrete_cracked, new ConcreteBricks());
 			}};
 		}});
 		/*
