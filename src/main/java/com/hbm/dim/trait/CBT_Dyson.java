@@ -85,6 +85,8 @@ public class CBT_Dyson extends CelestialBodyTrait {
 	// based on total across all swarms, meaning players on servers are encouraged to either annihilate other launchers or work together
 	public void attenuate() {
 		for(Swarm swarm : swarms.values()) {
+			if(swarm.members <= 0) continue;
+
 			swarm.consumers = swarm.addedConsumers;
 			swarm.addedConsumers = 0;
 
