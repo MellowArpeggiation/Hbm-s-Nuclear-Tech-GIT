@@ -24,9 +24,9 @@ public class WorldGeneratorDuna implements IWorldGenerator {
 		NBTStructure.registerStructure(SpaceConfig.dunaDimension, new SpawnCondition() {{
 			structure = new JigsawPiece("duna_comms", StructureManager.duna_comms, -1);
 			canSpawn = biome -> biome.heightVariation < 0.1F;
-			spawnWeight = 8;
+			spawnWeight = 4;
 		}});
-		NBTStructure.registerNullWeight(SpaceConfig.dunaDimension, 16);
+		NBTStructure.registerNullWeight(SpaceConfig.dunaDimension, 20);
 	}
 
 	@Override
