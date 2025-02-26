@@ -100,7 +100,9 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import com.hbm.dim.SolarSystem;
+import com.hbm.dim.WorldProviderCelestial;
 import com.hbm.dim.WorldTypeTeleport;
+import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.world.ModBiomes;
 import com.hbm.world.PlanetGen;
 
@@ -678,6 +680,30 @@ public class MainRegistry {
 				}
 			}
 		});
+
+		// Override water dispensing behaviour to handle vacuums
+		BehaviorDefaultDispenseItem bucketDispense = (BehaviorDefaultDispenseItem)BlockDispenser.dispenseBehaviorRegistry.getObject(Items.water_bucket);
+		BehaviorDefaultDispenseItem newBucketDispense = new BehaviorDefaultDispenseItem() {
+			@Override
+			public ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+				World world = source.getWorld();
+				if(world.provider instanceof WorldProviderCelestial) {
+					EnumFacing facing = BlockDispenser.func_149937_b(source.getBlockMetadata());
+					int x = source.getXInt() + facing.getFrontOffsetX();
+					int y = source.getYInt() + facing.getFrontOffsetY();
+					int z = source.getZInt() + facing.getFrontOffsetZ();
+
+					CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(world, x, y, z);
+					if(ChunkAtmosphereManager.proxy.hasLiquidPressure(atmosphere)) {
+						world.provider.isHellWorld = false;
+					}
+				}
+
+				return bucketDispense.dispense(source, stack);
+			}
+		};
+
+		BlockDispenser.dispenseBehaviorRegistry.putObject(Items.water_bucket, newBucketDispense);
 	}
 
 	@EventHandler

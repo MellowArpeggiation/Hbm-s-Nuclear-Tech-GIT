@@ -88,7 +88,6 @@ import io.netty.buffer.PooledByteBufAllocator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockFire;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandGameRule;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -577,12 +576,13 @@ public class ModEventHandler {
 	public void onBucketUse(FillBucketEvent event) {
 		if(event.world.isRemote) return;
 		if(event.target.typeOfHit != MovingObjectType.BLOCK) return;
+		if(!(event.world.provider instanceof WorldProviderCelestial)) return;
 
 		if(event.current != null && event.current.getItem() == Items.water_bucket) {
 			ForgeDirection dir = ForgeDirection.getOrientation(event.target.sideHit);
 			CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(event.world, event.target.blockX + dir.offsetX, event.target.blockY + dir.offsetY, event.target.blockZ + dir.offsetZ);
-			if(!ChunkAtmosphereManager.proxy.hasLiquidPressure(atmosphere)) {
-				event.setCanceled(true);
+			if(ChunkAtmosphereManager.proxy.hasLiquidPressure(atmosphere)) {
+				event.world.provider.isHellWorld = false;
 			}
 		}
 	}
