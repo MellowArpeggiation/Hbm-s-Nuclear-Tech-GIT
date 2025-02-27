@@ -95,10 +95,10 @@ public class ItemWandD extends Item {
 				//when all projectiles return zero and finish damaging the planet the trait deletes itself
 				//problem right now is that if both planets have war data the projectile list conflates the two
 
-
+				/*
 				// TESTING: END OF LIFE
 				//World targetdBody = DimensionManager.getWorld(SpaceConfig.dunaDimension);
-				CelestialBody target = CelestialBody.getBody(SpaceConfig.minmusDimension);
+				CelestialBody target = CelestialBody.getBody(SpaceConfig.moonDimension);
 				int dimid = target.dimensionId;
 				if(target.hasTrait(CBT_Destroyed.class)){
 					target.clearTraits();
@@ -120,6 +120,7 @@ public class ItemWandD extends Item {
 						player.addChatMessage(new ChatComponentText("projectile launched"));
 					}
 				}
+				*/
 			}
 		
 		return stack;

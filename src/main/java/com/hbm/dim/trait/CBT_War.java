@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.dim.CelestialBody;
+import com.hbm.items.tool.ItemWandD;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -84,7 +85,6 @@ public class CBT_War extends CelestialBodyTrait {
 		            if (projectile.getTravel() <= 0) {
 		                projectile.impact();
 		            }
-
 		            if (projectile.getAnimtime() >= 100) {
 		                this.destroyProjectile(projectile);
 		                World targetBody = MinecraftServer.getServer().worldServerForDimension(projectile.getTarget());

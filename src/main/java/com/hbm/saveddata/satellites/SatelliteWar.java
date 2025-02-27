@@ -2,10 +2,15 @@ package com.hbm.saveddata.satellites;
 
 import java.util.ArrayList;
 
+import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
-
+import com.hbm.dim.trait.CBT_Destroyed;
+import com.hbm.dim.trait.CBT_War;
+import com.hbm.dim.trait.CBT_War.Projectile;
+import com.hbm.dim.trait.CBT_War.ProjectileType;
 import com.hbm.entity.logic.EntityDeathBlast;
 import com.hbm.handler.ThreeInts;
+import com.hbm.interfaces.IControlReceiver;
 import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.satellites.Satellite.InterfaceActions;
 import com.hbm.saveddata.satellites.Satellite.Interfaces;
@@ -15,6 +20,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 public class SatelliteWar extends Satellite {
@@ -27,11 +33,13 @@ public class SatelliteWar extends Satellite {
 		this.satIface = Interfaces.SAT_PANEL;
 	}
 	
-	
+	private boolean canFire = false;
+	private boolean hasTarget = false;
+
 	public long lastOp;
 	public float interp;
 	public int cooldown;
-	
+	private CelestialBody target;
 	
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setLong("lastOp", lastOp);
@@ -42,18 +50,56 @@ public class SatelliteWar extends Satellite {
 	}
 	
 	public void onClick(World world, int x, int z) {
-	
+		fireAtTarget(target);
+
+		if(!hasTarget) {
+			canFire = false;
+		}
+		else {
+			canFire = true;
+		}
 	}	
 
 	public void fire() {
-		interp += 0.5f;
-		interp = Math.min(100.0f, interp + 0.3f * (100.0f - interp) * 0.15f);
+	    if (canFire) {
+	        interp += 0.5f;
+	        interp = Math.min(100.0f, interp + 0.3f * (100.0f - interp) * 0.15f);
 
-        if (interp >= 100) {
-        	interp = 0;
-        }
+	        if (interp >= 100) {
+	            interp = 0; 
+	            canFire = false;
+	        }
+
+	    }
+		
 	}
 	
+	public void setTarget(CelestialBody body) {
+		target = CelestialBody.getBody(body.dimensionId);
+		if(target != null) {
+			hasTarget = true;
+		}
+
+	}
+	
+	public void fireAtTarget(CelestialBody body) {
+		if(hasTarget) {
+			if(!target.hasTrait(CBT_War.class)) {
+				target.modifyTraits(new CBT_War(100, 0));
+			} else {
+				CBT_War war = target.getTrait(CBT_War.class);
+				if(war != null) {
+					float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat();
+					//TODO: be able to choose projectile types 
+					Projectile projectile = new Projectile(100, 20, 50, 28 * rand * 5, 55, 20, ProjectileType.SMALL, body.dimensionId);
+					projectile.GUIangle = (int) (rand * 360);
+					war.launchProjectile(projectile);
+					System.out.println(war.health);
+					
+				}
+			}			
+		}
+	}
 	public void playsound(World world) {
         Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
 
@@ -76,8 +122,12 @@ public class SatelliteWar extends Satellite {
 
 	@Override
 	public void deserialize(ByteBuf buf) {
-
 		this.interp = buf.readFloat();
+	}
+
+	
+	public void setCanFire(boolean canFire) {
+		    this.canFire = canFire;
 	}
 
 }

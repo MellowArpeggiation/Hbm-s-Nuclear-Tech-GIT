@@ -47,30 +47,30 @@ public class WorldProviderEarth extends WorldProviderCelestial {
 	    SatelliteSavedData data = (SatelliteSavedData)world.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
 
 
-		if(!worldObj.isRemote) {
+
 
 		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world).sats;
 		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
 				if(entry.getValue() instanceof SatelliteWar) {
 					SatelliteWar war = (SatelliteWar) entry.getValue();
-					//war.fire();	
-					war.interp = 100;
+					war.fire();	
 				}
 			
 			}
-        } else {
+
 			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
 				if(entry.getValue() instanceof SatelliteWar) {
 
 					SatelliteWar war = (SatelliteWar) entry.getValue();
-					if(war.getInterp() <= 1) {
-				        Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
+
+					if(war.getInterp() >= 1 && war.interp <= 10) {
+				       Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
 					}
 				}
 			}
 		}
 
 
-	}
+	
     
 }

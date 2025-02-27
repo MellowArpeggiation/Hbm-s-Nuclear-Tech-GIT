@@ -48,7 +48,6 @@ public class WorldProviderEve extends WorldProviderCelestial {
 	@Override
 	public void updateWeather() {
 		super.updateWeather();
-
 		if(!worldObj.isRemote) {
 			if (chargetime <= 0 || chargetime <= 800) {
 				chargetime += 1;
@@ -64,6 +63,7 @@ public class WorldProviderEve extends WorldProviderCelestial {
 				}
 				flashd += 0.1f;
 				flashd = Math.min(100.0f, flashd + 0.1f * (100.0f - flashd) * 0.15f);
+				
 			}
 		}
 	}

@@ -1576,13 +1576,13 @@ public class ModEventHandler {
 	public void onServerTick(TickEvent.ServerTickEvent event) {
 
 		if(event.phase == Phase.START) {
-			for(CelestialBody body : CelestialBody.getAllBodies()) {
-			        Iterator<CelestialBodyTrait> iterator = body.getTraits().values().iterator();
-			        while(iterator.hasNext()) {
-			            CelestialBodyTrait trait = iterator.next();
+			    for(CelestialBody body : CelestialBody.getAllBodies()) {
+			        List<CelestialBodyTrait> traits = new ArrayList<>(body.getTraits().values());
+			        for (CelestialBodyTrait trait : traits) {
 			            trait.update(false);
 			        }
-			}
+			    }
+			
 			// do other shit I guess?
 			RTTYSystem.updateBroadcastQueue();
 			RequestNetwork.updateEntries();

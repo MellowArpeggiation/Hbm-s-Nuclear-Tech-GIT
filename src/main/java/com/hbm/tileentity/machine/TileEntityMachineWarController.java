@@ -1,23 +1,37 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.dim.CelestialBody;
+import com.hbm.dim.SolarSystem;
+import com.hbm.interfaces.IControlReceiver;
 import com.hbm.inventory.container.ContainerAutocrafter;
 import com.hbm.inventory.container.ContainerMachineWarController;
 import com.hbm.inventory.gui.GUIAutocrafter;
 import com.hbm.inventory.gui.GUIWarController;
+import com.hbm.items.ISatChip;
+import com.hbm.items.ItemVOTVdrive;
+import com.hbm.items.ModItems;
+import com.hbm.saveddata.SatelliteSavedData;
+import com.hbm.saveddata.satellites.Satellite;
+import com.hbm.saveddata.satellites.SatelliteWar;
+import com.hbm.items.ItemVOTVdrive.Destination;
+import com.hbm.items.ItemVOTVdrive.Target;
+import com.hbm.tileentity.IBufPacketReceiver;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energymk2.IEnergyReceiverMK2;
+import codechicken.core.IGuiPacketSender;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class TileEntityMachineWarController extends TileEntityMachineBase implements IEnergyReceiverMK2, IGUIProvider {
+public class TileEntityMachineWarController extends TileEntityMachineBase implements IEnergyReceiverMK2, IGUIProvider, IControlReceiver {
 
-		
+	public int id;
 	public TileEntityMachineWarController() {
 		super(4);
 	}
@@ -62,8 +76,52 @@ public class TileEntityMachineWarController extends TileEntityMachineBase implem
 	}
 	@Override
 	public void updateEntity() {
-		// TODO Auto-generated method stub
-		
+		if(!worldObj.isRemote) {
+			id = ISatChip.getFreqS(slots[2]);
+			if(slots[1] == null || slots[1].getItem() != ModItems.full_drive) return;
+
+			//Destination destination = ItemVOTVdrive.getApproximateDestination(slots[1]);
+		       SatelliteSavedData data = SatelliteSavedData.getData(worldObj);
+
+			SolarSystem.Body target = ItemVOTVdrive.getDestination(slots[1]).body;
+
+			CelestialBody body = target.getBody();
+	              Satellite sat = data.getSatFromFreq(id);
+	              
+	              if(sat instanceof SatelliteWar) {
+	              	SatelliteWar satelliteWar = (SatelliteWar) sat;
+	              	
+	              	satelliteWar.setTarget(body);
+	              	
+	              	
+	              }
+
+			
+		}		
+	}
+	
+	@Override
+	public void receiveControl(NBTTagCompound data) {
+
+		if(data.hasKey("xcoord") && data.hasKey("zcoord")) {
+			updateDriveCoords(data.getInteger("xcoord"), data.getInteger("zcoord"));
+		}
+
+	}
+	
+	
+	private void updateDriveCoords(int x, int z) {
+		if(slots[1] == null || slots[1].getItem() != ModItems.full_drive) return;
+
+		Destination destination = ItemVOTVdrive.getApproximateDestination(slots[1]);
+		ItemVOTVdrive.setCoordinates(slots[1], x, z);
+
+		this.markDirty();
+	}
+	
+	@Override
+	public boolean hasPermission(EntityPlayer player) {
+		return isUseableByPlayer(player);
 	}
 
 }
