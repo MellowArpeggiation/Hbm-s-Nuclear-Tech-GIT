@@ -973,6 +973,7 @@ public class MainRegistry {
 		new OreCave(ModBlocks.laythe_silt, 6).setDimension(SpaceConfig.laytheDimension).setThreshold(0.25D).setRangeMult(80).setYLevel(54).setMaxRange(24).setBlockOverride(ModBlocks.laythe_silt).setIgnoreWater(true).setStalagmites(false);
 		new OreCave(ModBlocks.laythe_silt, 3).setDimension(SpaceConfig.laytheDimension).setThreshold(0.2D).setRangeMult(60).setYLevel(58).setMaxRange(14).setBlockOverride(ModBlocks.laythe_silt).setIgnoreWater(true).setStalagmites(false);
 
+		new OreCave(ModBlocks.basalt, 0).setDimension(SpaceConfig.eveDimension).setThreshold(0.15D).setRangeMult(40).setYLevel(54).setMaxRange(24).setBlockOverride(ModBlocks.eve_silt).setIgnoreWater(true).setStalagmites(false);
 
 		BedrockOre.init();
 
