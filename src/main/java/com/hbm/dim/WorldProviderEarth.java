@@ -11,6 +11,7 @@ import com.hbm.dim.trait.CelestialBodyTrait;
 import com.hbm.dim.trait.CBT_War.ProjectileType;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
+import com.hbm.saveddata.satellites.SatelliteRailgun;
 import com.hbm.saveddata.satellites.SatelliteWar;
 
 import net.minecraft.client.Minecraft;
@@ -52,7 +53,7 @@ public class WorldProviderEarth extends WorldProviderCelestial {
 		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world).sats;
 		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
 				if(entry.getValue() instanceof SatelliteWar) {
-					SatelliteWar war = (SatelliteWar) entry.getValue();
+					SatelliteRailgun war = (SatelliteRailgun) entry.getValue();
 					war.fire();	
 				}
 			
@@ -61,7 +62,7 @@ public class WorldProviderEarth extends WorldProviderCelestial {
 			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
 				if(entry.getValue() instanceof SatelliteWar) {
 
-					SatelliteWar war = (SatelliteWar) entry.getValue();
+					SatelliteRailgun war = (SatelliteRailgun) entry.getValue();
 
 					if(war.getInterp() >= 1 && war.interp <= 10) {
 				       Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);

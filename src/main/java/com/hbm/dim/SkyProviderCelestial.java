@@ -23,6 +23,7 @@ import com.hbm.render.util.BeamPronter.EnumBeamType;
 import com.hbm.render.util.BeamPronter.EnumWaveType;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
+import com.hbm.saveddata.satellites.SatelliteRailgun;
 import com.hbm.saveddata.satellites.SatelliteWar;
 import com.hbm.util.BobMathUtil;
 
@@ -224,66 +225,11 @@ public class SkyProviderCelestial extends IRenderHandler {
 				for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
 
 					if(entry.getValue() instanceof SatelliteWar) {
-						GL11.glColor3f(skyR, skyG, skyB);
-
-						GL11.glPushMatrix();
-
-						GL11.glScaled(5, 5, 5);
-
-						SatelliteWar war = (SatelliteWar) entry.getValue();
-
-						double rounded = Math.round(entry.getKey() / 1000.0);
-						double x = ((entry.getKey() % 10) - 5) * 2;
-						double y = (((entry.getKey() / 10) % 10) - 5) * 2;
-
-						double xPos = Math.min(Math.max(-rounded + 30 + x, -50), 50);
-						double yPos = Math.min(Math.max(-rounded - 20 + y, -50), 50);
-
-						GL11.glTranslated(xPos, yPos, 20);
-						float fuck = entry.getValue().getInterp();
-						float alped = 1.0F - Math.min(1.0F, fuck / 100);
-
-						GL11.glPushMatrix();
-						GL11.glColor4d(1, 1, 1, alped);
-
-						GL11.glTranslated(1, 5.5, 0);
-						GL11.glScaled(fuck * 0.2, fuck * 0.2, fuck * 0.2);
-						mc.renderEngine.bindTexture(flash);
-						ResourceManager.plane.renderAll();
-
-
-						mc.renderEngine.bindTexture(texture);
-						ResourceManager.plane.renderAll();
-						GL11.glPopMatrix();
-
-						GL11.glPushMatrix();
-						GL11.glTranslated(1, 5.5, 0);
-						BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2 , 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)1.6 * 1.2F * alped, alped * 0.2F );
-						BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.7 * 0.6F, alped * 0.6F );
-						BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2, 0), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x202060, 0x202060, (int)(world.getTotalWorldTime() / 5) % 1000, 35, 0.2F, 6, (float)0.2 * 0.1F, alped );
-						GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-						GL11.glDisable(GL11.GL_LIGHTING);
-						GL11.glEnable(GL11.GL_CULL_FACE);
-
-						GL11.glPopMatrix();
-
-
-
-						GL11.glEnable(GL11.GL_DEPTH_TEST);
-						GL11.glDisable(GL11.GL_BLEND);
-						GL11.glRotated(-90, 0, 0, 1);
-
-						GL11.glDepthRange(0.0, 1.0);
-
-						//GL11.glDepthMask(false);
-						GL11.glColor4d(planetTint.xCoord - 0.1F, planetTint.yCoord - 0.1F, planetTint.zCoord - 0.1F, 1);
-
-						mc.renderEngine.bindTexture(ResourceManager.sat_rail_tex);
-						ResourceManager.sat_rail.renderAll();
-
-						GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-						GL11.glEnable(GL11.GL_BLEND);
-						GL11.glPopMatrix();
+						    SatelliteWar satellite = (SatelliteWar) entry.getValue(); // It could be any type of satellite (e.g., Minigun, Cannon)
+						    
+						    
+						    // Call the render method for each satellite (Minigun, Cannon, etc.)
+						    satellite.render(world, entry.getKey(), entry.getKey(), satellite.interp, mc);
 
 
 
