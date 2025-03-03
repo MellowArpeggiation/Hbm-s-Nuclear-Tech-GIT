@@ -8,3 +8,4 @@ Includes all changes and bugfixes from the latest upstream NTMain update - [X525
 * Fixed vertibirds spawning unburied in deserts
 * Fixed skybox not showing on first time joining a server
 * Fixed shift-clicking into VAB deleting drives
+* Fix corrosion check crashing for non FSB (Full Set Bonus) armor
