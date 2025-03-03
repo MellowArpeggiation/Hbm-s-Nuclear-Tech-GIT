@@ -1,6 +1,5 @@
 package com.hbm.main;
 
-import api.hbm.energymk2.Nodespace;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.hbm.blocks.IStepTickReceiver;
@@ -68,6 +67,7 @@ import com.hbm.tileentity.machine.TileEntityMachineRadarNT;
 import com.hbm.tileentity.machine.rbmk.RBMKDials;
 import com.hbm.tileentity.network.RTTYSystem;
 import com.hbm.tileentity.network.RequestNetwork;
+import com.hbm.uninos.UniNodespace;
 import com.hbm.util.*;
 import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.ContaminationUtil.ContaminationType;
@@ -757,8 +757,7 @@ public class ModEventHandler {
 
 	@SubscribeEvent
 	public void onUnload(WorldEvent.Unload event) {
-		NeutronNodeWorld.removeAllWorlds(); // Remove world from worlds when unloaded to avoid world issues.
-		NeutronNodeWorld.removeAllNodes(); // Remove all nodes.
+		NeutronNodeWorld.streamWorlds.remove(event.world);
 	}
 
 	public static boolean didSit = false;
@@ -1577,9 +1576,9 @@ public class ModEventHandler {
 			RTTYSystem.updateBroadcastQueue();
 			RequestNetwork.updateEntries();
 			TileEntityMachineRadarNT.updateSystem();
-			Nodespace.updateNodespace();
+			//Nodespace.updateNodespace();
 			CelestialBody.updateSwarms();
-			// bob i beg of you i need fluid nodespace :pray:
+			UniNodespace.updateNodespace();
 		}
 
 		// There is an issue here somewhere...
