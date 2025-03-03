@@ -6,3 +6,4 @@ Includes all changes and bugfixes from the latest upstream NTMain update - [X525
 * Water being placed by dispensers and melting ice in vacuums instead of evaporating immediately
 * Fixed crash on servers caused by atmosphere scanners
 * Fixed vertibirds spawning unburied in deserts
+* Fixed skybox not showing on first time joining a server
