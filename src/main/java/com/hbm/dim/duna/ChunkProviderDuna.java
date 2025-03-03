@@ -17,8 +17,11 @@ public class ChunkProviderDuna extends ChunkProviderCelestial {
 	public ChunkProviderDuna(World world, long seed, boolean hasMapFeatures) {
 		super(world, seed, hasMapFeatures);
 		stoneBlock = ModBlocks.duna_rock;
-		genPlateau.surfrock = ModBlocks.duna_rock;
-		genPlateau.stoneBlock = ModBlocks.duna_sands;
+		genPlateau.surfrock = ModBlocks.duna_sands;
+		genPlateau.stoneBlock = ModBlocks.duna_rock;
+		genPlateau.fillblock = ModBlocks.duna_sands;
+		
+		
 		caveGenV2.lavaBlock = ModBlocks.basalt;
 		caveGenV2.stoneBlock = ModBlocks.duna_rock;
 	}
