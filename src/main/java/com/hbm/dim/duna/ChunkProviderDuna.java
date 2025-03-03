@@ -21,10 +21,10 @@ public class ChunkProviderDuna extends ChunkProviderCelestial {
 	
     public ChunkProviderDuna(World world, long seed, boolean hasMapFeatures) {
         super(world, seed, hasMapFeatures);
-	this.platnoise = new NoiseGeneratorPerlin(world.rand, 4);  
-	stoneBlock = ModBlocks.duna_rock;
-	genPlateau.surfrock = ModBlocks.duna_rock;
-	genPlateau.stoneBlock = ModBlocks.duna_sands;
+	 this.platnoise = new NoiseGeneratorPerlin(world.rand, 4);  
+	 stoneBlock = ModBlocks.duna_rock;
+	 genPlateau.surfrock = ModBlocks.duna_rock;
+	 genPlateau.stoneBlock = ModBlocks.duna_sands;
         caveGenV2.lavaBlock = ModBlocks.basalt;
         caveGenV2.stoneBlock = ModBlocks.duna_rock;
     }
