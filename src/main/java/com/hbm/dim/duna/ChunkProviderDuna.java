@@ -2,45 +2,38 @@ package com.hbm.dim.duna;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.dim.ChunkProviderCelestial;
-import com.hbm.dim.ChunkProviderCelestial.BlockMetaBuffer;
 import com.hbm.dim.duna.biome.BiomeGenBaseDuna;
 import com.hbm.dim.mapgen.ExperimentalCaveGenerator;
 import com.hbm.dim.mapgen.MapGenPlateau;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.gen.NoiseGeneratorPerlin;
+
 public class ChunkProviderDuna extends ChunkProviderCelestial {
 
 	private ExperimentalCaveGenerator caveGenV2 = new ExperimentalCaveGenerator(2, 40, 8.0F);
-	private final NoiseGeneratorPerlin platnoise;
 	private MapGenPlateau genPlateau = new MapGenPlateau(worldObj);
-	
-	
-    public ChunkProviderDuna(World world, long seed, boolean hasMapFeatures) {
-        super(world, seed, hasMapFeatures);
-	 this.platnoise = new NoiseGeneratorPerlin(world.rand, 4);  
-	 stoneBlock = ModBlocks.duna_rock;
-	 genPlateau.surfrock = ModBlocks.duna_rock;
-	 genPlateau.stoneBlock = ModBlocks.duna_sands;
-        caveGenV2.lavaBlock = ModBlocks.basalt;
-        caveGenV2.stoneBlock = ModBlocks.duna_rock;
-    }
 
-    @Override
+
+	public ChunkProviderDuna(World world, long seed, boolean hasMapFeatures) {
+		super(world, seed, hasMapFeatures);
+		stoneBlock = ModBlocks.duna_rock;
+		genPlateau.surfrock = ModBlocks.duna_rock;
+		genPlateau.stoneBlock = ModBlocks.duna_sands;
+		caveGenV2.lavaBlock = ModBlocks.basalt;
+		caveGenV2.stoneBlock = ModBlocks.duna_rock;
+	}
+
+	@Override
 	public BlockMetaBuffer getChunkPrimer(int x, int z) {
 		BlockMetaBuffer buffer = super.getChunkPrimer(x, z);
 
-        if(biomesForGeneration[0] == BiomeGenBaseDuna.dunaLowlands) {
-            // BEEG CAVES UNDER THE CANYONS
-            this.caveGenV2.func_151539_a(this, worldObj, x, z, buffer.blocks);
-        }
-		
-       genPlateau.func_151539_a(this, worldObj, x, z, buffer.blocks);    
-       	
-        
+		if(biomesForGeneration[0] == BiomeGenBaseDuna.dunaLowlands) {
+			// BEEG CAVES UNDER THE CANYONS
+			this.caveGenV2.func_151539_a(this, worldObj, x, z, buffer.blocks);
+		}
+
+	   	genPlateau.func_151539_a(this, worldObj, x, z, buffer.blocks);
+
 		return buffer;
 	}
 

@@ -27,7 +27,7 @@ public class WorldProviderMoho extends WorldProviderCelestial {
 	public String getDimensionName() {
 		return "Moho";
 	}
-	
+
 	@Override
 	public IChunkProvider createChunkGenerator() {
 		return new ChunkProviderMoho(this.worldObj, this.getSeed(), false);
@@ -47,7 +47,6 @@ public class WorldProviderMoho extends WorldProviderCelestial {
 		// biomes = new GenLayerZoom(1003L, biomes);
 		biomes = new GenLayerSmooth(700L, biomes);
 		biomes = new GenLayerZoom(1006L, biomes);
-		GenLayer genlayerVoronoiZoom = new GenLayerVoronoiZoom(10L, biomes);
 		GenLayer genlayerRiverZoom = new GenLayerZoom(1000L, biomes);
 		GenLayer genlayerRiver = new GenLayerRiver(1004L, genlayerRiverZoom);
 		genlayerRiver = new GenLayerZoom(105L, genlayerRiver);
@@ -57,9 +56,9 @@ public class WorldProviderMoho extends WorldProviderCelestial {
 		GenLayer genlayerRiverMix = new GenLayerRiverMix(100L, biomes, genlayerRiver);
 		genlayerRiverMix = new GenLayerZoom(107L, genlayerRiverMix); // Additional zoom to enhance rivers
 
-		GenLayer genLayerVoronoiZoom = new GenLayerVoronoiZoom(10L, biomes);
+		GenLayer genlayerVoronoiZoom = new GenLayerVoronoiZoom(10L, genlayerRiverMix);
 
-		return new BiomeGenLayers(genlayerRiverMix, genLayerVoronoiZoom, seed);
+		return new BiomeGenLayers(genlayerRiverMix, genlayerVoronoiZoom, seed);
 	}
 
 }
