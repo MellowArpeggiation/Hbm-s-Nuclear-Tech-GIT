@@ -26,9 +26,9 @@ public class ChunkProviderEve extends ChunkProviderCelestial {
 		noise.surfBlock = ModBlocks.eve_silt;
 		noise.cellSize = 72;
 		noise.crackSize = 2.0;
-		noise.plateThickness = 25;
-		noise.shapeExponent = 3.0;
-		noise.plateStartY = 55;
+		noise.plateThickness = 35;
+		noise.shapeExponent = 2.0;
+		noise.plateStartY = 57;
 
 	}
 

@@ -42,7 +42,7 @@ public class SpaceConfig {
 
 	public static int mohoBiome = 122;
 	public static int mohoBasaltBiome = 43;
-	public static int mohoLava = 55;
+	public static int mohoLava = 105;
 
 	public static int laytheBiome = 123;
 	public static int laytheOceanBiome = 124;
