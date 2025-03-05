@@ -6,6 +6,8 @@ import com.hbm.dim.mapgen.ExperimentalCaveGenerator;
 import com.hbm.dim.mapgen.MapGenCrater;
 import com.hbm.dim.mapgen.MapGenVolcano;
 import com.hbm.dim.mapgen.MapgenRavineButBased;
+import com.hbm.dim.moho.biome.BiomeGenBaseMoho;
+import com.hbm.dim.noise.MapGenVNoise;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -14,7 +16,7 @@ public class ChunkProviderMoho extends ChunkProviderCelestial {
 
 	private ExperimentalCaveGenerator caveGenV2 = new ExperimentalCaveGenerator(1, 52, 10.0F);
 	private MapgenRavineButBased rgen = new MapgenRavineButBased();
-
+	private MapGenVNoise noise = new MapGenVNoise();
 	private MapGenCrater smallCrater = new MapGenCrater(6);
 	private MapGenCrater largeCrater = new MapGenCrater(64);
 	private MapGenVolcano volcano = new MapGenVolcano(72);
@@ -33,6 +35,15 @@ public class ChunkProviderMoho extends ChunkProviderCelestial {
 		rgen.stoneBlock = ModBlocks.moho_stone;
 		stoneBlock = ModBlocks.moho_stone;
 		seaBlock = Blocks.lava;
+		
+		noise.surfBlock = ModBlocks.moho_stone;
+		noise.rockBlock = ModBlocks.moho_stone;
+		noise.fluidBlock = Blocks.lava;
+		noise.crackSize = 0.5;
+		noise.cellSize = 27;
+		noise.plateStartY = 62;
+		noise.plateThickness = 25;
+
 	}
 
 	@Override
@@ -45,7 +56,10 @@ public class ChunkProviderMoho extends ChunkProviderCelestial {
 		smallCrater.func_151539_a(this, worldObj, x, z, buffer.blocks);
 		largeCrater.func_151539_a(this, worldObj, x, z, buffer.blocks);
 		volcano.func_151539_a(this, worldObj, x, z, buffer.blocks);
+		if(biomesForGeneration[0] == BiomeGenBaseMoho.mohoLavaSea) {
+			noise.func_151539_a(this, worldObj, x, z, buffer.blocks);
 
+		}
 		return buffer;
 	}
 

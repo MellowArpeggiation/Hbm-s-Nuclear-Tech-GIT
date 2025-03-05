@@ -35,7 +35,11 @@ public class ChunkProviderDuna extends ChunkProviderCelestial {
 			this.caveGenV2.func_151539_a(this, worldObj, x, z, buffer.blocks);
 		}
 
-	   	genPlateau.func_151539_a(this, worldObj, x, z, buffer.blocks);
+		if(biomesForGeneration[0] == BiomeGenBaseDuna.dunaHills) {
+		   	genPlateau.func_151539_a(this, worldObj, x, z, buffer.blocks);
+		   	super.replaceBlocksForBiome(x, z, buffer.blocks, buffer.metas, biomesForGeneration);
+		   	
+		}
 
 		return buffer;
 	}

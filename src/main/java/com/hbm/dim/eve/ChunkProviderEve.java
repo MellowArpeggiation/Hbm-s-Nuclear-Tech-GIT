@@ -3,6 +3,7 @@ package com.hbm.dim.eve;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.dim.ChunkProviderCelestial;
 import com.hbm.dim.eve.biome.BiomeGenBaseEve;
+import com.hbm.dim.noise.MapGenVNoise;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -12,13 +13,22 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 public class ChunkProviderEve extends ChunkProviderCelestial {
 
 	private final NoiseGeneratorPerlin crackNoise;
-
+	MapGenVNoise noise = new MapGenVNoise();
 	public ChunkProviderEve(World world, long seed, boolean hasMapFeatures) {
 		super(world, seed, hasMapFeatures);
 		reclamp = false;
 		stoneBlock = ModBlocks.eve_rock;
 		seaBlock = ModBlocks.mercury_block;
 		this.crackNoise = new NoiseGeneratorPerlin(world.rand, 4);
+		
+		noise.fluidBlock = ModBlocks.mercury_block;
+		noise.rockBlock = ModBlocks.eve_rock;
+		noise.surfBlock = ModBlocks.eve_silt;
+		noise.cellSize = 72;
+		noise.crackSize = 2.0;
+		noise.plateThickness = 25;
+		noise.shapeExponent = 3.0;
+		noise.plateStartY = 55;
 
 	}
 
@@ -26,6 +36,12 @@ public class ChunkProviderEve extends ChunkProviderCelestial {
 	public BlockMetaBuffer getChunkPrimer(int x, int z) {
 		BlockMetaBuffer buffer = super.getChunkPrimer(x, z);
 		generateCracks(x, z, buffer);
+		
+		if(biomesForGeneration[0] == BiomeGenBaseEve.eveOcean) {
+			noise.func_151539_a(this, worldObj, x, z, buffer.blocks);
+	
+		}
+		
 		// how many times do I gotta say BEEEEG
 		return buffer;
 	}

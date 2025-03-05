@@ -16,9 +16,9 @@ public class MapGenPlateau extends MapGenBase {
 	    public Block fillblock;
 
 	    public NoiseGeneratorPerlin plateauNoise;
-	    public double noiseScale = 0.01;    
+	    public double noiseScale = 0.05;    
 	    public int maxPlateauAddition = 12;    
-	    public int stepHeight = 2;            
+	    public int stepHeight = 6;            
 	    public int topsoilThickness = 2;       
 
 	    public MapGenPlateau(World world) {
