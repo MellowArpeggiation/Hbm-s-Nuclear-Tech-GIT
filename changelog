@@ -1,26 +1,11 @@
-Includes all changes from the latest upstream NTMain update - [X5243 - the secret invisible C96](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5243)
-
-
-## Added
-* DYSON SWARMS
-  * Dyson Swarm Members - must be continuously launched in order to maintain the swarm, as members will attenuate over time, the more members, the faster they attenuate
-  * Dyson Spinlauncher - launches new swarm members continuously as long as it is powered and has a satellite ID chip installed
-  * Dyson Receiver - receives energy from the swarm as long as a matching satellite ID chip is installed, collimates it into a potent beam
-  * Dyson Power Converter - receives an energy beam from a receiver and converts it directly into power (HE)
-  * Dyson Heat Converter - receives an energy beam from a receiver and converts it directly into heat (TU)
-  * Dyson Anatmogenesis Terraformer - receives an energy beam from a receiver and converts the energy into mass, producing atmospheric gases at planetary scales
-  * Satellite Dyson Relay - launch this into orbit in order for a Dyson receiver with a matching ID to be able to operate at night for that planet/moon
-* Magma Drill - extracts mineral-rich magma from Moho, which can be processed into gallium, arsenic, and meteorite dust
-* Atmosphere Scanner - reports on the current atmospheric composition
-
-
-## Changed
-* Redesigned Meteor Dungeons!
-* Geiger counters now produce less counts between 0-1RAD/s
-* Jetpack and oxygen tanks now stack to 16, and aren't consumed if the target is full
-
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5257 - in the hudson bay, you know how we do it](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5257)
 
 ## Fixed
-* All fixes from upstream NTM
-* Improved celestial trait syncing robustness
-* PU-239 bedrock fragments now produce ingots
+* Mun cows being irradiated by the sun, turning to mooshrooms, and immediately suffocating
+* Dyson swarm counts going negative with multiple competing swarms
+* Water being placed by dispensers and melting ice in vacuums instead of evaporating immediately
+* Fixed crash on servers caused by atmosphere scanners
+* Fixed vertibirds spawning unburied in deserts
+* Fixed skybox not showing on first time joining a server
+* Fixed shift-clicking into VAB deleting drives
+* Fix corrosion check crashing for non FSB (Full Set Bonus) armor

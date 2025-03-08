@@ -42,6 +42,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 
 public abstract class WorldProviderCelestial extends WorldProvider {
 	
+
 	private long localTime = -1;
 
 	@Override
@@ -109,6 +110,12 @@ public abstract class WorldProviderCelestial extends WorldProvider {
  
 		
 		if(atmosphere != null && atmosphere.getPressure() > 0.5F) {
+		double pressure = atmosphere != null ? atmosphere.getPressure() : 0;
+
+		// Will prevent water from existing, will be unset immediately before using a bucket if inside a pressurized room
+		isHellWorld = !worldObj.isRemote && pressure <= 0.2F;
+
+		if(pressure > 0.5F) {
 			super.updateWeather();
 			return;
 		}
@@ -279,6 +286,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			}
 
 		}
+
 		// The cold hard vacuum of space
 		if(atmosphere == null) {
 
@@ -383,7 +391,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			float f3 = MathHelper.cos((celestialAngle) * (float)Math.PI * 2.0F) - 0.0F;
 			float f4 = -0.0F;
 
-			if(f3 >= f4 - f2 && f3 <= f4 + f2) {
+			if (f3 >= f4 - f2 && f3 <= f4 + f2) {
 				float f5 = (f3 - f4) / f2 * 0.5F + 0.5F;
 				float f6 = 1.0F - (1.0F - MathHelper.sin(f5 * (float)Math.PI)) * 0.99F;
 				f6 *= f6;
