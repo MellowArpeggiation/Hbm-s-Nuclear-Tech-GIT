@@ -127,6 +127,8 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		this.worldObj.getWorldInfo().setThundering(false);
 		this.worldObj.rainingStrength = 0.0F;
 		this.worldObj.thunderingStrength = 0.0F;
+		}
+	
 	}
 
 	// Can be overridden to provide fog changing events based on weather
