@@ -65,6 +65,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.biome.BiomeGenBase;
 
 public class EntityEffectHandler {
@@ -112,7 +113,7 @@ public class EntityEffectHandler {
 				}
 			}
 			//only sets players on fire so mod compatibility doesnt die
-			if((GeneralConfig.enable528 && GeneralConfig.enable528NetherBurn) && entity instanceof EntityPlayer && !entity.isImmuneToFire() && entity.worldObj.provider.isHellWorld) {
+			if((GeneralConfig.enable528 && GeneralConfig.enable528NetherBurn) && entity instanceof EntityPlayer && !entity.isImmuneToFire() && entity.worldObj.provider instanceof WorldProviderHell) {
 				entity.setFire(5);
 			}
 
@@ -245,7 +246,7 @@ public class EntityEffectHandler {
 			}
 			if(neut<1e-5)
 				HbmLivingProps.setNeutronActivation(entity,0);
-			if(world.provider.isHellWorld && RadiationConfig.hellRad > 0 && rad < RadiationConfig.hellRad)
+			if(world.provider instanceof WorldProviderHell && RadiationConfig.hellRad > 0 && rad < RadiationConfig.hellRad)
 				rad = (float) RadiationConfig.hellRad;
 
 			if(world.provider instanceof WorldProviderCelestial || world.provider instanceof WorldProviderOrbit) {
