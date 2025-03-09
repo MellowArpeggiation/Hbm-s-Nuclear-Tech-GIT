@@ -4,6 +4,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.dim.ChunkProviderCelestial;
 import com.hbm.dim.duna.biome.BiomeGenBaseDuna;
 import com.hbm.dim.mapgen.ExperimentalCaveGenerator;
+import com.hbm.dim.mapgen.MapGenPlateau;
 
 import net.minecraft.world.World;
 
@@ -11,6 +12,7 @@ public class ChunkProviderDuna extends ChunkProviderCelestial {
 
 	private ExperimentalCaveGenerator caveGenSmall = new ExperimentalCaveGenerator(2, 12, 0.12F);
 	private ExperimentalCaveGenerator caveGenV2 = new ExperimentalCaveGenerator(2, 40, 3.0F);
+	private MapGenPlateau genPlateau = new MapGenPlateau(worldObj);
 
 	public ChunkProviderDuna(World world, long seed, boolean hasMapFeatures) {
 		super(world, seed, hasMapFeatures);
@@ -25,22 +27,38 @@ public class ChunkProviderDuna extends ChunkProviderCelestial {
 
 		caveGenV2.onlyBiome = BiomeGenBaseDuna.dunaLowlands;
 		caveGenSmall.ignoreBiome = BiomeGenBaseDuna.dunaLowlands;
+
+		genPlateau.surfrock = ModBlocks.duna_sands;
+		genPlateau.stoneBlock = ModBlocks.duna_rock;
+		genPlateau.fillblock = ModBlocks.duna_sands;
+		genPlateau.applyToBiome = BiomeGenBaseDuna.dunaHills;
 	}
 
 	@Override
 	public BlockMetaBuffer getChunkPrimer(int x, int z) {
-		BlockMetaBuffer buffer = super.getChunkPrimer(x, z);
+		// Instead of calling super, we want to do some generation before _and_ after block replacement, for shaping!
+		BlockMetaBuffer buffer = new BlockMetaBuffer();
+		generateBlocks(x, z, buffer.blocks);
+		biomesForGeneration = this.worldObj.getWorldChunkManager().loadBlockGeneratorData(biomesForGeneration, x * 16, z * 16, 16, 16);
 
 		boolean hasLowlands = false;
 		boolean hasNotLowlands = false;
+		boolean hasPlateau = false;
 
 		for(int i = 0; i < biomesForGeneration.length; i++) {
 			if(biomesForGeneration[i] == BiomeGenBaseDuna.dunaLowlands) hasLowlands = true; else hasNotLowlands = true;
-			if(hasLowlands && hasNotLowlands) break;
+			if(biomesForGeneration[i] == BiomeGenBaseDuna.dunaHills) hasPlateau = true;
+			if(hasLowlands && hasNotLowlands && hasPlateau) break;
 		}
 
-		if(hasLowlands) this.caveGenV2.func_151539_a(this, worldObj, x, z, buffer.blocks);
-		if(hasNotLowlands) this.caveGenSmall.func_151539_a(this, worldObj, x, z, buffer.blocks);
+		// Pre-biome blocks
+		if(hasPlateau) genPlateau.func_151539_a(this, worldObj, x, z, buffer.blocks);
+
+		replaceBlocksForBiome(x, z, buffer.blocks, buffer.metas, biomesForGeneration);
+
+		// Post-biome blocks
+		if(hasLowlands) caveGenV2.func_151539_a(this, worldObj, x, z, buffer.blocks);
+		if(hasNotLowlands) caveGenSmall.func_151539_a(this, worldObj, x, z, buffer.blocks);
 
 		return buffer;
 	}
