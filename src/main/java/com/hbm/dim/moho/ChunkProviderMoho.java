@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 public class ChunkProviderMoho extends ChunkProviderCelestial {
 
-	private ExperimentalCaveGenerator caveGenV2 = new ExperimentalCaveGenerator(1, 52, 10.0F);
+	private ExperimentalCaveGenerator caveGenV2 = new ExperimentalCaveGenerator(1, 52, 4.0F);
 	private MapgenRavineButBased rgen = new MapgenRavineButBased();
 
 	private MapGenCrater smallCrater = new MapGenCrater(6);
