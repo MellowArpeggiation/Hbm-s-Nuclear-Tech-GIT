@@ -42,7 +42,6 @@ public class SpaceConfig {
 
 	public static int mohoBiome = 122;
 	public static int mohoBasaltBiome = 43;
-	public static int mohoLava = 105;
 
 	public static int laytheBiome = 123;
 	public static int laytheOceanBiome = 124;
@@ -56,11 +55,11 @@ public class SpaceConfig {
 	public static int tektoRiver = 102;
 
 
-	
 
-	
 
-	
+
+
+
 
 
 	public static boolean allowNetherPortals = false;
@@ -68,12 +67,12 @@ public class SpaceConfig {
 	public static boolean enableVolcanoGen = true;
 
 	public static int maxProbeDistance = 32_000;
-	
+
 	public static void loadFromConfig(Configuration config) {
-	
+
 		final String CATEGORY_DIM = CommonConfig.CATEGORY_DIMS;
 		allowNetherPortals = CommonConfig.createConfigBool(config, CATEGORY_DIM, "17.00_allowNetherPortals", "Should Nether portals function on other celestial bodies?", false);
-		
+
 		moonDimension = CommonConfig.createConfigInt(config, CATEGORY_DIM, "17.01_moonDimension", "Mun dimension ID", moonDimension);
 		dunaDimension = CommonConfig.createConfigInt(config, CATEGORY_DIM, "17.02_dunaDimension", "Duna dimension ID", dunaDimension);
 		ikeDimension = CommonConfig.createConfigInt(config, CATEGORY_DIM, "17.03_ikeDimension", "Ike dimension ID", ikeDimension);
@@ -84,7 +83,7 @@ public class SpaceConfig {
 		laytheDimension = CommonConfig.createConfigInt(config, CATEGORY_DIM, "17.08_laytheDimension", "Laythe dimension ID", laytheDimension);
 		orbitDimension = CommonConfig.createConfigInt(config, CATEGORY_DIM, "17.09_orbitDimension", "Orbital dimension ID", orbitDimension);
 		tektoDimension = CommonConfig.createConfigInt(config, CATEGORY_DIM, "17.10_tektoDimension", "Tekto dimension ID", tektoDimension);
-		
+
 		final String CATEGORY_GENERAL = CommonConfig.CATEGORY_GENERAL;
 		maxProbeDistance = CommonConfig.createConfigInt(config, CATEGORY_GENERAL, "1.90_maxProbeDistance", "How far from the center of the dimension can probes generate landing coordinates", maxProbeDistance);
 		enableVolcanoGen = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.91_enableVolcanoGen", "Should volcanoes be active when spawning, disabling will prevent natural volcanoes from spewing lava and growing", enableVolcanoGen);
@@ -113,8 +112,6 @@ public class SpaceConfig {
 		mohoBasaltBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.22_mohoBasaltBiome", "Moho Basalt Biome ID", mohoBasaltBiome);
 		orbitBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.23_orbitBiome", "Space Biome ID", orbitBiome);
 		laytheCoastBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.24_laytheCoastBiome", "Laythe Coast Biome ID", laytheCoastBiome);
-		mohoLava = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.25_mohoLavaBiome", "Moho Lava Biome ID", mohoLava);
-
 	}
 
 }
