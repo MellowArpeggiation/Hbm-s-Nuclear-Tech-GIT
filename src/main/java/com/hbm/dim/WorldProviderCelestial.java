@@ -265,7 +265,15 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		if(eclipseAmount > 0) {
 			color.xCoord *= 1 - eclipseAmount * 0.3;
 			color.yCoord *= 1 - eclipseAmount * 0.3;
-			color.zCoord *= 1 - eclipseAmount * 0.25;
+			color.zCoord *= 1 - eclipseAmount * 0.3;
+
+			float[] sunsetFog = calcSunriseSunsetColors(0.25F, 0);
+			if(sunsetFog != null) {
+				double sunsetAmount = eclipseAmount * 0.5F;
+				color.xCoord = color.xCoord * (1.0F - sunsetAmount) + sunsetFog[0] * sunsetAmount;
+				color.yCoord = color.yCoord * (1.0F - sunsetAmount) + sunsetFog[1] * sunsetAmount;
+				color.zCoord = color.zCoord * (1.0F - sunsetAmount) + sunsetFog[2] * sunsetAmount;
+			}
 		}
 
 		return color;
