@@ -379,6 +379,13 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		return colors;
 	}
 
+	// this function should be called `getCloudColor`, please slap the next MCP dev you see lmao
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Vec3 drawClouds(float partialTicks) {
+		return super.drawClouds(partialTicks);
+	}
+
 	@Override
 	public boolean canDoLightning(Chunk chunk) {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
