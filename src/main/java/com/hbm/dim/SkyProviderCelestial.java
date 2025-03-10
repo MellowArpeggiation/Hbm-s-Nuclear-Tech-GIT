@@ -67,21 +67,22 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
-		float fogIntensity = 0;
+		// We can now guarantee that this only runs with celestial, but it doesn't hurt to be safe
+		if(!(world.provider instanceof WorldProviderCelestial)) return;
 
-		if(world.provider instanceof WorldProviderCelestial) {
-			// Without mixins, we have to resort to some very wacky ways of checking that the lightmap needs to be updated
-			// fortunately, thanks to torch flickering, we can just check to see if the brightest pixel has been modified
-			if(lastBrightestPixel != mc.entityRenderer.lightmapColors[255] + mc.entityRenderer.lightmapColors[250]) {
-				if(((WorldProviderCelestial)world.provider).updateLightmap(mc.entityRenderer.lightmapColors)) {
-					mc.entityRenderer.lightmapTexture.updateDynamicTexture();
-				}
+		WorldProviderCelestial celestialProvider = (WorldProviderCelestial) world.provider;
 
-				lastBrightestPixel = mc.entityRenderer.lightmapColors[255] + mc.entityRenderer.lightmapColors[250];
+		// Without mixins, we have to resort to some very wacky ways of checking that the lightmap needs to be updated
+		// fortunately, thanks to torch flickering, we can just check to see if the brightest pixel has been modified
+		if(lastBrightestPixel != mc.entityRenderer.lightmapColors[255] + mc.entityRenderer.lightmapColors[250]) {
+			if(celestialProvider.updateLightmap(mc.entityRenderer.lightmapColors)) {
+				mc.entityRenderer.lightmapTexture.updateDynamicTexture();
 			}
 
-			fogIntensity = ModEventHandlerRenderer.lastFogDensity * 30;
+			lastBrightestPixel = mc.entityRenderer.lightmapColors[255] + mc.entityRenderer.lightmapColors[250];
 		}
+
+		float fogIntensity = ModEventHandlerRenderer.lastFogDensity * 30;
 
 		CelestialBody body = CelestialBody.getBody(world);
 		CelestialBody sun = body.getStar();
@@ -176,24 +177,15 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
 
-			double sunSize = SolarSystem.calculateSunSize(body);
+			// Scale sun size for rendering (texture is 4 times larger than actual, for glow)
+			double sunSize = SolarSystem.calculateSunSize(body) * SolarSystem.SUN_RENDER_SCALE;
 			double coronaSize = sunSize * (3 - MathHelper.clamp_float(pressure, 0.0F, 1.0F));
 
 			renderSun(partialTicks, world, mc, sun, sunSize, coronaSize, visibility, pressure);
 
 			float blendAmount = hasAtmosphere ? MathHelper.clamp_float(1 - world.getSunBrightnessFactor(partialTicks), 0.25F, 1F) : 1F;
 
-			double longitude = 0;
-			CelestialBody tidalLockedBody = body.tidallyLockedTo != null ? CelestialBody.getBody(body.tidallyLockedTo) : null;
-
-			if(tidalLockedBody != null) {
-				longitude = SolarSystem.calculateSingleAngle(world, partialTicks, body, tidalLockedBody) + celestialAngle * 360.0 + 60.0;
-			}
-
-			// Get our orrery of bodies
-			List<AstroMetric> metrics = SolarSystem.calculateMetricsFromBody(world, partialTicks, longitude, body);
-
-			renderCelestials(partialTicks, world, mc, metrics, celestialAngle, tidalLockedBody, planetTint, visibility, blendAmount, null, 24);
+			renderCelestials(partialTicks, world, mc, celestialProvider.metrics, celestialAngle, celestialProvider.tidalLockedBody, planetTint, visibility, blendAmount, null, 24);
 
 			GL11.glEnable(GL11.GL_BLEND);
 
