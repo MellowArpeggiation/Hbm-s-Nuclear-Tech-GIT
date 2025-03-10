@@ -263,9 +263,9 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		}
 
 		if(eclipseAmount > 0) {
-			color.xCoord *= 1 - eclipseAmount * 0.25;
-			color.yCoord *= 1 - eclipseAmount * 0.25;
-			color.zCoord *= 1 - eclipseAmount * 0.2;
+			color.xCoord *= 1 - eclipseAmount * 0.3;
+			color.yCoord *= 1 - eclipseAmount * 0.3;
+			color.zCoord *= 1 - eclipseAmount * 0.25;
 		}
 
 		return color;
@@ -319,9 +319,9 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		color.zCoord *= pressureFactor;
 
 		if(eclipseAmount > 0) {
-			color.xCoord *= 1 - eclipseAmount * 0.5;
-			color.yCoord *= 1 - eclipseAmount * 0.5;
-			color.zCoord *= 1 - eclipseAmount * 0.4;
+			color.xCoord *= 1 - eclipseAmount * 0.6;
+			color.yCoord *= 1 - eclipseAmount * 0.6;
+			color.zCoord *= 1 - eclipseAmount * 0.5;
 		}
 
 		return color;
@@ -417,7 +417,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 		float sunBrightness = super.getSunBrightness(par1);
 
-		sunBrightness *= 1 - eclipseAmount * 0.5;
+		sunBrightness *= 1 - eclipseAmount * 0.6;
 
 		if(atmosphere == null) return sunBrightness;
 
