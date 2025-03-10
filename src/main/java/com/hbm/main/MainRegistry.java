@@ -1040,6 +1040,7 @@ public class MainRegistry {
 		event.registerServerCommand(new CommandRadiation());
 		event.registerServerCommand(new CommandStations());
 		event.registerServerCommand(new CommandPacketInfo());
+		event.registerServerCommand(new CommandTotalTime());
 	}
 
 	@EventHandler

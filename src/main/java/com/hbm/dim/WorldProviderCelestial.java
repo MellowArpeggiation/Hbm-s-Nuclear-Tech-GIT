@@ -177,6 +177,8 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		for(AstroMetric metric : metrics) {
 			double phase = Math.abs(metric.phase);
 
+			if(metric.apparentSize < 1) continue;
+
 			double sizeToArc = 0.0028; // due to rendering, the arc is not exactly 1deg = 1deg, this converts from apparentSize to 0-1
 			double planetSize = MathHelper.clamp_double(metric.apparentSize, 0, 24);
 
