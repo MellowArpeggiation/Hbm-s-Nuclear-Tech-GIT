@@ -1,16 +1,16 @@
-package com.hbm.dim.moho.genlayer;
+package com.hbm.dim.duna.genlayer;
 
-import com.hbm.dim.moho.biome.BiomeGenBaseMoho;
+import com.hbm.dim.duna.biome.BiomeGenBaseDuna;
 
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
-public class GenLayerMohoBiomes extends GenLayer {
+public class GenLayerDunaBiomes extends GenLayer {
 
-	private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseMoho.mohoCrag, BiomeGenBaseMoho.mohoLavaSea };
+	private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseDuna.dunaPlains, BiomeGenBaseDuna.dunaLowlands, BiomeGenBaseDuna.dunaPolar, BiomeGenBaseDuna.dunaHills, BiomeGenBaseDuna.dunaPolarHills };
 
-	public GenLayerMohoBiomes(long l) {
+	public GenLayerDunaBiomes(long l) {
 		super(l);
 	}
 

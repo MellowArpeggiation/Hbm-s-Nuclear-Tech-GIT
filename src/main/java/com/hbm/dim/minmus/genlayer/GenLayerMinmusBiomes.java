@@ -1,16 +1,16 @@
-package com.hbm.dim.moho.genlayer;
+package com.hbm.dim.minmus.genlayer;
 
-import com.hbm.dim.moho.biome.BiomeGenBaseMoho;
+import com.hbm.dim.minmus.biome.BiomeGenBaseMinmus;
 
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
-public class GenLayerMohoBiomes extends GenLayer {
+public class GenLayerMinmusBiomes extends GenLayer {
 
-	private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseMoho.mohoCrag, BiomeGenBaseMoho.mohoLavaSea };
+	private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseMinmus.minmusCanyon, BiomeGenBaseMinmus.minmusPlains };
 
-	public GenLayerMohoBiomes(long l) {
+	public GenLayerMinmusBiomes(long l) {
 		super(l);
 	}
 

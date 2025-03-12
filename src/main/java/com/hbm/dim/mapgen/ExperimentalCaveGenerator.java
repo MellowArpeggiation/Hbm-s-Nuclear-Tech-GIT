@@ -262,7 +262,7 @@ public class ExperimentalCaveGenerator extends MapGenBase {
 	}
 
 	protected boolean isOceanBlock(Block[] data, int index, int x, int y, int z, int chunkX, int chunkZ) {
-		return data[index] == Blocks.flowing_water || data[index] == Blocks.water;
+		return data[index] != null && data[index].getMaterial().isLiquid();
 	}
 
 	// Determine if the block at the specified location is the top block for the

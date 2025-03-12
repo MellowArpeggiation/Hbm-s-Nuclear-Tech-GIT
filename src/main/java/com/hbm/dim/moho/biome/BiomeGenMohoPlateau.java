@@ -4,13 +4,13 @@ import com.hbm.blocks.ModBlocks;
 
 import net.minecraft.world.biome.BiomeGenBase;
 
-public class BiomeGenMohoLavaSea extends BiomeGenBaseMoho {
+public class BiomeGenMohoPlateau extends BiomeGenBaseMoho {
 
-	public static final BiomeGenBase.Height height = new BiomeGenBase.Height(-0.8F, 0.01F);
+	public static final BiomeGenBase.Height height = new BiomeGenBase.Height(0.255F, 0.432F);
 
-	public BiomeGenMohoLavaSea(int id) {
+	public BiomeGenMohoPlateau(int id) {
 		super(id);
-		this.setBiomeName("Moho Lava Sea");
+		this.setBiomeName("Moho Plateau");
 
 		this.setHeight(height);
 

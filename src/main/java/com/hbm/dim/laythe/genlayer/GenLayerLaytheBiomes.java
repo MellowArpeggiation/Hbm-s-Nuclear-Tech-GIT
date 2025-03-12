@@ -1,16 +1,16 @@
-package com.hbm.dim.moho.genlayer;
+package com.hbm.dim.laythe.genlayer;
 
-import com.hbm.dim.moho.biome.BiomeGenBaseMoho;
+import com.hbm.dim.laythe.biome.BiomeGenBaseLaythe;
 
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
-public class GenLayerMohoBiomes extends GenLayer {
+public class GenLayerLaytheBiomes extends GenLayer {
 
-	private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseMoho.mohoCrag, BiomeGenBaseMoho.mohoLavaSea };
+	private static final BiomeGenBase[] biomes = new BiomeGenBase[] { BiomeGenBaseLaythe.laytheIsland, BiomeGenBaseLaythe.laytheOcean, BiomeGenBaseLaythe.laytheCoast };
 
-	public GenLayerMohoBiomes(long l) {
+	public GenLayerLaytheBiomes(long l) {
 		super(l);
 	}
 

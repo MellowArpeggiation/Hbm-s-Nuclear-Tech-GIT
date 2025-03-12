@@ -22,7 +22,7 @@ public class SpaceConfig {
 	public static int orbitBiome = 42;
 
 	public static int minmusBiome = 40;
-	public static int minmusBasins = 41;
+	public static int minmusBasinBiome = 41;
 	public static int moonBiome = 111;
 
 	public static int dunaBiome = 112;
@@ -38,10 +38,12 @@ public class SpaceConfig {
 	public static int eveRiverBiome = 110;
 
 	public static int dresBiome = 120;
-	public static int dresBasins = 121;
+	public static int dresBasinBiome = 121;
 
 	public static int mohoBiome = 122;
 	public static int mohoBasaltBiome = 43;
+	public static int mohoLavaBiome = 105;
+	public static int mohoPlateauBiome = 106;
 
 	public static int laytheBiome = 123;
 	public static int laytheOceanBiome = 124;
@@ -104,14 +106,16 @@ public class SpaceConfig {
 		laytheBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.14_laytheBiome", "Laythe Biome ID", laytheBiome);
 		laytheOceanBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.15_laytheOceanBiome", "Laythe Ocean Biome ID", laytheOceanBiome);
 		laythePolarBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.16_laythePolarBiome", "Laythe Polar Biome ID", laythePolarBiome);
-		minmusBasins = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.17_minmusBasinsBiome", "Minmus Basins Biome ID", minmusBasins);
+		minmusBasinBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.17_minmusBasinsBiome", "Minmus Basins Biome ID", minmusBasinBiome);
 		minmusBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.18_minmusBiome", "Minmus Biome ID", minmusBiome);
 		mohoBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.19_mohoBiome", "Moho Biome ID", mohoBiome);
 		dresBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.20_dresBiome", "Dres Biome ID", dresBiome);
-		dresBasins = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.21_dresBasinsBiome", "Dres Basins Biome ID", dresBasins);
+		dresBasinBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.21_dresBasinsBiome", "Dres Basins Biome ID", dresBasinBiome);
 		mohoBasaltBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.22_mohoBasaltBiome", "Moho Basalt Biome ID", mohoBasaltBiome);
 		orbitBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.23_orbitBiome", "Space Biome ID", orbitBiome);
 		laytheCoastBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.24_laytheCoastBiome", "Laythe Coast Biome ID", laytheCoastBiome);
+		mohoLavaBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.25_mohoLavaBiome", "Moho Lava Biome ID", mohoLavaBiome);
+		mohoPlateauBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.26_mohoPlateauBiome", "Moho Plateau Biome ID", mohoPlateauBiome);
 	}
 
 }
