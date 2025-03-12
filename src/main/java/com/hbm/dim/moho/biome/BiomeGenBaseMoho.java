@@ -19,6 +19,7 @@ public abstract class BiomeGenBaseMoho extends BiomeGenBaseCelestial {
 	public static final BiomeGenBase mohoBasalt = new BiomeGenMohoBasalt(SpaceConfig.mohoBasaltBiome);
 	public static final BiomeGenBase mohoLavaSea = new BiomeGenMohoLavaSea(SpaceConfig.mohoLavaBiome);
 	public static final BiomeGenBase mohoPlateau = new BiomeGenMohoPlateau(SpaceConfig.mohoPlateauBiome);
+	public static final BiomeGenBase mohoRiver = new BiomeGenMohoRiver(SpaceConfig.mohoRiverBiome);
 
 	public BiomeGenBaseMoho(int id) {
 		super(id);

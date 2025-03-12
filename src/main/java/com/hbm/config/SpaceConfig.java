@@ -44,6 +44,7 @@ public class SpaceConfig {
 	public static int mohoBasaltBiome = 43;
 	public static int mohoLavaBiome = 105;
 	public static int mohoPlateauBiome = 106;
+	public static int mohoRiverBiome = 107;
 
 	public static int laytheBiome = 123;
 	public static int laytheOceanBiome = 124;
@@ -116,6 +117,7 @@ public class SpaceConfig {
 		laytheCoastBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.24_laytheCoastBiome", "Laythe Coast Biome ID", laytheCoastBiome);
 		mohoLavaBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.25_mohoLavaBiome", "Moho Lava Biome ID", mohoLavaBiome);
 		mohoPlateauBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.26_mohoPlateauBiome", "Moho Plateau Biome ID", mohoPlateauBiome);
+		mohoRiverBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.27_mohoRiverBiome", "Moho River Biome ID", mohoRiverBiome);
 	}
 
 }
