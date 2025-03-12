@@ -1485,6 +1485,7 @@ public class AssemblerRecipes extends SerializableRecipe {
 				new OreDictStack(STEEL.plate(), 32),
 				new ComparableStack(ModItems.drill_titanium, 1),
 				new ComparableStack(ModItems.motor_bismuth),
+				new ComparableStack(ModItems.circuit, 8, EnumCircuitType.GASCHIP),
 		}, 400);
 
 		//DYSON//
