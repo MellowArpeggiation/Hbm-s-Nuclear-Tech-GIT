@@ -51,16 +51,17 @@ public class WorldProviderMoho extends WorldProviderCelestial {
 		biomes = new GenLayerZoom(1006L, biomes);
 		biomes = new GenLayerSmooth(700L, biomes);
 		biomes = new GenLayerZoom(1000L, biomes);
+		biomes = new GenLayerZoom(107L, biomes);
+
+		// biome detail layer should ignore rivers (for monster spawns and biome block replacement)
+		GenLayer genlayerVoronoiZoom = new GenLayerVoronoiZoom(10L, biomes);
 
 		GenLayer genlayerRiver = new GenLayerRiver(1004L, biomes);
 		genlayerRiver = new GenLayerZoom(105L, genlayerRiver);
 		genlayerRiver = new GenLayerZoom(106L, genlayerRiver); // Added extra zoom for more frequent rivers
 
-		// Make the river mix layer more prominent
+		// apply the rivers to the biome map
 		GenLayer genlayerRiverMix = new GenLayerRiverMix(100L, biomes, genlayerRiver);
-		genlayerRiverMix = new GenLayerZoom(107L, genlayerRiverMix); // Additional zoom to enhance rivers
-
-		GenLayer genlayerVoronoiZoom = new GenLayerVoronoiZoom(10L, genlayerRiverMix);
 
 		return new BiomeGenLayers(genlayerRiverMix, genlayerVoronoiZoom, seed);
 	}
