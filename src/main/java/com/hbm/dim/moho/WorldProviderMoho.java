@@ -2,7 +2,6 @@ package com.hbm.dim.moho;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.dim.GenLayerDiversify;
-import com.hbm.dim.GenLayerRiver;
 import com.hbm.dim.WorldChunkManagerCelestial;
 import com.hbm.dim.WorldChunkManagerCelestial.BiomeGenLayers;
 import com.hbm.dim.WorldProviderCelestial;
@@ -14,6 +13,8 @@ import net.minecraft.block.Block;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.GenLayerFuzzyZoom;
+import net.minecraft.world.gen.layer.GenLayerRiver;
+import net.minecraft.world.gen.layer.GenLayerRiverMix;
 import net.minecraft.world.gen.layer.GenLayerSmooth;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
@@ -51,14 +52,17 @@ public class WorldProviderMoho extends WorldProviderCelestial {
 		biomes = new GenLayerSmooth(700L, biomes);
 		biomes = new GenLayerZoom(1000L, biomes);
 
-		GenLayer genlayerRiver = new GenLayerRiver(1004L, biomes, BiomeGenBaseMoho.mohoRiver);
+		GenLayer genlayerRiver = new GenLayerRiver(1004L, biomes);
 		genlayerRiver = new GenLayerZoom(105L, genlayerRiver);
-		genlayerRiver = new GenLayerZoom(106L, genlayerRiver);
-		genlayerRiver = new GenLayerZoom(107L, genlayerRiver);
+		genlayerRiver = new GenLayerZoom(106L, genlayerRiver); // Added extra zoom for more frequent rivers
 
-		GenLayer genlayerVoronoiZoom = new GenLayerVoronoiZoom(10L, genlayerRiver);
+		// Make the river mix layer more prominent
+		GenLayer genlayerRiverMix = new GenLayerRiverMix(100L, biomes, genlayerRiver);
+		genlayerRiverMix = new GenLayerZoom(107L, genlayerRiverMix); // Additional zoom to enhance rivers
 
-		return new BiomeGenLayers(genlayerRiver, genlayerVoronoiZoom, seed);
+		GenLayer genlayerVoronoiZoom = new GenLayerVoronoiZoom(10L, genlayerRiverMix);
+
+		return new BiomeGenLayers(genlayerRiverMix, genlayerVoronoiZoom, seed);
 	}
 
 }
