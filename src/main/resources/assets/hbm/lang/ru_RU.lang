@@ -6327,6 +6327,13 @@ desc.gui.upgrade.speed= * §4Скорость§r: Стакается до 3-х �
 
 
 
+
+
+
+
+
+
+
 // NTM Space //
 
 // celestial bodies //
@@ -6345,6 +6352,7 @@ body.thatmo=Тэтмо //НЕ ТАЙЛО!
 
 
 // nature //
+tile.moon_rock.name=Лунный камень
 tile.moho_regolith.name=Реголит Мохо
 tile.moho_stone.name=Камень Мохо
 tile.eve_silt.name=Грунт Евы
@@ -6358,6 +6366,10 @@ tile.ike_regolith.name=Реголит Айка
 tile.ike_stone.name=Камень Айка
 tile.dres_rock.name=Камень Дреса
 tile.laythe_silt.name=Ил Лейта
+
+
+tile.mercury_block.name=Ртуть
+tile.bromine_block.name=Смесь алкилбромидов
 
 tile.stone_resource.conglomerate.name=Конгломерат
 tile.ferric_clay.name=Блок железистой глины
@@ -6437,6 +6449,10 @@ hbmfluid.gaseous_plutonium_bromide=Газообразный бромид плу�
 hbmfluid.gaseous_schrabidium_bromide=Газообразный бромид шрабидия
 hbmfluid.gaseous_thorium_bromide=Газообразный бромид тория
 hbmfluid.gas_watz=Газообразные токсичные отходы
+hbmfluid.rizz=Кам
+hbmfluid.mslurry=Моркитовая жижа
+hbmfluid.morkite=Моркит
+hbmfluid.morkine=Моркин
 
 hbmpseudofluid.minsol=Тяжёлый минеральный шлам
 hbmpseudofluid.minsolsep=Отделённый минеральный шлам
@@ -6466,8 +6482,8 @@ tile.ore_silicon.name=Кремниевая руда
 tile.ore_fire.name=Фосфорная руда
 tile.ore_lanthanium.name=Лантановая руда
 tile.ore_shale.name=Газовый карман
-tile.ore_gas.name=Природногазовый карман
-tile.ore_gas_empty.name=Пустой природногазовый карман
+tile.ore_gas.name=Газовый карман
+tile.ore_gas_empty.name=Пустой газовый карман
 
 item.ore.bismuth=Висмутовая
 item.ore.cadmium=Кадмиевая
@@ -6488,7 +6504,9 @@ item.clump_schrabidic.name=Сверхглубоко очищенные мине�
 item.clump_nitric.name=Азотированные минералы
 item.clump_solvent.name=Глубоко очищенные минералы
 item.clump_hydrochloric.name=Хлорированные очищенные минералы
-item.mineral_dust.name=Минеральная смесь
+item.mineral_dust.name=Смесь минералов
+
+item.ore_byproduct.b_arsenic.name=Crystalline Arsenic Fragment
 
 
 
@@ -6510,6 +6528,8 @@ hbmmat.iodine=Йод
 hbmmat.netherquartz=Кварц
 hbmmat.tasmanite=Тасманит
 hbmmat.richmagma=Обогащённая минералами магма
+hbmmat.platnium=Платина
+hbmmat.iridium=Иридий
 
 
 tile.block_nickel.name=Никелевый блок
@@ -6686,9 +6706,12 @@ tile.machine_htrf4.name=Ракетный двигатель HTR-F4
 tile.machine_htrf4.desc=Подключите нагреватель плазмы для впрыска топлива.
 tile.machine_radiator.name=Паровой радиатор
 tile.nuke_antimatter.name=Антиматериальная бомба
+container.nukeAntimatter=Антиматериальная бомба
 tile.rbmk_burner.name=Жидкостный прогреватель РБМК
 tile.capacitor_complex.name=Конденсатор на вейв-функции
 tile.machine_vacuum_circuit.name=Вакуумный паяльный стол
+tile.machine_vacuum_circuit.desc=Требуется практически полный вакуум для функционирования.
+container.machineVacuumCircuit=ВПС
 tile.dyson_launcher.name=Пусковая установка SpinLaunch™
 tile.dyson_launcher.desc=Запускает модули роя на солнечную орбиту.$Модули роя портятся со временем, необходимо$переодически запускать новые для поддержания количества.
 tile.dyson_receiver.name=Приёмник Дайсона
@@ -6711,6 +6734,16 @@ container.machine_discharger=Устройство разрядки матери�
 item.transporter_linker.name=Соединитель ракетного транспортера
 item.atmosphere_scanner.name=Сканер атмосферы
 item.flippers.name=Ласты
+item.lox_tank.name=Резервный кислородный бак PLSS
+item.oxy_plss.name=PLSS
+
+item.oil_detector.bullseye_gas=Газовый резервуар прямо снизу!
+item.oil_detector.detected_gas=Поблизости обнаружен резервуар газа.
+
+armor.canSeal=Может обеспечивать герметичность (требуется PLSS)
+armor.mustSeal=Необходимо использовать с полностью герметичным набором брони!
+
+tool.ability.hammersilk=Зона действия (Шёлковое касание)
 
 
 
@@ -6755,10 +6788,15 @@ item.rp_pod_20.name=Десантная капсула
 item.sat_dyson_relay.name=Ретранслятор Роя Дайсона
 item.swarm_member.name=Модуль Роя Дайсона
 
+item.rocket_custom.name=Орбитальная ракета
+
 
 // entity //
 entity.entity_mob_flesh_creeper.name=Мясной крипер
 entity.entity_scutterfish.name=Рыба-Рассеиватель
+entity.entity_rideable_rocket.name=Ракета
+entity.entity_rideable_rocket_dummy.name=Ракета
+entity.entity_moon_cow.name=Лунная корова
 
 
 
@@ -6802,6 +6840,8 @@ chem.URANIUM_BROMIDE=Производство бромида урана
 chem.PLUTONIUM_BROMIDE=Производство бромида плутония
 chem.SCHRABIDIUM_BROMIDE=Производство бромида шрабидия
 chem.THORIUM_BROMIDE=Производство бромида тория
+chem.CHLOROMETHANE=Галогенирование природного газа
+chem.SOIL=Производство почвы
 
 crucible.arse=Производство арсенида галлия
 crucible.conglomerate=Переплавка конгломерата в железо и никель
@@ -6846,7 +6886,33 @@ station.removeDrive=Извлеките жёсткий диск, чтобы пр�
 station.interactDrive=Нажмите, чтобы извлечь жёсткий диск
 station.insertDrive=Вставьте жёсткий диск, чтобы начать путешествие
 
+commands.station.no_stations=Станций не обнаружено!
+commands.station.invalid_station=Необходимо ввести имя или ID станции!
+commands.station.no_match=Станции с таким именем или ID не существует!
+commands.station.invalid_drive=Необходимо держать в руке диск с данными о станции!
+commands.station.drive_created=Диск создан.
+commands.station.teleported=Телепортация на станцию...
+commands.station.launched=Ядро станции запущено.
+
 death.attack.eve=%1$ превратился в лужицу кипящей плоти.
+death.attack.nitan=%1$s был поглощён заражением.
+death.attack.oxyprime=%1$s забыл PLSS.
+death.attack.run=%1$s искупил свои грехи.
+
+info.corrosion=Мой костюм плавится.
+info.orbitfall=Я сейчас упаду.
+info.template_oxy=Требуется кислородная атмосфера
+
+wavelengths.name.xray=X-Ray
+wavelengths.waveRange.xray=10нм-10пм
+
+generator.martian=Марсианин
+
+
+
+// achievements //
+achievement.driveFail.desc=Ты не сделал копию диска орбитальной станции перед запуском
+achievement.driveFail=Эм, ты же скопировал?
 
 
 
@@ -6861,6 +6927,15 @@ item.bucket_mercury.name=Ведро ртути
 item.bucket_bromine.name=Ведро смеси алкилбромидов
 item.oxy_pinwheel.name=Кислородная вертуша
 item.coin_airliner.name=Монета Гражданский самолёт
+item.flask_infusion.nitan.name=Амброзия NITANÂ©
+item.flask_infusion.nitan.desc=Болеутоляющее исключительно для медицинского или развлекательного использования.
+item.laser_crystal_iron.name=Железо-Арсенидовый жар-кристалл
+item.laser_crystal_iron.desc=Железное ядро с жар-сердцевиной, обёрнутое арсенидом галлия.
+
 
 potion.hbm_run=БОГ НАБЛЮДАЕТ ЗА ВАМИ
 potion.hbm_slippery=Скольжение
+potion.hbm_nitan=Aмброзия
+
+trait.confusion=Аутизм
+trait.neutron=Нейтронная радиация
