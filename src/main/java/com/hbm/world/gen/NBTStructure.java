@@ -16,6 +16,7 @@ import com.hbm.handler.ThreeInts;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.Tuple.Pair;
 import com.hbm.util.Tuple.Quartet;
+import com.hbm.util.fauxpointtwelve.BlockPos;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.*;
@@ -561,10 +562,10 @@ public class NBTStructure {
 			return blockTable.get(definition.block).getSelectedBlockMetaData();
 		}
 
-		if(coordBaseMode == 0) return definition.meta;
-
 		// Our shit
 		if(definition.block instanceof INBTTransformable) return ((INBTTransformable) definition.block).transformMeta(definition.meta, coordBaseMode);
+
+		if(coordBaseMode == 0) return definition.meta;
 
 		// Vanilla shit
 		if(definition.block instanceof BlockStairs) return INBTTransformable.transformMetaStairs(definition.meta, coordBaseMode);
@@ -981,6 +982,17 @@ public class NBTStructure {
 			return false;
 		}
 
+		protected boolean isInsideIgnoringSelf(LinkedList<StructureComponent> components, int x, int y, int z) {
+			for(StructureComponent component : components) {
+				if(component == this) continue;
+				if(component.getBoundingBox() == null) continue;
+
+				if(component.getBoundingBox().isVecInside(x, y, z)) return true;
+			}
+
+			return false;
+		}
+
 	}
 
 	public static class Start extends StructureStart {
@@ -1048,9 +1060,14 @@ public class NBTStructure {
 							queuedComponents.add(nextComponent);
 						} else {
 							// If we failed to fit anything in, grab something from the fallback pool, ignoring bounds check
+							// unless we are perfectly abutting another piece, so grid layouts can work!
 							if(nextPool.fallback != null) {
-								nextComponent = buildNextComponent(rand, spawn, spawn.pools.get(nextPool.fallback), fromComponent, fromConnection);
-								addComponent(nextComponent, fromConnection.placementPriority); // don't add to queued list, we don't want to try continue from fallback
+								BlockPos checkPos = getConnectionTargetPosition(fromComponent, fromConnection);
+
+								if(!fromComponent.isInsideIgnoringSelf(components, checkPos.getX(), checkPos.getY(), checkPos.getZ())) {
+									nextComponent = buildNextComponent(rand, spawn, spawn.pools.get(nextPool.fallback), fromComponent, fromConnection);
+									addComponent(nextComponent, fromConnection.placementPriority); // don't add to queued list, we don't want to try continue from fallback
+								}
 							}
 						}
 					}
@@ -1077,6 +1094,18 @@ public class NBTStructure {
 			component.priority = placementPriority;
 		}
 
+		private BlockPos getConnectionTargetPosition(Component component, JigsawConnection connection) {
+			// The direction this component is extending towards in ABSOLUTE direction
+			ForgeDirection extendDir = component.rotateDir(connection.dir);
+
+			// Set the starting point for the next structure to the location of the connector block
+			int x = component.getXWithOffset(connection.pos.x, connection.pos.z) + extendDir.offsetX;
+			int y = component.getYWithOffset(connection.pos.y) + extendDir.offsetY;
+			int z = component.getZWithOffset(connection.pos.x, connection.pos.z) + extendDir.offsetZ;
+
+			return new BlockPos(x, y, z);
+		}
+
 		private Component buildNextComponent(Random rand, SpawnCondition spawn, JigsawPool pool, Component fromComponent, JigsawConnection fromConnection) {
 			JigsawPiece nextPiece = pool.get(rand);
 			if(nextPiece == null) return null;
@@ -1086,23 +1115,17 @@ public class NBTStructure {
 
 			JigsawConnection toConnection = connectionPool.get(rand.nextInt(connectionPool.size()));
 
-			// The direction this component is extending towards in ABSOLUTE direction
-			ForgeDirection extendDir = fromComponent.rotateDir(fromConnection.dir);
-
 			// Rotate our incoming piece to plug it in
 			int nextCoordBase = fromComponent.getNextCoordBase(fromConnection, toConnection, rand);
 
-			// Set the starting point for the next structure to the location of the connector block
-			int nextX = fromComponent.getXWithOffset(fromConnection.pos.x, fromConnection.pos.z) + extendDir.offsetX;
-			int nextY = fromComponent.getYWithOffset(fromConnection.pos.y) + extendDir.offsetY;
-			int nextZ = fromComponent.getZWithOffset(fromConnection.pos.x, fromConnection.pos.z) + extendDir.offsetZ;
+			BlockPos pos = getConnectionTargetPosition(fromComponent, fromConnection);
 
 			// offset the starting point to the connecting point
-			nextX -= nextPiece.structure.rotateX(toConnection.pos.x, toConnection.pos.z, nextCoordBase);
-			nextY -= toConnection.pos.y;
-			nextZ -= nextPiece.structure.rotateZ(toConnection.pos.x, toConnection.pos.z, nextCoordBase);
+			int ox = nextPiece.structure.rotateX(toConnection.pos.x, toConnection.pos.z, nextCoordBase);
+			int oy = toConnection.pos.y;
+			int oz = nextPiece.structure.rotateZ(toConnection.pos.x, toConnection.pos.z, nextCoordBase);
 
-			return new Component(spawn, nextPiece, rand, nextX, nextY, nextZ, nextCoordBase).connectedFrom(toConnection);
+			return new Component(spawn, nextPiece, rand, pos.getX() - ox, pos.getY() - oy, pos.getZ() - oz, nextCoordBase).connectedFrom(toConnection);
 		}
 
 		private List<JigsawConnection> getConnectionPool(JigsawPiece nextPiece, JigsawConnection fromConnection) {

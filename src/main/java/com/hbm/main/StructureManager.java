@@ -68,6 +68,20 @@ public class StructureManager {
 	public static final NBTStructure mun_connector_t = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/munbase/connector-t.nbt"));
 
 
+	//MOHO//
+	public static final NBTStructure moho_core = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/mohobase/moho-core.nbt"));
+	public static final NBTStructure moho_corner_empty = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/mohobase/moho-corner-empty.nbt"));
+	public static final NBTStructure moho_corner_lab = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/mohobase/moho-corner-lab.nbt"));
+	public static final NBTStructure moho_corner_cap = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/mohobase/moho-corner-cap.nbt"));
+	public static final NBTStructure moho_corner_extension = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/mohobase/moho-corner-extension.nbt"));
+	public static final NBTStructure moho_corner_heffer = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/mohobase/moho-corner-heffer.nbt"));
+	public static final NBTStructure moho_room_tape = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/mohobase/moho-room-tape.nbt"));
+	public static final NBTStructure moho_room_reception = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/mohobase/moho-room-reception.nbt"));
+	public static final NBTStructure moho_room_kitchen = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/mohobase/moho-room-kitchen.nbt"));
+	public static final NBTStructure moho_snorkel = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/mohobase/moho-snorkel.nbt"));
+
+
+
 	public static final NBTStructure martian = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/martian-base.nbt"));
 	public static final NBTStructure duna_comms = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/duna-comms.nbt"));
 
