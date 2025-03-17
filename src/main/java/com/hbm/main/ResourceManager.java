@@ -1248,7 +1248,7 @@ public class ResourceManager {
 	public static final IModelCustom soyuz_launcher_tower = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_tower.obj"), false).asVBO();
 	public static final IModelCustom soyuz_launcher_support_base = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_support_base.obj"), false).asVBO();
 	public static final IModelCustom soyuz_launcher_support = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/launch_table/soyuz_launcher_support.obj"), false).asVBO();
-	public static final IModelCustom soyuz_lander_neo = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/module_lander.obj")).asVBO();
+	public static final IModelCustom landing_capsule = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/missile_parts/rp_landing_capsule.obj")).asVBO();
 	public static final IModelCustom drop_pod = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/missile_parts/rp_drop_pod.obj")).asVBO();
 
 	//Missile Parts
@@ -1455,7 +1455,7 @@ public class ResourceManager {
 	public static final ResourceLocation soyuz_lander_rust_tex = new ResourceLocation(RefStrings.MODID, "textures/models/soyuz_capsule/soyuz_lander_rust.png");
 	public static final ResourceLocation soyuz_chute_tex = new ResourceLocation(RefStrings.MODID, "textures/models/soyuz_capsule/soyuz_chute.png");
 	public static final ResourceLocation supply_crate = new ResourceLocation(RefStrings.MODID, "textures/blocks/crate_can.png");
-	public static final ResourceLocation module_lander_tex = new ResourceLocation(RefStrings.MODID, "textures/models/soyuz_capsule/module_lander_space_elon.png");
+	public static final ResourceLocation landing_capsule_tex = new ResourceLocation(RefStrings.MODID, "textures/models/missile_parts/warheads/rp_landing_capsule.png");
 	public static final ResourceLocation drop_pod_tex = new ResourceLocation(RefStrings.MODID, "textures/models/missile_parts/warheads/rp_drop_pod.png");
 
 	public static final ResourceLocation soyuz_module_dome_tex = new ResourceLocation(RefStrings.MODID, "textures/models/soyuz_capsule/module_dome.png");
