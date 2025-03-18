@@ -26,6 +26,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class Spotlight extends Block implements ISpotlight, INBTTransformable {
 
+	public static boolean disableOnGeneration = true;
+
 	// I'd be extending the ReinforcedLamp class if it wasn't for the inverted behaviour of these specific lights
 	// I want these blocks to be eminently useful, so removing the need for redstone by default is desired,
 	// these act more like redstone torches, in that applying a signal turns them off
@@ -326,11 +328,13 @@ public class Spotlight extends Block implements ISpotlight, INBTTransformable {
 	@Override
 	public int transformMeta(int meta, int coordBaseMode) {
 		// +1 to set as broken, won't turn on until broken and replaced
-		return (INBTTransformable.transformMetaDeco(meta >> 1, coordBaseMode) << 1) + 1;
+		int disabled = disableOnGeneration ? 1 : 0;
+		return (INBTTransformable.transformMetaDeco(meta >> 1, coordBaseMode) << 1) + disabled;
 	}
 
 	@Override
 	public Block transformBlock(Block block) {
+		if(!disableOnGeneration) return block;
 		if(block == ModBlocks.spotlight_incandescent) return ModBlocks.spotlight_incandescent_off;
 		if(block == ModBlocks.spotlight_fluoro) return ModBlocks.spotlight_fluoro_off;
 		if(block == ModBlocks.spotlight_halogen) return ModBlocks.spotlight_halogen_off;

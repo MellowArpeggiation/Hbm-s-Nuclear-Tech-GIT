@@ -26,7 +26,8 @@ public class WorldGeneratorMoho implements IWorldGenerator {
 	public WorldGeneratorMoho() {
 		NBTStructure.registerStructure(SpaceConfig.mohoDimension, new SpawnCondition() {{
 			spawnWeight = 6;
-			minHeight = 64 - 11;
+			minHeight = 63 - 11;
+			maxHeight = 63;
 			sizeLimit = 64;
 			rangeLimit = 64;
 			startPool = "start";
