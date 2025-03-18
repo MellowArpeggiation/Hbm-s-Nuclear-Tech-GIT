@@ -354,7 +354,7 @@ public class NBTStructure {
 			if(connections.size() > 0) {
 				fromConnections = new ArrayList<>();
 
-				connections.sort((a, b) -> a.selectionPriority - b.selectionPriority); // sort by descending priority, highest first
+				connections.sort((a, b) -> b.selectionPriority - a.selectionPriority); // sort by descending priority, highest first
 
 				// Sort out our from connections, splitting into individual lists for each priority level
 				List<JigsawConnection> innerList = null;
@@ -831,7 +831,7 @@ public class NBTStructure {
 
 		boolean heightUpdated = false;
 
-		int priority; // placement priority not yet implemented because selection priority is far more useful whatever
+		int priority;
 
 		// this is fucking hacky but we need a way to update ALL component bounds once a Y-level is determined
 		private Start parent;
@@ -1018,7 +1018,15 @@ public class NBTStructure {
 
 			// Iterate through and build out all the components we intend to spawn
 			while(!queuedComponents.isEmpty()) {
-				final int i = rand.nextInt(queuedComponents.size());
+				queuedComponents.sort((a, b) -> b.priority - a.priority); // sort by placement priority descending
+				int matchPriority = queuedComponents.get(0).priority;
+				int max = 1;
+				while(max < queuedComponents.size()) {
+					if(queuedComponents.get(max).priority != matchPriority) break;
+					max++;
+				}
+
+				final int i = rand.nextInt(max);
 				Component fromComponent = queuedComponents.remove(i);
 
 				if(fromComponent.piece.structure.fromConnections == null) continue;
@@ -1066,7 +1074,7 @@ public class NBTStructure {
 
 								if(!fromComponent.isInsideIgnoringSelf(components, checkPos.getX(), checkPos.getY(), checkPos.getZ())) {
 									nextComponent = buildNextComponent(rand, spawn, spawn.pools.get(nextPool.fallback), fromComponent, fromConnection);
-									addComponent(nextComponent, fromConnection.placementPriority); // don't add to queued list, we don't want to try continue from fallback
+									if(nextComponent != null) addComponent(nextComponent, fromConnection.placementPriority); // don't add to queued list, we don't want to try continue from fallback
 								}
 							}
 						}
