@@ -89,7 +89,7 @@ public class PipeNet implements IPipeNet {
 	public long transferFluid(long fill, int pressure) {
 
 		subscribers.removeIf(x ->
-			x == null || !(x instanceof TileEntity) || ((TileEntity)x).isInvalid() || !x.isLoaded()
+			x == null || (x instanceof TileEntity && ((TileEntity)x).isInvalid()) || !x.isLoaded()
 		);
 
 		if(this.subscribers.isEmpty())

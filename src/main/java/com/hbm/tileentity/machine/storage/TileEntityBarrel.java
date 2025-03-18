@@ -58,7 +58,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 	public static final short modes = 4;
 	public int age = 0;
 	protected boolean sendingBrake = false;
-	
+
 	public Explosion lastExplosion = null;
 	public byte lastRedstone = 0;
 
@@ -188,7 +188,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 			List<IFluidConnector> con = new ArrayList<>();
 			con.addAll(consumers);
 
-			con.removeIf(x -> x == null || !(x instanceof TileEntity) || ((TileEntity)x).isInvalid());
+			con.removeIf(x -> x == null || (x instanceof TileEntity && ((TileEntity)x).isInvalid()) || !x.isLoaded());
 
 			if(PipeNet.trackingInstances == null) {
 				PipeNet.trackingInstances = new ArrayList<>();
@@ -407,16 +407,16 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 					EntityNukeExplosionMK3 ex = EntityNukeExplosionMK3.statFacFleija(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, (int) aschrab);
 					if(!ex.isDead) {
 						worldObj.spawnEntityInWorld(ex);
-			
+
 						EntityCloudFleija cloud = new EntityCloudFleija(worldObj, (int) aschrab);
 						cloud.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
 						worldObj.spawnEntityInWorld(cloud);
 					}
-					return;			
-				}	
+					return;
+				}
 			}
 		}
-		
+
 		this.markChanged();
 	}
 
