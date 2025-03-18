@@ -39,7 +39,20 @@ public class RenderTransporterRocket extends TileEntitySpecialRenderer implement
 
 			bindTexture(ResourceManager.transporter_pad_tex);
 			ResourceManager.transporter_pad.renderPart("base");
-			ResourceManager.transporter_pad.renderPart("pipe");
+
+			GL11.glPushMatrix();
+			{
+
+				float rot = MathHelper.clamp_float(getPipeEngage(pad, interp), 0, 1);
+
+				GL11.glTranslatef(0.0F, 0.75F, -0.75F);
+				GL11.glRotatef(rot * -30.0F, 1, 0, 0);
+				GL11.glTranslatef(0.0F, -0.75F, 0.75F);
+
+				ResourceManager.transporter_pad.renderPart("pipe");
+
+			}
+			GL11.glPopMatrix();
 
 			if(pad.launchTicks < 100) {
 				GL11.glPushMatrix();
@@ -61,6 +74,14 @@ public class RenderTransporterRocket extends TileEntitySpecialRenderer implement
 
 		}
 		GL11.glPopMatrix();
+	}
+
+	private float getPipeEngage(TileEntityTransporterRocket pad, float interp) {
+		if(pad.launchTicks >= 0) {
+			return !pad.hasRocket ? (pad.launchTicks + interp) * 0.25F : 1.0F;
+		} else {
+			return 1 - (-pad.launchTicks - 1 + interp) * 0.25F;
+		}
 	}
 
 	@Override
