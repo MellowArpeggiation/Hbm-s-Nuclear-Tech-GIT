@@ -1,5 +1,6 @@
 package com.hbm.dim.dres;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
@@ -7,7 +8,12 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.dim.dres.biome.BiomeGenBaseDres;
+import com.hbm.main.StructureManager;
 import com.hbm.world.gen.NBTStructure;
+import com.hbm.world.gen.NBTStructure.JigsawPiece;
+import com.hbm.world.gen.NBTStructure.JigsawPool;
+import com.hbm.world.gen.NBTStructure.SpawnCondition;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -17,7 +23,41 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorDres implements IWorldGenerator {
 
 	public WorldGeneratorDres() {
-		NBTStructure.registerNullWeight(SpaceConfig.dresDimension, 24);
+		NBTStructure.registerStructure(SpaceConfig.dresDimension, new SpawnCondition() {{
+			spawnWeight = 8;
+			minHeight = 46;
+			maxHeight = 46;
+			sizeLimit = 128;
+			rangeLimit = 64;
+			canSpawn = biome -> biome == BiomeGenBaseDres.dresPlains;
+			startPool = "start";
+			pools = new HashMap<String, JigsawPool>() {{
+				put("start", new JigsawPool() {{
+					add(new JigsawPiece("dres_core", StructureManager.dres_core), 1);
+				}});
+				put("default", new JigsawPool() {{
+					add(new JigsawPiece("dres_t", StructureManager.dres_t), 1);
+					add(new JigsawPiece("dres_airlock", StructureManager.dres_airlock), 1);
+					add(new JigsawPiece("dres_dome", StructureManager.dres_dome), 1);
+					fallback = "inback";
+				}});
+				put("outside", new JigsawPool() {{
+					add(new JigsawPiece("dres_balcony", StructureManager.dres_balcony), 1);
+					fallback = "outback";
+				}});
+				put("reactor", new JigsawPool() {{
+					add(new JigsawPiece("dres_hall_starbmk", StructureManager.dres_hall_starbmk), 1);
+				}});
+				put("inback", new JigsawPool() {{
+					add(new JigsawPiece("dres_incap", StructureManager.dres_incap), 1);
+				}});
+				put("outback", new JigsawPool() {{
+					add(new JigsawPiece("dres_outcap", StructureManager.dres_outcap), 1);
+				}});
+			}};
+		}});
+
+		NBTStructure.registerNullWeight(SpaceConfig.dresDimension, 16);
 	}
 
 	@Override

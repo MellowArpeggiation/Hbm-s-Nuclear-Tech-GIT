@@ -25,7 +25,7 @@ public class WorldGeneratorMoho implements IWorldGenerator {
 
 	public WorldGeneratorMoho() {
 		NBTStructure.registerStructure(SpaceConfig.mohoDimension, new SpawnCondition() {{
-			spawnWeight = 6;
+			spawnWeight = 4;
 			minHeight = 63 - 11;
 			maxHeight = 63;
 			sizeLimit = 64;
@@ -57,7 +57,7 @@ public class WorldGeneratorMoho implements IWorldGenerator {
 			}};
 		}});
 
-		NBTStructure.registerNullWeight(SpaceConfig.mohoDimension, 18);
+		NBTStructure.registerNullWeight(SpaceConfig.mohoDimension, 20);
 	}
 
 	@Override

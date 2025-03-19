@@ -81,6 +81,17 @@ public class StructureManager {
 	public static final NBTStructure moho_snorkel = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/mohobase/moho-snorkel.nbt"));
 
 
+	//DRES//
+	public static final NBTStructure dres_core = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/core.nbt"));
+	public static final NBTStructure dres_t = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/t.nbt"));
+	public static final NBTStructure dres_dome = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/dome.nbt"));
+	public static final NBTStructure dres_airlock = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/airlock.nbt"));
+	public static final NBTStructure dres_balcony = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/balcony.nbt"));
+	public static final NBTStructure dres_incap = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/incap.nbt"));
+	public static final NBTStructure dres_outcap = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/outcap.nbt"));
+	public static final NBTStructure dres_hall_starbmk = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/hall/starbmk.nbt"));
+
+
 
 	public static final NBTStructure martian = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/martian-base.nbt"));
 	public static final NBTStructure duna_comms = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/duna-comms.nbt"));
