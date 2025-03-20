@@ -1,6 +1,7 @@
 package com.hbm.dim.dres;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
@@ -14,15 +15,22 @@ import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.gen.NBTStructure.JigsawPiece;
 import com.hbm.world.gen.NBTStructure.JigsawPool;
 import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.component.Component.LabTiles;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.structure.StructureComponent.BlockSelector;
 
 public class WorldGeneratorDres implements IWorldGenerator {
 
 	public WorldGeneratorDres() {
+        Map<Block, BlockSelector> tiles = new HashMap<Block, BlockSelector>() {{
+            put(ModBlocks.tile_lab, new LabTiles(0.2F));
+        }};
+
 		NBTStructure.registerStructure(SpaceConfig.dresDimension, new SpawnCondition() {{
 			spawnWeight = 8;
 			minHeight = 46;
@@ -33,26 +41,27 @@ public class WorldGeneratorDres implements IWorldGenerator {
 			startPool = "start";
 			pools = new HashMap<String, JigsawPool>() {{
 				put("start", new JigsawPool() {{
-					add(new JigsawPiece("dres_core", StructureManager.dres_core), 1);
+					add(new JigsawPiece("dres_core", StructureManager.dres_core) {{ blockTable = tiles; }}, 1);
 				}});
 				put("default", new JigsawPool() {{
-					add(new JigsawPiece("dres_t", StructureManager.dres_t), 1);
-					add(new JigsawPiece("dres_airlock", StructureManager.dres_airlock), 1);
-					add(new JigsawPiece("dres_dome", StructureManager.dres_dome), 1);
+					add(new JigsawPiece("dres_t", StructureManager.dres_t) {{ blockTable = tiles; }}, 1);
+					add(new JigsawPiece("dres_airlock", StructureManager.dres_airlock) {{ blockTable = tiles; }}, 1);
+					add(new JigsawPiece("dres_dome", StructureManager.dres_dome) {{ blockTable = tiles; }}, 1);
 					fallback = "inback";
 				}});
 				put("outside", new JigsawPool() {{
-					add(new JigsawPiece("dres_balcony", StructureManager.dres_balcony), 1);
+					add(new JigsawPiece("dres_balcony", StructureManager.dres_balcony) {{ blockTable = tiles; }}, 1);
+					add(new JigsawPiece("dres_pad", StructureManager.dres_pad) {{ blockTable = tiles; }}, 1);
 					fallback = "outback";
 				}});
 				put("reactor", new JigsawPool() {{
-					add(new JigsawPiece("dres_hall_starbmk", StructureManager.dres_hall_starbmk), 1);
+					add(new JigsawPiece("dres_hall_starbmk", StructureManager.dres_hall_starbmk) {{ blockTable = tiles; }}, 1);
 				}});
 				put("inback", new JigsawPool() {{
-					add(new JigsawPiece("dres_incap", StructureManager.dres_incap), 1);
+					add(new JigsawPiece("dres_incap", StructureManager.dres_incap) {{ blockTable = tiles; }}, 1);
 				}});
 				put("outback", new JigsawPool() {{
-					add(new JigsawPiece("dres_outcap", StructureManager.dres_outcap), 1);
+					add(new JigsawPiece("dres_outcap", StructureManager.dres_outcap) {{ blockTable = tiles; }}, 1);
 				}});
 			}};
 		}});

@@ -87,6 +87,7 @@ public class StructureManager {
 	public static final NBTStructure dres_dome = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/dome.nbt"));
 	public static final NBTStructure dres_airlock = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/airlock.nbt"));
 	public static final NBTStructure dres_balcony = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/balcony.nbt"));
+	public static final NBTStructure dres_pad = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/pad.nbt"));
 	public static final NBTStructure dres_incap = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/incap.nbt"));
 	public static final NBTStructure dres_outcap = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/outcap.nbt"));
 	public static final NBTStructure dres_hall_starbmk = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/dresbmk/hall/starbmk.nbt"));
