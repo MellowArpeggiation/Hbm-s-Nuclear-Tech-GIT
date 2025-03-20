@@ -32,7 +32,7 @@ public class WorldGeneratorDres implements IWorldGenerator {
         }};
 
 		NBTStructure.registerStructure(SpaceConfig.dresDimension, new SpawnCondition() {{
-			spawnWeight = 8;
+			spawnWeight = 6;
 			minHeight = 46;
 			maxHeight = 46;
 			sizeLimit = 128;
@@ -66,7 +66,7 @@ public class WorldGeneratorDres implements IWorldGenerator {
 			}};
 		}});
 
-		NBTStructure.registerNullWeight(SpaceConfig.dresDimension, 16);
+		NBTStructure.registerNullWeight(SpaceConfig.dresDimension, 18);
 	}
 
 	@Override
