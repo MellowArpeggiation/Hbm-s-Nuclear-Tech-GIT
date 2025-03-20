@@ -33,8 +33,8 @@ public class WorldGeneratorDres implements IWorldGenerator {
 
 		NBTStructure.registerStructure(SpaceConfig.dresDimension, new SpawnCondition() {{
 			spawnWeight = 6;
-			minHeight = 46;
-			maxHeight = 46;
+			minHeight = 44;
+			maxHeight = 44;
 			sizeLimit = 128;
 			rangeLimit = 64;
 			canSpawn = biome -> biome == BiomeGenBaseDres.dresPlains;
