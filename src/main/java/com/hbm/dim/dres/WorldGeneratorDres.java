@@ -32,9 +32,9 @@ public class WorldGeneratorDres implements IWorldGenerator {
         }};
 
 		NBTStructure.registerStructure(SpaceConfig.dresDimension, new SpawnCondition() {{
-			spawnWeight = 6;
-			minHeight = 44;
-			maxHeight = 44;
+			spawnWeight = 4;
+			minHeight = 40;
+			maxHeight = 40;
 			sizeLimit = 128;
 			rangeLimit = 64;
 			canSpawn = biome -> biome == BiomeGenBaseDres.dresPlains;
@@ -47,6 +47,7 @@ public class WorldGeneratorDres implements IWorldGenerator {
 					add(new JigsawPiece("dres_t", StructureManager.dres_t) {{ blockTable = tiles; }}, 1);
 					add(new JigsawPiece("dres_airlock", StructureManager.dres_airlock) {{ blockTable = tiles; }}, 1);
 					add(new JigsawPiece("dres_dome", StructureManager.dres_dome) {{ blockTable = tiles; }}, 1);
+					add(new JigsawPiece("dres_pool", StructureManager.dres_pool) {{ blockTable = tiles; }}, 1);
 					fallback = "inback";
 				}});
 				put("outside", new JigsawPool() {{
@@ -55,7 +56,8 @@ public class WorldGeneratorDres implements IWorldGenerator {
 					fallback = "outback";
 				}});
 				put("reactor", new JigsawPool() {{
-					add(new JigsawPiece("dres_hall_starbmk", StructureManager.dres_hall_starbmk) {{ blockTable = tiles; }}, 1);
+					add(new JigsawPiece("dres_hall_starbmk", StructureManager.dres_hall_starbmk) {{ blockTable = tiles; }}, 5);
+					add(new JigsawPiece("dres_hall_breeder", StructureManager.dres_hall_breeder) {{ blockTable = tiles; }}, 1);
 				}});
 				put("inback", new JigsawPool() {{
 					add(new JigsawPiece("dres_incap", StructureManager.dres_incap) {{ blockTable = tiles; }}, 1);
@@ -66,7 +68,7 @@ public class WorldGeneratorDres implements IWorldGenerator {
 			}};
 		}});
 
-		NBTStructure.registerNullWeight(SpaceConfig.dresDimension, 18);
+		NBTStructure.registerNullWeight(SpaceConfig.dresDimension, 20);
 	}
 
 	@Override
