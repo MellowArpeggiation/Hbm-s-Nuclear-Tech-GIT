@@ -662,6 +662,7 @@ chem.GASOLINE_LEADED=Leaded Gasoline Mixing
 chem.HEAVY_ELECTROLYSIS=Heavy Water Cryo-Electrolysis
 chem.HELIUM3=Helium-3 Extraction from Moon Turf
 chem.HYDRAZINE=Hydrazine Production
+chem.HYDRAPISS=Hydrazine Production via Urea
 chem.KEVLAR=Kevlar Compound Production
 chem.LAMINATE=Laminate Production
 chem.LPG=Petroleum Gas Liquefaction
