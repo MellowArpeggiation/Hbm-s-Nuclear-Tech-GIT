@@ -15,6 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -220,6 +221,31 @@ public class Spotlight extends Block implements ISpotlight, INBTTransformable {
 
 	public ForgeDirection getDirection(int metadata) {
 		return ForgeDirection.getOrientation(metadata >> 1);
+	}
+
+	// Replace bulbs on broken lights with a click
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		int meta = world.getBlockMetadata(x, y, z);
+		if(!isBroken(meta)) return false;
+
+		repair(world, x, y, z);
+		return true;
+	}
+
+	private void repair(World world, int x, int y, int z) {
+		int meta = world.getBlockMetadata(x, y, z);
+		if(!isBroken(meta)) return;
+
+		world.setBlock(x, y, z, getOn(), meta - 1, 2);
+
+		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+			int ox = x + dir.offsetX;
+			int oy = y + dir.offsetY;
+			int oz = z + dir.offsetZ;
+			Block block = world.getBlock(ox, oy, oz);
+			if(block == this) repair(world, ox, oy, oz);
+		}
 	}
 
 	public boolean isBroken(int metadata) {
