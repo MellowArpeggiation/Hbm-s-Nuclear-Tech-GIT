@@ -45,6 +45,7 @@ import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -70,6 +71,7 @@ public class TileEntityChungus extends TileEntityLoadedBase implements IEnergyPr
 	public static double efficiency = 0.85D;
 
 	public boolean damaged;
+	public Explosion lastExplosion;
 
 	public TileEntityChungus() {
 		tanks = new FluidTank[2];

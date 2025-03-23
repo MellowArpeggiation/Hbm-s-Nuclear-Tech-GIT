@@ -25,6 +25,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -41,6 +42,7 @@ public class TileEntityCondenserPowered extends TileEntityCondenser implements I
 	public static int powerConsumption = 10;
 
 	public boolean damaged;
+	public Explosion lastExplosion;
 
 	public TileEntityCondenserPowered() {
 		tanks = new FluidTank[2];

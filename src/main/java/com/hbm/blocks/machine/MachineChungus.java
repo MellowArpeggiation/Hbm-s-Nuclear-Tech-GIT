@@ -21,9 +21,11 @@ import com.hbm.util.I18nUtil;
 import api.hbm.block.IToolable;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -191,6 +193,31 @@ public class MachineChungus extends BlockDummyable implements ITooltipProvider, 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		return IPersistentNBT.getDrops(world, x, y, z, this);
+	}
+
+	@Override
+	public boolean canDropFromExplosion(Explosion explosion) {
+		return false;
+	}
+
+	@Override
+	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
+
+		int[] pos = this.findCore(world, x, y, z);
+		if(pos == null) return;
+		TileEntity core = world.getTileEntity(pos[0], pos[1], pos[2]);
+		if(!(core instanceof TileEntityChungus)) return;
+
+		TileEntityChungus tank = (TileEntityChungus) core;
+		if(tank.lastExplosion == explosion) return;
+		tank.lastExplosion = explosion;
+
+		if(!tank.damaged) {
+			tank.damaged = true;
+			tank.markDirty();
+		} else {
+			world.setBlock(pos[0], pos[1], pos[2], Blocks.air);
+		}
 	}
 
 }
