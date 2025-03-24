@@ -1767,6 +1767,9 @@ public class MainRegistry {
 		remapItems.put("hbm:item.briquette_lignite", ModItems.briquette);
 		remapItems.put("hbm:item.antiknock", ModItems.fuel_additive);
 
+		remapItems.put("hbm:item.kit_toolbox_empty", ModItems.toolbox);
+		remapItems.put("hbm:item.kit_toolbox", ModItems.legacy_toolbox);
+
 		for(MissingMapping mapping : event.get()) {
 
 			// ignore all ammo prefixes because those are from the time we threw out all the ammo items
