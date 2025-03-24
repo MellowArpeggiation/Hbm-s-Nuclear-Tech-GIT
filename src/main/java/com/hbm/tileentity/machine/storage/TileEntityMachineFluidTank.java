@@ -444,10 +444,10 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 		return (mode == 0 || mode == 1) ? new FluidTank[] {tank} : new FluidTank[0];
 	}
 
-	@Override
-	public ConnectionPriority getFluidPriority() {
-		return mode == 1 ? ConnectionPriority.LOW : ConnectionPriority.NORMAL;
-	}
+	// @Override
+	// public ConnectionPriority getFluidPriority() {
+	// 	return mode == 1 ? ConnectionPriority.LOW : ConnectionPriority.NORMAL;
+	// }
 
 	@Override
 	public int[] getFluidIDToCopy() {

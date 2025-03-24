@@ -319,10 +319,10 @@ public class TileEntityBarrel extends TileEntityMachineBase implements SimpleCom
 		return new FluidTank[] { tank };
 	}
 
-	@Override
-	public ConnectionPriority getFluidPriority() {
-		return mode == 1 ? ConnectionPriority.LOW : ConnectionPriority.NORMAL;
-	}
+	// @Override
+	// public ConnectionPriority getFluidPriority() {
+	// 	return mode == 1 ? ConnectionPriority.LOW : ConnectionPriority.NORMAL;
+	// }
 
 	@Override
 	public int[] getFluidIDToCopy() {
