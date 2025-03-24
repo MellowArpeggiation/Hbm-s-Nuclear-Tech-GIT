@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine.storage;
 
+import api.hbm.energymk2.IEnergyReceiverMK2.ConnectionPriority;
 import api.hbm.fluid.IFluidStandardTransceiver;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
@@ -48,7 +49,7 @@ import java.util.List;
 import java.util.Random;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "opencomputers")})
-public class TileEntityMachineFluidTank extends TileEntityMachineBase implements SimpleComponent, OCComponent, IFluidStandardTransceiver, IPersistentNBT, IOverpressurable, IGUIProvider, IRepairable, IFluidCopiable{
+public class TileEntityMachineFluidTank extends TileEntityMachineBase implements SimpleComponent, OCComponent, IFluidStandardTransceiver, IPersistentNBT, IOverpressurable, IGUIProvider, IRepairable, IFluidCopiable {
 	
 	public FluidTank tank;
 	public short mode = 0;
@@ -106,9 +107,10 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 					this.markChanged();
 				}
 				
-				this.sendingBrake = true;
-				tank.setFill(TileEntityBarrel.transmitFluidFairly(worldObj, tank, this, tank.getFill(), this.mode == 0 || this.mode == 1, this.mode == 1 || this.mode == 2, getConPos()));
-				this.sendingBrake = false;
+				for(DirPos pos : getConPos()) {
+					if(mode == 0 || mode == 1) this.trySubscribe(tank.getTankType(), worldObj, pos);
+					if(mode == 1 || mode == 2) this.tryProvide(tank, worldObj, pos);
+				}
 				
 				tank.loadTank(2, 3, slots);
 				tank.setType(0, 1, slots);
@@ -330,12 +332,8 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 
 	@Override
 	public long getDemand(FluidType type, int pressure) {
-		
-		if(this.mode == 2 || this.mode == 3 || this.sendingBrake)
-			return 0;
-		
+		if(this.mode == 2 || this.mode == 3) return 0;
 		if(tank.getPressure() != pressure) return 0;
-		
 		return type == tank.getTankType() ? tank.getMaxFill() - tank.getFill() : 0;
 	}
 
@@ -374,6 +372,11 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 	public FluidTank[] getReceivingTanks() {
 		if(this.hasExploded || this.sendingBrake) return new FluidTank[0];
 		return (mode == 0 || mode == 1) ? new FluidTank[] {tank} : new FluidTank[0];
+	}
+
+	@Override
+	public ConnectionPriority getFluidPriority() {
+		return mode == 1 ? ConnectionPriority.LOW : ConnectionPriority.NORMAL;
 	}
 
 	@Override

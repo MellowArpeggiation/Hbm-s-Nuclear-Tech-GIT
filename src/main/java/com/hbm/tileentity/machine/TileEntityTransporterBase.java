@@ -12,14 +12,18 @@ import com.hbm.packet.toserver.NBTControlPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.uninos.GenNode;
+import com.hbm.uninos.UniNodespace;
 import com.hbm.util.BufferUtil;
 import com.hbm.util.Compat;
 import com.hbm.util.InventoryUtil;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
-import api.hbm.fluid.IFluidConductor;
 import api.hbm.fluid.IFluidStandardTransceiver;
-import api.hbm.fluid.IFluidUser;
+import api.hbm.fluidmk2.IFluidConnectorMK2;
+import api.hbm.fluidmk2.IFluidReceiverMK2;
+import api.hbm.fluidmk2.IFluidStandardReceiverMK2;
+import api.hbm.fluidmk2.IFluidUserMK2;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -260,67 +264,28 @@ public abstract class TileEntityTransporterBase extends TileEntityMachineBase im
 	}
 
 	public void trySubscribeFuel(FluidType type, World world, int x, int y, int z, ForgeDirection dir) {
-		TileEntity te = Compat.getTileStandard(world, x, y, z);
-
-		if(te instanceof IFluidConductor) {
-			IFluidConductor con = (IFluidConductor) te;
-
-			if(!con.canConnect(type, dir))
-				return;
-
-			if(con.getPipeNet(type) != null && !con.getPipeNet(type).isSubscribed(fuelReceiver))
-				con.getPipeNet(type).subscribe(fuelReceiver);
-		}
+		fuelReceiver.trySubscribe(type, world, x, y, z, dir);
 	}
 
 	FuelReceiver fuelReceiver = new FuelReceiver();
 
-	private class FuelReceiver implements IFluidUser {
+	private class FuelReceiver implements IFluidStandardReceiverMK2 {
 
 		boolean valid = true;
-
-		@Override
-		public long transferFluid(FluidType type, int pressure, long amount) {
-			for(FluidTank tank : getFuelTanks()) {
-				if(tank.getTankType() == type && tank.getPressure() == pressure) {
-					tank.setFill(tank.getFill() + (int) amount);
-
-					if(tank.getFill() > tank.getMaxFill()) {
-						long overshoot = tank.getFill() - tank.getMaxFill();
-						tank.setFill(tank.getMaxFill());
-						return overshoot;
-					}
-
-					return 0;
-				}
-			}
-
-			return amount;
-		}
-
-		@Override
-		public long getDemand(FluidType type, int pressure) {
-			for(FluidTank tank : getFuelTanks()) {
-				if(tank.getTankType() == type && tank.getPressure() == pressure) {
-					return tank.getMaxFill() - tank.getFill();
-				}
-			}
-
-			return 0;
-		}
 
 		@Override
 		public boolean isLoaded() {
 			return valid && TileEntityTransporterBase.this.isLoaded();
 		}
 
-		public FluidTank[] getFuelTanks() {
-			return (FluidTank[]) Arrays.copyOfRange(tanks, outputTankMax, tanks.length);
-		}
-
 		@Override
 		public FluidTank[] getAllTanks() {
 			return TileEntityTransporterBase.this.getAllTanks();
+		}
+
+		@Override
+		public FluidTank[] getReceivingTanks() {
+			return (FluidTank[]) Arrays.copyOfRange(tanks, outputTankMax, tanks.length);
 		}
 
 	}

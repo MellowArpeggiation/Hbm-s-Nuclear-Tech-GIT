@@ -1635,6 +1635,7 @@ public class ModItems {
 	public static Item gun_light_revolver_atlas;
 	public static Item gun_light_revolver_dani;
 	public static Item gun_henry;
+	public static Item gun_henry_lincoln;
 	public static Item gun_greasegun;
 	public static Item gun_maresleg;
 	public static Item gun_maresleg_akimbo;
@@ -1683,6 +1684,11 @@ public class ModItems {
 
 	public static Item ammo_standard;
 	public static Item ammo_secret;
+
+	public static Item weapon_mod_test;
+	public static Item weapon_mod_generic;
+	public static Item weapon_mod_special;
+	public static Item weapon_mod_caliber;
 
 	public static Item crucible;
 
@@ -3330,7 +3336,8 @@ public class ModItems {
 		iv_empty = new ItemSimpleConsumable().setUseActionServer((stack, user) -> {
 			if(user.hurtResistantTime <= 0) {
 				ItemSimpleConsumable.giveSoundAndDecrement(stack, user, "hbm:item.syringe", new ItemStack(ModItems.iv_blood));
-				user.attackEntityFrom(DamageSource.magic, 5F);
+				user.setHealth(Math.max(user.getHealth() - 5F, 0F));
+				if(user.getHealth() <= 0) user.onDeath(DamageSource.magic);
 			}
 		}).setUnlocalizedName("iv_empty").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":iv_empty");
 
@@ -4244,7 +4251,7 @@ public class ModItems {
 		gun_b92_ammo = new GunB92Cell().setUnlocalizedName("gun_b92_ammo").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":gun_b92_ammo_alt");
 		gun_b92 = new GunB92().setUnlocalizedName("gun_b92").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":gun_b92");
 		gun_cryolator_ammo = new Item().setUnlocalizedName("gun_cryolator_ammo").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":gun_cryolator_ammo");
-		gun_cryocannon = new ItemCryoCannon(GunEnergyFactory.getCryoCannonConfig()).setUnlocalizedName("gun_cryocannon").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":gun_cryocannon");
+		gun_cryocannon = new ItemCryoCannon(GunEnergyFactory.getCryoCannonConfig()).setUnlocalizedName("gun_cryocannon").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":gun_darter");
 		gun_fireext = new ItemGunBase(GunEnergyFactory.getExtConfig()).setUnlocalizedName("gun_fireext").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":gun_fireext");
 
 		ToolMaterial matCrucible = EnumHelper.addToolMaterial("CRUCIBLE", 10, 3, 50.0F, 100.0F, 0);
@@ -6992,16 +6999,6 @@ public class ModItems {
 		GameRegistry.registerItem(rp_station_core_20, rp_station_core_20.getUnlocalizedName());
 		GameRegistry.registerItem(rp_pod_20, rp_pod_20.getUnlocalizedName());
 
-		/*GameRegistry.registerItem(missile_skin_camo, missile_skin_camo.getUnlocalizedName());
-		GameRegistry.registerItem(missile_skin_desert, missile_skin_desert.getUnlocalizedName());
-		GameRegistry.registerItem(missile_skin_flames, missile_skin_flames.getUnlocalizedName());
-		GameRegistry.registerItem(missile_skin_manly_pink, missile_skin_manly_pink.getUnlocalizedName());
-		GameRegistry.registerItem(missile_skin_orange_insulation, missile_skin_orange_insulation.getUnlocalizedName());
-		GameRegistry.registerItem(missile_skin_sleek, missile_skin_sleek.getUnlocalizedName());
-		GameRegistry.registerItem(missile_skin_soviet_glory, missile_skin_soviet_glory.getUnlocalizedName());
-		GameRegistry.registerItem(missile_skin_soviet_stank, missile_skin_soviet_stank.getUnlocalizedName());
-		GameRegistry.registerItem(missile_skin_metal, missile_skin_metal.getUnlocalizedName());*/
-
 		//Satellites
 		GameRegistry.registerItem(sat_mapper, sat_mapper.getUnlocalizedName());
 		GameRegistry.registerItem(sat_scanner, sat_scanner.getUnlocalizedName());
@@ -7033,6 +7030,7 @@ public class ModItems {
 		GameRegistry.registerItem(gun_light_revolver_atlas, gun_light_revolver_atlas.getUnlocalizedName());
 		GameRegistry.registerItem(gun_light_revolver_dani, gun_light_revolver_dani.getUnlocalizedName());
 		GameRegistry.registerItem(gun_henry, gun_henry.getUnlocalizedName());
+		GameRegistry.registerItem(gun_henry_lincoln, gun_henry_lincoln.getUnlocalizedName());
 		GameRegistry.registerItem(gun_greasegun, gun_greasegun.getUnlocalizedName());
 		GameRegistry.registerItem(gun_maresleg, gun_maresleg.getUnlocalizedName());
 		GameRegistry.registerItem(gun_maresleg_akimbo, gun_maresleg_akimbo.getUnlocalizedName());
@@ -7081,6 +7079,11 @@ public class ModItems {
 
 		GameRegistry.registerItem(ammo_standard, ammo_standard.getUnlocalizedName());
 		GameRegistry.registerItem(ammo_secret, ammo_secret.getUnlocalizedName());
+
+		GameRegistry.registerItem(weapon_mod_test, weapon_mod_test.getUnlocalizedName());
+		GameRegistry.registerItem(weapon_mod_generic, weapon_mod_generic.getUnlocalizedName());
+		GameRegistry.registerItem(weapon_mod_special, weapon_mod_special.getUnlocalizedName());
+		GameRegistry.registerItem(weapon_mod_caliber, weapon_mod_caliber.getUnlocalizedName());
 
 		//Ammo
 		GameRegistry.registerItem(gun_b92_ammo, gun_b92_ammo.getUnlocalizedName());
