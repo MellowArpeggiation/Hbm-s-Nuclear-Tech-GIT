@@ -1,11 +1,34 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5257 - in the hudson bay, you know how we do it](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5257)
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5278 - yeehaw](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5278)
+
+**MAJOR FLUIDNET CHANGES, make sure to backup your worlds before updating!**
+
+## Added
+* Solar eclipses!
+* Moho has new plateau and lava ocean biomes
+* Eve seismic plains are now the site of major faultlines
+* Duna now has terraced plateaus, and smaller non-basalt caves away from basins
+* New structures on Moho and Dres, keep an eye out!
+    * Some of these new structures may have destroyed versions of highly valuable machines that can be repaired on the cheap
+* Conveyor inserters/extractors can now be crafted with stainless steel
+
+## Changed
+* Moho, Duna, and Eve received some other world generation overhauls, mostly in biome selection and size
+* Matter Discharger crafting recipe removed
+* Starmetal rings can be melted down back into 4 ingots
+* Hand-held drills have new item textures
+* Dyson relay satellite has a new item texture
+* Capsule model updated to have a proper interior
+* Magma drills now require gallium arsenide to be crafted
+* New rocket transporter pad model, with separate fuel tank ports to make it easier to send hydrolox _on_ the rocket
+* Drop pods are now fueled with hydrazine instead of hydrolox
+* Hydrazine can now be made in a pinch with urea...
+* Damaged lights can be quickly repaired by interacting with them
 
 ## Fixed
-* Mun cows being irradiated by the sun, turning to mooshrooms, and immediately suffocating
-* Dyson swarm counts going negative with multiple competing swarms
-* Water being placed by dispensers and melting ice in vacuums instead of evaporating immediately
-* Fixed crash on servers caused by atmosphere scanners
-* Fixed vertibirds spawning unburied in deserts
-* Fixed skybox not showing on first time joining a server
-* Fixed shift-clicking into VAB deleting drives
-* Fix corrosion check crashing for non FSB (Full Set Bonus) armor
+* Incorrect worldtime used for pedestal recipes (moon phase is based on closest moon, if the planet you're on _has_ any)
+* Fix Stardar shift clicking voiding drives
+* OC support in many machines returned
+* Orbital station cores can no longer be destroyed, even in creative
+* Hell rads were being applied on planets with no atmosphere (now they only have solar rads, as intended)
+* Weird fog edge on render distances above 16
+* Rare crash with certain mod combos on loot blocks
