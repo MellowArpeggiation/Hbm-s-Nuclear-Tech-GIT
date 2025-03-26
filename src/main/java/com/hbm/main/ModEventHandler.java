@@ -102,6 +102,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityVillager;
@@ -679,7 +680,7 @@ public class ModEventHandler {
 
 					// Undo falling, and add our intended falling speed
 					// On high gravity planets, only apply falling speed when descending, so we can still jump up single blocks
-					if (gravity < 1.5F || event.entityLiving.motionY < 0) {
+					if((gravity < 1.5F || event.entityLiving.motionY < 0) && !(event.entity instanceof EntityChicken)) {
 						event.entityLiving.motionY /= 0.98F;
 						event.entityLiving.motionY += (AstronomyUtil.STANDARD_GRAVITY / 20F);
 						event.entityLiving.motionY -= (gravity / 20F);
