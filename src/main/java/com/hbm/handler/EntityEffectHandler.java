@@ -45,6 +45,7 @@ import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
 import com.hbm.world.biome.BiomeGenCraterBase;
 
+import api.hbm.entity.ISuffocationImmune;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -338,9 +339,7 @@ public class EntityEffectHandler {
 
 	private static void handleOxy(EntityLivingBase entity, CBT_Atmosphere atmosphere) {
 		if(entity.worldObj.isRemote) return;
-		if(entity instanceof EntityGlyphid) return; // can't suffocate the bastards
-		if(entity instanceof EntityCyberCrab) return; // machines
-		if(entity instanceof EntityMoonCow) return; // MOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+		if(entity instanceof ISuffocationImmune) return;
 		if(entity.ridingEntity != null && entity.ridingEntity instanceof EntityRideableRocket) return; // breathe easy in your ship
 
 		if (!ArmorUtil.checkForOxy(entity, atmosphere)) {
