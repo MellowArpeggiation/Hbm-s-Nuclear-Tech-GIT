@@ -102,6 +102,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityVillager;
@@ -151,6 +152,7 @@ import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.Level;
@@ -678,7 +680,7 @@ public class ModEventHandler {
 
 					// Undo falling, and add our intended falling speed
 					// On high gravity planets, only apply falling speed when descending, so we can still jump up single blocks
-					if (gravity < 1.5F || event.entityLiving.motionY < 0) {
+					if((gravity < 1.5F || event.entityLiving.motionY < 0) && !(event.entity instanceof EntityChicken)) {
 						event.entityLiving.motionY /= 0.98F;
 						event.entityLiving.motionY += (AstronomyUtil.STANDARD_GRAVITY / 20F);
 						event.entityLiving.motionY -= (gravity / 20F);
@@ -1621,6 +1623,18 @@ public class ModEventHandler {
 
 		if(evt.entity instanceof EntityMissileCustom) {
 			((EntityMissileCustom) evt.entity).loadNeighboringChunks(evt.newChunkX, evt.newChunkZ);
+		}*/
+	}
+
+	@SubscribeEvent
+	public void onChunkLoad(ChunkEvent.Load event) {
+
+		//test for automatic in-world block replacement
+
+		/*for(int x = 0; x < 16; x++) for(int y = 0; y < 255; y++) for(int z = 0; z < 16; z++) {
+			if(event.getChunk().getBlock(x, y, z) instanceof MachineArcFurnace) {
+				event.getChunk().func_150807_a(x, y, z, Blocks.air, 0);
+			}
 		}*/
 	}
 
