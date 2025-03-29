@@ -161,9 +161,8 @@ public class ItemConveyorWand extends Item {
 	// attempts to construct a conveyor between two points, including bends, lifts, and chutes
 	private static boolean construct(World routeWorld, IBlockAccess buildWorld, int x1, int y1, int z1, int side1, int x2, int y2, int z2, int side2, int box, int boy, int boz) {
 		boolean isFromCrane = routeWorld.getBlock(x1, y1, z1) instanceof BlockCraneBase;
-		// boolean isTargetCrane = routeWorld.getBlock(x2, y2, z2) instanceof BlockCraneBase;
+		boolean isTargetCrane = routeWorld.getBlock(x2, y2, z2) instanceof BlockCraneBase;
 
-		ForgeDirection target = getTargetDirection(x1, y1, z1, x2, y2, z2);
 		ForgeDirection dir = ForgeDirection.getOrientation(side1);
 
 		ForgeDirection targetDir = ForgeDirection.getOrientation(side2);
@@ -175,13 +174,17 @@ public class ItemConveyorWand extends Item {
 		int y = y1 + dir.offsetY;
 		int z = z1 + dir.offsetZ;
 
-		if(!isFromCrane) dir = target.getOpposite();
+		if(!isFromCrane) {
+			dir = getTargetDirection(x, y, z, x2, y2, z2);
+		}
+
+		ForgeDirection horDir = dir == ForgeDirection.UP || dir == ForgeDirection.DOWN ? ForgeDirection.NORTH : dir;
 
 		for(int loopDepth = 0; loopDepth < 64; loopDepth++) {
 			if(!routeWorld.getBlock(x, y, z).isReplaceable(routeWorld, x, y, z)) return false;
 
 			Block block = getConveyorForDirection(dir);
-			int meta = block != ModBlocks.conveyor ? target.getOpposite().ordinal() : dir.getOpposite().ordinal();
+			int meta = getConveyorMetaForDirection(block, dir, targetDir, horDir);
 
 			int ox = x + dir.offsetX;
 			int oy = y + dir.offsetY;
@@ -191,19 +194,25 @@ public class ItemConveyorWand extends Item {
 			int fromDistance = taxiDistance(x, y, z, tx, ty, tz);
 			int toDistance = taxiDistance(ox, oy, oz, tx, ty, tz);
 			int finalDistance = taxiDistance(ox, oy, oz, x2, y2, z2);
-			boolean willBeObstructed = finalDistance > 0 && !routeWorld.getBlock(ox, oy, oz).isReplaceable(routeWorld, ox, oy, oz);
-			boolean shouldTurn = (toDistance >= fromDistance && finalDistance > 0) || willBeObstructed;
+			boolean notAtTarget = (isTargetCrane ? finalDistance : fromDistance) > 0;
+			boolean willBeObstructed = notAtTarget && !routeWorld.getBlock(ox, oy, oz).isReplaceable(routeWorld, ox, oy, oz);
+			boolean shouldTurn = (toDistance >= fromDistance && notAtTarget) || willBeObstructed;
 
 			if(shouldTurn) {
-				ForgeDirection newDir = getTargetDirection(x, y, z, x2, y2, z2, dir);
+				ForgeDirection newDir = getTargetDirection(x, y, z, isTargetCrane ? x2 : tx, isTargetCrane ? y2 : ty, isTargetCrane ? z2 : tz, tx, ty, tz, dir);
 
-				if(dir.getRotation(ForgeDirection.UP) == newDir) {
+				if(newDir == ForgeDirection.UP) {
+					block = ModBlocks.conveyor_lift;
+				} else if(newDir == ForgeDirection.DOWN) {
+					block = ModBlocks.conveyor_chute;
+				} else if(dir.getRotation(ForgeDirection.UP) == newDir) {
 					meta += 8;
 				} else if(dir.getRotation(ForgeDirection.DOWN) == newDir) {
 					meta += 4;
 				}
 
 				dir = newDir;
+				if(dir != ForgeDirection.UP && dir != ForgeDirection.DOWN) horDir = dir;
 			}
 
 			if(buildWorld instanceof World) {
@@ -222,6 +231,12 @@ public class ItemConveyorWand extends Item {
 		return false;
 	}
 
+	private static int getConveyorMetaForDirection(Block block, ForgeDirection dir, ForgeDirection targetDir, ForgeDirection horDir) {
+		if(block == ModBlocks.conveyor) return dir.getOpposite().ordinal();
+		if(targetDir == ForgeDirection.UP || targetDir == ForgeDirection.DOWN) return horDir.getOpposite().ordinal();
+		return targetDir.ordinal();
+	}
+
 	private static Block getConveyorForDirection(ForgeDirection dir) {
 		if(dir == ForgeDirection.UP) return ModBlocks.conveyor_lift;
 		if(dir == ForgeDirection.DOWN) return ModBlocks.conveyor_chute;
@@ -229,11 +244,11 @@ public class ItemConveyorWand extends Item {
 	}
 
 	private static ForgeDirection getTargetDirection(int x1, int y1, int z1, int x2, int y2, int z2) {
-		return getTargetDirection(x1, y1, z1, x2, y2, z2, null);
+		return getTargetDirection(x1, y1, z1, x2, y2, z2, x2, y2, z2, null);
 	}
 
-	private static ForgeDirection getTargetDirection(int x1, int y1, int z1, int x2, int y2, int z2, ForgeDirection heading) {
-		if(x1 == x2 && z1 == z2) return y1 > y2 ? ForgeDirection.DOWN : ForgeDirection.UP;
+	private static ForgeDirection getTargetDirection(int x1, int y1, int z1, int x2, int y2, int z2, int tx, int ty, int tz, ForgeDirection heading) {
+		if(y1 != y2 && ((x1 == x2 && z1 == z2) || (x1 == tx && z1 == tz))) return y1 > y2 ? ForgeDirection.DOWN : ForgeDirection.UP;
 
 		if(Math.abs(x1 - x2) > Math.abs(z1 - z2) && heading != ForgeDirection.EAST && heading != ForgeDirection.WEST) {
 			return x1 > x2 ? ForgeDirection.WEST : ForgeDirection.EAST;

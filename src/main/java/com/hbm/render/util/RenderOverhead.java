@@ -377,6 +377,8 @@ public class RenderOverhead {
 	private static int offsetZ;
 	private static boolean actionPreviewSuccess;
 
+	private static boolean clearPreview;
+
 	public static void setActionPreview(WorldInAJar wiaj, int x, int y, int z, boolean canAction) {
 		actionPreviewWorld = wiaj;
 		offsetX = x;
@@ -385,11 +387,17 @@ public class RenderOverhead {
 		actionPreviewSuccess = canAction;
 	}
 
+	// Prevents thread unsafe null exception
 	public static void clearActionPreview() {
-		actionPreviewWorld = null;
+		clearPreview = true;
 	}
 
 	public static void renderActionPreview(float partialTicks) {
+		if(clearPreview) {
+			actionPreviewWorld = null;
+			clearPreview = false;
+		}
+
 		if(actionPreviewWorld == null) return;
 
 		RenderBlocks renderer = new RenderBlocks(actionPreviewWorld);
