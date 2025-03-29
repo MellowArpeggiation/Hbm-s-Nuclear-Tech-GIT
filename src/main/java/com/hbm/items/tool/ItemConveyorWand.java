@@ -180,6 +180,13 @@ public class ItemConveyorWand extends Item {
 
 		ForgeDirection horDir = dir == ForgeDirection.UP || dir == ForgeDirection.DOWN ? ForgeDirection.NORTH : dir;
 
+		// Initial dropdown
+		if(y > ty) {
+			if(routeWorld.getBlock(x, y - 1, z).isReplaceable(routeWorld, x, y - 1, z)) {
+				dir = ForgeDirection.DOWN;
+			}
+		}
+
 		for(int loopDepth = 0; loopDepth < 64; loopDepth++) {
 			if(!routeWorld.getBlock(x, y, z).isReplaceable(routeWorld, x, y, z)) return false;
 
@@ -199,7 +206,7 @@ public class ItemConveyorWand extends Item {
 			boolean shouldTurn = (toDistance >= fromDistance && notAtTarget) || willBeObstructed;
 
 			if(shouldTurn) {
-				ForgeDirection newDir = getTargetDirection(x, y, z, isTargetCrane ? x2 : tx, isTargetCrane ? y2 : ty, isTargetCrane ? z2 : tz, tx, ty, tz, dir);
+				ForgeDirection newDir = getTargetDirection(x, y, z, isTargetCrane ? x2 : tx, isTargetCrane ? y2 : ty, isTargetCrane ? z2 : tz, tx, ty, tz, dir, willBeObstructed);
 
 				if(newDir == ForgeDirection.UP) {
 					block = ModBlocks.conveyor_lift;
@@ -244,11 +251,11 @@ public class ItemConveyorWand extends Item {
 	}
 
 	private static ForgeDirection getTargetDirection(int x1, int y1, int z1, int x2, int y2, int z2) {
-		return getTargetDirection(x1, y1, z1, x2, y2, z2, x2, y2, z2, null);
+		return getTargetDirection(x1, y1, z1, x2, y2, z2, x2, y2, z2, null, false);
 	}
 
-	private static ForgeDirection getTargetDirection(int x1, int y1, int z1, int x2, int y2, int z2, int tx, int ty, int tz, ForgeDirection heading) {
-		if(y1 != y2 && ((x1 == x2 && z1 == z2) || (x1 == tx && z1 == tz))) return y1 > y2 ? ForgeDirection.DOWN : ForgeDirection.UP;
+	private static ForgeDirection getTargetDirection(int x1, int y1, int z1, int x2, int y2, int z2, int tx, int ty, int tz, ForgeDirection heading, boolean willBeObstructed) {
+		if(y1 != ty && (willBeObstructed || (x1 == x2 && z1 == z2) || (x1 == tx && z1 == tz))) return y1 > y2 ? ForgeDirection.DOWN : ForgeDirection.UP;
 
 		if(Math.abs(x1 - x2) > Math.abs(z1 - z2) && heading != ForgeDirection.EAST && heading != ForgeDirection.WEST) {
 			return x1 > x2 ? ForgeDirection.WEST : ForgeDirection.EAST;
