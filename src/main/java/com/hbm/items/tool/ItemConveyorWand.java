@@ -37,13 +37,30 @@ public class ItemConveyorWand extends Item {
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float fx, float fy, float fz) {
 		if(player.isSneaking() && !stack.hasTagCompound()) {
 			ForgeDirection dir = ForgeDirection.getOrientation(side);
+			Block onBlock = world.getBlock(x, y, z);
+			int onMeta = world.getBlockMetadata(x, y, z);
+
+			if(onBlock == ModBlocks.conveyor && onMeta < 6) {
+				if(dir == ForgeDirection.UP) {
+					onBlock = ModBlocks.conveyor_lift;
+					world.setBlock(x, y, z, onBlock, onMeta, 3);
+				} else if(dir == ForgeDirection.DOWN) {
+					onBlock = ModBlocks.conveyor_chute;
+					world.setBlock(x, y, z, onBlock, onMeta, 3);
+				}
+			}
+
+			Block toPlace = ModBlocks.conveyor;
+			if(onBlock == ModBlocks.conveyor_lift && dir == ForgeDirection.UP) toPlace = ModBlocks.conveyor_lift;
+			if(onBlock == ModBlocks.conveyor_chute && dir == ForgeDirection.DOWN) toPlace = ModBlocks.conveyor_chute;
+
 			x += dir.offsetX;
 			y += dir.offsetY;
 			z += dir.offsetZ;
 
 			if(world.getBlock(x, y, z).isReplaceable(world, x, y, z)) {
-				world.setBlock(x, y, z, ModBlocks.conveyor);
-				ModBlocks.conveyor.onBlockPlacedBy(world, x, y, z, player, stack);
+				world.setBlock(x, y, z, toPlace);
+				toPlace.onBlockPlacedBy(world, x, y, z, player, stack);
 				stack.stackSize--;
 			}
 
