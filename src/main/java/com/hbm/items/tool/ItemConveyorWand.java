@@ -35,7 +35,7 @@ public class ItemConveyorWand extends Item {
 
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float fx, float fy, float fz) {
-		if(player.isSneaking()) {
+		if(player.isSneaking() && !stack.hasTagCompound()) {
 			ForgeDirection dir = ForgeDirection.getOrientation(side);
 			x += dir.offsetX;
 			y += dir.offsetY;
@@ -235,8 +235,9 @@ public class ItemConveyorWand extends Item {
 	// attempts to construct a conveyor between two points, including bends, lifts, and chutes
 	private static int construct(World routeWorld, IBlockAccess buildWorld, int x1, int y1, int z1, int side1, int x2, int y2, int z2, int side2, int box, int boy, int boz, int max) {
 		Block startBlock = routeWorld.getBlock(x1, y1, z1);
+		Block targetBlock = routeWorld.getBlock(x2, y2, z2);
 		boolean isFromCrane = startBlock instanceof BlockCraneBase || startBlock instanceof BlockConveyorBendable;
-		boolean isTargetCrane = routeWorld.getBlock(x2, y2, z2) instanceof BlockCraneBase;
+		boolean isTargetCrane = targetBlock instanceof BlockCraneBase || targetBlock instanceof BlockConveyorBendable;
 
 		ForgeDirection dir = ForgeDirection.getOrientation(side1);
 
