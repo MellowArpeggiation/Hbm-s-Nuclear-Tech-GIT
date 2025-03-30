@@ -5479,7 +5479,7 @@ public class ModItems {
 		mysteryshovel = new ItemMS().setUnlocalizedName("mysteryshovel").setFull3D().setMaxStackSize(1).setTextureName(RefStrings.MODID + ":cursed_shovel");
 		memory = new ItemBattery(Long.MAX_VALUE / 100L, 100000000000000L, 100000000000000L).setUnlocalizedName("memory").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":mo8_anim");
 
-		conveyor_wand = new ItemConveyorWand().setUnlocalizedName("conveyor_wand").setFull3D().setMaxStackSize(1).setTextureName(RefStrings.MODID + ":wand_s");
+		conveyor_wand = new ItemConveyorWand().setUnlocalizedName("conveyor_wand").setFull3D().setTextureName(RefStrings.MODID + ":wand_s");
 
 		swarm_member = new Item().setUnlocalizedName("swarm_member").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":sat_base");
 

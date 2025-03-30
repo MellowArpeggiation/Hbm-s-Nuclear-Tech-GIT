@@ -1,9 +1,15 @@
 package com.hbm.items.tool;
 
+import java.util.List;
+
+import org.lwjgl.input.Keyboard;
+
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.network.BlockConveyorBase;
+import com.hbm.blocks.network.BlockConveyorBendable;
 import com.hbm.blocks.network.BlockCraneBase;
 import com.hbm.render.util.RenderOverhead;
+import com.hbm.util.I18nUtil;
 import com.hbm.wiaj.WorldInAJar;
 
 import net.minecraft.block.Block;
@@ -16,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.IBlockAccess;
@@ -28,54 +35,103 @@ public class ItemConveyorWand extends Item {
 
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float fx, float fy, float fz) {
-		if(stack.stackTagCompound == null) stack.stackTagCompound = new NBTTagCompound();
-		NBTTagCompound nbt = stack.stackTagCompound;
+		if(player.isSneaking()) {
+			ForgeDirection dir = ForgeDirection.getOrientation(side);
+			x += dir.offsetX;
+			y += dir.offsetY;
+			z += dir.offsetZ;
 
-		if(!nbt.getBoolean("placing")) {
+			if(world.getBlock(x, y, z).isReplaceable(world, x, y, z)) {
+				world.setBlock(x, y, z, ModBlocks.conveyor);
+				ModBlocks.conveyor.onBlockPlacedBy(world, x, y, z, player, stack);
+				stack.stackSize--;
+			}
+
+			return true;
+		}
+
+		if(!stack.hasTagCompound()) {
 			// Starting placement
+			NBTTagCompound nbt = stack.stackTagCompound = new NBTTagCompound();
 
 			nbt.setInteger("x", x);
 			nbt.setInteger("y", y);
 			nbt.setInteger("z", z);
 			nbt.setInteger("side", side);
 
-			nbt.setBoolean("placing", true);
+			int count = 0;
+			if(player.capabilities.isCreativeMode) {
+				count = 256;
+			} else {
+				for(ItemStack inventoryStack : player.inventory.mainInventory) {
+					if(inventoryStack != null && inventoryStack.getItem() == this) {
+						count += inventoryStack.stackSize;
+					}
+				}
+			}
+
+			nbt.setInteger("count", count);
 		} else {
 			// Constructing conveyor
+			NBTTagCompound nbt = stack.stackTagCompound;
 
 			int sx = nbt.getInteger("x");
 			int sy = nbt.getInteger("y");
 			int sz = nbt.getInteger("z");
 			int sSide = nbt.getInteger("side");
+			int count = nbt.getInteger("count");
 
 			if(!world.isRemote) {
 				// pretend to construct, if it doesn't fail, actually construct
-				if(construct(world, null, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0)) {
-					construct(world, world, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0);
+				if(construct(world, null, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0, count) > 0) {
+					int toRemove = construct(world, world, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0, count);
+
+					if(!player.capabilities.isCreativeMode) {
+						for(ItemStack inventoryStack : player.inventory.mainInventory) {
+							if(inventoryStack != null && inventoryStack.getItem() == this) {
+								int removing = Math.min(toRemove, inventoryStack.stackSize);
+								inventoryStack.stackSize -= removing;
+								toRemove -= removing;
+							}
+
+							if(toRemove <= 0) break;
+						}
+
+						player.inventory.markDirty();
+					}
+
 					player.addChatMessage(new ChatComponentText("Conveyor built!"));
 				} else {
 					player.addChatMessage(new ChatComponentText("Conveyor obstructed, build cancelled"));
 				}
+			} else {
+				RenderOverhead.clearActionPreview();
 			}
 
-			nbt.setBoolean("placing", false);
+			stack.stackTagCompound = null;
 		}
 
 		return true; // always eat interactions
 	}
 
+	private static MovingObjectPosition lastMop;
+
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean inHand) {
-		if(!inHand && stack.hasTagCompound() && stack.stackTagCompound.getBoolean("placing")) {
-			stack.stackTagCompound.setBoolean("placing", false);
+		if(!(entity instanceof EntityPlayer)) return;
+		EntityPlayer player = (EntityPlayer) entity;
+
+		if(!inHand && stack.hasTagCompound()) {
+			ItemStack held = player.getHeldItem();
+			if(held == null || held.getItem() != this) {
+				stack.stackTagCompound = null;
+				if(!world.isRemote) RenderOverhead.clearActionPreview();
+			}
 		}
 
 		// clientside prediction only
-		if(!world.isRemote) {
-			if(!(entity instanceof EntityPlayer)) return;
-			// EntityPlayer player = (EntityPlayer) entity;
-
-			if(!stack.hasTagCompound() || !stack.stackTagCompound.getBoolean("placing")) {
+		if(!world.isRemote && inHand) {
+			if(!stack.hasTagCompound()) {
 				RenderOverhead.clearActionPreview();
 				return;
 			}
@@ -85,6 +141,9 @@ public class ItemConveyorWand extends Item {
 				RenderOverhead.clearActionPreview();
 				return;
 			}
+
+			if(lastMop != null && mop.blockX == lastMop.blockX && mop.blockY == lastMop.blockY && mop.blockZ == lastMop.blockZ && mop.sideHit == lastMop.sideHit) return;
+			lastMop = mop;
 
 			int x = mop.blockX;
 			int y = mop.blockY;
@@ -97,6 +156,7 @@ public class ItemConveyorWand extends Item {
 			int sy = nbt.getInteger("y");
 			int sz = nbt.getInteger("z");
 			int sSide = nbt.getInteger("side");
+			int count = nbt.getInteger("count");
 
 			// Size has a one block buffer on both sides, for overshooting conveyors
 			int sizeX = Math.abs(sx - x) + 3;
@@ -108,9 +168,23 @@ public class ItemConveyorWand extends Item {
 			int minZ = Math.min(sz, z) - 1;
 
 			WorldInAJar wiaj = new WorldInAJar(sizeX, sizeY, sizeZ);
-			boolean pathSuccess = construct(world, wiaj, sx, sy, sz, sSide, x, y, z, side, minX, minY, minZ);
+			boolean pathSuccess = construct(world, wiaj, sx, sy, sz, sSide, x, y, z, side, minX, minY, minZ, count) > 0;
 
 			RenderOverhead.setActionPreview(wiaj, minX, minY, minZ, pathSuccess);
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean ext) {
+
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			for(String s : I18nUtil.resolveKeyArray(stack.getUnlocalizedName() + ".desc")) {
+				list.add(EnumChatFormatting.YELLOW + s);
+			}
+		} else {
+			list.add(EnumChatFormatting.DARK_GRAY + "" + EnumChatFormatting.ITALIC + "Hold <" + EnumChatFormatting.YELLOW + "" + EnumChatFormatting.ITALIC + "LSHIFT" + EnumChatFormatting.DARK_GRAY
+					+ "" + EnumChatFormatting.ITALIC + "> to display more info");
 		}
 	}
 
@@ -159,8 +233,9 @@ public class ItemConveyorWand extends Item {
 	}
 
 	// attempts to construct a conveyor between two points, including bends, lifts, and chutes
-	private static boolean construct(World routeWorld, IBlockAccess buildWorld, int x1, int y1, int z1, int side1, int x2, int y2, int z2, int side2, int box, int boy, int boz) {
-		boolean isFromCrane = routeWorld.getBlock(x1, y1, z1) instanceof BlockCraneBase;
+	private static int construct(World routeWorld, IBlockAccess buildWorld, int x1, int y1, int z1, int side1, int x2, int y2, int z2, int side2, int box, int boy, int boz, int max) {
+		Block startBlock = routeWorld.getBlock(x1, y1, z1);
+		boolean isFromCrane = startBlock instanceof BlockCraneBase || startBlock instanceof BlockConveyorBendable;
 		boolean isTargetCrane = routeWorld.getBlock(x2, y2, z2) instanceof BlockCraneBase;
 
 		ForgeDirection dir = ForgeDirection.getOrientation(side1);
@@ -187,8 +262,8 @@ public class ItemConveyorWand extends Item {
 			}
 		}
 
-		for(int loopDepth = 0; loopDepth < 64; loopDepth++) {
-			if(!routeWorld.getBlock(x, y, z).isReplaceable(routeWorld, x, y, z)) return false;
+		for(int loopDepth = 1; loopDepth <= max; loopDepth++) {
+			if(!routeWorld.getBlock(x, y, z).isReplaceable(routeWorld, x, y, z)) return 0;
 
 			Block block = getConveyorForDirection(dir);
 			int meta = getConveyorMetaForDirection(block, dir, targetDir, horDir);
@@ -228,14 +303,14 @@ public class ItemConveyorWand extends Item {
 				((WorldInAJar) buildWorld).setBlock(x - box, y - boy, z - boz, block, meta);
 			}
 
-			if(x == tx && y == ty && z == tz) return true;
+			if(x == tx && y == ty && z == tz) return loopDepth;
 
 			x += dir.offsetX;
 			y += dir.offsetY;
 			z += dir.offsetZ;
 		}
 
-		return false;
+		return 0;
 	}
 
 	private static int getConveyorMetaForDirection(Block block, ForgeDirection dir, ForgeDirection targetDir, ForgeDirection horDir) {
