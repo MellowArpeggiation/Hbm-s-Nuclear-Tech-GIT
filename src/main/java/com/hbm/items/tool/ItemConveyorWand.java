@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.network.BlockConveyorBase;
+import com.hbm.blocks.network.BlockConveyorBendable;
 import com.hbm.blocks.network.BlockCraneBase;
 import com.hbm.render.util.RenderOverhead;
 import com.hbm.util.I18nUtil;
@@ -137,9 +138,9 @@ public class ItemConveyorWand extends Item {
 		// If placing on top of a conveyor block, auto-snap to edge if possible
 		// this makes it easier to connect without having to click the small edge of a conveyor
 		Block onBlock = world.getBlock(x, y, z);
-		BlockConveyorBase placingBlock = (BlockConveyorBase) getConveyorBlock(getType(stack));
-		if(onBlock == placingBlock) {
-			ForgeDirection moveDir = stack.hasTagCompound() ? placingBlock.getInputDirection(world, x, y, z) : placingBlock.getOutputDirection(world, x, y, z);
+		if(onBlock instanceof BlockConveyorBendable) {
+			BlockConveyorBase bendable = (BlockConveyorBase) onBlock;
+			ForgeDirection moveDir = stack.hasTagCompound() ? bendable.getInputDirection(world, x, y, z) : bendable.getOutputDirection(world, x, y, z);
 
 			int ox = x + moveDir.offsetX;
 			int oy = y + moveDir.offsetY;
@@ -261,9 +262,9 @@ public class ItemConveyorWand extends Item {
 			int side = mop.sideHit;
 
 			Block onBlock = world.getBlock(x, y, z);
-			BlockConveyorBase placingBlock = (BlockConveyorBase) getConveyorBlock(getType(stack));
-			if(onBlock == placingBlock) {
-				ForgeDirection moveDir = placingBlock.getInputDirection(world, x, y, z);
+			if(onBlock instanceof BlockConveyorBendable) {
+				BlockConveyorBase bendable = (BlockConveyorBase) onBlock;
+				ForgeDirection moveDir = bendable.getInputDirection(world, x, y, z);
 
 				int ox = x + moveDir.offsetX;
 				int oy = y + moveDir.offsetY;
