@@ -1,6 +1,7 @@
 package com.hbm.items.tool;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.lwjgl.input.Keyboard;
 
@@ -12,8 +13,11 @@ import com.hbm.render.util.RenderOverhead;
 import com.hbm.util.I18nUtil;
 import com.hbm.wiaj.WorldInAJar;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -33,14 +37,72 @@ import net.minecraftforge.event.world.BlockEvent;
 
 public class ItemConveyorWand extends Item {
 
+	public ItemConveyorWand() {
+		setHasSubtypes(true);
+	}
+
+	public static enum ConveyorType {
+		REGULAR,
+		EXPRESS,
+		DOUBLE,
+		TRIPLE
+	}
+
+	public static ConveyorType getType(ItemStack stack) {
+		if(stack == null) return ConveyorType.REGULAR;
+		return ConveyorType.values()[stack.getItemDamage()];
+	}
+
+	public static Block getConveyorBlock(ConveyorType type) {
+		switch(type) {
+		case EXPRESS: return ModBlocks.conveyor_express;
+		case DOUBLE: return ModBlocks.conveyor_double;
+		case TRIPLE: return ModBlocks.conveyor_triple;
+		default: return ModBlocks.conveyor;
+		}
+	}
+
+	public static boolean hasSnakesAndLadders(ConveyorType type) {
+		return type == ConveyorType.REGULAR;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(Item item, CreativeTabs tab, List list) {
+		for(ConveyorType type : ConveyorType.values()) {
+			list.add(new ItemStack(item, 1, type.ordinal()));
+		}
+	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+		return super.getUnlocalizedName() + "." + getType(stack).name().toLowerCase(Locale.US);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean ext) {
+
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			for(String s : I18nUtil.resolveKeyArray(super.getUnlocalizedName(stack) + ".desc")) {
+				list.add(EnumChatFormatting.YELLOW + s);
+			}
+		} else {
+			list.add(EnumChatFormatting.DARK_GRAY + "" + EnumChatFormatting.ITALIC + "Hold <" + EnumChatFormatting.YELLOW + "" + EnumChatFormatting.ITALIC + "LSHIFT" + EnumChatFormatting.DARK_GRAY
+					+ "" + EnumChatFormatting.ITALIC + "> to display more info");
+		}
+	}
+
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float fx, float fy, float fz) {
 		if(player.isSneaking() && !stack.hasTagCompound()) {
 			ForgeDirection dir = ForgeDirection.getOrientation(side);
 			Block onBlock = world.getBlock(x, y, z);
 			int onMeta = world.getBlockMetadata(x, y, z);
+			ConveyorType type = getType(stack);
 
-			if(onBlock == ModBlocks.conveyor && onMeta < 6) {
+			if(hasSnakesAndLadders(type) && onBlock == ModBlocks.conveyor && onMeta < 6) {
 				if(dir == ForgeDirection.UP) {
 					onBlock = ModBlocks.conveyor_lift;
 					world.setBlock(x, y, z, onBlock, onMeta, 3);
@@ -50,9 +112,11 @@ public class ItemConveyorWand extends Item {
 				}
 			}
 
-			Block toPlace = ModBlocks.conveyor;
-			if(onBlock == ModBlocks.conveyor_lift && dir == ForgeDirection.UP) toPlace = ModBlocks.conveyor_lift;
-			if(onBlock == ModBlocks.conveyor_chute && dir == ForgeDirection.DOWN) toPlace = ModBlocks.conveyor_chute;
+			Block toPlace = getConveyorBlock(type);
+			if(hasSnakesAndLadders(type)) {
+				if(onBlock == ModBlocks.conveyor_lift && dir == ForgeDirection.UP) toPlace = ModBlocks.conveyor_lift;
+				if(onBlock == ModBlocks.conveyor_chute && dir == ForgeDirection.DOWN) toPlace = ModBlocks.conveyor_chute;
+			}
 
 			x += dir.offsetX;
 			y += dir.offsetY;
@@ -81,7 +145,7 @@ public class ItemConveyorWand extends Item {
 				count = 256;
 			} else {
 				for(ItemStack inventoryStack : player.inventory.mainInventory) {
-					if(inventoryStack != null && inventoryStack.getItem() == this) {
+					if(inventoryStack != null && inventoryStack.getItem() == this && inventoryStack.getItemDamage() == stack.getItemDamage()) {
 						count += inventoryStack.stackSize;
 					}
 				}
@@ -99,13 +163,15 @@ public class ItemConveyorWand extends Item {
 			int count = nbt.getInteger("count");
 
 			if(!world.isRemote) {
+				ConveyorType type = getType(stack);
+
 				// pretend to construct, if it doesn't fail, actually construct
-				if(construct(world, null, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0, count) > 0) {
-					int toRemove = construct(world, world, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0, count);
+				if(construct(world, null, type, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0, count) > 0) {
+					int toRemove = construct(world, world, type, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0, count);
 
 					if(!player.capabilities.isCreativeMode) {
 						for(ItemStack inventoryStack : player.inventory.mainInventory) {
-							if(inventoryStack != null && inventoryStack.getItem() == this) {
+							if(inventoryStack != null && inventoryStack.getItem() == this && inventoryStack.getItemDamage() == stack.getItemDamage()) {
 								int removing = Math.min(toRemove, inventoryStack.stackSize);
 								inventoryStack.stackSize -= removing;
 								toRemove -= removing;
@@ -140,7 +206,7 @@ public class ItemConveyorWand extends Item {
 
 		if(!inHand && stack.hasTagCompound()) {
 			ItemStack held = player.getHeldItem();
-			if(held == null || held.getItem() != this) {
+			if(held == null || held.getItem() != this || held.getItemDamage() != stack.getItemDamage()) {
 				stack.stackTagCompound = null;
 				if(!world.isRemote) RenderOverhead.clearActionPreview();
 			}
@@ -185,23 +251,9 @@ public class ItemConveyorWand extends Item {
 			int minZ = Math.min(sz, z) - 1;
 
 			WorldInAJar wiaj = new WorldInAJar(sizeX, sizeY, sizeZ);
-			boolean pathSuccess = construct(world, wiaj, sx, sy, sz, sSide, x, y, z, side, minX, minY, minZ, count) > 0;
+			boolean pathSuccess = construct(world, wiaj, getType(stack), sx, sy, sz, sSide, x, y, z, side, minX, minY, minZ, count) > 0;
 
 			RenderOverhead.setActionPreview(wiaj, minX, minY, minZ, pathSuccess);
-		}
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean ext) {
-
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			for(String s : I18nUtil.resolveKeyArray(stack.getUnlocalizedName() + ".desc")) {
-				list.add(EnumChatFormatting.YELLOW + s);
-			}
-		} else {
-			list.add(EnumChatFormatting.DARK_GRAY + "" + EnumChatFormatting.ITALIC + "Hold <" + EnumChatFormatting.YELLOW + "" + EnumChatFormatting.ITALIC + "LSHIFT" + EnumChatFormatting.DARK_GRAY
-					+ "" + EnumChatFormatting.ITALIC + "> to display more info");
 		}
 	}
 
@@ -250,11 +302,13 @@ public class ItemConveyorWand extends Item {
 	}
 
 	// attempts to construct a conveyor between two points, including bends, lifts, and chutes
-	private static int construct(World routeWorld, IBlockAccess buildWorld, int x1, int y1, int z1, int side1, int x2, int y2, int z2, int side2, int box, int boy, int boz, int max) {
+	private static int construct(World routeWorld, IBlockAccess buildWorld, ConveyorType type, int x1, int y1, int z1, int side1, int x2, int y2, int z2, int side2, int box, int boy, int boz, int max) {
 		Block startBlock = routeWorld.getBlock(x1, y1, z1);
 		Block targetBlock = routeWorld.getBlock(x2, y2, z2);
 		boolean isFromCrane = startBlock instanceof BlockCraneBase || startBlock instanceof BlockConveyorBendable;
 		boolean isTargetCrane = targetBlock instanceof BlockCraneBase || targetBlock instanceof BlockConveyorBendable;
+
+		boolean hasVertical = hasSnakesAndLadders(type);
 
 		ForgeDirection dir = ForgeDirection.getOrientation(side1);
 
@@ -268,7 +322,7 @@ public class ItemConveyorWand extends Item {
 		int z = z1 + dir.offsetZ;
 
 		if(!isFromCrane) {
-			dir = getTargetDirection(x, y, z, x2, y2, z2);
+			dir = getTargetDirection(x, y, z, x2, y2, z2, hasVertical);
 		}
 
 		ForgeDirection horDir = dir == ForgeDirection.UP || dir == ForgeDirection.DOWN ? ForgeDirection.NORTH : dir;
@@ -283,7 +337,7 @@ public class ItemConveyorWand extends Item {
 		for(int loopDepth = 1; loopDepth <= max; loopDepth++) {
 			if(!routeWorld.getBlock(x, y, z).isReplaceable(routeWorld, x, y, z)) return 0;
 
-			Block block = getConveyorForDirection(dir);
+			Block block = getConveyorForDirection(type, dir);
 			int meta = getConveyorMetaForDirection(block, dir, targetDir, horDir);
 
 			int ox = x + dir.offsetX;
@@ -299,7 +353,7 @@ public class ItemConveyorWand extends Item {
 			boolean shouldTurn = (toDistance >= fromDistance && notAtTarget) || willBeObstructed;
 
 			if(shouldTurn) {
-				ForgeDirection newDir = getTargetDirection(x, y, z, isTargetCrane ? x2 : tx, isTargetCrane ? y2 : ty, isTargetCrane ? z2 : tz, tx, ty, tz, dir, willBeObstructed);
+				ForgeDirection newDir = getTargetDirection(x, y, z, isTargetCrane ? x2 : tx, isTargetCrane ? y2 : ty, isTargetCrane ? z2 : tz, tx, ty, tz, dir, willBeObstructed, hasVertical);
 
 				if(newDir == ForgeDirection.UP) {
 					block = ModBlocks.conveyor_lift;
@@ -332,23 +386,23 @@ public class ItemConveyorWand extends Item {
 	}
 
 	private static int getConveyorMetaForDirection(Block block, ForgeDirection dir, ForgeDirection targetDir, ForgeDirection horDir) {
-		if(block == ModBlocks.conveyor) return dir.getOpposite().ordinal();
+		if(block != ModBlocks.conveyor_chute && block != ModBlocks.conveyor_lift) return dir.getOpposite().ordinal();
 		if(targetDir == ForgeDirection.UP || targetDir == ForgeDirection.DOWN) return horDir.getOpposite().ordinal();
 		return targetDir.ordinal();
 	}
 
-	private static Block getConveyorForDirection(ForgeDirection dir) {
+	private static Block getConveyorForDirection(ConveyorType type, ForgeDirection dir) {
 		if(dir == ForgeDirection.UP) return ModBlocks.conveyor_lift;
 		if(dir == ForgeDirection.DOWN) return ModBlocks.conveyor_chute;
-		return ModBlocks.conveyor;
+		return getConveyorBlock(type);
 	}
 
-	private static ForgeDirection getTargetDirection(int x1, int y1, int z1, int x2, int y2, int z2) {
-		return getTargetDirection(x1, y1, z1, x2, y2, z2, x2, y2, z2, null, false);
+	private static ForgeDirection getTargetDirection(int x1, int y1, int z1, int x2, int y2, int z2, boolean hasVertical) {
+		return getTargetDirection(x1, y1, z1, x2, y2, z2, x2, y2, z2, null, false, hasVertical);
 	}
 
-	private static ForgeDirection getTargetDirection(int x1, int y1, int z1, int x2, int y2, int z2, int tx, int ty, int tz, ForgeDirection heading, boolean willBeObstructed) {
-		if(y1 != ty && (willBeObstructed || (x1 == x2 && z1 == z2) || (x1 == tx && z1 == tz))) return y1 > y2 ? ForgeDirection.DOWN : ForgeDirection.UP;
+	private static ForgeDirection getTargetDirection(int x1, int y1, int z1, int x2, int y2, int z2, int tx, int ty, int tz, ForgeDirection heading, boolean willBeObstructed, boolean hasVertical) {
+		if(hasVertical && y1 != ty && (willBeObstructed || (x1 == x2 && z1 == z2) || (x1 == tx && z1 == tz))) return y1 > y2 ? ForgeDirection.DOWN : ForgeDirection.UP;
 
 		if(Math.abs(x1 - x2) > Math.abs(z1 - z2) && heading != ForgeDirection.EAST && heading != ForgeDirection.WEST) {
 			return x1 > x2 ? ForgeDirection.WEST : ForgeDirection.EAST;

@@ -11,11 +11,11 @@ import net.minecraftforge.client.IItemRenderer;
 
 public class ItemRenderBlock implements IItemRenderer {
 
-	private final Block block;
+	private final Block[] blocks;
 	private RenderBlocks renderBlocks = new RenderBlocks();
 
-	public ItemRenderBlock(Block block) {
-		this.block = block;
+	public ItemRenderBlock(Block... blocks) {
+		this.blocks = blocks;
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class ItemRenderBlock implements IItemRenderer {
 
 		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 		textureManager.bindTexture(textureManager.getResourceLocation(0));
-		renderBlocks.renderBlockAsItem(block, item.getItemDamage(), 1.0F);
+		renderBlocks.renderBlockAsItem(blocks[item.getItemDamage()], 0, 1.0F);
 	}
 
 }
