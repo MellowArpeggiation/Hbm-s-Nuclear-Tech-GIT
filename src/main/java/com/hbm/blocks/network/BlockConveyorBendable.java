@@ -51,6 +51,13 @@ public abstract class BlockConveyorBendable extends BlockConveyorBase implements
 	}
 
 	@Override
+	public ForgeDirection getInputDirection(World world, int x, int y, int z) {
+		int meta = world.getBlockMetadata(x, y, z);
+		int dir = getPathDirection(meta);
+		return ForgeDirection.getOrientation(meta - dir * 4);
+	}
+
+	@Override
 	public ForgeDirection getOutputDirection(World world, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
 		int dir = getPathDirection(meta);

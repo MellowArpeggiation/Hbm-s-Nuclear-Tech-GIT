@@ -134,25 +134,25 @@ public class ItemConveyorWand extends Item {
 			return true;
 		}
 
+		// If placing on top of a conveyor block, auto-snap to edge if possible
+		// this makes it easier to connect without having to click the small edge of a conveyor
+		Block onBlock = world.getBlock(x, y, z);
+		BlockConveyorBase placingBlock = (BlockConveyorBase) getConveyorBlock(getType(stack));
+		if(onBlock == placingBlock) {
+			ForgeDirection moveDir = stack.hasTagCompound() ? placingBlock.getInputDirection(world, x, y, z) : placingBlock.getOutputDirection(world, x, y, z);
+
+			int ox = x + moveDir.offsetX;
+			int oy = y + moveDir.offsetY;
+			int oz = z + moveDir.offsetZ;
+
+			if(world.getBlock(ox, oy, oz).isReplaceable(world, ox, oy, oz)) {
+				side = moveDir.ordinal();
+			}
+		}
+
 		if(!stack.hasTagCompound()) {
 			// Starting placement
 			NBTTagCompound nbt = stack.stackTagCompound = new NBTTagCompound();
-
-			// If placing on top of a conveyor block, auto-snap to edge if possible
-			// this makes it easier to connect without having to click the small edge of a conveyor
-			Block onBlock = world.getBlock(x, y, z);
-			Block placingBlock = getConveyorBlock(getType(stack));
-			if(onBlock == placingBlock) {
-				ForgeDirection moveDir = ((BlockConveyorBase) onBlock).getOutputDirection(world, x, y, z);
-
-				int ox = x + moveDir.offsetX;
-				int oy = y + moveDir.offsetY;
-				int oz = z + moveDir.offsetZ;
-
-				if(world.getBlock(ox, oy, oz).isReplaceable(world, ox, oy, oz)) {
-					side = moveDir.ordinal();
-				}
-			}
 
 			nbt.setInteger("x", x);
 			nbt.setInteger("y", y);
@@ -221,6 +221,7 @@ public class ItemConveyorWand extends Item {
 	}
 
 	private static MovingObjectPosition lastMop;
+	private static int lastSide;
 	private static float lastYaw;
 
 	@Override
@@ -254,14 +255,29 @@ public class ItemConveyorWand extends Item {
 				return;
 			}
 
-			if(lastMop != null && mop.blockX == lastMop.blockX && mop.blockY == lastMop.blockY && mop.blockZ == lastMop.blockZ && mop.sideHit == lastMop.sideHit && Math.abs(lastYaw - player.rotationYaw) < 15) return;
-			lastMop = mop;
-			lastYaw = player.rotationYaw;
-
 			int x = mop.blockX;
 			int y = mop.blockY;
 			int z = mop.blockZ;
 			int side = mop.sideHit;
+
+			Block onBlock = world.getBlock(x, y, z);
+			BlockConveyorBase placingBlock = (BlockConveyorBase) getConveyorBlock(getType(stack));
+			if(onBlock == placingBlock) {
+				ForgeDirection moveDir = placingBlock.getInputDirection(world, x, y, z);
+
+				int ox = x + moveDir.offsetX;
+				int oy = y + moveDir.offsetY;
+				int oz = z + moveDir.offsetZ;
+
+				if(world.getBlock(ox, oy, oz).isReplaceable(world, ox, oy, oz)) {
+					side = moveDir.ordinal();
+				}
+			}
+
+			if(lastMop != null && mop.blockX == lastMop.blockX && mop.blockY == lastMop.blockY && mop.blockZ == lastMop.blockZ && side == lastSide && Math.abs(lastYaw - player.rotationYaw) < 15) return;
+			lastMop = mop;
+			lastYaw = player.rotationYaw;
+			lastSide = side;
 
 			NBTTagCompound nbt = stack.stackTagCompound;
 
