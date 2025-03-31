@@ -200,7 +200,7 @@ public class ItemConveyorWand extends Item {
 							if(toRemove <= 0) break;
 						}
 
-						player.inventory.markDirty();
+						player.inventoryContainer.detectAndSendChanges();
 					}
 
 					player.addChatMessage(new ChatComponentText("Conveyor built!"));
