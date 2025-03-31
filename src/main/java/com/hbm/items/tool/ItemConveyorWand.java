@@ -7,7 +7,6 @@ import org.lwjgl.input.Keyboard;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.network.BlockConveyorBase;
-import com.hbm.blocks.network.BlockConveyorBendable;
 import com.hbm.blocks.network.BlockCraneBase;
 import com.hbm.render.util.RenderOverhead;
 import com.hbm.util.I18nUtil;
@@ -27,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.IBlockAccess;
@@ -135,6 +135,22 @@ public class ItemConveyorWand extends Item {
 			// Starting placement
 			NBTTagCompound nbt = stack.stackTagCompound = new NBTTagCompound();
 
+			// If placing on top of a conveyor block, auto-snap to edge if possible
+			// this makes it easier to connect without having to click the small edge of a conveyor
+			Block onBlock = world.getBlock(x, y, z);
+			Block placingBlock = getConveyorBlock(getType(stack));
+			if(onBlock == placingBlock) {
+				ForgeDirection moveDir = ((BlockConveyorBase) onBlock).getOutputDirection(world, x, y, z);
+
+				int ox = x + moveDir.offsetX;
+				int oy = y + moveDir.offsetY;
+				int oz = z + moveDir.offsetZ;
+
+				if(world.getBlock(ox, oy, oz).isReplaceable(world, ox, oy, oz)) {
+					side = moveDir.ordinal();
+				}
+			}
+
 			nbt.setInteger("x", x);
 			nbt.setInteger("y", y);
 			nbt.setInteger("z", z);
@@ -166,8 +182,9 @@ public class ItemConveyorWand extends Item {
 				ConveyorType type = getType(stack);
 
 				// pretend to construct, if it doesn't fail, actually construct
-				if(construct(world, null, type, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0, count) > 0) {
-					int toRemove = construct(world, world, type, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0, count);
+				int constructCount = construct(world, null, type, player, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0, count);
+				if(constructCount > 0) {
+					int toRemove = construct(world, world, type, player, sx, sy, sz, sSide, x, y, z, side, 0, 0, 0, count);
 
 					if(!player.capabilities.isCreativeMode) {
 						for(ItemStack inventoryStack : player.inventory.mainInventory) {
@@ -184,11 +201,14 @@ public class ItemConveyorWand extends Item {
 					}
 
 					player.addChatMessage(new ChatComponentText("Conveyor built!"));
+				} else if(constructCount == 0) {
+					player.addChatMessage(new ChatComponentText("Not enough conveyors, build cancelled"));
 				} else {
 					player.addChatMessage(new ChatComponentText("Conveyor obstructed, build cancelled"));
 				}
 			} else {
 				RenderOverhead.clearActionPreview();
+				lastMop = null;
 			}
 
 			stack.stackTagCompound = null;
@@ -198,6 +218,7 @@ public class ItemConveyorWand extends Item {
 	}
 
 	private static MovingObjectPosition lastMop;
+	private static float lastYaw;
 
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean inHand) {
@@ -208,7 +229,10 @@ public class ItemConveyorWand extends Item {
 			ItemStack held = player.getHeldItem();
 			if(held == null || held.getItem() != this || held.getItemDamage() != stack.getItemDamage()) {
 				stack.stackTagCompound = null;
-				if(!world.isRemote) RenderOverhead.clearActionPreview();
+				if(!world.isRemote) {
+					RenderOverhead.clearActionPreview();
+					lastMop = null;
+				}
 			}
 		}
 
@@ -216,17 +240,20 @@ public class ItemConveyorWand extends Item {
 		if(!world.isRemote && inHand) {
 			if(!stack.hasTagCompound()) {
 				RenderOverhead.clearActionPreview();
+				lastMop = null;
 				return;
 			}
 
 			MovingObjectPosition mop = Minecraft.getMinecraft().objectMouseOver;
 			if(mop == null || mop.typeOfHit != MovingObjectType.BLOCK) {
 				RenderOverhead.clearActionPreview();
+				lastMop = null;
 				return;
 			}
 
-			if(lastMop != null && mop.blockX == lastMop.blockX && mop.blockY == lastMop.blockY && mop.blockZ == lastMop.blockZ && mop.sideHit == lastMop.sideHit) return;
+			if(lastMop != null && mop.blockX == lastMop.blockX && mop.blockY == lastMop.blockY && mop.blockZ == lastMop.blockZ && mop.sideHit == lastMop.sideHit && Math.abs(lastYaw - player.rotationYaw) < 15) return;
 			lastMop = mop;
+			lastYaw = player.rotationYaw;
 
 			int x = mop.blockX;
 			int y = mop.blockY;
@@ -251,7 +278,7 @@ public class ItemConveyorWand extends Item {
 			int minZ = Math.min(sz, z) - 1;
 
 			WorldInAJar wiaj = new WorldInAJar(sizeX, sizeY, sizeZ);
-			boolean pathSuccess = construct(world, wiaj, getType(stack), sx, sy, sz, sSide, x, y, z, side, minX, minY, minZ, count) > 0;
+			boolean pathSuccess = construct(world, wiaj, getType(stack), player, sx, sy, sz, sSide, x, y, z, side, minX, minY, minZ, count) > 0;
 
 			RenderOverhead.setActionPreview(wiaj, minX, minY, minZ, pathSuccess);
 		}
@@ -302,17 +329,30 @@ public class ItemConveyorWand extends Item {
 	}
 
 	// attempts to construct a conveyor between two points, including bends, lifts, and chutes
-	private static int construct(World routeWorld, IBlockAccess buildWorld, ConveyorType type, int x1, int y1, int z1, int side1, int x2, int y2, int z2, int side2, int box, int boy, int boz, int max) {
-		Block startBlock = routeWorld.getBlock(x1, y1, z1);
-		Block targetBlock = routeWorld.getBlock(x2, y2, z2);
-		boolean isFromCrane = startBlock instanceof BlockCraneBase || startBlock instanceof BlockConveyorBendable;
-		boolean isTargetCrane = targetBlock instanceof BlockCraneBase || targetBlock instanceof BlockConveyorBendable;
+	private static int construct(World routeWorld, IBlockAccess buildWorld, ConveyorType type, EntityPlayer player, int x1, int y1, int z1, int side1, int x2, int y2, int z2, int side2, int box, int boy, int boz, int max) {
+		ForgeDirection dir = ForgeDirection.getOrientation(side1);
+		ForgeDirection targetDir = ForgeDirection.getOrientation(side2);
+
+		// if placing within a single block, we have to handle rotation specially, treating it like a manual placement with player facing
+		if(x1 == x2 && y1 == y2 && z1 == z2 && side1 == side2 && (dir == ForgeDirection.UP || dir == ForgeDirection.DOWN)) {
+			int meta = getFacingMeta(player);
+
+			y1 += dir.offsetY;
+
+			if(!routeWorld.getBlock(x1, y1, z1).isReplaceable(routeWorld, x1, y1, z1)) return -1;
+
+			Block block = getConveyorBlock(type);
+			if(buildWorld instanceof World) {
+				((World) buildWorld).setBlock(x1 - box, y1 - boy, z1 - boz, block, meta, 3);
+			} else if(buildWorld instanceof WorldInAJar) {
+				((WorldInAJar) buildWorld).setBlock(x1 - box, y1 - boy, z1 - boz, block, meta);
+			}
+
+			return 1;
+		}
 
 		boolean hasVertical = hasSnakesAndLadders(type);
 
-		ForgeDirection dir = ForgeDirection.getOrientation(side1);
-
-		ForgeDirection targetDir = ForgeDirection.getOrientation(side2);
 		int tx = x2 + targetDir.offsetX;
 		int ty = y2 + targetDir.offsetY;
 		int tz = z2 + targetDir.offsetZ;
@@ -321,13 +361,17 @@ public class ItemConveyorWand extends Item {
 		int y = y1 + dir.offsetY;
 		int z = z1 + dir.offsetZ;
 
-		if(!isFromCrane) {
+		if(dir == ForgeDirection.UP || dir == ForgeDirection.DOWN) {
 			dir = getTargetDirection(x, y, z, x2, y2, z2, hasVertical);
 		}
 
-		ForgeDirection horDir = dir == ForgeDirection.UP || dir == ForgeDirection.DOWN ? ForgeDirection.NORTH : dir;
+		Block targetBlock = routeWorld.getBlock(x2, y2, z2);
+		boolean isTargetHorizontal = targetDir != ForgeDirection.UP && targetDir != ForgeDirection.DOWN;
+		boolean shouldTurnToTarget = isTargetHorizontal || targetBlock instanceof BlockCraneBase || targetBlock == ModBlocks.conveyor_lift || targetBlock == ModBlocks.conveyor_chute;
 
-		// Initial dropdown
+		ForgeDirection horDir = dir == ForgeDirection.UP || dir == ForgeDirection.DOWN ? ForgeDirection.getOrientation(getFacingMeta(player)).getOpposite() : dir;
+
+		// Initial dropdown to floor level, if possible
 		if(y > ty) {
 			if(routeWorld.getBlock(x, y - 1, z).isReplaceable(routeWorld, x, y - 1, z)) {
 				dir = ForgeDirection.DOWN;
@@ -335,7 +379,7 @@ public class ItemConveyorWand extends Item {
 		}
 
 		for(int loopDepth = 1; loopDepth <= max; loopDepth++) {
-			if(!routeWorld.getBlock(x, y, z).isReplaceable(routeWorld, x, y, z)) return 0;
+			if(!routeWorld.getBlock(x, y, z).isReplaceable(routeWorld, x, y, z)) return -1;
 
 			Block block = getConveyorForDirection(type, dir);
 			int meta = getConveyorMetaForDirection(block, dir, targetDir, horDir);
@@ -348,12 +392,12 @@ public class ItemConveyorWand extends Item {
 			int fromDistance = taxiDistance(x, y, z, tx, ty, tz);
 			int toDistance = taxiDistance(ox, oy, oz, tx, ty, tz);
 			int finalDistance = taxiDistance(ox, oy, oz, x2, y2, z2);
-			boolean notAtTarget = (isTargetCrane ? finalDistance : fromDistance) > 0;
+			boolean notAtTarget = (shouldTurnToTarget ? finalDistance : fromDistance) > 0;
 			boolean willBeObstructed = notAtTarget && !routeWorld.getBlock(ox, oy, oz).isReplaceable(routeWorld, ox, oy, oz);
 			boolean shouldTurn = (toDistance >= fromDistance && notAtTarget) || willBeObstructed;
 
 			if(shouldTurn) {
-				ForgeDirection newDir = getTargetDirection(x, y, z, isTargetCrane ? x2 : tx, isTargetCrane ? y2 : ty, isTargetCrane ? z2 : tz, tx, ty, tz, dir, willBeObstructed, hasVertical);
+				ForgeDirection newDir = getTargetDirection(x, y, z, shouldTurnToTarget ? x2 : tx, shouldTurnToTarget ? y2 : ty, shouldTurnToTarget ? z2 : tz, tx, ty, tz, dir, willBeObstructed, hasVertical);
 
 				if(newDir == ForgeDirection.UP) {
 					block = ModBlocks.conveyor_lift;
@@ -385,6 +429,17 @@ public class ItemConveyorWand extends Item {
 		return 0;
 	}
 
+	private static int getFacingMeta(EntityPlayer player) {
+		int meta = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		switch(meta) {
+			case 0: return 2;
+			case 1: return 5;
+			case 2: return 3;
+			case 3: return 4;
+		}
+		return 2;
+	}
+
 	private static int getConveyorMetaForDirection(Block block, ForgeDirection dir, ForgeDirection targetDir, ForgeDirection horDir) {
 		if(block != ModBlocks.conveyor_chute && block != ModBlocks.conveyor_lift) return dir.getOpposite().ordinal();
 		if(targetDir == ForgeDirection.UP || targetDir == ForgeDirection.DOWN) return horDir.getOpposite().ordinal();
@@ -402,11 +457,13 @@ public class ItemConveyorWand extends Item {
 	}
 
 	private static ForgeDirection getTargetDirection(int x1, int y1, int z1, int x2, int y2, int z2, int tx, int ty, int tz, ForgeDirection heading, boolean willBeObstructed, boolean hasVertical) {
-		if(hasVertical && y1 != ty && (willBeObstructed || (x1 == x2 && z1 == z2) || (x1 == tx && z1 == tz))) return y1 > y2 ? ForgeDirection.DOWN : ForgeDirection.UP;
+		if(hasVertical && (y1 != y2 || y1 != ty) && (willBeObstructed || (x1 == x2 && z1 == z2) || (x1 == tx && z1 == tz))) return y1 > y2 ? ForgeDirection.DOWN : ForgeDirection.UP;
 
-		if(Math.abs(x1 - x2) > Math.abs(z1 - z2) && heading != ForgeDirection.EAST && heading != ForgeDirection.WEST) {
+		if(Math.abs(x1 - x2) > Math.abs(z1 - z2)) {
+			if(heading == ForgeDirection.EAST || heading == ForgeDirection.WEST) return z1 > z2 ? ForgeDirection.NORTH : ForgeDirection.SOUTH;
 			return x1 > x2 ? ForgeDirection.WEST : ForgeDirection.EAST;
 		} else {
+			if(heading == ForgeDirection.NORTH || heading == ForgeDirection.SOUTH) return x1 > x2 ? ForgeDirection.WEST : ForgeDirection.EAST;
 			return z1 > z2 ? ForgeDirection.NORTH : ForgeDirection.SOUTH;
 		}
 	}

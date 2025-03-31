@@ -74,6 +74,10 @@ public abstract class BlockConveyorBase extends Block implements IConveyorBelt, 
 		return ret;
 	}
 
+	public ForgeDirection getOutputDirection(World world, int x, int y, int z) {
+		return ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z)).getOpposite();
+	}
+
 	public ForgeDirection getTravelDirection(World world, int x, int y, int z, Vec3 itemPos) {
 		return ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z));
 	}
