@@ -88,6 +88,9 @@ public class ItemConveyorWand extends Item {
 			for(String s : I18nUtil.resolveKeyArray(super.getUnlocalizedName(stack) + ".desc")) {
 				list.add(EnumChatFormatting.YELLOW + s);
 			}
+			if(hasSnakesAndLadders(getType(stack))) {
+				list.add(EnumChatFormatting.AQUA + I18nUtil.resolveKey(super.getUnlocalizedName(stack) + ".vertical.desc"));
+			}
 		} else {
 			list.add(EnumChatFormatting.DARK_GRAY + "" + EnumChatFormatting.ITALIC + "Hold <" + EnumChatFormatting.YELLOW + "" + EnumChatFormatting.ITALIC + "LSHIFT" + EnumChatFormatting.DARK_GRAY
 					+ "" + EnumChatFormatting.ITALIC + "> to display more info");
