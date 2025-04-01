@@ -162,12 +162,7 @@ public class ModEventHandlerImpact {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onLoad(WorldEvent.Load event) {
-
 		TomSaveData.resetLastCached();
-
-		if(!(event.world.provider instanceof WorldProviderEarth)) {
-			PlanetGen.overrideOverworldProvider();
-		}
 	}
 
 	@SubscribeEvent
