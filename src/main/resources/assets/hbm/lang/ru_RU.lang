@@ -2666,6 +2666,8 @@ item.conveyor_wand.regular.name=Конвейер
 item.conveyor_wand.express.name=Быстрый конвейер
 item.conveyor_wand.double.name=Двухполосный конвейер
 item.conveyor_wand.triple.name=Трёхполосный конвейер
+item.conveyor_wand.desc=Перемещает предметы, упавшие на него.$Соедините две точки, чтобы проложить конвейер.$Присядьте для установки в ручном режиме.$Нажатие отвёрткой поворачивает конвейер.$Нажатие отвёрткой в присяде меняет вид конвейера.
+item.conveyor_wand.vertical.desc=Может принимать форму лифта/жёлоба.
 item.cordite.name=Кордит
 item.cotton_candy.name=Радиоактивная сахарная вата
 item.crackpipe.name=Оздоровительная трубка
@@ -6338,6 +6340,7 @@ desc.gui.upgrade.speed= * §4Скорость§r: Стакается до 3-х �
 
 
 
+
 // NTM Space //
 
 // celestial bodies //
@@ -6423,7 +6426,7 @@ hbmfluid.nmasstetranol=N-Масс(III) Тетрагексаэтанол
 hbmfluid.elbowgrease=Локтевая смазка
 hbmfluid.minsol=Минеральный шлам
 hbmfluid.hcl=Соляная кислота
-hbmfluid.scutterblood=Кровь рыбы рассеивателя
+hbmfluid.scutterblood=Кровь скаттера
 hbmfluid.bloodgas=Кровавое топливо
 hbmfluid.fluorine=Фтор
 hbmfluid.dicyanoacetylene=Дицианоацетилен
@@ -6797,7 +6800,7 @@ item.rocket_custom.name=Орбитальная ракета
 
 // entity //
 entity.entity_mob_flesh_creeper.name=Мясной крипер
-entity.entity_scutterfish.name=Рыба-Рассеиватель
+entity.entity_scutterfish.name=Скаттер
 entity.entity_rideable_rocket.name=Ракета
 entity.entity_rideable_rocket_dummy.name=Ракета
 entity.entity_moon_cow.name=Лунная корова
@@ -6922,7 +6925,7 @@ achievement.driveFail=Эм, ты же скопировал?
 
 
 // random //
-item.scuttertail.name=Хвост рыбы рассеивателя
+item.scuttertail.name=Хвост скаттера
 item.glass_empty.name=Пустой стакан
 item.cmug_empty.name=Пустая кружка
 item.teacup_empty.name=Пустая чашка
@@ -6945,4 +6948,4 @@ potion.hbm_nitan=Aмброзия
 trait.confusion=Аутизм
 trait.neutron=Нейтронная радиация
 
-// last updated 23.03.2025 //
+// last updated 02.04.2025 //
