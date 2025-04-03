@@ -4,6 +4,7 @@ import com.hbm.entity.mob.ai.EntityAIBehemothGun;
 import com.hbm.entity.mob.ai.EntityAIMaskmanMinigun;
 import com.hbm.entity.mob.ai.EntityAIStepTowardsTarget;
 
+import api.hbm.entity.ISuffocationImmune;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -14,6 +15,7 @@ import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
@@ -27,9 +29,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 //no model yet, im gonna take this low n slow
-public class EntityWarBehemoth extends EntityMob implements IMob, IAnimals {
+public class EntityWarBehemoth extends EntityMob implements IMob, IAnimals, ISuffocationImmune {
     private int stepTimer = 0;
-	public double headTargetYaw; 
+    public double headTargetYaw; 
 
     private static final IEntitySelector selector = new IEntitySelector() {
 		public boolean isEntityApplicable(Entity p_82704_1_) {

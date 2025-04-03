@@ -13,6 +13,7 @@ import com.hbm.particle.helper.ExplosionCreator;
 import com.hbm.util.ParticleUtil;
 
 import api.hbm.entity.IRadiationImmune;
+import api.hbm.entity.ISuffocationImmune;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -37,7 +38,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.world.World;
 
-public class EntityTankbot extends EntityMob implements IMob, IRadiationImmune, IAnimals {
+public class EntityTankbot extends EntityMob implements IMob, IRadiationImmune, IAnimals, ISuffocationImmune {
     private int stepTimer = 0;
 	public double headTargetYaw; 
 	public double currentHeadYaw; 
