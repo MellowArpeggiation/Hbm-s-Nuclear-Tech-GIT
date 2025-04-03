@@ -7,8 +7,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockVolcano;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
-import com.hbm.dim.eve.GenLayerEve.WorldGenElectricVolcano;
-import com.hbm.dim.eve.GenLayerEve.WorldGenEveSpike;
+
 import com.hbm.dim.eve.biome.BiomeGenBaseEve;
 import com.hbm.dim.tekto.biome.BiomeGenBaseTekto;
 import com.hbm.world.feature.OilBubble;
@@ -18,6 +17,7 @@ import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 

@@ -47,7 +47,6 @@ import com.hbm.dim.SolarSystem.AstroMetric;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.dim.trait.CBT_Impact;
-import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ModEventHandlerClient;
@@ -275,7 +274,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 					GL11.glColor4d(1, 1, 1, alpd);
 
-					mc.renderEngine.bindTexture(this.texture);
+					mc.renderEngine.bindTexture(this.shockwaveTexture);
 					ResourceManager.plane.renderAll();
 
 
@@ -906,7 +905,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, alpd);
-						mc.renderEngine.bindTexture(texture);
+						mc.renderEngine.bindTexture(shockwaveTexture);
 						double interpe = (d.interp * 0.5) * size * 0.1;
 						tessellator.startDrawingQuads();
 						tessellator.addVertexWithUV(-interpe, 100.0D, -interpe, 0.0D + uvOffset, 0.0D);
@@ -917,7 +916,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 
 						GL11.glColor4f(1.0F, 1.0F, 1.0F, alpd * 2);
-						mc.renderEngine.bindTexture(flared);
+						mc.renderEngine.bindTexture(shockFlareTexture);
 
 						interpr = size * 3;
 						tessellator.startDrawingQuads();

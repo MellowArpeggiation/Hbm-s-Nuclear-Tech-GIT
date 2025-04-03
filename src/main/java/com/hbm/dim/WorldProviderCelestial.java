@@ -12,7 +12,6 @@ import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_War.ProjectileType;
 import com.hbm.dim.trait.CBT_Destroyed;
-import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
 import com.hbm.handler.ImpactWorldHandler;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.FluidStack;
@@ -574,15 +573,15 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getSunBrightness(float par1) {
-		if(CelestialBody.getStar(worldObj).hasTrait(CBT_Destroyed.class))
+		if (CelestialBody.getStar(worldObj).hasTrait(CBT_Destroyed.class))
 			return 0;
 
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 		float skyflash = 0;
 
 		float sunBrightness = super.getSunBrightness(par1);
-		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-			if(entry instanceof SatelliteWar) {
+		for (Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+			if (entry instanceof SatelliteWar) {
 				SatelliteWar war = (SatelliteWar) entry.getValue();
 				float flame = war.getInterp();
 				float invertedFlash = 100 - flame;
@@ -590,26 +589,30 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 				skyflash = alpd;
 			}
 		}
-		if(atmosphere == null) {
+
+		if (atmosphere == null) {
 			return sunBrightness + skyflash;
 		}
-		if(CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
+
+		if (CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
 			CBT_War wardat = CelestialBody.getTrait(worldObj, CBT_War.class);
-				for(int i = 0; i < wardat.getProjectiles().size(); i++) {
-					CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
-					float flash = projectile.getFlashtime();
-					if(projectile.getAnimtime() > 0) {
-						skyflash = 100 - flash;
+			for (int i = 0; i < wardat.getProjectiles().size(); i++) {
+				CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
+				float flash = projectile.getFlashtime();
+				if (projectile.getAnimtime() > 0) {
+					skyflash = 100 - flash;
 
-		sunBrightness *= 1 - eclipseAmount * 0.6;
+					sunBrightness *= 1 - eclipseAmount * 0.6;
 
-		float dust = ImpactWorldHandler.getDustForClient(worldObj);
-		sunBrightness *= (1 - dust);
+					float dust = ImpactWorldHandler.getDustForClient(worldObj);
+					sunBrightness *= (1 - dust);
 
-		if(atmosphere == null) return sunBrightness;
+					if (atmosphere == null) return sunBrightness;
+				}
+			}
+		}
 
-
-		return sunBrightness * MathHelper.clamp_float(1.0F - ((float)atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F) + skyflash + skyflash;
+		return sunBrightness * MathHelper.clamp_float(1.0F - ((float) atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F) + skyflash + skyflash;
 	}
 
 	@Override

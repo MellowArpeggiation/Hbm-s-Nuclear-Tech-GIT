@@ -77,7 +77,7 @@ public class CBT_War extends CelestialBodyTrait {
 		if(!isremote) {
 		    if (this != null) {
 		        for (int i = 0; i < this.getProjectiles().size(); i++) {
-		            CBT_War.Projectile projectile = this.getProjectiles().get(i);
+		            Projectile projectile = this.getProjectiles().get(i);
 
 		            projectile.update();
 		            float travel = projectile.getTravel();

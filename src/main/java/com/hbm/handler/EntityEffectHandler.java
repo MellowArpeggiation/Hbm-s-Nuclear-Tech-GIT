@@ -18,7 +18,6 @@ import com.hbm.entity.mob.EntityTankbot;
 import com.hbm.entity.mob.EntityWarBehemoth;
 import com.hbm.entity.mob.EntityMoonCow;
 import com.hbm.entity.mob.glyphid.EntityGlyphid;
-import com.hbm.entity.mob.siege.EntitySiegeSkeleton;
 import com.hbm.explosion.ExplosionNukeSmall;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.extprop.HbmPlayerProps;
