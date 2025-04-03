@@ -17,6 +17,11 @@ public abstract class CelestialBodyTrait {
 	
 	public static class CBT_BATTLEFIELD extends CelestialBodyTrait { }
 	public static CBT_BATTLEFIELD BATTLE = new CBT_BATTLEFIELD();
+	public static class CBT_War extends CelestialBodyTrait { }
+	public static CBT_War WAR = new CBT_War();
+
+	public static class CBT_Destroyed extends CelestialBodyTrait { }
+	public static CBT_Destroyed SPLODE = new CBT_Destroyed();
 
 	public static class CBT_COMPROMISED extends CelestialBodyTrait { }
 	public static CBT_COMPROMISED COMP = new CBT_COMPROMISED();
@@ -34,13 +39,14 @@ public abstract class CelestialBodyTrait {
 		registerTrait("battle", CBT_BATTLEFIELD.class);
 		registerTrait("infected", CBT_COMPROMISED.class);
 		registerTrait("dyson", CBT_Dyson.class);
+		registerTrait("impact", CBT_Impact.class);
 	};
 
 	private static void registerTrait(String name, Class<? extends CelestialBodyTrait> clazz) {
 		traitList.add(clazz);
 		traitMap.put(name, clazz);
 	}
-	
+
 	// Serialization
 	public void readFromNBT(NBTTagCompound nbt) { }
 	public void writeToNBT(NBTTagCompound nbt) { }

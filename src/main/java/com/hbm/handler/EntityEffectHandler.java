@@ -35,7 +35,6 @@ import com.hbm.items.armor.ArmorFSB;
 import com.hbm.items.weapon.sedna.factory.ConfettiUtil;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.packet.toclient.ExtPropPacket;
 import com.hbm.particle.helper.FlameCreator;
@@ -49,6 +48,7 @@ import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
 import com.hbm.world.biome.BiomeGenCraterBase;
 
+import api.hbm.entity.ISuffocationImmune;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -68,6 +68,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.biome.BiomeGenBase;
 
 public class EntityEffectHandler {
@@ -115,7 +116,7 @@ public class EntityEffectHandler {
 				}
 			}
 			//only sets players on fire so mod compatibility doesnt die
-			if((GeneralConfig.enable528 && GeneralConfig.enable528NetherBurn) && entity instanceof EntityPlayer && !entity.isImmuneToFire() && entity.worldObj.provider.isHellWorld) {
+			if((GeneralConfig.enable528 && GeneralConfig.enable528NetherBurn) && entity instanceof EntityPlayer && !entity.isImmuneToFire() && entity.worldObj.provider instanceof WorldProviderHell) {
 				entity.setFire(5);
 			}
 
@@ -248,7 +249,7 @@ public class EntityEffectHandler {
 			}
 			if(neut<1e-5)
 				HbmLivingProps.setNeutronActivation(entity,0);
-			if(world.provider.isHellWorld && RadiationConfig.hellRad > 0 && rad < RadiationConfig.hellRad)
+			if(world.provider instanceof WorldProviderHell && RadiationConfig.hellRad > 0 && rad < RadiationConfig.hellRad)
 				rad = (float) RadiationConfig.hellRad;
 
 			if(world.provider instanceof WorldProviderCelestial || world.provider instanceof WorldProviderOrbit) {
@@ -292,7 +293,7 @@ public class EntityEffectHandler {
 					nbt.setString("mode", "blood");
 					nbt.setInteger("count", 25);
 					nbt.setInteger("entity", entity.getEntityId());
-					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
+					PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
 
 					if((world.getTotalWorldTime() + r600) % 600 == 1) {
 						world.playSoundEffect(ix, iy, iz, "hbm:player.vomit", 1.0F, 1.0F);
@@ -307,7 +308,7 @@ public class EntityEffectHandler {
 				nbt.setString("mode", "normal");
 				nbt.setInteger("count", 15);
 				nbt.setInteger("entity", entity.getEntityId());
-				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
+				PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
 
 				if((world.getTotalWorldTime() + r1200) % 1200 == 1) {
 					world.playSoundEffect(ix, iy, iz, "hbm:player.vomit", 1.0F, 1.0F);
@@ -323,7 +324,7 @@ public class EntityEffectHandler {
 				nbt.setInteger("count", 1);
 				nbt.setInteger("block", Block.getIdFromBlock(Blocks.redstone_block));
 				nbt.setInteger("entity", entity.getEntityId());
-				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
+				PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
 
 			}
 		} else {
@@ -341,13 +342,7 @@ public class EntityEffectHandler {
 
 	private static void handleOxy(EntityLivingBase entity, CBT_Atmosphere atmosphere) {
 		if(entity.worldObj.isRemote) return;
-		if(entity instanceof EntityGlyphid) return; // can't suffocate the bastards
-		if(entity instanceof EntityCyberCrab) return; // machines
-		if(entity instanceof EntitySiegeSkeleton) return; 
-		if(entity instanceof EntityTankbot) return; // machines
-		if(entity instanceof EntityWarBehemoth)return; // machines
-
-		if(entity instanceof EntityMoonCow) return; // MOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+		if(entity instanceof ISuffocationImmune) return;
 		if(entity.ridingEntity != null && entity.ridingEntity instanceof EntityRideableRocket) return; // breathe easy in your ship
 
 		if (!ArmorUtil.checkForOxy(entity, atmosphere)) {
@@ -389,7 +384,7 @@ public class EntityEffectHandler {
 				data.setInteger("count", 1);
 				data.setInteger("block", Block.getIdFromBlock(Blocks.soul_sand));
 				data.setInteger("entity", entity.getEntityId());
-				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
+				PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(data, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
 			}
 		}
 	}
@@ -494,7 +489,7 @@ public class EntityEffectHandler {
 					nbt.setString("mode", "blood");
 					nbt.setInteger("count", 25);
 					nbt.setInteger("entity", entity.getEntityId());
-					PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
+					PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
 
 					if((contagion + entity.getEntityId()) % 200 == 19)
 						world.playSoundEffect(entity.posX, entity.posY, entity.posZ, "hbm:player.vomit", 1.0F, 1.0F);
@@ -570,7 +565,7 @@ public class EntityEffectHandler {
 				nbt.setString("mode", "blood");
 				nbt.setInteger("count", 5);
 				nbt.setInteger("entity", entity.getEntityId());
-				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
+				PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
 			}
 
 			if(coughsCoal) {
@@ -579,7 +574,7 @@ public class EntityEffectHandler {
 				nbt.setString("mode", "smoke");
 				nbt.setInteger("count", coughsALotOfCoal ? 50 : 10);
 				nbt.setInteger("entity", entity.getEntityId());
-				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
+				PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(nbt, 0, 0, 0),  new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
 			}
 		}
 	}
@@ -606,7 +601,7 @@ public class EntityEffectHandler {
 				nbt.setInteger("count", 1);
 				nbt.setInteger("block", Block.getIdFromBlock(Blocks.coal_block));
 				nbt.setInteger("entity", entity.getEntityId());
-				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(nbt, 0, 0, 0), new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
+				PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(nbt, 0, 0, 0), new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 25));
 			}
 		}
 	}

@@ -1,10 +1,13 @@
 package com.hbm.dim.moho;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.dim.GenLayerDiversify;
 import com.hbm.dim.WorldChunkManagerCelestial;
 import com.hbm.dim.WorldChunkManagerCelestial.BiomeGenLayers;
 import com.hbm.dim.WorldProviderCelestial;
+import com.hbm.dim.moho.biome.BiomeGenBaseMoho;
 import com.hbm.dim.moho.genlayer.GenLayerMohoBiomes;
+import com.hbm.dim.moho.genlayer.GenLayerMohoPlateauExtend;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -42,21 +45,23 @@ public class WorldProviderMoho extends WorldProviderCelestial {
 		GenLayer biomes = new GenLayerMohoBiomes(seed);
 
 		biomes = new GenLayerFuzzyZoom(2000L, biomes);
+		biomes = new GenLayerDiversify(1234L, biomes, 6, BiomeGenBaseMoho.mohoBasalt);
 		biomes = new GenLayerZoom(2001L, biomes);
-		// biomes = new GenLayerZoom(1000L, biomes);
-		// biomes = new GenLayerZoom(1003L, biomes);
-		biomes = new GenLayerSmooth(700L, biomes);
+		biomes = new GenLayerMohoPlateauExtend(9944L, biomes);
 		biomes = new GenLayerZoom(1006L, biomes);
-		GenLayer genlayerRiverZoom = new GenLayerZoom(1000L, biomes);
-		GenLayer genlayerRiver = new GenLayerRiver(1004L, genlayerRiverZoom);
+		biomes = new GenLayerSmooth(700L, biomes);
+		biomes = new GenLayerZoom(1000L, biomes);
+		biomes = new GenLayerZoom(107L, biomes);
+
+		// biome detail layer should ignore rivers (for monster spawns and biome block replacement)
+		GenLayer genlayerVoronoiZoom = new GenLayerVoronoiZoom(10L, biomes);
+
+		GenLayer genlayerRiver = new GenLayerRiver(1004L, biomes);
 		genlayerRiver = new GenLayerZoom(105L, genlayerRiver);
 		genlayerRiver = new GenLayerZoom(106L, genlayerRiver); // Added extra zoom for more frequent rivers
 
-		// Make the river mix layer more prominent
+		// apply the rivers to the biome map
 		GenLayer genlayerRiverMix = new GenLayerRiverMix(100L, biomes, genlayerRiver);
-		genlayerRiverMix = new GenLayerZoom(107L, genlayerRiverMix); // Additional zoom to enhance rivers
-
-		GenLayer genlayerVoronoiZoom = new GenLayerVoronoiZoom(10L, genlayerRiverMix);
 
 		return new BiomeGenLayers(genlayerRiverMix, genlayerVoronoiZoom, seed);
 	}

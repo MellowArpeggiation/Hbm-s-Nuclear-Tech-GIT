@@ -3,13 +3,17 @@ package com.hbm.dim;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import com.hbm.config.GeneralConfig;
+import com.hbm.dim.SolarSystem.AstroMetric;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_War.ProjectileType;
 import com.hbm.dim.trait.CBT_Destroyed;
+import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
+import com.hbm.handler.ImpactWorldHandler;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.FluidStack;
 import com.hbm.inventory.fluid.Fluids;
@@ -196,6 +200,51 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		return colors;
 	}
 
+	public double eclipseAmount;
+	public List<AstroMetric> metrics;
+	public CelestialBody tidalLockedBody;
+
+	@SideOnly(Side.CLIENT)
+	protected void updateSky(float partialTicks) {
+		CelestialBody body = CelestialBody.getBody(worldObj);
+
+		// First fetch the suns true size
+		double sunSize = SolarSystem.calculateSunSize(body);
+
+		float celestialAngle = worldObj.getCelestialAngle(partialTicks);
+
+		double longitude = 0;
+		tidalLockedBody = body.tidallyLockedTo != null ? CelestialBody.getBody(body.tidallyLockedTo) : null;
+
+		if(tidalLockedBody != null) {
+			longitude = SolarSystem.calculateSingleAngle(worldObj, partialTicks, body, tidalLockedBody) + celestialAngle * 360.0 + 60.0;
+		}
+
+		// Get our orrery of bodies
+		metrics = SolarSystem.calculateMetricsFromBody(worldObj, partialTicks, longitude, body);
+		eclipseAmount = 0;
+
+		// Calculate eclipse
+		for(AstroMetric metric : metrics) {
+			double phase = Math.abs(metric.phase);
+
+			if(metric.apparentSize < 1) continue;
+
+			double sizeToArc = 0.0028; // due to rendering, the arc is not exactly 1deg = 1deg, this converts from apparentSize to 0-1
+			double planetSize = MathHelper.clamp_double(metric.apparentSize, 0, 24);
+
+			double planetArc = planetSize * sizeToArc;
+			double sunArc = sunSize * sizeToArc;
+			double minPhase = 1 - (planetArc + sunArc);
+			double maxPhase = 1 - (planetArc - sunArc);
+			if(phase < minPhase) continue;
+
+			double thisEclipseAmount = 1 - (phase - maxPhase) / (minPhase - maxPhase);
+
+			eclipseAmount = Math.min(Math.max(eclipseAmount, thisEclipseAmount), 1.0);
+		}
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Vec3 getFogColor(float celestialAngle, float y) {
@@ -262,8 +311,38 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		if(Minecraft.getMinecraft().renderViewEntity.posY > 600) {
 			double curvature = MathHelper.clamp_float((1000.0F - (float)Minecraft.getMinecraft().renderViewEntity.posY) / 400.0F, 0.0F, 1.0F);
 			color.xCoord *= curvature;
-			color.zCoord *= curvature;
 			color.yCoord *= curvature;
+			color.zCoord *= curvature;
+		}
+
+		if(eclipseAmount > 0) {
+			color.xCoord *= 1 - eclipseAmount * 0.3;
+			color.yCoord *= 1 - eclipseAmount * 0.3;
+			color.zCoord *= 1 - eclipseAmount * 0.3;
+
+			float[] sunsetFog = calcSunriseSunsetColors(0.25F, 0);
+			if(sunsetFog != null) {
+				double sunsetAmount = eclipseAmount * 0.5F;
+				color.xCoord = color.xCoord * (1.0F - sunsetAmount) + sunsetFog[0] * sunsetAmount;
+				color.yCoord = color.yCoord * (1.0F - sunsetAmount) + sunsetFog[1] * sunsetAmount;
+				color.zCoord = color.zCoord * (1.0F - sunsetAmount) + sunsetFog[2] * sunsetAmount;
+			}
+		}
+
+		float dust = ImpactWorldHandler.getDustForClient(worldObj);
+		float fire = ImpactWorldHandler.getFireForClient(worldObj);
+
+		color.yCoord *= 1 - (dust * 0.5F);
+		color.zCoord *= 1 - dust;
+
+		if(fire > 0) {
+			color.xCoord *= Math.max((1 - (dust * 2)), 0);
+			color.yCoord *= Math.max((1 - (dust * 2)), 0);
+			color.zCoord *= Math.max((1 - (dust * 2)), 0);
+		} else {
+			color.xCoord *= 1 - dust;
+			color.yCoord *= 1 - dust;
+			color.zCoord *= 1 - dust;
 		}
 
 		return color;
@@ -272,6 +351,9 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Vec3 getSkyColor(Entity camera, float partialTicks) {
+		// getSkyColor is called first on every frame, so if you want to memoise anything, do it here
+		updateSky(partialTicks);
+
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 		Vec3 color = Vec3.createVectorHelper(0, 0, 0);
 
@@ -362,6 +444,30 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		color.yCoord *= pressureFactor;
 		color.zCoord *= pressureFactor;
 
+		if(eclipseAmount > 0) {
+			color.xCoord *= 1 - eclipseAmount * 0.6;
+			color.yCoord *= 1 - eclipseAmount * 0.6;
+			color.zCoord *= 1 - eclipseAmount * 0.5;
+		}
+
+		float dust = ImpactWorldHandler.getDustForClient(worldObj);
+		float fire = ImpactWorldHandler.getFireForClient(worldObj);
+
+		if(dust > 0) {
+			if(fire > 0) {
+				color.xCoord *= 1.3;
+				color.yCoord *= Math.max((1 - (dust * 1.4f)), 0);
+				color.zCoord *= Math.max((1 - (dust * 4)), 0);
+			} else {
+				color.yCoord *= 1 - (dust * 0.5F);
+				color.zCoord *= Math.max((1 - (dust * 4)), 0);
+			}
+
+			color.xCoord *= fire + (1 - dust);
+			color.yCoord *= fire + (1 - dust);
+			color.zCoord *= fire + (1 - dust);
+		}
+
 		return color;
 	}
 
@@ -408,7 +514,20 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			colors[2] = tmp;
 		}
 
+		float dustFactor = 1 - ImpactWorldHandler.getDustForClient(worldObj);
+		colors[0] *= dustFactor;
+		colors[1] *= dustFactor;
+		colors[2] *= dustFactor;
+		colors[3] *= dustFactor;
+
 		return colors;
+	}
+
+	// this function should be called `getCloudColor`, please slap the next MCP dev you see lmao
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Vec3 drawClouds(float partialTicks) {
+		return super.drawClouds(partialTicks);
 	}
 
 	@Override
@@ -447,7 +566,9 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		float starBrightness = super.getStarBrightness(par1);
 
-		return MathHelper.clamp_float(starBrightness, distanceFactor, 1F);
+		float dust = ImpactWorldHandler.getDustForClient(worldObj);
+
+		return MathHelper.clamp_float(starBrightness, distanceFactor, 1F) * (1 - dust);
 	}
 
 	@Override
@@ -480,9 +601,12 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 					if(projectile.getAnimtime() > 0) {
 						skyflash = 100 - flash;
 
-					}
-				}
-			}
+		sunBrightness *= 1 - eclipseAmount * 0.6;
+
+		float dust = ImpactWorldHandler.getDustForClient(worldObj);
+		sunBrightness *= (1 - dust);
+
+		if(atmosphere == null) return sunBrightness;
 
 
 		return sunBrightness * MathHelper.clamp_float(1.0F - ((float)atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F) + skyflash + skyflash;

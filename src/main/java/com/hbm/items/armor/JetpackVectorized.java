@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.hbm.dim.CelestialBody;
 import com.hbm.extprop.HbmPlayerProps;
+import com.hbm.handler.threading.PacketThreading;
 import com.hbm.inventory.fluid.FluidType;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.util.AstronomyUtil;
 
@@ -42,15 +42,15 @@ public class JetpackVectorized extends JetpackFueledBase {
 				data.setString("type", "jetpack");
 				data.setInteger("player", player.getEntityId());
 				data.setInteger("mode", 1);
-				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, player.posX, player.posY, player.posZ), new TargetPoint(world.provider.dimensionId, player.posX, player.posY, player.posZ, 100));
+				PacketThreading.createAllAroundThreadedPacket(new AuxParticlePacketNT(data, player.posX, player.posY, player.posZ), new TargetPoint(world.provider.dimensionId, player.posX, player.posY, player.posZ, 100));
 			}
 		}
 
 		if(getFuel(stack) > 0 && props.isJetpackActive()) {
-			float gravity = Math.min(CelestialBody.getBody(world).getSurfaceGravity(), AstronomyUtil.STANDARD_GRAVITY);
+			float gravity = CelestialBody.getGravity(player);
 
 			if(player.motionY < 0.4D)
-				player.motionY += 0.1D * (gravity * AstronomyUtil.PLAYER_GRAVITY_MODIFIER);
+				player.motionY += 0.1D * Math.min(gravity / AstronomyUtil.STANDARD_GRAVITY, 1);
 
 			Vec3 look = player.getLookVec();
 

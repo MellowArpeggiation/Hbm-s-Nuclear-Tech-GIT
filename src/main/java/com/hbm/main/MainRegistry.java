@@ -34,6 +34,7 @@ import com.hbm.items.ItemEnums.EnumAchievementType;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemFertilizer;
 import com.hbm.items.weapon.ItemGenericGrenade;
+import com.hbm.items.weapon.sedna.mods.WeaponModManager;
 import com.hbm.lib.HbmWorld;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
@@ -144,7 +145,7 @@ public class MainRegistry {
 	public static ToolMaterial enumToolMaterialBatNail = EnumHelper.addToolMaterial("BATNAIL", 0, 450, 1.0F, 4F, 25);
 	public static ToolMaterial enumToolMaterialGolfClub = EnumHelper.addToolMaterial("GOLFCLUB", 1, 1000, 2.0F, 5F, 25);
 	public static ToolMaterial enumToolMaterialPipeRusty = EnumHelper.addToolMaterial("PIPERUSTY", 1, 350, 1.5F, 4.5F, 25);
-	public static ToolMaterial enumToolMaterialPipeLead = EnumHelper.addToolMaterial("PIPELEAD", 1, 250, 1.5F, 5.5F, 25);
+	public static ToolMaterial enumToolMaterialPipeLead = EnumHelper.addToolMaterial("PIPELEAD", 1, 250, 1.5F, 3F, 25);
 
 	public static ToolMaterial enumToolMaterialBottleOpener = EnumHelper.addToolMaterial("OPENER", 1, 250, 1.5F, 0.5F, 200);
 	public static ToolMaterial enumToolMaterialSledge = EnumHelper.addToolMaterial("SHIMMERSLEDGE", 1, 0, 25.0F, 26F, 200);
@@ -284,7 +285,7 @@ public class MainRegistry {
 				polaroidID = rand.nextInt(18) + 1;
 		}
 
-		//ShadyUtil.test();
+		ShadyUtil.test();
 		loadConfig(PreEvent);
 		HbmPotion.init();
 
@@ -307,6 +308,7 @@ public class MainRegistry {
 		SiegeTier.registerTiers();
 		HazardRegistry.registerItems();
 		HazardRegistry.registerTrafos();
+		WeaponModManager.init();
 
 		SolarSystem.init();
 
@@ -913,7 +915,9 @@ public class MainRegistry {
 
 		FalloutConfigJSON.initialize();
 		ItemPoolConfigJSON.initialize();
+
 		ClientConfig.initConfig();
+		ServerConfig.initConfig();
 
 		TileEntityNukeCustom.registerBombItems();
 		ArmorUtil.register();
@@ -1040,6 +1044,8 @@ public class MainRegistry {
 		event.registerServerCommand(new CommandRadiation());
 		event.registerServerCommand(new CommandStations());
 		event.registerServerCommand(new CommandPacketInfo());
+		event.registerServerCommand(new CommandReloadServer());
+		event.registerServerCommand(new CommandTotalTime());
 	}
 
 	@EventHandler
@@ -1502,34 +1508,6 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.test_leggings");
 		ignoreMappings.add("hbm:item.test_boots");
 		ignoreMappings.add("hbm:item.cape_test");
-		ignoreMappings.add("hbm:tile.fluid_duct");
-		ignoreMappings.add("hbm:tile.fluid_duct_solid");
-		ignoreMappings.add("hbm:item.void_anim");
-		ignoreMappings.add("hbm:item.pellet_mercury");
-		ignoreMappings.add("hbm:item.pellet_meteorite");
-		ignoreMappings.add("hbm:item.d_smoke1");
-		ignoreMappings.add("hbm:item.d_smoke2");
-		ignoreMappings.add("hbm:item.d_smoke3");
-		ignoreMappings.add("hbm:item.d_smoke4");
-		ignoreMappings.add("hbm:item.d_smoke5");
-		ignoreMappings.add("hbm:item.d_smoke6");
-		ignoreMappings.add("hbm:item.d_smoke7");
-		ignoreMappings.add("hbm:item.d_smoke8");
-		ignoreMappings.add("hbm:item.smoke1");
-		ignoreMappings.add("hbm:item.smoke2");
-		ignoreMappings.add("hbm:item.smoke3");
-		ignoreMappings.add("hbm:item.smoke4");
-		ignoreMappings.add("hbm:item.smoke5");
-		ignoreMappings.add("hbm:item.smoke6");
-		ignoreMappings.add("hbm:item.smoke7");
-		ignoreMappings.add("hbm:item.smoke8");
-		ignoreMappings.add("hbm:item.battery_su");
-		ignoreMappings.add("hbm:item.battery_su_l");
-		ignoreMappings.add("hbm:item.redstone_depleted");
-		ignoreMappings.add("hbm:item.euphemium_stopper");
-		ignoreMappings.add("hbm:item.energy_ball");
-		ignoreMappings.add("hbm:item.discharge");
-		ignoreMappings.add("hbm:item.empblast");
 		ignoreMappings.add("hbm:item.spill1");
 		ignoreMappings.add("hbm:item.spill2");
 		ignoreMappings.add("hbm:item.spill3");
@@ -1780,13 +1758,25 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:item.bobmazon_weapons");
 		ignoreMappings.add("hbm:item.bobmazon_tools");
 		ignoreMappings.add("hbm:item.missile_carrier");
+		ignoreMappings.add("hbm:item.magnet_circular");
+		ignoreMappings.add("hbm:item.mechanism_revolver_1");
+		ignoreMappings.add("hbm:item.mechanism_revolver_2");
+		ignoreMappings.add("hbm:item.mechanism_rifle_1");
+		ignoreMappings.add("hbm:item.mechanism_rifle_2");
+		ignoreMappings.add("hbm:item.mechanism_launcher_1");
+		ignoreMappings.add("hbm:item.mechanism_launcher_2");
+		ignoreMappings.add("hbm:item.mechanism_special");
 		ignoreMappings.add("hbm:item.alloy_knife");
+		ignoreMappings.add("hbm:tile.hazmat");
 
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);
 		remapItems.put("hbm:item.man_explosive8", ModItems.explosive_lenses);
 		remapItems.put("hbm:item.briquette_lignite", ModItems.briquette);
 		remapItems.put("hbm:item.antiknock", ModItems.fuel_additive);
+
+		remapItems.put("hbm:item.kit_toolbox_empty", ModItems.toolbox);
+		remapItems.put("hbm:item.kit_toolbox", ModItems.legacy_toolbox);
 
 		for(MissingMapping mapping : event.get()) {
 

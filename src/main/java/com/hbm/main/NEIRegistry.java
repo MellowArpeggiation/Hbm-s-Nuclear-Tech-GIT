@@ -40,11 +40,14 @@ public class NEIRegistry {
 		handlers.add(new FusionRecipeHandler());
 		handlers.add(new SILEXRecipeHandler());
 		handlers.add(new FuelPoolHandler());
+		handlers.add(new RBMKRodDisassemblyHandler());
+		handlers.add(new RBMKWasteDecayHandler());
 		handlers.add(new CrucibleSmeltingHandler());
 		handlers.add(new CrucibleAlloyingHandler());
 		handlers.add(new CrucibleCastingHandler());
 		handlers.add(new ToolingHandler());
 		handlers.add(new ConstructionHandler());
+		handlers.add(new SatelliteHandler());
 		handlers.add(new DairyHandler());
 
 		//universal boyes
