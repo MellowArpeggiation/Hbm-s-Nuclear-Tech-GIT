@@ -480,10 +480,6 @@ public class SolarSystem {
 	}
 
 	private static double getApparentSize(double radius, double distance) {
-		return getApparentSizeUnscaled(Math.min(radius, 3_000), distance);
-	}
-
-	private static double getApparentSizeUnscaled(double radius, double distance) {
 		return 2D * (float)Math.atan((2D * radius) / (2D * distance)) * RENDER_SCALE;
 	}
 
