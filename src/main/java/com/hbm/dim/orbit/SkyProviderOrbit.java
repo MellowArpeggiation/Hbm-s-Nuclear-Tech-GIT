@@ -59,7 +59,7 @@ public class SkyProviderOrbit extends SkyProviderCelestial {
 
 			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
 
-			double sunSize = SolarSystem.calculateSunSize(station.orbiting);
+			double sunSize = SolarSystem.calculateSunSize(station.orbiting) * SolarSystem.SUN_RENDER_SCALE;
 			if(station.state != StationState.ORBIT) {
 				double sunTargetSize = SolarSystem.calculateSunSize(station.target);
 				sunSize = BobMathUtil.lerp(progress, sunSize, sunTargetSize);
