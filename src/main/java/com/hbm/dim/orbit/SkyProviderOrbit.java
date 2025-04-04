@@ -61,7 +61,7 @@ public class SkyProviderOrbit extends SkyProviderCelestial {
 
 			double sunSize = SolarSystem.calculateSunSize(station.orbiting) * SolarSystem.SUN_RENDER_SCALE;
 			if(station.state != StationState.ORBIT) {
-				double sunTargetSize = SolarSystem.calculateSunSize(station.target);
+				double sunTargetSize = SolarSystem.calculateSunSize(station.target) * SolarSystem.SUN_RENDER_SCALE;
 				sunSize = BobMathUtil.lerp(progress, sunSize, sunTargetSize);
 			}
 			double coronaSize = sunSize * (3 - Library.smoothstep(Math.abs(celestialPhase), 0.7, 0.8));
