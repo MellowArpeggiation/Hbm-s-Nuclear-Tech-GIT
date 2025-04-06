@@ -18,6 +18,7 @@ import com.hbm.inventory.FluidStack;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
+import com.hbm.saveddata.satellites.SatelliteRailgun;
 import com.hbm.saveddata.satellites.SatelliteWar;
 
 import cpw.mods.fml.relauncher.Side;
@@ -102,9 +103,10 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
 				if(entry.getValue() instanceof SatelliteWar) {
 
-					SatelliteWar war = (SatelliteWar) entry.getValue();
-					if(war.getInterp() <= 1) {
-						Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
+					SatelliteRailgun war = (SatelliteRailgun) entry.getValue();
+
+					if(war.getInterp() >= 1 && war.interp <= 9) {
+				       Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
 					}
 				}
 			}

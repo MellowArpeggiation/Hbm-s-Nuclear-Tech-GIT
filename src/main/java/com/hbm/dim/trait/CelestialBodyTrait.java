@@ -17,11 +17,8 @@ public abstract class CelestialBodyTrait {
 	
 	public static class CBT_BATTLEFIELD extends CelestialBodyTrait { }
 	public static CBT_BATTLEFIELD BATTLE = new CBT_BATTLEFIELD();
-	public static class CBT_War extends CelestialBodyTrait { }
-	public static CBT_War WAR = new CBT_War();
 
-	public static class CBT_Destroyed extends CelestialBodyTrait { }
-	public static CBT_Destroyed SPLODE = new CBT_Destroyed();
+
 
 	public static class CBT_COMPROMISED extends CelestialBodyTrait { }
 	public static CBT_COMPROMISED COMP = new CBT_COMPROMISED();
