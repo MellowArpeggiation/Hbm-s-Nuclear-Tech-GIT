@@ -6,6 +6,10 @@ import java.util.List;
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.fluid.trait.FT_Corrosive;
+import com.hbm.inventory.fluid.trait.FT_Gaseous;
+import com.hbm.inventory.fluid.trait.FluidTraitSimple.FT_Gaseous_ART;
+import com.hbm.items.machine.IItemFluidIdentifier;
 import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -27,6 +31,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -96,7 +104,23 @@ public class PneumoTube extends BlockContainer implements IToolable, IFluidConne
 			if(tile instanceof TileEntityPneumoTube) {
 				TileEntityPneumoTube tube = (TileEntityPneumoTube) tile;
 				if(tube.isCompressor()) {
-					FMLNetworkHandler.openGui(player, MainRegistry.instance, 0, world, x, y, z);
+					if(player.getHeldItem() != null && player.getHeldItem().getItem() instanceof IItemFluidIdentifier) {
+						if(!world.isRemote) {
+							FluidType type = ((IItemFluidIdentifier) player.getHeldItem().getItem()).getType(world, x, y, z, player.getHeldItem());
+							boolean canUse = !type.hasTrait(FT_Corrosive.class) && (type.hasTrait(FT_Gaseous.class) || type.hasTrait(FT_Gaseous_ART.class));
+
+							if(canUse) {
+								tube.compair.setTankType(type);
+								tube.markDirty();
+								player.addChatComponentMessage(new ChatComponentText("Changed type to ").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW)).appendSibling(new ChatComponentTranslation(type.getConditionalName())).appendSibling(new ChatComponentText("!")));
+							} else {
+								player.addChatComponentMessage(new ChatComponentText("Invalid gas!").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+							}
+						}
+					} else {
+						FMLNetworkHandler.openGui(player, MainRegistry.instance, 0, world, x, y, z);
+					}
+
 					return true;
 				}
 			}
@@ -210,15 +234,17 @@ public class PneumoTube extends BlockContainer implements IToolable, IFluidConne
 	}
 
 	public boolean canConnectToAir(IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
+		FluidType air = Fluids.AIR;
 		TileEntity te = world.getTileEntity(x, y, z);
 		if(te instanceof TileEntityPneumoTube) {
 			TileEntityPneumoTube tube = (TileEntityPneumoTube) te;
 			if(!tube.isCompressor()) return false;
 			if(tube.ejectionDir == dir || tube.insertionDir == dir) return false;
+			air = tube.compair.getTankType();
 		}
 		TileEntity tile = world.getTileEntity(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
 		if(tile instanceof TileEntityPneumoTube) return false;
-		return Library.canConnectFluid(world, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, dir, Fluids.AIR);
+		return Library.canConnectFluid(world, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, dir, air);
 	}
 
 	@Override
