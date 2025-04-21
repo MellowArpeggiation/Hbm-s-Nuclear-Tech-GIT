@@ -333,7 +333,9 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCatalyticCracker.class, new RenderCatalyticCracker());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineLiquefactor.class, new RenderLiquefactor());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineSolidifier.class, new RenderSolidifier());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineIntake.class, new RenderIntake());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCompressor.class, new RenderCompressor());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCompressorCompact.class, new RenderCompressorCompact());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineDrain.class, new RenderDrain());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRadiolysis.class, new RenderRadiolysis());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityElectrolyser.class, new RenderElectrolyser());
@@ -870,6 +872,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerBlockHandler(new RenderPartitioner());
 		RenderingRegistry.registerBlockHandler(new RenderAlgaeFilm());
 		RenderingRegistry.registerBlockHandler(new RenderCoral());
+		RenderingRegistry.registerBlockHandler(new RenderPneumoTube());
 
 		RenderingRegistry.registerBlockHandler(new RenderFoundryBasin());
 		RenderingRegistry.registerBlockHandler(new RenderFoundryMold());

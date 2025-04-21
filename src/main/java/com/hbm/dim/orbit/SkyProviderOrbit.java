@@ -118,5 +118,5 @@ public class SkyProviderOrbit extends SkyProviderCelestial {
 			return ((float)BobMathUtil.clerp(progress, travelAngle, celestialAngle) + 180.0F) / 360.0F;
 		}
 	}
-	
+
 }
