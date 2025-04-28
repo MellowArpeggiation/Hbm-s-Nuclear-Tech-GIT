@@ -172,13 +172,15 @@ public class TileEntityMachineTurbofan extends TileEntityMachinePolluting implem
 				}
 			}
 
+			int amountToBurn = 0;
+
 			if(!redstone) {
 
 				if(tank.getTankType().hasTrait(FT_Combustible.class) && tank.getTankType().getTrait(FT_Combustible.class).getGrade() == FuelGrade.AERO) {
 					burnValue = tank.getTankType().getTrait(FT_Combustible.class).getCombustionEnergy() / 1_000;
 				}
 
-				int amountToBurn = breatheAir(this.tank.getFill() > 0 ? amount : 0) ? Math.min(amount, this.tank.getFill()) : 0;
+				amountToBurn = breatheAir(this.tank.getFill() > 0 ? amount : 0) ? Math.min(amount, this.tank.getFill()) : 0;
 
 				if(amountToBurn > 0) {
 					this.wasOn = true;
