@@ -16,13 +16,13 @@ public class ModelShifterEel extends ModelBase {
 		GL11.glPushMatrix();
 		{
 
-            GL11.glRotatef(180.0F, 0, 0, 1);
-            GL11.glTranslatef(0, -1.5F, 0);
+			GL11.glRotatef(180.0F, 0, 0, 1);
+			GL11.glTranslatef(0, -1.5F, 0);
 
 			ResourceManager.shiftereel.renderAll();
 
-        }
-        GL11.glPopMatrix();
-    }
+		}
+		GL11.glPopMatrix();
+	}
 
 }

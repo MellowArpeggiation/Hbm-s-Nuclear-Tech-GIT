@@ -12,24 +12,24 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderEntityMulti extends RenderLiving {
 
-    private ResourceLocation[] textures;
+	private ResourceLocation[] textures;
 
-    @SuppressWarnings("rawtypes")
-    public RenderEntityMulti(ModelBase model, Class<? extends Enum> theEnum, float shadowSize) {
-        super(model, shadowSize);
+	@SuppressWarnings("rawtypes")
+	public RenderEntityMulti(ModelBase model, Class<? extends Enum> theEnum, float shadowSize) {
+		super(model, shadowSize);
 
-        Enum[] order = theEnum.getEnumConstants();
-        textures = new ResourceLocation[order.length];
-        for(int i = 0; i < order.length; i++) {
-            textures[i] = new ResourceLocation(RefStrings.MODID, "textures/entity/" + theEnum.getSimpleName().toLowerCase(Locale.US) + "_" + order[i].name().toLowerCase(Locale.US) + ".png");
-        }
-    }
+		Enum[] order = theEnum.getEnumConstants();
+		textures = new ResourceLocation[order.length];
+		for(int i = 0; i < order.length; i++) {
+			textures[i] = new ResourceLocation(RefStrings.MODID, "textures/entity/" + theEnum.getSimpleName().toLowerCase(Locale.US) + "_" + order[i].name().toLowerCase(Locale.US) + ".png");
+		}
+	}
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    protected ResourceLocation getEntityTexture(Entity entity) {
-        Enum entityEnum = ((IEntityEnumMulti) entity).getEnum();
-        return textures[entityEnum.ordinal()];
-    }
+	@SuppressWarnings("rawtypes")
+	@Override
+	protected ResourceLocation getEntityTexture(Entity entity) {
+		Enum entityEnum = ((IEntityEnumMulti) entity).getEnum();
+		return textures[entityEnum.ordinal()];
+	}
 
 }

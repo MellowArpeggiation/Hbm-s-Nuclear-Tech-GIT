@@ -7,44 +7,44 @@ import net.minecraft.world.World;
 
 public class EntityScuttlecrab extends EntityWaterMob implements IEntityEnumMulti {
 
-    public enum Scuttlecrab {
-        TROPICAL,
-        CLAYINFUSED,
-    }
+	public enum Scuttlecrab {
+		TROPICAL,
+		CLAYINFUSED,
+	}
 
-    public Scuttlecrab type;
+	public Scuttlecrab type;
 
-    public EntityScuttlecrab(World world) {
-        super(world);
+	public EntityScuttlecrab(World world) {
+		super(world);
 
-        type = Scuttlecrab.TROPICAL;
-        if(world.rand.nextInt(8) == 0) type = Scuttlecrab.CLAYINFUSED;
-    }
+		type = Scuttlecrab.TROPICAL;
+		if(world.rand.nextInt(8) == 0) type = Scuttlecrab.CLAYINFUSED;
+	}
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public Enum getEnum() {
-        return type;
-    }
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Enum getEnum() {
+		return type;
+	}
 
 
-    // Walk on the seafloor, to do so, we override the isInWater check when attempting movement
-    private boolean seafloorWalking = false;
+	// Walk on the seafloor, to do so, we override the isInWater check when attempting movement
+	private boolean seafloorWalking = false;
 
-    @Override
-    public boolean isInWater() {
-        if(seafloorWalking) return false;
-        return this.inWater;
-    }
+	@Override
+	public boolean isInWater() {
+		if(seafloorWalking) return false;
+		return this.inWater;
+	}
 
-    @Override
-    public void onLivingUpdate() {
-        seafloorWalking = true;
-        super.onLivingUpdate();
-        seafloorWalking = false;
-    }
+	@Override
+	public void onLivingUpdate() {
+		seafloorWalking = true;
+		super.onLivingUpdate();
+		seafloorWalking = false;
+	}
 
-    @Override
+	@Override
 	protected Item getDropItem() {
 		return Items.clay_ball;
 	}

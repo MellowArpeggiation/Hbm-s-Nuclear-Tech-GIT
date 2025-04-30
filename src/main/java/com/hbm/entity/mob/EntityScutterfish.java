@@ -8,10 +8,10 @@ import net.minecraft.world.World;
 public class EntityScutterfish extends EntityFish {
 
 	public EntityScutterfish(World world) {
-        super(world, 1.5, 6.0F);
-    }
+		super(world, 1.5, 6.0F);
+	}
 
-    @Override
+	@Override
 	protected Item getDropItem() {
 		return ModItems.scuttertail;
 	}
