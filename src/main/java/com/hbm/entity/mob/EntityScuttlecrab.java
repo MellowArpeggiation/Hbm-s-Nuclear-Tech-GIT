@@ -44,6 +44,20 @@ public class EntityScuttlecrab extends EntityWaterMob implements IEntityEnumMult
 		seafloorWalking = false;
 	}
 
+
+	// Crab walk!
+	float crabDirection = 1;
+	int switchTimer = 0;
+	public void moveEntityWithHeading(float strafe, float forwards) {
+		switchTimer--;
+		if(switchTimer <= 0) {
+			crabDirection *= -1;
+			switchTimer = 20 + worldObj.rand.nextInt(80);
+		}
+
+		super.moveEntityWithHeading(forwards * crabDirection, strafe);
+	}
+
 	@Override
 	protected Item getDropItem() {
 		return Items.clay_ball;
