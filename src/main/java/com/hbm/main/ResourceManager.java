@@ -412,7 +412,13 @@ public class ResourceManager {
 	public static final IModelCustom siege_ufo = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/siege_ufo.obj"));
 	public static final IModelCustom glyphid = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/glyphid.obj"));
 	public static final IModelCustom drone = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/mobs/quadcopter.obj"));
-	public static final IModelCustom scutterfish = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/mobs/scutterfish.obj"));
+
+	//Laythies
+	public static final IModelCustom scutterfish = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/scutterfish.obj")).asVBO();
+	public static final IModelCustom scuttlecrab = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/scuttlecrab.obj")).asVBO();
+	public static final IModelCustom scrapfish = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/scrapfish.obj")).asVBO();
+	public static final IModelCustom depthsquid = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/depthsquid.obj")).asVBO();
+	public static final IModelCustom shiftereel = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/shiftereel.obj")).asVBO();
 
 	//ZIRNOX
 	public static final IModelCustom zirnox = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/zirnox.obj")).asVBO();
