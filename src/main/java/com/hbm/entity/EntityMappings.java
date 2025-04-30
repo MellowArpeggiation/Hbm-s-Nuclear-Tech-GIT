@@ -238,10 +238,10 @@ public class EntityMappings {
 
 		addMob(EntityMoonCow.class, "entity_moon_cow", 0xECD376, 0x262A44);
 		addMob(EntityScutterfish.class, "entity_scutterfish", 0xC8C9CD, 0x858894);
-		addMob(EntityScuttlecrab.class, "entity_scuttlecrab", 0xC8C9CD, 0x858894);
-		addMob(EntityDepthSquid.class, "entity_depthsquid", 0xC8C9CD, 0x858894);
-		addMob(EntityScrapFish.class, "entity_scrapfish", 0xC8C9CD, 0x858894);
-		addMob(EntityShifterEel.class, "entity_shiftereel", 0xC8C9CD, 0x858894);
+		addMob(EntityScuttlecrab.class, "entity_scuttlecrab", 0xF17951, 0xEDDABB);
+		addMob(EntityDepthSquid.class, "entity_depthsquid", 0x00B4Df, 0x016085);
+		addMob(EntityScrapFish.class, "entity_scrapfish", 0xDF9835, 0x510E13);
+		addMob(EntitySifterEel.class, "entity_siftereel", 0x5B963E, 0xC0B286);
 
 		addMob(EntityFBI.class, "entity_ntm_fbi", 0x008000, 0x404040);
 		addMob(EntityFBIDrone.class, "entity_ntm_fbi_drone", 0x008000, 0x404040);

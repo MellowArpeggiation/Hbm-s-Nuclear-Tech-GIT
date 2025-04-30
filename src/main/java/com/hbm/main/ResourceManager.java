@@ -418,7 +418,7 @@ public class ResourceManager {
 	public static final IModelCustom scuttlecrab = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/scuttlecrab.obj")).asVBO();
 	public static final IModelCustom scrapfish = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/scrapfish.obj")).asVBO();
 	public static final IModelCustom depthsquid = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/depthsquid.obj")).asVBO();
-	public static final IModelCustom shiftereel = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/shiftereel.obj")).asVBO();
+	public static final IModelCustom siftereel = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/mobs/siftereel.obj")).asVBO();
 
 	//ZIRNOX
 	public static final IModelCustom zirnox = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/zirnox.obj")).asVBO();

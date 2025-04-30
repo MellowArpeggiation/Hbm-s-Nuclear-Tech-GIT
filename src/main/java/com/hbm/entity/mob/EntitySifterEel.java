@@ -2,9 +2,9 @@ package com.hbm.entity.mob;
 
 import net.minecraft.world.World;
 
-public class EntityShifterEel extends EntityFish implements IEntityEnumMulti {
+public class EntitySifterEel extends EntityFish implements IEntityEnumMulti {
 
-	public enum ShifterEel {
+	public enum SifterEel {
 		PLAIN,
 		FAST,
 		EXOTIC,
@@ -13,12 +13,12 @@ public class EntityShifterEel extends EntityFish implements IEntityEnumMulti {
 		PERFECT,
 	}
 
-	public ShifterEel type;
+	public SifterEel type;
 
-	public EntityShifterEel(World world) {
+	public EntitySifterEel(World world) {
 		super(world, 1.8, 8.0F);
 
-		type = ShifterEel.values()[world.rand.nextInt(ShifterEel.values().length)];
+		type = SifterEel.values()[world.rand.nextInt(SifterEel.values().length)];
 	}
 
 	@SuppressWarnings("rawtypes")
