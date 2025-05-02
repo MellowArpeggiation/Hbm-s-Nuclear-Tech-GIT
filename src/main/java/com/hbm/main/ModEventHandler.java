@@ -62,7 +62,6 @@ import com.hbm.packet.toclient.PermaSyncPacket;
 import com.hbm.packet.toclient.PlayerInformPacket;
 import com.hbm.particle.helper.BlackPowderCreator;
 import com.hbm.potion.HbmPotion;
-import com.hbm.saveddata.AuxSavedData;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.tileentity.machine.TileEntityMachineRadarNT;
 import com.hbm.tileentity.machine.rbmk.RBMKDials;
