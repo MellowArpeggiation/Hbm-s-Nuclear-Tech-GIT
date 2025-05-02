@@ -17,8 +17,10 @@ public class TTree extends WorldGenAbstractTree {
 	int xz;
 	int y;
 	boolean vines;
+	Block logBlock;
+	Block leavBlock;
 	
-    public TTree(boolean notify, int offset, int smallest, int tallest, int xz, int y, boolean vines) {
+    public TTree(boolean notify, int offset, int smallest, int tallest, int xz, int y, boolean vines, Block log, Block leaf) {
         super(notify);
         this.offset = offset;
         this.smallest = smallest;
@@ -26,6 +28,8 @@ public class TTree extends WorldGenAbstractTree {
         this.xz = xz;
         this.y = y;
         this.vines = vines;
+        this.logBlock = log;
+        this.leavBlock = leaf;
     }
 
     @Override
@@ -42,7 +46,7 @@ public class TTree extends WorldGenAbstractTree {
         }
 
         for (int i = 0; i < height; i++) {
-            world.setBlock(x, y + i, z, ModBlocks.pvc_log, 0, 2); 
+            world.setBlock(x, y + i, z, logBlock, 0, 2); 
         }
 
        
@@ -58,7 +62,7 @@ public class TTree extends WorldGenAbstractTree {
                     if (Math.pow(dx / (double)bulbRadiusXz, 2) + Math.pow(dy / (double)bulbRadiusY, 2) + Math.pow(dz / (double)bulbRadiusXz, 2) <= 1) {
                         Block block = world.getBlock(x + dx, bulbStartY + dy, z + dz);
                         if (block.isAir(world, x + dx, bulbStartY + dy, z + dz)) {
-                            world.setBlock(x + dx, bulbStartY + dy, z + dz, ModBlocks.rubber_leaves, 0, 2);  
+                            world.setBlock(x + dx, bulbStartY + dy, z + dz, leavBlock, 0, 2);  
                             if (vines) {
                                 for (int i = 0; i < 4; i++) { 
                                     int vineX = x + dx + (i % 2 == 0 ? (i - 1) : 0); 
