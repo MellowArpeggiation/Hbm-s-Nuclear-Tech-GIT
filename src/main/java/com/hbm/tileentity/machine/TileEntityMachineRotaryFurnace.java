@@ -161,6 +161,11 @@ public class TileEntityMachineRotaryFurnace extends TileEntityMachinePolluting i
 						this.markDirty();
 					}
 
+					if(this.burnTime > 0) {
+						this.pollute(PollutionType.SOOT, PollutionHandler.SOOT_PER_SECOND / 10F);
+						this.burnTime--;
+					}
+
 				} else {
 					this.progress = 0;
 				}
@@ -178,10 +183,6 @@ public class TileEntityMachineRotaryFurnace extends TileEntityMachinePolluting i
 			}
 
 			this.isVenting = false;
-			if(this.burnTime > 0 && (this.canBreathe || breatheAir(1))) {
-				this.pollute(PollutionType.SOOT, PollutionHandler.SOOT_PER_SECOND / 10F);
-				this.burnTime--;
-			}
 
 			this.networkPackNT(50);
 
@@ -313,7 +314,7 @@ public class TileEntityMachineRotaryFurnace extends TileEntityMachinePolluting i
 		}
 
 		float speed = Math.max((float) burnHeat, 1);
-		
+
 		if(tanks[1].getFill() < recipe.steam * speed) return false;
 		if(tanks[2].getMaxFill() - tanks[2].getFill() < recipe.steam * speed / 100) return false;
 		if(this.steamUsed > 100) return false;
