@@ -6466,8 +6466,6 @@ desc.gui.upgrade.speed= * §4Скорость§r: Стакается до 3-х �
 
 
 
-
-
 // NTM Space //
 
 // celestial bodies //
@@ -6481,7 +6479,7 @@ body.ike=Айк
 body.dres=Дрес
 body.laythe=Лейт
 body.tekto=Текто
-body.thatmo=Тэтмо //НЕ ТАЙЛО!
+body.thatmo=Тэтмо
 
 
 
@@ -6935,7 +6933,7 @@ entity.entity_mob_flesh_creeper.name=Мясной крипер
 entity.entity_scutterfish.name=Скаттер
 entity.entity_scuttlecrab.name=Краб-бегун
 entity.entity_scrapfish.name=Металлоломорыба
-entity.entity_siftereel.name=Угорь-сито
+entity.entity_siftereel.name=Угорь-просейщик
 entity.entity_depthsquid.name=Глубинный кальмар
 entity.entity_rideable_rocket.name=Ракета
 entity.entity_rideable_rocket_dummy.name=Ракета
@@ -7087,5 +7085,5 @@ potion.hbm_nitan=Aмброзия
 trait.confusion=Аутизм
 trait.neutron=Нейтронная радиация
 
-// last updated 01.05.2025 //
+// last updated 04.05.2025 by MrKimkimora//
 // Do not forget to adapt tile.machine_intake.name and tile.pneumatic_tube.desc from NTMain//
