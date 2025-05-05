@@ -1,7 +1,5 @@
 package com.hbm.entity.mob;
 
-import java.util.Random;
-
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -16,7 +14,6 @@ import net.minecraft.world.World;
 public abstract class EntityFish extends EntityWaterMob {
 
 	private Vec3 currentSwimTarget;
-	private static final Random rand = new Random();
 
 	public EntityFish(World world, double swimSpeed, float watchDistance) {
 		super(world);
