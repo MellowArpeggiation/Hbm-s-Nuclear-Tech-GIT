@@ -199,6 +199,7 @@ atmosphere.noVacuum=REQUIRES ATMOSPHERE
 atmosphere.noGravity=REQUIRES ZERO-G
 atmosphere.noOrbit=MUST BE IN ORBIT
 atmosphere.engineFacing=WRONG DIRECTION
+atmosphere.recycling=Running on recycled air
 
 battery.mode.buffer=Input/Output Mode
 battery.mode.input=Input Mode

@@ -32,6 +32,7 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -120,6 +121,10 @@ public class ChunkAtmosphereHandler {
 		}
 
 		return false;
+	}
+
+	protected List<AtmosphereBlob> getBlobsWithinRadius(World world, ThreeInts pos) {
+		return getBlobsWithinRadius(world, pos, MAX_BLOB_RADIUS);
 	}
 
 	protected List<AtmosphereBlob> getBlobsWithinRadius(World world, ThreeInts pos, int radius) {
@@ -258,7 +263,7 @@ public class ChunkAtmosphereHandler {
 	private void onBlockPlaced(World world, ThreeInts pos) {
 		if(!AtmosphereBlob.isBlockSealed(world, pos)) return;
 
-		List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(world, pos, MAX_BLOB_RADIUS);
+		List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(world, pos);
 		for(AtmosphereBlob blob : nearbyBlobs) {
 			if(blob.contains(pos)) {
 				blob.removeBlock(pos);
@@ -269,7 +274,7 @@ public class ChunkAtmosphereHandler {
 	}
 
 	private void onBlockRemoved(World world, ThreeInts pos) {
-		List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(world, pos, MAX_BLOB_RADIUS);
+		List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(world, pos);
 		for(AtmosphereBlob blob : nearbyBlobs) {
 			// Make sure that a block can actually be attached to the blob
 			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
@@ -293,6 +298,14 @@ public class ChunkAtmosphereHandler {
 	public void receiveWorldUnload(WorldEvent.Unload event) {
 		if(event.world.isRemote) return;
 		worldBlobs.remove(event.world.provider.dimensionId);
+	}
+
+	public void receiveWorldTick(TickEvent.WorldTickEvent tick) {
+		if(tick.world.isRemote || tick.world.getTotalWorldTime() % 20 != 0) return;
+		HashMap<IAtmosphereProvider, AtmosphereBlob> blobs = worldBlobs.get(tick.world.provider.dimensionId);
+		for(AtmosphereBlob blob : blobs.values()) {
+			blob.checkGrowth();
+		}
 	}
 
 	public void receiveBlockPlaced(BlockEvent.PlaceEvent event) {
@@ -350,6 +363,30 @@ public class ChunkAtmosphereHandler {
 		}
 
 		explosions.clear();
+	}
+
+	public void receiveTreeGrow(SaplingGrowTreeEvent event) {
+		ThreeInts pos = new ThreeInts(event.x, event.y, event.z);
+		List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(event.world, pos, MAX_BLOB_RADIUS);
+		for(AtmosphereBlob blob : nearbyBlobs) {
+			if(blob.contains(pos)) {
+				// Trees convert on average 200mb of CO2 -> O2
+				int production = 175 + event.rand.nextInt(50);
+				blob.produce(production);
+				break;
+			}
+		}
+	}
+
+	public void trackPlant(World world, int x, int y, int z) {
+		ThreeInts pos = new ThreeInts(x, y, z);
+
+		List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(world, pos);
+		for(AtmosphereBlob blob : nearbyBlobs) {
+			if(blob.contains(pos)) {
+				blob.addPlant(world, x, y, z);
+			}
+		}
 	}
 
 }

@@ -86,6 +86,7 @@ import io.netty.buffer.PooledByteBufAllocator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockFire;
+import net.minecraft.block.IGrowable;
 import net.minecraft.command.CommandGameRule;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -627,8 +628,13 @@ public class ModEventHandler {
 	public void onBlockPlaced(PlaceEvent event) {
 		if(event.world.isRemote) return;
 		boolean placeCancelled = ChunkAtmosphereManager.proxy.runEffectsOnBlock(event.world, event.block, event.x, event.y, event.z);
+		if(placeCancelled) return;
 
-		if(SpaceConfig.allowNetherPortals && !placeCancelled && event.world.provider.dimensionId > 1 && event.block instanceof BlockFire) {
+		if(event.block instanceof IGrowable) {
+			ChunkAtmosphereManager.proxy.trackPlant(event.world, event.x, event.y, event.z);
+		}
+
+		if(SpaceConfig.allowNetherPortals && event.world.provider.dimensionId > 1 && event.block instanceof BlockFire) {
 			Blocks.portal.func_150000_e(event.world, event.x, event.y, event.z);
 		}
 	}
