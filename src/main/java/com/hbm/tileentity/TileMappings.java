@@ -255,6 +255,7 @@ public class TileMappings {
 		put(TileEntityAirPump.class, "tileentity_air_vent");
 		put(TileEntityAirScrubber.class, "tileentity_air_scrubber");
 		put(TileEntityAlgaeFilm.class, "tileentity_algae_film");
+		put(TileEntityHydroponic.class, "tileentity_hydrobay");
 
 		put(TileEntityBlockPWR.class, "tileentity_block_pwr");
 		put(TileEntityPWRController.class, "tileentity_pwr_controller");
@@ -464,7 +465,7 @@ public class TileMappings {
 		put(TileEntityCranePartitioner.class, "tileentity_partitioner");
 		put(TileEntityFan.class, "tileentity_fan");
 		put(TileEntityPistonInserter.class, "tileentity_piston_inserter");
-		
+
 		put(TileEntityPneumoTube.class, "tileentity_pneumatic_tube");
 
 		put(TileEntityRadioTorchSender.class, "tileentity_rtty_sender");

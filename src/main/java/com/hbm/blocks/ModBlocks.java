@@ -1261,6 +1261,7 @@ public class ModBlocks {
 	public static Block air_vent;
 	public static Block air_scrubber;
 	public static Block algae_film;
+	public static Block hydrobay;
 
 	public static Block gas_radon;
 	public static Block gas_radon_dense;
@@ -2550,6 +2551,7 @@ public class ModBlocks {
 		air_vent = new BlockAirPump(Material.iron).setBlockName("air_vent").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel_machine");
 		air_scrubber = new BlockAirScrubber(Material.iron).setBlockName("air_scrubber").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel_machine");
 		algae_film = new BlockAlgaeFilm(Material.iron).setBlockName("algae_film").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":algae_film");
+		hydrobay = new MachineHydroponic(Material.iron).setBlockName("hydrobay").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel_machine");
 
 		gas_radon = new BlockGasRadon().setBlockName("gas_radon").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":gas_radon");
 		gas_radon_dense = new BlockGasRadonDense().setBlockName("gas_radon_dense").setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":gas_radon_dense");
@@ -3900,6 +3902,7 @@ public class ModBlocks {
 		GameRegistry.registerBlock(air_vent, air_vent.getUnlocalizedName());
 		register(air_scrubber);
 		register(algae_film);
+		register(hydrobay);
 
 		//???
 		GameRegistry.registerBlock(crystal_virus, crystal_virus.getUnlocalizedName());
