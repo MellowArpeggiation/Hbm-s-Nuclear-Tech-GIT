@@ -1,11 +1,13 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
+import api.hbm.energymk2.IEnergyReceiverMK2;
 import api.hbm.fluidmk2.IFluidStandardTransceiverMK2;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,10 +19,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityHydroponic extends TileEntityMachineBase implements IFluidStandardTransceiverMK2 {
+public class TileEntityHydroponic extends TileEntityMachineBase implements IFluidStandardTransceiverMK2, IEnergyReceiverMK2 {
 
 	public FluidTank[] tanks;
+	public long power;
+	public static long maxPower = 2_000;
 
+	private boolean lightsOn = false;
 	private int[] prevMeta = new int[3];
 
 	public TileEntityHydroponic() {
@@ -41,10 +46,43 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IFlui
 			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 			ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
-			for(DirPos pos : getConPos()) {
+			for(DirPos pos : getFluidPos()) {
 				trySubscribe(tanks[0].getTankType(), worldObj, pos);
 				tryProvide(tanks[1].getTankType(), worldObj, pos);
 			}
+
+			for(DirPos pos : getPowerPos()) {
+				trySubscribe(worldObj, pos);
+			}
+
+			if(power > 0) {
+				power = Math.max(power - 25, 0);
+			}
+
+			BlockDummyable.safeRem = true;
+			{
+
+				int lMeta = worldObj.getBlockMetadata(xCoord - rot.offsetX, yCoord + 2, zCoord - rot.offsetZ);
+				int rMeta = worldObj.getBlockMetadata(xCoord + rot.offsetX, yCoord + 2, zCoord + rot.offsetZ);
+
+				if(power >= 200) {
+					if(!lightsOn) {
+						worldObj.setBlock(xCoord - rot.offsetX, yCoord + 2, zCoord - rot.offsetZ, ModBlocks.dummy_beam, lMeta, 3);
+						worldObj.setBlock(xCoord + rot.offsetX, yCoord + 2, zCoord + rot.offsetZ, ModBlocks.dummy_beam, rMeta, 3);
+
+						lightsOn = true;
+					}
+				} else {
+					if(lightsOn) {
+						worldObj.setBlock(xCoord - rot.offsetX, yCoord + 2, zCoord - rot.offsetZ, ModBlocks.hydrobay, lMeta, 3);
+						worldObj.setBlock(xCoord + rot.offsetX, yCoord + 2, zCoord + rot.offsetZ, ModBlocks.hydrobay, rMeta, 3);
+
+						lightsOn = false;
+					}
+				}
+
+			}
+			BlockDummyable.safeRem = false;
 
 			Block testPlant = Blocks.wheat;
 			IGrowable testGrow = (IGrowable) Blocks.wheat;
@@ -57,7 +95,7 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IFlui
 				Block currentPlant = worldObj.getBlock(x, y, z);
 
 				// Minimum CO2 pressure required to start growing
-				if(tanks[0].getFill() >= 100) {
+				if(power >= 200 && tanks[0].getFill() >= 100) {
 					if(currentPlant != testPlant) {
 						worldObj.setBlock(x, y, z, testPlant);
 						prevMeta[i] = worldObj.getBlockMetadata(x, y, z);
@@ -106,7 +144,7 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IFlui
 		}
 	}
 
-	private DirPos[] getConPos() {
+	private DirPos[] getFluidPos() {
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
@@ -118,14 +156,22 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IFlui
 		};
 	}
 
+	private DirPos[] getPowerPos() {
+		return new DirPos[] {
+			new DirPos(xCoord, yCoord + 3, zCoord, ForgeDirection.UP),
+		};
+	}
+
 	@Override
 	public void serialize(ByteBuf buf) {
 		for(int i = 0; i < tanks.length; i++) tanks[i].serialize(buf);
+		buf.writeLong(power);
 	}
 
 	@Override
 	public void deserialize(ByteBuf buf) {
 		for(int i = 0; i < tanks.length; i++) tanks[i].deserialize(buf);
+		power = buf.readLong();
 	}
 
 	@Override
@@ -133,6 +179,9 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IFlui
 		super.writeToNBT(nbt);
 		for(int i = 0; i < tanks.length; i++) tanks[i].writeToNBT(nbt, "t" + i);
 		for(int i = 0; i < 3; i++) nbt.setInteger("p" + i, prevMeta[i]);
+
+		nbt.setLong("power", power);
+		nbt.setBoolean("lights", lightsOn);
 	}
 
 	@Override
@@ -140,6 +189,9 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IFlui
 		super.readFromNBT(nbt);
 		for(int i = 0; i < tanks.length; i++) tanks[i].readFromNBT(nbt, "t" + i);
 		for(int i = 0; i < 3; i++) prevMeta[i] = nbt.getInteger("p" + i);
+
+		power = nbt.getLong("power");
+		lightsOn = nbt.getBoolean("lights");
 	}
 
 	AxisAlignedBB bb = null;
@@ -169,5 +221,9 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IFlui
 	@Override public FluidTank[] getReceivingTanks() { return new FluidTank[] { tanks[0] }; }
 	@Override public FluidTank[] getSendingTanks() { return new FluidTank[] { tanks[1] }; }
 	@Override public FluidTank[] getAllTanks() { return tanks; }
+
+	@Override public long getPower() { return power; }
+	@Override public void setPower(long power) { this.power = power; }
+	@Override public long getMaxPower() { return maxPower; }
 
 }

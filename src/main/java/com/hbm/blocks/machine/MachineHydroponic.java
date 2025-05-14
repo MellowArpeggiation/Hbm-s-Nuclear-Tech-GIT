@@ -6,8 +6,10 @@ import java.util.List;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.handler.MultiblockHandlerXR;
+import com.hbm.handler.atmosphere.IBlockSealable;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityHydroponic;
+import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
 
 import cpw.mods.fml.relauncher.Side;
@@ -22,13 +24,10 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class MachineHydroponic extends BlockDummyable implements ILookOverlay {
+public class MachineHydroponic extends BlockDummyable implements ILookOverlay, IBlockSealable {
 
 	public MachineHydroponic(Material mat) {
 		super(mat);
-
-		// // Bottom
-		// this.bounding.add(AxisAlignedBB.getBoundingBox(-0.5, 0, -2.5, 0.5, 1, 2.5));
 
 		// Middle
 		this.bounding.add(AxisAlignedBB.getBoundingBox(-0.5, 0, -1.5, 0.5, 3, 1.5));
@@ -46,7 +45,7 @@ public class MachineHydroponic extends BlockDummyable implements ILookOverlay {
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		if(meta >= 12) return new TileEntityHydroponic();
-		if(meta >= 6) return new TileEntityProxyCombo(true, false, true);
+		if(meta >= 6) return new TileEntityProxyCombo(true, true, true);
 		return null;
 	}
 
@@ -80,19 +79,22 @@ public class MachineHydroponic extends BlockDummyable implements ILookOverlay {
 		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {0, 0, 0, 0, 2, 2}, this, dir);
 
 		// Front/Back
-		MultiblockHandlerXR.fillSpace(world, x, y + 2, z, new int[] {0, 1, 1, -1, 2, 2}, this, dir);
-		MultiblockHandlerXR.fillSpace(world, x, y + 2, z, new int[] {0, 1, -1, 1, 2, 2}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x + rot.offsetX * 2 + dir.offsetX, y + 2, z + rot.offsetZ * 2 + dir.offsetZ, new int[] {0, 1, 0, 0, 0, 4}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x + rot.offsetX * 2 - dir.offsetX, y + 2, z + rot.offsetZ * 2 - dir.offsetZ, new int[] {0, 1, 0, 0, 0, 4}, this, dir);
 
 		// Top
-		MultiblockHandlerXR.fillSpace(world, x + rot.offsetX * 2, y + 2, z + rot.offsetZ * 2, new int[] {0, 0, 0, 0, 0, 2}, this, dir);
-		MultiblockHandlerXR.fillSpace(world, x - rot.offsetX * 2, y + 2, z - rot.offsetZ * 2, new int[] {0, 0, 0, 0, 3, 0}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x + rot.offsetX * 2, y + 2, z + rot.offsetZ * 2, new int[] {0, 0, 1, 1, 0, 4}, this, dir);
 
 		// Sides
 		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {2, 0, 0, 0, -2, 2}, this, dir);
 		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {2, 0, 0, 0, 2, -2}, this, dir);
 
+		// Connector needs to point laterally to avoid disconnecting when light blocks are added
+		MultiblockHandlerXR.fillSpace(world, x + dir.offsetX, y + 2, z + dir.offsetZ, new int[] {0, 0, 1, 0, 0, 0}, this, dir);
+
 		makeExtra(world, x + rot.offsetX * 2, y, z + rot.offsetZ * 2);
 		makeExtra(world, x - rot.offsetX * 2, y, z - rot.offsetZ * 2);
+		makeExtra(world, x, y + 2, z);
 	}
 
 	// Only the blocks immediately horizontally adjacent to the core can actually sustain plants, so we do a 4 block search in all cardinals
@@ -125,10 +127,17 @@ public class MachineHydroponic extends BlockDummyable implements ILookOverlay {
 
 		List<String> text = new ArrayList<String>();
 
+		text.add((hydro.getPower() <= 200 ? EnumChatFormatting.RED : EnumChatFormatting.GREEN) + "Power: " + BobMathUtil.getShortNumber(hydro.getPower()) + "HE");
+
 		text.add(EnumChatFormatting.GREEN + "-> " + EnumChatFormatting.RESET + hydro.tanks[0].getTankType().getLocalizedName() + ": " + hydro.tanks[0].getFill() + "/" + hydro.tanks[0].getMaxFill() + "mB");
 		text.add(EnumChatFormatting.RED + "<- " + EnumChatFormatting.RESET + hydro.tanks[1].getTankType().getLocalizedName() + ": " + hydro.tanks[1].getFill() + "/" + hydro.tanks[1].getMaxFill() + "mB");
 
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+	}
+
+	@Override
+	public boolean isSealed(World world, int x, int y, int z) {
+		return true;
 	}
 
 }

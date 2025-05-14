@@ -48,7 +48,7 @@ public class RenderHydroponic extends TileEntitySpecialRenderer implements IItem
 	public IItemRenderer getRenderer() {
 		return new ItemRenderBase() {
 			public void renderInventory() {
-				GL11.glTranslated(0, -1, 0);
+				GL11.glTranslated(0, -1.75, 0);
 				GL11.glScaled(3, 3, 3);
 			}
 			public void renderCommon() {
