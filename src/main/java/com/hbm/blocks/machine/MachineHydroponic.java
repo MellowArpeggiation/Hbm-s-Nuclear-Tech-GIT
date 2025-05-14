@@ -6,7 +6,6 @@ import java.util.List;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.handler.MultiblockHandlerXR;
-import com.hbm.handler.atmosphere.IBlockSealable;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityHydroponic;
 import com.hbm.util.BobMathUtil;
@@ -25,7 +24,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class MachineHydroponic extends BlockDummyable implements ILookOverlay, IBlockSealable {
+public class MachineHydroponic extends BlockDummyable implements ILookOverlay {
 
 	public MachineHydroponic(Material mat) {
 		super(mat);
@@ -133,11 +132,6 @@ public class MachineHydroponic extends BlockDummyable implements ILookOverlay, I
 		text.add(EnumChatFormatting.RED + "<- " + EnumChatFormatting.RESET + hydro.tanks[1].getTankType().getLocalizedName() + ": " + hydro.tanks[1].getFill() + "/" + hydro.tanks[1].getMaxFill() + "mB");
 
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
-	}
-
-	@Override
-	public boolean isSealed(World world, int x, int y, int z) {
-		return true;
 	}
 
 	@Override

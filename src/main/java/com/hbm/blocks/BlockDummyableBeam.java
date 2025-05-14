@@ -2,8 +2,6 @@ package com.hbm.blocks;
 
 import java.util.Random;
 
-import com.hbm.handler.atmosphere.IBlockSealable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
@@ -11,7 +9,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class BlockDummyableBeam extends BlockDummyable implements ILookOverlay, IBlockSealable {
+public class BlockDummyableBeam extends BlockDummyable implements ILookOverlay {
 
 	// Passes on any interactions to the true dummyable
 
@@ -112,12 +110,6 @@ public class BlockDummyableBeam extends BlockDummyable implements ILookOverlay, 
 		if(!(b instanceof BlockDummyable)) {
 			world.setBlockToAir(x, y, z);
 		}
-	}
-
-	// If you add any other uses for this beam block, change this!!
-	@Override
-	public boolean isSealed(World world, int x, int y, int z) {
-		return true;
 	}
 
 	@Override

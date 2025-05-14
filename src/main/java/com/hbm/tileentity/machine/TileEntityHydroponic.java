@@ -1,5 +1,7 @@
 package com.hbm.tileentity.machine;
 
+import java.util.List;
+
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.container.ContainerHydroponic;
@@ -8,6 +10,7 @@ import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.gui.GUIHydroponic;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.util.InventoryUtil;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.energymk2.IEnergyReceiverMK2;
@@ -16,14 +19,15 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStem;
 import net.minecraft.block.IGrowable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -103,9 +107,6 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 			}
 			BlockDummyable.safeRem = false;
 
-			Block testPlant = Blocks.wheat;
-			IGrowable testGrow = (IGrowable) Blocks.wheat;
-
 			for(int i = 0; i < 3; i++) {
 				int x = xCoord + rot.offsetX * (i - 1);
 				int y = yCoord + 1;
@@ -115,21 +116,39 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 
 				// Minimum CO2 pressure required to start growing
 				if(power >= 200 && tanks[0].getFill() >= 100) {
-					if(currentPlant != testPlant) {
-						worldObj.setBlock(x, y, z, testPlant);
-						prevMeta[i] = worldObj.getBlockMetadata(x, y, z);
+
+					// Attempt planting a new plant
+					// Only allows single block crops
+					if(!(currentPlant instanceof IGrowable)) {
+						if(slots[0] == null || !(slots[0].getItem() instanceof IPlantable)) continue;
+
+						IPlantable plantable = (IPlantable) slots[0].getItem();
+						if(plantable.getPlantType(worldObj, x, y, z) != EnumPlantType.Crop) continue;
+
+						currentPlant = plantable.getPlant(worldObj, x, y, z);
+						if(!(currentPlant instanceof IGrowable) || currentPlant instanceof BlockStem) continue;
+
+						worldObj.setBlock(x, y, z, currentPlant);
+						prevMeta[i] = 0;
+
+						slots[0].stackSize--;
+						if(slots[0].stackSize <= 0) slots[0] = null;
+
+						markDirty();
 					}
+
+					IGrowable currentGrowable = (IGrowable) currentPlant;
 
 					// a 3/(16^3) chance of ticking, multiplied by 10
 					// if(worldObj.rand.nextInt(136) == 0) testPlant.updateTick(worldObj, x, y, z, worldObj.rand);
-					if(worldObj.rand.nextInt(20) == 0) testPlant.updateTick(worldObj, x, y, z, worldObj.rand);
+					if(worldObj.rand.nextInt(20) == 0) currentPlant.updateTick(worldObj, x, y, z, worldObj.rand);
 
 					boolean fullyGrown = false;
 					boolean bonemeal = false;
-					if(testGrow.func_149851_a(worldObj, x, y, z, worldObj.isRemote)) { // should consume bonemeal, if not, assume fully grown
+					if(currentGrowable.func_149851_a(worldObj, x, y, z, worldObj.isRemote)) { // should consume bonemeal, if not, assume fully grown
 						if(bonemeal) {
-							if(testGrow.func_149852_a(worldObj, worldObj.rand, x, y, z)) { // does bonemeal apply
-								testGrow.func_149853_b(worldObj, worldObj.rand, x, y, z); // apply bonemeal
+							if(currentGrowable.func_149852_a(worldObj, worldObj.rand, x, y, z)) { // does bonemeal apply
+								currentGrowable.func_149853_b(worldObj, worldObj.rand, x, y, z); // apply bonemeal
 							}
 
 							// now consume the bonemeal
@@ -150,7 +169,11 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 					}
 
 					// after collecting produced O2, break any fully grown plants
-					if(fullyGrown) worldObj.setBlockToAir(x, y, z);
+					// unless there is no space to collect the drops
+					if(fullyGrown && attemptHarvest(currentPlant.getDrops(worldObj, x, y, z, newMeta, 0))) {
+						worldObj.setBlockToAir(x, y, z);
+						markDirty();
+					}
 				} else if(currentPlant instanceof IGrowable) {
 					// pause growth until sufficient CO2 added
 					worldObj.setBlockMetadataWithNotify(x, y, z, prevMeta[i], 2);
@@ -161,6 +184,24 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 		} else {
 
 		}
+	}
+
+	private boolean attemptHarvest(List<ItemStack> drops) {
+		ItemStack[] originals = new ItemStack[3];
+		originals[0] = slots[3];
+		originals[1] = slots[4];
+		originals[2] = slots[5];
+
+		for(ItemStack drop : drops) {
+			if(InventoryUtil.tryAddItemToInventory(slots, 3, 5, drop) != null) {
+				slots[3] = originals[0];
+				slots[4] = originals[1];
+				slots[5] = originals[2];
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private DirPos[] getFluidPos() {
