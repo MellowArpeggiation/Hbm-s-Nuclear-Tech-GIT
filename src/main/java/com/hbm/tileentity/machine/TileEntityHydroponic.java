@@ -282,7 +282,19 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
-		return itemStack.getItem() instanceof IPlantable;
+		if(slot == 0) return itemStack.getItem() instanceof IPlantable;
+		if(slot == 1) return getFertilizerStrength(itemStack) > 0;
+		return false;
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		return new int[] {0, 1, 2, 3, 4, 5};
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
+		return slot >= 3;
 	}
 
 	AxisAlignedBB bb = null;
