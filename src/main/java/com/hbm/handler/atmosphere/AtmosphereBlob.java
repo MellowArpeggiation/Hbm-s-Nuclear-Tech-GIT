@@ -364,9 +364,7 @@ public class AtmosphereBlob implements Runnable {
 
 			if(newMeta != oldMeta) {
 				entry.setValue(newMeta);
-
-				// each growth stage sequesters 5mb of carbon
-				produce(Math.max(newMeta - oldMeta, 0) * 5);
+				produce(Math.max(newMeta - oldMeta, 0) * ChunkAtmosphereHandler.CROP_GROWTH_CONVERSION);
 			}
 		}
 	}

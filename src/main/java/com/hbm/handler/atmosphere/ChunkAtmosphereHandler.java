@@ -46,6 +46,10 @@ public class ChunkAtmosphereHandler {
 	private HashMap<Integer, HashMap<IAtmosphereProvider, AtmosphereBlob>> worldBlobs = new HashMap<>();
 	private final int MAX_BLOB_RADIUS = 256;
 
+	// How much CO2 is converted into O2 from various growing
+	public static final int TREE_GROWTH_CONVERSION = 2_000; // per sapling -> tree
+	public static final int CROP_GROWTH_CONVERSION = 20; // per stage
+
 	/*
 	 * Methods to get information about the current atmosphere
 	 */
@@ -370,9 +374,7 @@ public class ChunkAtmosphereHandler {
 		List<AtmosphereBlob> nearbyBlobs = getBlobsWithinRadius(event.world, pos, MAX_BLOB_RADIUS);
 		for(AtmosphereBlob blob : nearbyBlobs) {
 			if(blob.contains(pos)) {
-				// Trees convert on average 200mb of CO2 -> O2
-				int production = 175 + event.rand.nextInt(50);
-				blob.produce(production);
+				blob.produce(TREE_GROWTH_CONVERSION);
 				break;
 			}
 		}

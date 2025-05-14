@@ -4,10 +4,12 @@ import java.util.List;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.handler.atmosphere.ChunkAtmosphereHandler;
 import com.hbm.inventory.container.ContainerHydroponic;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.gui.GUIHydroponic;
+import com.hbm.items.ModItems;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.InventoryUtil;
@@ -22,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockStem;
 import net.minecraft.block.IGrowable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,6 +39,8 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 	public FluidTank[] tanks;
 	public long power;
 	public static long maxPower = 2_000;
+
+	public int fertilizer;
 
 	private boolean lightsOn = false;
 	private int[] prevMeta = new int[3];
@@ -80,6 +85,16 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 
 			if(power > 0) {
 				power = Math.max(power - 25, 0);
+			}
+
+			if(slots[1] != null) {
+				int strength = getFertilizerStrength(slots[1]);
+				if(strength > 0) {
+					slots[1].stackSize--;
+					fertilizer += strength;
+					if(slots[1].stackSize <= 0) slots[1] = null;
+					markDirty();
+				}
 			}
 
 			BlockDummyable.safeRem = true;
@@ -139,19 +154,19 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 
 					IGrowable currentGrowable = (IGrowable) currentPlant;
 
-					// a 3/(16^3) chance of ticking, multiplied by 10
-					// if(worldObj.rand.nextInt(136) == 0) testPlant.updateTick(worldObj, x, y, z, worldObj.rand);
-					if(worldObj.rand.nextInt(20) == 0) currentPlant.updateTick(worldObj, x, y, z, worldObj.rand);
+					// Increase growth speed
+					if(worldObj.rand.nextInt(120) == 0) currentPlant.updateTick(worldObj, x, y, z, worldObj.rand);
 
 					boolean fullyGrown = false;
-					boolean bonemeal = false;
 					if(currentGrowable.func_149851_a(worldObj, x, y, z, worldObj.isRemote)) { // should consume bonemeal, if not, assume fully grown
-						if(bonemeal) {
+						if(fertilizer > 0 && worldObj.rand.nextInt(60) == 0) {
 							if(currentGrowable.func_149852_a(worldObj, worldObj.rand, x, y, z)) { // does bonemeal apply
 								currentGrowable.func_149853_b(worldObj, worldObj.rand, x, y, z); // apply bonemeal
+								worldObj.playAuxSFX(2005, x, y, z, 0);
 							}
 
 							// now consume the bonemeal
+							fertilizer--;
 						}
 					} else {
 						fullyGrown = true;
@@ -161,7 +176,7 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 
 					if(newMeta != prevMeta[i]) {
 						// each growth stage sequesters 5mb of carbon
-						int toProduce = Math.max(newMeta - prevMeta[i], 0) * 5;
+						int toProduce = Math.max(newMeta - prevMeta[i], 0) * ChunkAtmosphereHandler.CROP_GROWTH_CONVERSION;
 						tanks[0].setFill(Math.max(tanks[0].getFill() - toProduce, 0));
 						tanks[1].setFill(Math.min(tanks[1].getFill() + toProduce, tanks[1].getMaxFill()));
 
@@ -184,6 +199,13 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 		} else {
 
 		}
+	}
+
+	private int getFertilizerStrength(ItemStack stack) {
+		if(stack == null) return 0;
+		if(stack.getItem() == Items.dye && stack.getItemDamage() == 15) return 1;
+		if(stack.getItem() == ModItems.powder_fertilizer) return 9;
+		return 0;
 	}
 
 	private boolean attemptHarvest(List<ItemStack> drops) {
@@ -226,12 +248,14 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 	public void serialize(ByteBuf buf) {
 		for(int i = 0; i < tanks.length; i++) tanks[i].serialize(buf);
 		buf.writeLong(power);
+		buf.writeInt(fertilizer);
 	}
 
 	@Override
 	public void deserialize(ByteBuf buf) {
 		for(int i = 0; i < tanks.length; i++) tanks[i].deserialize(buf);
 		power = buf.readLong();
+		fertilizer = buf.readInt();
 	}
 
 	@Override
@@ -242,6 +266,7 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 
 		nbt.setLong("power", power);
 		nbt.setBoolean("lights", lightsOn);
+		nbt.setInteger("fertilizer", fertilizer);
 	}
 
 	@Override
@@ -252,6 +277,7 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 
 		power = nbt.getLong("power");
 		lightsOn = nbt.getBoolean("lights");
+		fertilizer = nbt.getInteger("fertilizer");
 	}
 
 	@Override
