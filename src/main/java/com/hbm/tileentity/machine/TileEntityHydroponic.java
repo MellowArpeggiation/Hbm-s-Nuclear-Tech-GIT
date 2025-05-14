@@ -2,8 +2,11 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.container.ContainerHydroponic;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
+import com.hbm.inventory.gui.GUIHydroponic;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
@@ -14,12 +17,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityHydroponic extends TileEntityMachineBase implements IFluidStandardTransceiverMK2, IEnergyReceiverMK2 {
+public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIProvider, IFluidStandardTransceiverMK2, IEnergyReceiverMK2 {
 
 	public FluidTank[] tanks;
 	public long power;
@@ -29,10 +37,21 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IFlui
 	private int[] prevMeta = new int[3];
 
 	public TileEntityHydroponic() {
-		super(4);
+		super(6);
 		tanks = new FluidTank[2];
 		tanks[0] = new FluidTank(Fluids.CARBONDIOXIDE, 16_000);
 		tanks[1] = new FluidTank(Fluids.OXYGEN, 16_000);
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerHydroponic(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Object provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIHydroponic(player.inventory, this);
 	}
 
 	@Override
@@ -192,6 +211,11 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IFlui
 
 		power = nbt.getLong("power");
 		lightsOn = nbt.getBoolean("lights");
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
+		return itemStack.getItem() instanceof IPlantable;
 	}
 
 	AxisAlignedBB bb = null;

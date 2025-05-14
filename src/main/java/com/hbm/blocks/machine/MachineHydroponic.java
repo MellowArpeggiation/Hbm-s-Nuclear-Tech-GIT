@@ -15,6 +15,7 @@ import com.hbm.util.I18nUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
@@ -112,7 +113,6 @@ public class MachineHydroponic extends BlockDummyable implements ILookOverlay, I
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void printHook(Pre event, World world, int x, int y, int z) {
-
 		int[] pos = this.findCore(world, x, y, z);
 
 		if(pos == null)
@@ -138,6 +138,11 @@ public class MachineHydroponic extends BlockDummyable implements ILookOverlay, I
 	@Override
 	public boolean isSealed(World world, int x, int y, int z) {
 		return true;
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		return this.standardOpenBehavior(world, x, y, z, player, 0);
 	}
 
 }
