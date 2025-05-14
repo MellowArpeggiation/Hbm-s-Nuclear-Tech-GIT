@@ -14,6 +14,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -25,6 +26,21 @@ public class MachineHydroponic extends BlockDummyable implements ILookOverlay {
 
 	public MachineHydroponic(Material mat) {
 		super(mat);
+
+		// // Bottom
+		// this.bounding.add(AxisAlignedBB.getBoundingBox(-0.5, 0, -2.5, 0.5, 1, 2.5));
+
+		// Middle
+		this.bounding.add(AxisAlignedBB.getBoundingBox(-0.5, 0, -1.5, 0.5, 3, 1.5));
+
+		// Sides
+		this.bounding.add(AxisAlignedBB.getBoundingBox(-1.125, 1, -2.5, 1.125, 3, -1.5));
+		this.bounding.add(AxisAlignedBB.getBoundingBox(-1.125, 1, 1.5, 1.125, 3, 2.5));
+
+		// Side butts
+		this.bounding.add(AxisAlignedBB.getBoundingBox(-0.75, 0, -2.5, 0.75, 1, -1.5));
+		this.bounding.add(AxisAlignedBB.getBoundingBox(-0.75, 0, 1.5, 0.75, 1, 2.5));
+
 	}
 
 	@Override
@@ -45,6 +61,15 @@ public class MachineHydroponic extends BlockDummyable implements ILookOverlay {
 	}
 
 	@Override
+	protected boolean checkRequirement(World world, int x, int y, int z, ForgeDirection dir, int o) {
+		if(!super.checkRequirement(world, x, y, z, dir, o)) return false;
+
+		if(!MultiblockHandlerXR.checkSpace(world, x + dir.offsetX * o, y + dir.offsetY * o, z + dir.offsetZ * o, new int[] {2, -1, 1, 1, 2, 2}, x, y, z, dir)) return false;
+
+		return true;
+	}
+
+	@Override
 	protected void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {
 		x += dir.offsetX * o;
 		z += dir.offsetZ * o;
@@ -53,6 +78,10 @@ public class MachineHydroponic extends BlockDummyable implements ILookOverlay {
 
 		// Base
 		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {0, 0, 0, 0, 2, 2}, this, dir);
+
+		// Front/Back
+		MultiblockHandlerXR.fillSpace(world, x, y + 2, z, new int[] {0, 1, 1, -1, 2, 2}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x, y + 2, z, new int[] {0, 1, -1, 1, 2, 2}, this, dir);
 
 		// Top
 		MultiblockHandlerXR.fillSpace(world, x + rot.offsetX * 2, y + 2, z + rot.offsetZ * 2, new int[] {0, 0, 0, 0, 0, 2}, this, dir);
@@ -101,12 +130,5 @@ public class MachineHydroponic extends BlockDummyable implements ILookOverlay {
 
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
 	}
-
-	// TEMP
-	@Override
-	public int getRenderType() {
-		return 0;
-	}
-	// TEMP
 
 }

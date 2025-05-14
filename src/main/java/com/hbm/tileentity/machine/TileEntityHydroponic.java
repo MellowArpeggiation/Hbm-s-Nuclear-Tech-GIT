@@ -7,11 +7,14 @@ import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
 import api.hbm.fluidmk2.IFluidStandardTransceiverMK2;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityHydroponic extends TileEntityMachineBase implements IFluidStandardTransceiverMK2 {
@@ -108,8 +111,10 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IFlui
 		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
 		return new DirPos[] {
-			new DirPos(xCoord + rot.offsetX * 3, yCoord, zCoord + rot.offsetZ * 3, rot.getOpposite()),
-			new DirPos(xCoord - rot.offsetX * 3, yCoord, zCoord - rot.offsetZ * 3, rot),
+			new DirPos(xCoord + rot.offsetX * 2 + dir.offsetX, yCoord, zCoord + rot.offsetZ * 2 + dir.offsetZ, dir),
+			new DirPos(xCoord - rot.offsetX * 2 + dir.offsetX, yCoord, zCoord - rot.offsetZ * 2 + dir.offsetZ, dir),
+			new DirPos(xCoord + rot.offsetX * 2 - dir.offsetX, yCoord, zCoord + rot.offsetZ * 2 - dir.offsetZ, dir.getOpposite()),
+			new DirPos(xCoord - rot.offsetX * 2 - dir.offsetX, yCoord, zCoord - rot.offsetZ * 2 - dir.offsetZ, dir.getOpposite()),
 		};
 	}
 
@@ -127,12 +132,38 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IFlui
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		for(int i = 0; i < tanks.length; i++) tanks[i].writeToNBT(nbt, "t" + i);
+		for(int i = 0; i < 3; i++) nbt.setInteger("p" + i, prevMeta[i]);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		for(int i = 0; i < tanks.length; i++) tanks[i].readFromNBT(nbt, "t" + i);
+		for(int i = 0; i < 3; i++) prevMeta[i] = nbt.getInteger("p" + i);
+	}
+
+	AxisAlignedBB bb = null;
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		if(bb == null) {
+			bb = AxisAlignedBB.getBoundingBox(
+				xCoord - 2,
+				yCoord,
+				zCoord - 2,
+				xCoord + 3,
+				yCoord + 2,
+				zCoord + 3
+			);
+		}
+
+		return bb;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared() {
+		return 65536.0D;
 	}
 
 	@Override public FluidTank[] getReceivingTanks() { return new FluidTank[] { tanks[0] }; }

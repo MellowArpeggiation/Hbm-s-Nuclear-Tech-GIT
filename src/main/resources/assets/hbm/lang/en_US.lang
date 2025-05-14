@@ -5863,6 +5863,7 @@ tile.heater_oilburner.desc=Burns fluids to produce heat.$Can be configured with 
 tile.heater_oven.name=Heating Oven
 tile.heater_oven.desc=Burns solid fuel to produce heat.$Accepts heat from the bottom with 50%% efficiency.
 tile.hev_battery.name=Suit Battery
+tile.hydrobay.name=Hydroponics Bay
 tile.machine_hydrotreater.name=Hydrotreater
 tile.impact_dirt.name=Scorched Dirt
 tile.icf.name=Inertial Confinement Fusion Reactor (ICF)
