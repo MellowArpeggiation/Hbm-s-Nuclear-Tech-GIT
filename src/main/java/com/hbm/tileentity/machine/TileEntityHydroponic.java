@@ -10,6 +10,7 @@ import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.inventory.gui.GUIHydroponic;
 import com.hbm.items.ModItems;
+import com.hbm.lib.Library;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.InventoryUtil;
@@ -41,6 +42,7 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 	public static long maxPower = 2_000;
 
 	public int fertilizer;
+	public static int maxFertilizer = 200;
 
 	private boolean lightsOn = false;
 	private int[] prevMeta = new int[3];
@@ -65,7 +67,7 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 
 	@Override
 	public String getName() {
-		return "container.hydroponic";
+		return "container.hydrobay";
 	}
 
 	@Override
@@ -89,13 +91,15 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 
 			if(slots[1] != null) {
 				int strength = getFertilizerStrength(slots[1]);
-				if(strength > 0) {
+				if(strength > 0 && fertilizer <= maxFertilizer - strength) {
 					slots[1].stackSize--;
 					fertilizer += strength;
 					if(slots[1].stackSize <= 0) slots[1] = null;
 					markDirty();
 				}
 			}
+
+			power = Library.chargeTEFromItems(slots, 2, power, maxPower);
 
 			BlockDummyable.safeRem = true;
 			{
@@ -199,6 +203,13 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 		} else {
 
 		}
+	}
+
+	public ItemStack[] getValidFertilizers() {
+		return new ItemStack[] {
+			new ItemStack(Items.dye, 1, 15),
+			new ItemStack(ModItems.powder_fertilizer),
+		};
 	}
 
 	private int getFertilizerStrength(ItemStack stack) {
