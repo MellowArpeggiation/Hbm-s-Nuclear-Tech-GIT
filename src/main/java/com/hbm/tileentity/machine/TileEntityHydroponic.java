@@ -158,7 +158,7 @@ public class TileEntityHydroponic extends TileEntityMachineBase implements IGUIP
 
 					IGrowable currentGrowable = (IGrowable) currentPlant;
 
-					// Increase growth speed
+					// Increase growth speed by about x10
 					if(worldObj.rand.nextInt(120) == 0) currentPlant.updateTick(worldObj, x, y, z, worldObj.rand);
 
 					boolean fullyGrown = false;

@@ -47,8 +47,11 @@ public class ChunkAtmosphereHandler {
 	private final int MAX_BLOB_RADIUS = 256;
 
 	// How much CO2 is converted into O2 from various growing
-	public static final int TREE_GROWTH_CONVERSION = 2_000; // per sapling -> tree
-	public static final int CROP_GROWTH_CONVERSION = 20; // per stage
+	// Balanced around these amounts of plants providing for a single pressurized room:
+	//  * 25 trees (955s to grow), OR
+	//  * 200 crops (300s per stage)
+	public static final int TREE_GROWTH_CONVERSION = 400; // per sapling -> tree
+	public static final int CROP_GROWTH_CONVERSION = 15; // per stage
 
 	/*
 	 * Methods to get information about the current atmosphere
@@ -148,8 +151,8 @@ public class ChunkAtmosphereHandler {
 		return list;
 	}
 
-    // Assuming 21% AIR/9% OXY is required for breathable atmosphere
-    public boolean canBreathe(EntityLivingBase entity) {
+	// Assuming 21% AIR/9% OXY is required for breathable atmosphere
+	public boolean canBreathe(EntityLivingBase entity) {
 		CBT_Atmosphere atmosphere = getAtmosphere(entity);
 
 		if(GeneralConfig.enableDebugMode && entity instanceof EntityPlayer && entity.worldObj.getTotalWorldTime() % 20 == 0) {
@@ -163,10 +166,10 @@ public class ChunkAtmosphereHandler {
 		}
 
 		return canBreathe(atmosphere);
-    }
+	}
 
 	public boolean canBreathe(CBT_Atmosphere atmosphere) {
-        return atmosphere != null && (atmosphere.hasFluid(Fluids.AIR, 0.21) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09));
+		return atmosphere != null && (atmosphere.hasFluid(Fluids.AIR, 0.21) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09));
 	}
 
 	// Is the air pressure high enough to support liquids
