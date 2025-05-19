@@ -8,6 +8,7 @@ import com.hbm.blocks.generic.BlockAshes;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.MobConfig;
 import com.hbm.config.RadiationConfig;
+import com.hbm.config.ServerConfig;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.DebugTeleporter;
@@ -841,6 +842,8 @@ public class ModEventHandler {
 			List loadedEntityList = new ArrayList();
 			loadedEntityList.addAll(event.world.loadedEntityList); // ConcurrentModificationException my balls
 
+			int tickrate = Math.max(1, ServerConfig.ITEM_HAZARD_DROP_TICKRATE.get());
+
 			for(Object e : loadedEntityList) {
 
 				if(e instanceof EntityPlayer) {
@@ -867,7 +870,7 @@ public class ModEventHandler {
 					}
 				}
 
-				if(event.phase == Phase.END) {
+				if(event.phase == Phase.END && event.world.getTotalWorldTime() % tickrate == 0) {
 					if(e instanceof EntityItem) {
 						EntityItem item = (EntityItem) e;
 						HazardSystem.updateDroppedItem(item);
