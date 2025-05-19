@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
@@ -110,6 +111,28 @@ public class BlockDummyableBeam extends BlockDummyable implements ILookOverlay {
 		if(!(b instanceof BlockDummyable)) {
 			world.setBlockToAir(x, y, z);
 		}
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		int metadata = world.getBlockMetadata(x, y, z);
+
+		// if it's an extra, remove the extra-ness
+		if(metadata >= extra) metadata -= extra;
+
+		ForgeDirection dir = ForgeDirection.getOrientation(metadata).getOpposite();
+
+		x += dir.offsetX;
+		y += dir.offsetY;
+		z += dir.offsetZ;
+
+		Block b = world.getBlock(x, y, z);
+
+		if(b instanceof BlockDummyable) {
+			return ((BlockDummyable) b).onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
+		}
+
+		return false;
 	}
 
 	@Override

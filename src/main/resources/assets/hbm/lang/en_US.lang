@@ -5707,6 +5707,7 @@ tile.ducrete.name=Ducrete Tile
 tile.ducrete_stairs.name=Ducrete Tile Stairs
 tile.ducrete_smooth.name=Ducrete
 tile.ducrete_smooth_stairs.name=Ducrete Stairs
+tile.dummy_beam.name=Integrated Lamp
 tile.dummy_block.name=Dummy Block
 tile.dummy_port.name=Dummy Block (Electricity Port)
 tile.dungeon_chain.name=Metal Chain

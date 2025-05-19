@@ -77,22 +77,27 @@ public class MachineHydroponic extends BlockDummyable implements ILookOverlay, I
 
 		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
-		// Base
-		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {0, 0, 0, 0, 2, 2}, this, dir);
+		// Hollow machines hate this weird trick
+		// ABRA CHUPACADABRA
 
 		// Front/Back
 		MultiblockHandlerXR.fillSpace(world, x + rot.offsetX * 2 + dir.offsetX, y + 2, z + rot.offsetZ * 2 + dir.offsetZ, new int[] {0, 1, 0, 0, 0, 4}, this, dir);
 		MultiblockHandlerXR.fillSpace(world, x + rot.offsetX * 2 - dir.offsetX, y + 2, z + rot.offsetZ * 2 - dir.offsetZ, new int[] {0, 1, 0, 0, 0, 4}, this, dir);
 
 		// Top
-		MultiblockHandlerXR.fillSpace(world, x + rot.offsetX * 2, y + 2, z + rot.offsetZ * 2, new int[] {0, 0, 1, 1, 0, 4}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x + rot.offsetX * 2, y + 2, z + rot.offsetZ * 2, new int[] {0, 0, 0, 0, 0, 4}, this, dir);
 
-		// Sides
+		// Side caps
+		MultiblockHandlerXR.fillSpace(world, x + rot.offsetX * 2, y + 1, z + rot.offsetZ * 2, new int[] {1, 0, 1, 1, 0, 0}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x - rot.offsetX * 2, y + 1, z - rot.offsetZ * 2, new int[] {1, 0, 1, 1, 0, 0}, this, dir);
 		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {2, 0, 0, 0, -2, 2}, this, dir);
 		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {2, 0, 0, 0, 2, -2}, this, dir);
 
-		// Connector needs to point laterally to avoid disconnecting when light blocks are added
+		// Top connector needs to point laterally to avoid disconnecting when light blocks are added
 		MultiblockHandlerXR.fillSpace(world, x + dir.offsetX, y + 2, z + dir.offsetZ, new int[] {0, 0, 1, 0, 0, 0}, this, dir);
+
+		// Base
+		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {0, 0, 0, 0, 2, 2}, this, dir);
 
 		makeExtra(world, x + rot.offsetX * 2, y, z + rot.offsetZ * 2);
 		makeExtra(world, x - rot.offsetX * 2, y, z - rot.offsetZ * 2);
