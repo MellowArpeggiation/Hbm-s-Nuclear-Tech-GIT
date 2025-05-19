@@ -6,7 +6,9 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
+import com.hbm.tileentity.machine.TileEntityHydroponic;
 
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -16,6 +18,9 @@ public class RenderHydroponic extends TileEntitySpecialRenderer implements IItem
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float interp) {
+		if(!(tile instanceof TileEntityHydroponic)) return;
+		TileEntityHydroponic hydro = (TileEntityHydroponic) tile;
+
 		GL11.glPushMatrix();
 		{
 
@@ -31,8 +36,26 @@ public class RenderHydroponic extends TileEntitySpecialRenderer implements IItem
 			}
 
 			GL11.glShadeModel(GL11.GL_SMOOTH);
+
 			bindTexture(ResourceManager.hydroponic_tex);
-			ResourceManager.hydroponic.renderAll();
+			ResourceManager.hydroponic.renderPart("Base");
+
+			if(hydro.power >= 200) {
+				GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+				GL11.glDisable(GL11.GL_CULL_FACE);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+
+				GL11.glDepthMask(false);
+				ResourceManager.hydroponic.renderPart("Lights");
+				GL11.glDepthMask(true);
+
+				GL11.glDisable(GL11.GL_BLEND);
+				GL11.glEnable(GL11.GL_CULL_FACE);
+				GL11.glPopAttrib();
+			}
+
 			GL11.glShadeModel(GL11.GL_FLAT);
 
 		}
