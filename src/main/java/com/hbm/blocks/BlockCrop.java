@@ -24,9 +24,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockCrop extends BlockBush implements IGrowable {
-	
+
 	protected int maxGrowthStage = 7;
 	protected Block soilsBlocks;
 	 @SideOnly(Side.CLIENT)
@@ -68,7 +69,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 
 		world.setBlockMetadataWithNotify(x, y, z, growStage, 2);
 	}
-	
+
 	@Override
 	public Item getItemDropped(int meta, Random rand, int fortune) {
 		if(this == ModBlocks.crop_strawberry) {
@@ -91,7 +92,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 	public int getRenderType() {
 		return 1; // Cross like flowers
 	}
-	
+
 	/**
 	 * Gets the block's texture. Args: side, meta
 	 */
@@ -100,7 +101,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 	public IIcon getIcon(int side, int growthStage) {
 		return blockIcons[growthStage];
 	}
-	
+
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if(!this.canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
@@ -110,7 +111,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
-		return canPlaceBlockOn(world.getBlock(x, y - 1, z));
+		return  world.getBlock(x, y - 1, z).canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this);
 	}
 
 	/*
@@ -127,7 +128,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 
 		world.setBlockMetadataWithNotify(x, y, z, growStage, 2);
 	}
-	
+
 	// checks if finished growing (a grow stage of 7 is final stage)
 	@Override
 	public boolean func_149851_a(World world, int x, int y, int z, boolean p_149851_5_) {
@@ -149,7 +150,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 		if(meta == 7) { //dividing is probably better, but thats the point?? plus i want players to fully grow their crops
 			return(4);
 		} else {
-			return (meta/2);	
+			return (meta/2);
 		}
 		
 	}

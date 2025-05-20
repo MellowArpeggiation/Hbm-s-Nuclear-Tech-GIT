@@ -42,11 +42,11 @@ public class BlockAirPump extends BlockContainer implements ILookOverlay, IBlock
 	public BlockAirPump(Material p_i45386_1_) {
 		super(p_i45386_1_);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		
+
 		this.iconTop = iconRegister.registerIcon(RefStrings.MODID + ":vent_chlorine_seal_top");
 		this.blockIcon = iconRegister.registerIcon(RefStrings.MODID + ":vent_chlorine_seal_side");
 	}
@@ -54,7 +54,7 @@ public class BlockAirPump extends BlockContainer implements ILookOverlay, IBlock
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int metadata) {
-		
+
 		return side == 1 ? this.iconTop : this.blockIcon;
 	}
 
@@ -65,13 +65,13 @@ public class BlockAirPump extends BlockContainer implements ILookOverlay, IBlock
 
 	@Override
 	public void printHook(Pre event, World world, int x, int y, int z) {
-		
+
 		TileEntity tile = world.getTileEntity(x, y, z);
-		
+
 		if(!(tile instanceof TileEntityAirPump)) return;
-		
+
 		TileEntityAirPump pump = (TileEntityAirPump) tile;
-		
+
 		CBT_Atmosphere atmosphere = pump.currentAtmosphere;
 
 		List<String> text = new ArrayList<>();
@@ -101,7 +101,11 @@ public class BlockAirPump extends BlockContainer implements ILookOverlay, IBlock
 		if(!hasPressure) {
 			text.add(EnumChatFormatting.AQUA + " - " + I18nUtil.resolveKey("atmosphere.vacuum"));
 		}
-	
+
+		if(pump.isRecycling()) {
+			text.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey("atmosphere.recycling"));
+		}
+
 		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
 	}
 	@Override

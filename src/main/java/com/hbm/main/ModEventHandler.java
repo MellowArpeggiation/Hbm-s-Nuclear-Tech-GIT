@@ -8,6 +8,7 @@ import com.hbm.blocks.generic.BlockAshes;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.MobConfig;
 import com.hbm.config.RadiationConfig;
+import com.hbm.config.ServerConfig;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.DebugTeleporter;
@@ -89,6 +90,7 @@ import io.netty.buffer.PooledByteBufAllocator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockFire;
+import net.minecraft.block.IGrowable;
 import net.minecraft.command.CommandGameRule;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -436,13 +438,15 @@ public class ModEventHandler {
 
 		Map<Integer, List<WeightedRandomObject>> slotPools = new HashMap<>();
 
+		float soot = PollutionHandler.getPollution(entity.worldObj, MathHelper.floor_double(event.x), MathHelper.floor_double(event.y), MathHelper.floor_double(event.z), PollutionType.SOOT); //uhfgfg
+
 		if(entity instanceof EntityZombie) {
-			if(world.rand.nextFloat() < 0.005F) { // full hazmat zombine
+			if(world.rand.nextFloat() < 0.005F && soot > 2) { // full hazmat zombine
 				equipFullSet(entity, ModItems.hazmat_helmet, ModItems.hazmat_plate, ModItems.hazmat_legs, ModItems.hazmat_boots);
 				return;
 			}
 
-			if(world.rand.nextFloat() < 0.005F) { // full security zombine
+			if(world.rand.nextFloat() < 0.005F && soot > 20) { // full security zombine
 				equipFullSet(entity, ModItems.security_helmet, ModItems.security_plate, ModItems.security_legs, ModItems.security_boots);
 				return;
 			}
@@ -474,8 +478,6 @@ public class ModEventHandler {
 			}));
 
 		} else if(entity instanceof EntitySkeleton) {
-			float soot = PollutionHandler.getPollution(entity.worldObj,
-				MathHelper.floor_double(event.x), MathHelper.floor_double(event.y), MathHelper.floor_double(event.z), PollutionType.SOOT); //uhfgfg
 
 			slotPools.put(4, createSlotPool(12000, new Object[][]{
 				{ModItems.gas_mask_m65, 16}, {ModItems.gas_mask_olde, 12}, {ModItems.mask_of_infamy, 8},
@@ -527,7 +529,7 @@ public class ModEventHandler {
 	}
 
 
-	private void assignItemsToEntity(EntityLivingBase entity, Map<Integer, List<WeightedRandomObject>> slotPools) {
+	public void assignItemsToEntity(EntityLivingBase entity, Map<Integer, List<WeightedRandomObject>> slotPools) {
 		for (Map.Entry<Integer, List<WeightedRandomObject>> entry : slotPools.entrySet()) {
 			int slot = entry.getKey();
 			List<WeightedRandomObject> pool = entry.getValue();
@@ -630,8 +632,13 @@ public class ModEventHandler {
 	public void onBlockPlaced(PlaceEvent event) {
 		if(event.world.isRemote) return;
 		boolean placeCancelled = ChunkAtmosphereManager.proxy.runEffectsOnBlock(event.world, event.block, event.x, event.y, event.z);
+		if(placeCancelled) return;
 
-		if(SpaceConfig.allowNetherPortals && !placeCancelled && event.world.provider.dimensionId > 1 && event.block instanceof BlockFire) {
+		if(event.block instanceof IGrowable) {
+			ChunkAtmosphereManager.proxy.trackPlant(event.world, event.x, event.y, event.z);
+		}
+
+		if(SpaceConfig.allowNetherPortals && event.world.provider.dimensionId > 1 && event.block instanceof BlockFire) {
 			Blocks.portal.func_150000_e(event.world, event.x, event.y, event.z);
 		}
 	}
@@ -835,8 +842,12 @@ public class ModEventHandler {
 				}*/
 			}
 
+			List loadedEntityList = new ArrayList();
+			loadedEntityList.addAll(event.world.loadedEntityList); // ConcurrentModificationException my balls
 
-			for(Object e : event.world.loadedEntityList) {
+			int tickrate = Math.max(1, ServerConfig.ITEM_HAZARD_DROP_TICKRATE.get());
+
+			for(Object e : loadedEntityList) {
 
 				if(e instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer) e;
@@ -862,7 +873,7 @@ public class ModEventHandler {
 					}
 				}
 
-				if(event.phase == Phase.END) {
+				if(event.phase == Phase.END && event.world.getTotalWorldTime() % tickrate == 0) {
 					if(e instanceof EntityItem) {
 						EntityItem item = (EntityItem) e;
 						HazardSystem.updateDroppedItem(item);
