@@ -430,6 +430,7 @@ public class ModBlocks {
 
 
 	public static Block duna_sands;
+	public static Block duna_cobble;
 	public static Block duna_rock;
 	public static Block dry_ice;
 	public static Block ferric_clay;
@@ -1775,7 +1776,8 @@ public class ModBlocks {
 		tumor = new BlockTint(Material.clay, "tumor_base2", "tumor_base3", "fleshv2").setBlockName("tumor").setStepSound(Block.soundTypeSnow).setCreativeTab(MainRegistry.blockTab).setHardness(1.0F).setBlockTextureName(RefStrings.MODID + ":tumor_base");
 
 		duna_sands = new BlockFalling(Material.sand).setBlockName("duna_sands").setStepSound(Block.soundTypeSand).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":duna_sands");
-		duna_rock = new BlockGeneric(Material.rock).setBlockName("duna_rock").setStepSound(Block.soundTypeStone).setCreativeTab(MainRegistry.blockTab).setHardness(1.5F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":duna_rock");
+		duna_cobble = new BlockGeneric(Material.rock).setBlockName("duna_cobble").setStepSound(Block.soundTypeStone).setCreativeTab(MainRegistry.blockTab).setHardness(2.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":duna_cobble");
+		duna_rock = new BlockGenericDrop(Material.rock, duna_cobble).setBlockName("duna_rock").setStepSound(Block.soundTypeStone).setCreativeTab(MainRegistry.blockTab).setHardness(1.5F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":duna_rock");
 		dry_ice = new BlockGeneric(Material.ice).setBlockName("dry_ice").setStepSound(Block.soundTypeStone).setCreativeTab(MainRegistry.blockTab).setHardness(0.5F).setBlockTextureName(RefStrings.MODID + ":ice_dry");
 		ferric_clay = new BlockGeneric(Material.clay).setBlockName("ferric_clay").setStepSound(Block.soundTypeGravel).setCreativeTab(MainRegistry.blockTab).setHardness(0.6F).setBlockTextureName(RefStrings.MODID + ":ferric_clay");
 
@@ -3172,6 +3174,7 @@ public class ModBlocks {
 		GameRegistry.registerBlock(moon_rock, moon_rock.getUnlocalizedName());
 
 		GameRegistry.registerBlock(duna_sands, duna_sands.getUnlocalizedName());
+		GameRegistry.registerBlock(duna_cobble, duna_cobble.getUnlocalizedName());
 		GameRegistry.registerBlock(duna_rock, duna_rock.getUnlocalizedName());
 		GameRegistry.registerBlock(dry_ice, dry_ice.getUnlocalizedName());
 		GameRegistry.registerBlock(ferric_clay, ferric_clay.getUnlocalizedName());

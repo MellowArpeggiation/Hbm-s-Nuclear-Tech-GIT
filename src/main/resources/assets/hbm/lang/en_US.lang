@@ -5678,6 +5678,7 @@ tile.det_salt.name=Salted Nuclear Charge
 tile.dres_rock.name=Dres Rock
 tile.duna_sands.name=Duna Sand
 tile.duna_rock.name=Duna Rock
+tile.duna_cobble.name=Duna Cobblestone
 tile.dry_ice.name=Dry Ice
 tile.salted_fallout.name=Salted Fallout
 tile.dfc_core.name=Dark Fusion Core
