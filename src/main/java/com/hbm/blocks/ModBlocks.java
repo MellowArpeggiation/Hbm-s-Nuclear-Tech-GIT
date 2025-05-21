@@ -25,7 +25,6 @@ import com.hbm.tileentity.machine.storage.TileEntityFileCabinet;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
-import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.material.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
