@@ -515,6 +515,11 @@ public class ModItems {
 	public static Item crystal_osmiridium;
 	public static Item crystal_nickel;
 	public static Item crystal_niobium;
+	//my name is seven, i made the zinc dispatcher
+	//it was difficult, to dispatch the zinc() together
+	//but unforutnatley something went so chopped chin wrong
+	//now i cant do anything but sing this stupid song!!!!!!!!!!
+	public static Item crystal_zinc;
 
 
 
@@ -2902,6 +2907,7 @@ public class ModItems {
 		gem_alexandrite = new ItemAlexandrite().setUnlocalizedName("gem_alexandrite").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":gem_alexandrite");
 		crystal_nickel = new Item().setUnlocalizedName("crystal_nickel").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":crystal_nickel");
 		crystal_niobium = new Item().setUnlocalizedName("crystal_niobium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":crystal_niobium");
+		crystal_zinc = new Item().setUnlocalizedName("crystal_zinc").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":crystal_zinc");
 
 		powder_lead = new Item().setUnlocalizedName("powder_lead").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_lead");
 		powder_tantalium = new ItemCustomLore().setUnlocalizedName("powder_tantalium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_tantalium");
@@ -5863,6 +5869,7 @@ public class ModItems {
 		GameRegistry.registerItem(gem_alexandrite, gem_alexandrite.getUnlocalizedName());
 		GameRegistry.registerItem(crystal_nickel, crystal_nickel.getUnlocalizedName()); //l like nickel, i dont care, fuck off
 		GameRegistry.registerItem(crystal_niobium, crystal_niobium.getUnlocalizedName()); // the true path to enlightenment is ignoring the little green circle
+		GameRegistry.registerItem(crystal_zinc, crystal_zinc.getUnlocalizedName()); // the true path to enlightenment is ignoring the little green circle
 
 		//Fragments
 		GameRegistry.registerItem(fragment_neodymium, fragment_neodymium.getUnlocalizedName());
