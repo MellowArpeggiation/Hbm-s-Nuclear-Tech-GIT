@@ -40,11 +40,11 @@ public class SmeltingRecipes {
 		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.eve_silt), new ItemStack(Blocks.glass), 0.1F);
 		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.moon_turf), new ItemStack(Blocks.glass), 0.1F);
 
-		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.duna_rock), new ItemStack(Blocks.stone), 0.1F);
+		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.duna_cobble), new ItemStack(ModBlocks.duna_rock), 0.1F);
 		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.dres_rock), new ItemStack(Blocks.stone), 0.1F);
-		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.ike_regolith), new ItemStack(Blocks.stone), 0.1F);
+		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.ike_regolith), new ItemStack(ModBlocks.ike_stone), 0.1F);
 		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.eve_rock), new ItemStack(Blocks.stone), 0.1F);
-		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.moho_regolith), new ItemStack(Blocks.stone), 0.1F);
+		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.moho_regolith), new ItemStack(ModBlocks.moho_stone), 0.1F);
 		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.moon_rock), new ItemStack(Blocks.stone), 0.1F);
 
 		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.ore_thorium), new ItemStack(ModItems.ingot_th232), 3.0F);
