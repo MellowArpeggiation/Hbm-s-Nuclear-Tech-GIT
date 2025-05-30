@@ -4,6 +4,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.BlockEnums.EnumMeteorType;
 import com.hbm.blocks.generic.BlockNTMFlower.EnumFlowerType;
 import com.hbm.inventory.OreDictManager.DictFrame;
+import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemArcElectrode.EnumElectrodeType;
 import com.hbm.items.ItemEnums.EnumBriquetteType;
@@ -25,6 +26,8 @@ public class SmeltingRecipes {
 	public static void AddSmeltingRec()
 	{
 		GameRegistry.addSmelting(ModItems.glyphid_meat, new ItemStack(ModItems.glyphid_meat_grilled), 1.0F);
+
+		GameRegistry.addSmelting(ModItems.flour, new ItemStack(Items.bread), 1.0F);
 
 		// Oredict doesn't work for vanilla smelting :(
 		GameRegistry.addSmelting(Item.getItemFromBlock(ModBlocks.ore_iron), new ItemStack(Items.iron_ingot), 0.7F);
@@ -90,6 +93,8 @@ public class SmeltingRecipes {
 		GameRegistry.addSmelting(DictFrame.fromOne(ModItems.briquette, EnumBriquetteType.COAL), DictFrame.fromOne(ModItems.coke, EnumCokeType.COAL), 1.0F);
 		GameRegistry.addSmelting(DictFrame.fromOne(ModItems.briquette, EnumBriquetteType.LIGNITE), DictFrame.fromOne(ModItems.coke, EnumCokeType.LIGNITE), 1.0F);
 		GameRegistry.addSmelting(DictFrame.fromOne(ModItems.briquette, EnumBriquetteType.WOOD), new ItemStack(Items.coal, 1, 1), 1.0F);
+		
+		GameRegistry.addSmelting(ModItems.powder_lead, new ItemStack(ModItems.ingot_lead), 1.0F);
 
 		GameRegistry.addSmelting(ModItems.powder_lead, new ItemStack(ModItems.ingot_lead), 1.0F);
 		GameRegistry.addSmelting(ModItems.powder_neptunium, new ItemStack(ModItems.ingot_neptunium), 1.0F);

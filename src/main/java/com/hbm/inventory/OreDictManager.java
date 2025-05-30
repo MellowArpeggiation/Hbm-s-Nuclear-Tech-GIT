@@ -273,6 +273,7 @@ public class OreDictManager {
 	public static final DictFrame BAUXITE = new DictFrame("Bauxite");
 	public static final DictFrame CRYOLITE = new DictFrame("Cryolite");
 	public static final DictFrame RICHMAGMA = new DictFrame("RichMagma");
+	public static final DictFrame FLOUR = new DictFrame("foodFlour");
 	/*
 	 * HAZARDS, MISC
 	 */

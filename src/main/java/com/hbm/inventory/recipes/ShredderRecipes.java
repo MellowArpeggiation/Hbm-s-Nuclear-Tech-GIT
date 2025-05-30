@@ -136,6 +136,8 @@ public class ShredderRecipes extends SerializableRecipe {
 	public void registerDefaults() {
 
 		/* Primary recipes */
+		ShredderRecipes.setRecipe(Items.wheat, new ItemStack(ModItems.flour));
+
 		ShredderRecipes.setRecipe(ModItems.scrap, new ItemStack(ModItems.dust));
 		ShredderRecipes.setRecipe(ModItems.dust, new ItemStack(ModItems.dust));
 		ShredderRecipes.setRecipe(ModItems.dust_tiny, new ItemStack(ModItems.dust_tiny));

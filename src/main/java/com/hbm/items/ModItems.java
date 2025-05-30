@@ -1773,6 +1773,7 @@ public class ModItems {
 	public static Item glyphid_meat;
 	public static Item glyphid_meat_grilled;
 	public static Item egg_glyphid;
+	public static Item flour;
 
 	public static Item med_ipecac;
 	public static Item med_ptsd;
@@ -4271,6 +4272,7 @@ public class ModItems {
 		glyphid_meat = new ItemLemon(3, 0.5F, true).setUnlocalizedName("glyphid_meat").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":glyphid_meat");
 		glyphid_meat_grilled = new ItemLemon(8, 0.75F, true).setPotionEffect(Potion.damageBoost.id, 180, 1, 1F).setUnlocalizedName("glyphid_meat_grilled").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":glyphid_meat_grilled");
 		egg_glyphid = new Item().setUnlocalizedName("egg_glyphid").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":egg_glyphid");
+		flour = new Item().setUnlocalizedName("flour").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":flour");
 
 		defuser = new ItemTooling(ToolType.DEFUSER, 100).setUnlocalizedName("defuser").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab).setTextureName(RefStrings.MODID + ":defuser");
 		reacher = new Item().setUnlocalizedName("reacher").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.controlTab).setTextureName(RefStrings.MODID + ":reacher");
@@ -7292,6 +7294,7 @@ public class ModItems {
 		GameRegistry.registerItem(canteen_fab, canteen_fab.getUnlocalizedName());
 		GameRegistry.registerItem(mucho_mango, mucho_mango.getUnlocalizedName());
 		GameRegistry.registerItem(chocolate, chocolate.getUnlocalizedName());
+		GameRegistry.registerItem(flour, flour.getUnlocalizedName());
 
 		//Energy Drinks
 		GameRegistry.registerItem(can_empty, can_empty.getUnlocalizedName());
