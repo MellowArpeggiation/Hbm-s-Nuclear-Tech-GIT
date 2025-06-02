@@ -20,6 +20,7 @@ import com.hbm.dim.SolarSystem.AstroMetric;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.dim.trait.CBT_Impact;
+import com.hbm.dim.trait.CBT_Lights;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.lib.RefStrings;
@@ -44,6 +45,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 	private static final ResourceLocation impactTexture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/impact.png");
 	private static final ResourceLocation shockwaveTexture = new ResourceLocation(RefStrings.MODID, "textures/particle/shockwave.png");
 	private static final ResourceLocation shockFlareTexture = new ResourceLocation(RefStrings.MODID, "textures/particle/flare.png");
+	private static final ResourceLocation citylights = new ResourceLocation(RefStrings.MODID, "textures/misc/space/citylights.png");
 
 	private static final ResourceLocation noise = new ResourceLocation(RefStrings.MODID, "shaders/iChannel1.png");
 
@@ -653,6 +655,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 				tessellator.draw();
 
 				if(!renderAsPoint) {
+					
 					GL11.glEnable(GL11.GL_BLEND);
 
 					// Draw a shader on top to render celestial phase
@@ -674,7 +677,29 @@ public class SkyProviderCelestial extends IRenderHandler {
 					planetShader.stop();
 
 					OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
+					
+					
+					CBT_Lights light = metric.body.getTrait(CBT_Lights.class);
+					if(light != null && light.lights > 150) {
+						//city lights
+						GL11.glPushMatrix();
+						GL11.glColor4d(1.0, 1.0, 1.0, 0.5);
+						OpenGlHelper.glBlendFunc(GL11.GL_DST_ALPHA, GL11.GL_ONE_MINUS_DST_ALPHA, 1, 0);
 
+						mc.renderEngine.bindTexture(citylights);
+
+						tessellator.startDrawingQuads();
+						tessellator.addVertexWithUV(-size, 100.0D, -size, 0.0D + uvOffset, 0.0D);
+						tessellator.addVertexWithUV(size, 100.0D, -size, 1.0D + uvOffset, 0.0D);
+						tessellator.addVertexWithUV(size, 100.0D, size, 1.0D + uvOffset, 1.0D);
+						tessellator.addVertexWithUV(-size, 100.0D, size, 0.0D + uvOffset, 1.0D);
+						tessellator.draw();
+						GL11.glPopMatrix();
+						OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
+					}
+
+					
+					
 					CBT_Impact impact = metric.body.getTrait(CBT_Impact.class);
 					if(impact != null) {
 						double impactTime = (world.getTotalWorldTime() - impact.time) + partialTicks;

@@ -19,6 +19,8 @@ import com.hbm.dim.WorldTypeTeleport;
 import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.dim.trait.CBT_Impact;
+import com.hbm.dim.trait.CBT_Lights;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.missile.EntityRideableRocket;
 import com.hbm.entity.missile.EntityRideableRocket.RocketState;
@@ -70,6 +72,7 @@ import com.hbm.util.*;
 import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
+import com.hbm.util.fauxpointtwelve.BlockPos;
 import com.hbm.world.PlanetGen;
 import com.hbm.world.generator.TimedGenerator;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -638,6 +641,23 @@ public class ModEventHandler {
 		if(SpaceConfig.allowNetherPortals && event.world.provider.dimensionId > 1 && event.block instanceof BlockFire) {
 			Blocks.portal.func_150000_e(event.world, event.x, event.y, event.z);
 		}
+	    Block placedBlock = event.block; 
+	    int x = event.x;
+	    int y = event.y;
+	    int z = event.z;
+
+
+        if (event.block == ModBlocks.spotlight_incandescent || event.block == ModBlocks.spotlight_halogen) {
+        	
+        	CBT_Lights lights = CelestialBody.getTrait(event.world, CBT_Lights.class);
+        	if(lights == null) {
+    			CelestialBody body = CelestialBody.getBody(event.world);
+    			body.modifyTraits(new CBT_Lights());
+        	} else {
+        		lights.lights++;
+        		System.out.println(lights.lights);
+        	}
+        }
 	}
 
 	@SubscribeEvent
@@ -1612,6 +1632,18 @@ public class ModEventHandler {
 					event.world.setBlock(x, y, z, ModBlocks.gas_coal);
 			}
 		}
+		//TODO: better methods of distinguishing.
+        if (event.block == ModBlocks.spotlight_incandescent || event.block == ModBlocks.spotlight_halogen) {
+        	
+        	CBT_Lights lights = CelestialBody.getTrait(event.world, CBT_Lights.class);
+        	if(lights == null) {
+    			CelestialBody body = CelestialBody.getBody(event.world);
+    			body.modifyTraits(new CBT_Lights());
+        	} else {
+        		lights.lights--;
+        		System.out.println(lights.lights);
+        	}
+        }
 
 		if(RadiationConfig.enablePollution && RadiationConfig.enableLeadFromBlocks) {
 			if(!ArmorRegistry.hasProtection(player, 3, HazardClass.PARTICLE_FINE)) {
