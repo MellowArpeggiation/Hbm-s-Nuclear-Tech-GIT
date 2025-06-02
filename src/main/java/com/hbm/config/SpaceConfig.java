@@ -4,20 +4,33 @@ import net.minecraftforge.common.config.Configuration;
 
 public class SpaceConfig {
 
-	//thanks minecraft, for making the biome id limit 127(!!) because apparently anything after that spawns in the overworld.
-	//THANKS MOJANG..
 	public static int dunaoilSpawn = 100;
 
-	public static int moonDimension = 15;
-	public static int dunaDimension = 16;
-	public static int ikeDimension = 17;
-	public static int eveDimension = 18;
-	public static int dresDimension = 19;
-	public static int mohoDimension = 20;
-	public static int minmusDimension = 21;
-	public static int laytheDimension = 22;
-	public static int orbitDimension = 23;
-	public static int tektoDimension = 24;
+	// Dimension ID limit is over 4 million, so go crazy
+	public static int moonDimension = 413_015;
+	public static int dunaDimension = 413_016;
+	public static int ikeDimension = 413_017;
+	public static int eveDimension = 413_018;
+	public static int dresDimension = 413_019;
+	public static int mohoDimension = 413_020;
+	public static int minmusDimension = 413_021;
+	public static int laytheDimension = 413_022;
+	public static int orbitDimension = 413_023;
+	public static int tektoDimension = 413_024;
+
+	// Biome ID limit is 127(!!) It is not 255!!
+	// Make sure no defaults exceed this!
+
+	// NOTE: some popular mod biome IDs, try to avoid colliding with these
+
+	// Biomes O' Plenty: too many, EndlessIDs is required
+	// Aether Legacy: 127
+	// Galacticraft: 102+ (variable, ugh, just assume up to 110 I guess)
+	// Advanced Rocketry: "maxBiomes = 512" - ...that isn't even valid but okay
+	// Witchery: needs investigating
+	// Thaumcraft: needs investigating
+	// The Twilight Forest: needs investigating
+	// ExtraBiomesXL: needs investigating
 
 	public static int orbitBiome = 42;
 
@@ -50,7 +63,7 @@ public class SpaceConfig {
 	public static int laythePolarBiome = 126;
 	public static int laytheCoastBiome = 44;
 
-	public static int ikeBiome = 127;
+	public static int ikeBiome = 45;
 
 	public static int tektoPolyvinyl = 100;
 	public static int tektoHalogenHill = 101;
