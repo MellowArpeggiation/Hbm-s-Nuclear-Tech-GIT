@@ -34,6 +34,7 @@ public class SpaceConfig {
 	// Thaumcraft: needs investigating
 	// The Twilight Forest: 40-58
 	// ExtraBiomesXL: needs investigating
+	// NTM upstream: 80-82 for craters
 
 	// Most mods start at 40 and go up, so easiest way to avoid conflicts is to count backwards!
 
