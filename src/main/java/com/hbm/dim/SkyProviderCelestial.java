@@ -13,6 +13,7 @@ import net.minecraftforge.client.IRenderHandler;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
@@ -46,6 +47,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 	private static final ResourceLocation shockwaveTexture = new ResourceLocation(RefStrings.MODID, "textures/particle/shockwave.png");
 	private static final ResourceLocation shockFlareTexture = new ResourceLocation(RefStrings.MODID, "textures/particle/flare.png");
 	private static final ResourceLocation citylights = new ResourceLocation(RefStrings.MODID, "textures/misc/space/citylights.png");
+	private static final ResourceLocation blackout = new ResourceLocation(RefStrings.MODID, "textures/misc/space/black.png");
 
 	private static final ResourceLocation noise = new ResourceLocation(RefStrings.MODID, "shaders/iChannel1.png");
 
@@ -678,27 +680,63 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 					OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
 					CBT_Impact impact = metric.body.getTrait(CBT_Impact.class);
-
-					
 					CBT_Lights light = metric.body.getTrait(CBT_Lights.class);
-					if(impact == null && light != null && light.lights > 120) {
-						//city lights
-						GL11.glPushMatrix();
-						GL11.glColor4d(1.0, 1.0, 1.0, 0.5);
-						OpenGlHelper.glBlendFunc(GL11.GL_DST_ALPHA, GL11.GL_ONE_MINUS_DST_ALPHA, 1, 0);
 
-						mc.renderEngine.bindTexture(citylights);
+					if (light != null && light.lights > 150) {
 
-						tessellator.startDrawingQuads();
-						tessellator.addVertexWithUV(-size, 100.0D, -size, 0.0D + uvOffset, 0.0D);
-						tessellator.addVertexWithUV(size, 100.0D, -size, 1.0D + uvOffset, 0.0D);
-						tessellator.addVertexWithUV(size, 100.0D, size, 1.0D + uvOffset, 1.0D);
-						tessellator.addVertexWithUV(-size, 100.0D, size, 0.0D + uvOffset, 1.0D);
-						tessellator.draw();
-						GL11.glPopMatrix();
-						OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
+
+					    boolean hasImpact = impact != null;
+					    double impactTime = hasImpact ? (world.getTotalWorldTime() - impact.time) + partialTicks : 0;
+
+					    if (hasImpact && impactTime < 40) {
+					        int blackoutInterval = 8; 
+					        int maxBlackouts = 5;
+
+					        int activeBlackouts = Math.min((int)(impactTime / blackoutInterval), maxBlackouts);
+					        double blsize = size * 0.35;
+
+					        long seedBase = (long)(impactTime / (blackoutInterval * (maxBlackouts + 1)));
+					        Random rand = new Random(seedBase);
+
+					        for (int i = 0; i < activeBlackouts; i++) {
+					            double offsetX = (rand.nextDouble() * 2.0 - 1.0) * (size - blsize);
+					            double offsetZ = (rand.nextDouble() * 2.0 - 1.0) * (size - blsize);
+
+					            GL11.glPushMatrix();
+					            GL11.glColor4d(1.0, 1.0, 1.0, 0.0);
+					            OpenGlHelper.glBlendFunc(GL11.GL_DST_ALPHA, GL11.GL_ONE_MINUS_DST_ALPHA, 1, 0);
+					            mc.renderEngine.bindTexture(blackout);
+
+					            tessellator.startDrawingQuads();
+					            tessellator.addVertexWithUV(-blsize + offsetX, 100.0D, -blsize + offsetZ, 0.0D + uvOffset, 0.0D);
+					            tessellator.addVertexWithUV(blsize + offsetX, 100.0D, -blsize + offsetZ, 1.0D + uvOffset, 0.0D);
+					            tessellator.addVertexWithUV(blsize + offsetX, 100.0D, blsize + offsetZ, 1.0D + uvOffset, 1.0D);
+					            tessellator.addVertexWithUV(-blsize + offsetX, 100.0D, blsize + offsetZ, 0.0D + uvOffset, 1.0D);
+					            tessellator.draw();
+					            GL11.glPopMatrix();
+					            
+					        }
+					    }
+
+					    if (!hasImpact || impactTime < 40) {
+
+					        GL11.glPushMatrix();
+					        GL11.glColor4d(1.0, 1.0, 1.0, 0.2);
+					        OpenGlHelper.glBlendFunc(GL11.GL_DST_ALPHA, GL11.GL_ONE_MINUS_DST_ALPHA, 1, 0);
+
+					        mc.renderEngine.bindTexture(citylights);
+
+					        tessellator.startDrawingQuads();
+					        tessellator.addVertexWithUV(-size, 100.0D, -size, 0.0D + uvOffset, 0.0D);
+					        tessellator.addVertexWithUV(size, 100.0D, -size, 1.0D + uvOffset, 0.0D);
+					        tessellator.addVertexWithUV(size, 100.0D, size, 1.0D + uvOffset, 1.0D);
+					        tessellator.addVertexWithUV(-size, 100.0D, size, 0.0D + uvOffset, 1.0D);
+					        tessellator.draw();
+					        GL11.glPopMatrix();
+					    }
+
+					    OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
 					}
-
 					
 					
 					if(impact != null) {
