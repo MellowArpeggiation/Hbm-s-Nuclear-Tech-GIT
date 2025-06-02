@@ -1,5 +1,8 @@
 package com.hbm.config;
 
+import com.hbm.util.Compat;
+
+import cpw.mods.fml.common.Loader;
 import net.minecraftforge.common.config.Configuration;
 
 public class SpaceConfig {
@@ -29,45 +32,47 @@ public class SpaceConfig {
 	// Advanced Rocketry: "maxBiomes = 512" - ...that isn't even valid but okay
 	// Witchery: needs investigating
 	// Thaumcraft: needs investigating
-	// The Twilight Forest: needs investigating
+	// The Twilight Forest: 40-58
 	// ExtraBiomesXL: needs investigating
 
-	public static int orbitBiome = 42;
+	// Most mods start at 40 and go up, so easiest way to avoid conflicts is to count backwards!
 
-	public static int minmusBiome = 40;
-	public static int minmusBasinBiome = 41;
-	public static int moonBiome = 111;
+	public static int orbitBiome = 126;
 
-	public static int dunaBiome = 112;
-	public static int dunaLowlandsBiome = 113;
-	public static int dunaPolarBiome = 114;
-	public static int dunaHillsBiome = 115;
-	public static int dunaPolarHillsBiome = 116;
+	public static int moonBiome = 125;
+	public static int minmusBiome = 124;
+	public static int minmusBasinBiome = 123;
+
+	public static int dunaBiome = 122;
+	public static int dunaLowlandsBiome = 121;
+	public static int dunaPolarBiome = 120;
+	public static int dunaHillsBiome = 119;
+	public static int dunaPolarHillsBiome = 118;
 
 	public static int eveBiome = 117;
-	public static int eveMountainsBiome = 118;
-	public static int eveOceanBiome = 119;
-	public static int eveSeismicBiome = 125;
-	public static int eveRiverBiome = 110;
+	public static int eveMountainsBiome = 116;
+	public static int eveOceanBiome = 115;
+	public static int eveSeismicBiome = 114;
+	public static int eveRiverBiome = 113;
 
-	public static int dresBiome = 120;
-	public static int dresBasinBiome = 121;
+	public static int dresBiome = 112;
+	public static int dresBasinBiome = 111;
 
-	public static int mohoBiome = 122;
-	public static int mohoBasaltBiome = 43;
-	public static int mohoLavaBiome = 105;
-	public static int mohoPlateauBiome = 106;
+	public static int mohoBiome = 101;
+	public static int mohoBasaltBiome = 100;
+	public static int mohoLavaBiome = 99;
+	public static int mohoPlateauBiome = 98;
 
-	public static int laytheBiome = 123;
-	public static int laytheOceanBiome = 124;
-	public static int laythePolarBiome = 126;
-	public static int laytheCoastBiome = 44;
+	public static int laytheBiome = 97;
+	public static int laytheOceanBiome = 96;
+	public static int laythePolarBiome = 95;
+	public static int laytheCoastBiome = 94;
 
-	public static int ikeBiome = 45;
+	public static int ikeBiome = 93;
 
-	public static int tektoPolyvinyl = 100;
-	public static int tektoHalogenHill = 101;
-	public static int tektoRiver = 102;
+	public static int tektoPolyvinyl = 92;
+	public static int tektoHalogenHill = 91;
+	public static int tektoRiver = 90;
 
 
 
@@ -103,32 +108,35 @@ public class SpaceConfig {
 		maxProbeDistance = CommonConfig.createConfigInt(config, CATEGORY_GENERAL, "1.90_maxProbeDistance", "How far from the center of the dimension can probes generate landing coordinates", maxProbeDistance);
 		enableVolcanoGen = CommonConfig.createConfigBool(config, CATEGORY_GENERAL, "1.91_enableVolcanoGen", "Should volcanoes be active when spawning, disabling will prevent natural volcanoes from spewing lava and growing", enableVolcanoGen);
 
+		// Move defaults into unused ranges if EndlessIDs is installed
+		int defaultBiomeOffset = Loader.isModLoaded(Compat.MOD_EIDS) ? 12_000 : 0;
+
 		final String CATEGORY_BIOME = CommonConfig.CATEGORY_BIOMES;
-		moonBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.02_moonBiome", "Mun Biome ID", moonBiome);
-		dunaBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.03_dunaBiome", "Duna Biome ID", dunaBiome);
-		dunaLowlandsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.04_dunaLowlandsBiome", "Duna Lowlands Biome ID", dunaLowlandsBiome);
-		dunaPolarBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.05_dunaPolarBiome", "Duna Polar Biome ID", dunaPolarBiome);
-		dunaHillsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.06_dunaHillsBiome", "Duna Hills Biome ID", dunaHillsBiome);
-		dunaPolarHillsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.07_dunaPolarHillsBiome", "Duna Polar Hills Biome ID", dunaPolarHillsBiome);
-		eveBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.08_eveBiome", "Eve Biome ID", eveBiome);
-		eveMountainsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.09_eveMountainsBiome", "Eve Mountains Biome ID", eveMountainsBiome);
-		eveOceanBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.10_eveOceanBiome", "Eve Ocean Biome ID", eveOceanBiome);
-		eveSeismicBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.12_eveSeismicBiome", "Eve Seismic Biome ID", eveSeismicBiome);
-		eveRiverBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.24_eveRiverBiome", "Eve River Biome ID", eveRiverBiome);
-		ikeBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.13_ikeBiome", "Ike Biome ID", ikeBiome);
-		laytheBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.14_laytheBiome", "Laythe Biome ID", laytheBiome);
-		laytheOceanBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.15_laytheOceanBiome", "Laythe Ocean Biome ID", laytheOceanBiome);
-		laythePolarBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.16_laythePolarBiome", "Laythe Polar Biome ID", laythePolarBiome);
-		minmusBasinBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.17_minmusBasinsBiome", "Minmus Basins Biome ID", minmusBasinBiome);
-		minmusBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.18_minmusBiome", "Minmus Biome ID", minmusBiome);
-		mohoBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.19_mohoBiome", "Moho Biome ID", mohoBiome);
-		dresBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.20_dresBiome", "Dres Biome ID", dresBiome);
-		dresBasinBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.21_dresBasinsBiome", "Dres Basins Biome ID", dresBasinBiome);
-		mohoBasaltBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.22_mohoBasaltBiome", "Moho Basalt Biome ID", mohoBasaltBiome);
-		orbitBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.23_orbitBiome", "Space Biome ID", orbitBiome);
-		laytheCoastBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.24_laytheCoastBiome", "Laythe Coast Biome ID", laytheCoastBiome);
-		mohoLavaBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.25_mohoLavaBiome", "Moho Lava Biome ID", mohoLavaBiome);
-		mohoPlateauBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.26_mohoPlateauBiome", "Moho Plateau Biome ID", mohoPlateauBiome);
+		moonBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.02_moonBiome", "Mun Biome ID", moonBiome + defaultBiomeOffset);
+		dunaBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.03_dunaBiome", "Duna Biome ID", dunaBiome + defaultBiomeOffset);
+		dunaLowlandsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.04_dunaLowlandsBiome", "Duna Lowlands Biome ID", dunaLowlandsBiome + defaultBiomeOffset);
+		dunaPolarBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.05_dunaPolarBiome", "Duna Polar Biome ID", dunaPolarBiome + defaultBiomeOffset);
+		dunaHillsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.06_dunaHillsBiome", "Duna Hills Biome ID", dunaHillsBiome + defaultBiomeOffset);
+		dunaPolarHillsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.07_dunaPolarHillsBiome", "Duna Polar Hills Biome ID", dunaPolarHillsBiome + defaultBiomeOffset);
+		eveBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.08_eveBiome", "Eve Biome ID", eveBiome + defaultBiomeOffset);
+		eveMountainsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.09_eveMountainsBiome", "Eve Mountains Biome ID", eveMountainsBiome + defaultBiomeOffset);
+		eveOceanBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.10_eveOceanBiome", "Eve Ocean Biome ID", eveOceanBiome + defaultBiomeOffset);
+		eveSeismicBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.12_eveSeismicBiome", "Eve Seismic Biome ID", eveSeismicBiome + defaultBiomeOffset);
+		eveRiverBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.24_eveRiverBiome", "Eve River Biome ID", eveRiverBiome + defaultBiomeOffset);
+		ikeBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.13_ikeBiome", "Ike Biome ID", ikeBiome + defaultBiomeOffset);
+		laytheBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.14_laytheBiome", "Laythe Biome ID", laytheBiome + defaultBiomeOffset);
+		laytheOceanBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.15_laytheOceanBiome", "Laythe Ocean Biome ID", laytheOceanBiome + defaultBiomeOffset);
+		laythePolarBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.16_laythePolarBiome", "Laythe Polar Biome ID", laythePolarBiome + defaultBiomeOffset);
+		minmusBasinBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.17_minmusBasinsBiome", "Minmus Basins Biome ID", minmusBasinBiome + defaultBiomeOffset);
+		minmusBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.18_minmusBiome", "Minmus Biome ID", minmusBiome + defaultBiomeOffset);
+		mohoBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.19_mohoBiome", "Moho Biome ID", mohoBiome + defaultBiomeOffset);
+		dresBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.20_dresBiome", "Dres Biome ID", dresBiome + defaultBiomeOffset);
+		dresBasinBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.21_dresBasinsBiome", "Dres Basins Biome ID", dresBasinBiome + defaultBiomeOffset);
+		mohoBasaltBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.22_mohoBasaltBiome", "Moho Basalt Biome ID", mohoBasaltBiome + defaultBiomeOffset);
+		orbitBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.23_orbitBiome", "Space Biome ID", orbitBiome + defaultBiomeOffset);
+		laytheCoastBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.24_laytheCoastBiome", "Laythe Coast Biome ID", laytheCoastBiome + defaultBiomeOffset);
+		mohoLavaBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.25_mohoLavaBiome", "Moho Lava Biome ID", mohoLavaBiome + defaultBiomeOffset);
+		mohoPlateauBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.26_mohoPlateauBiome", "Moho Plateau Biome ID", mohoPlateauBiome + defaultBiomeOffset);
 	}
 
 }
