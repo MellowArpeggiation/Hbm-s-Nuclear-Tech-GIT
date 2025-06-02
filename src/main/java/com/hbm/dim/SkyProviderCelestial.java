@@ -681,7 +681,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 					
 					CBT_Lights light = metric.body.getTrait(CBT_Lights.class);
-					if(impact == null && light != null && light.isCivilized == true) {
+					if(impact == null && light != null && light.lights > 120) {
 						//city lights
 						GL11.glPushMatrix();
 						GL11.glColor4d(1.0, 1.0, 1.0, 0.5);
