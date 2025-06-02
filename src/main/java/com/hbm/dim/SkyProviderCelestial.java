@@ -677,10 +677,11 @@ public class SkyProviderCelestial extends IRenderHandler {
 					planetShader.stop();
 
 					OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
-					
+					CBT_Impact impact = metric.body.getTrait(CBT_Impact.class);
+
 					
 					CBT_Lights light = metric.body.getTrait(CBT_Lights.class);
-					if(light != null && light.lights > 150) {
+					if(impact == null && light != null && light.isCivilized == true) {
 						//city lights
 						GL11.glPushMatrix();
 						GL11.glColor4d(1.0, 1.0, 1.0, 0.5);
@@ -700,7 +701,6 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 					
 					
-					CBT_Impact impact = metric.body.getTrait(CBT_Impact.class);
 					if(impact != null) {
 						double impactTime = (world.getTotalWorldTime() - impact.time) + partialTicks;
 						double lavaAlpha = Math.min(impactTime * 0.1, 1.0);

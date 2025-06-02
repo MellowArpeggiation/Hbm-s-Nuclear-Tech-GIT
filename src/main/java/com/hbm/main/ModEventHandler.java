@@ -647,15 +647,15 @@ public class ModEventHandler {
 	    int z = event.z;
 
 
-        if (event.block == ModBlocks.spotlight_incandescent || event.block == ModBlocks.spotlight_halogen) {
-        	
+        if (event.block.getLightValue() > 10) {
+			CelestialBody body = CelestialBody.getBody(event.world);
+
         	CBT_Lights lights = CelestialBody.getTrait(event.world, CBT_Lights.class);
         	if(lights == null) {
-    			CelestialBody body = CelestialBody.getBody(event.world);
     			body.modifyTraits(new CBT_Lights());
         	} else {
         		lights.lights++;
-        		System.out.println(lights.lights);
+    			body.modifyTraits(lights);
         	}
         }
 	}
@@ -1632,16 +1632,15 @@ public class ModEventHandler {
 					event.world.setBlock(x, y, z, ModBlocks.gas_coal);
 			}
 		}
-		//TODO: better methods of distinguishing.
-        if (event.block == ModBlocks.spotlight_incandescent || event.block == ModBlocks.spotlight_halogen) {
-        	
+        if (event.block.getLightValue() > 10) {
+			CelestialBody body = CelestialBody.getBody(event.world);
+
         	CBT_Lights lights = CelestialBody.getTrait(event.world, CBT_Lights.class);
         	if(lights == null) {
-    			CelestialBody body = CelestialBody.getBody(event.world);
     			body.modifyTraits(new CBT_Lights());
         	} else {
         		lights.lights--;
-        		System.out.println(lights.lights);
+    			body.modifyTraits(lights);
         	}
         }
 
