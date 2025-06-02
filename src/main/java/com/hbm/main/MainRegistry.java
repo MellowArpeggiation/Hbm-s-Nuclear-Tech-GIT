@@ -982,6 +982,7 @@ public class MainRegistry {
 		BedrockOre.init();
 
 		Compat.handleRailcraftNonsense();
+		Compat.handleBopBiomeIDs();
 		SuicideThreadDump.register();
 		CommandReloadClient.register();
 
