@@ -56,6 +56,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 	private static final ResourceLocation citylights = new ResourceLocation(RefStrings.MODID, "textures/misc/space/citylights.png");
 	private static final ResourceLocation citylights0 = new ResourceLocation(RefStrings.MODID, "textures/misc/space/citylightst0.png");
 	private static final ResourceLocation citylights1 = new ResourceLocation(RefStrings.MODID, "textures/misc/space/citylightst1.png");
+	private static final ResourceLocation citylightskerb = new ResourceLocation(RefStrings.MODID, "textures/misc/space/citylightskerb.png");
 
 	private static final ResourceLocation blackout = new ResourceLocation(RefStrings.MODID, "textures/misc/space/black.png");
 	
@@ -737,6 +738,10 @@ public class SkyProviderCelestial extends IRenderHandler {
 					        } else if (light.lights > 300) {
 					            mc.renderEngine.bindTexture(citylights0);
 					        }
+					        else if (metric.body.name == "kerbin") {
+					            mc.renderEngine.bindTexture(citylightskerb);
+					        }
+					        //man i should REALLY consider a shader...
 
 					        tessellator.startDrawingQuads();
 					        tessellator.addVertexWithUV(-size, 100.0D, -size, 0.0D + uvOffset, 0.0D);

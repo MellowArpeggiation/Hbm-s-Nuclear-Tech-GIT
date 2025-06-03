@@ -651,12 +651,12 @@ public class ModEventHandler {
 
 			CBT_Lights lights = CelestialBody.getTrait(event.world, CBT_Lights.class);
 
-				System.out.println(lights.lights);
 				if(lights == null) {
 					body.modifyTraits(new CBT_Lights());
 				} else {
 					lights.lights++;
 					body.modifyTraits(lights);
+
 				}
 			}
 		}
