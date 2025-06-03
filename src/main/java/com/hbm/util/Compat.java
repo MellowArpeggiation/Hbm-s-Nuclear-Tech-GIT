@@ -1,6 +1,7 @@
 package com.hbm.util;
 
 import com.hbm.config.GeneralConfig;
+import com.hbm.config.SpaceConfig;
 import com.hbm.dim.BiomeCollisionException;
 import com.hbm.handler.HazmatRegistry;
 import com.hbm.hazard.HazardRegistry;
@@ -204,6 +205,8 @@ public class Compat {
 	}
 
 	public static void handleBopBiomeIDs() {
+		if(!SpaceConfig.crashOnBiomeConflict) return;
+
 		if(!Loader.isModLoaded(MOD_BOP)) return; // If no Biomes O' Plenty, we're fine
 		if(Loader.isModLoaded(MOD_EIDS)) return; // If we do have BoP, but also have Endless IDs, we're fine
 
