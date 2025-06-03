@@ -682,7 +682,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 					CBT_Impact impact = metric.body.getTrait(CBT_Impact.class);
 					CBT_Lights light = metric.body.getTrait(CBT_Lights.class);
 
-					if (light != null && light.lights > 150) {
+					if (light != null && light.lights > 1000) {
 
 
 					    boolean hasImpact = impact != null;
@@ -691,7 +691,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 					    if (hasImpact && impactTime < 40) {
 					        int blackoutInterval = 8; 
 					        int maxBlackouts = 5;
-
+					        
 					        int activeBlackouts = Math.min((int)(impactTime / blackoutInterval), maxBlackouts);
 					        double blsize = size * 0.35;
 
