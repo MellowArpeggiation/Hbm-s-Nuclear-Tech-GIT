@@ -46,14 +46,20 @@ public class SkyProviderCelestial extends IRenderHandler {
 	private static final ResourceLocation impactTexture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/impact.png");
 	private static final ResourceLocation shockwaveTexture = new ResourceLocation(RefStrings.MODID, "textures/particle/shockwave.png");
 	private static final ResourceLocation shockFlareTexture = new ResourceLocation(RefStrings.MODID, "textures/particle/flare.png");
-	private static final ResourceLocation citylights = new ResourceLocation(RefStrings.MODID, "textures/misc/space/citylights.png");
-	private static final ResourceLocation blackout = new ResourceLocation(RefStrings.MODID, "textures/misc/space/black.png");
+
 
 	private static final ResourceLocation noise = new ResourceLocation(RefStrings.MODID, "shaders/iChannel1.png");
 
 	protected static final Shader planetShader = new Shader(new ResourceLocation(RefStrings.MODID, "shaders/crescent.frag"));
 	protected static final Shader swarmShader = new Shader(new ResourceLocation(RefStrings.MODID, "shaders/swarm.vert"), new ResourceLocation(RefStrings.MODID, "shaders/swarm.frag"));
 
+	private static final ResourceLocation citylights = new ResourceLocation(RefStrings.MODID, "textures/misc/space/citylights.png");
+	private static final ResourceLocation citylights0 = new ResourceLocation(RefStrings.MODID, "textures/misc/space/citylightst0.png");
+	private static final ResourceLocation citylights1 = new ResourceLocation(RefStrings.MODID, "textures/misc/space/citylightst1.png");
+
+	private static final ResourceLocation blackout = new ResourceLocation(RefStrings.MODID, "textures/misc/space/black.png");
+	
+	
 	private static final String[] GL_SKY_LIST = new String[] { "glSkyList", "field_72771_w", "G" };
 	private static final String[] GL_SKY_LIST2 = new String[] { "glSkyList2", "field_72781_x", "H" };
 
@@ -682,7 +688,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 					CBT_Impact impact = metric.body.getTrait(CBT_Impact.class);
 					CBT_Lights light = metric.body.getTrait(CBT_Lights.class);
 
-					if (light != null && light.lights > 1000) {
+					if (light != null && light.lights > 300) {
 
 
 					    boolean hasImpact = impact != null;
@@ -723,8 +729,14 @@ public class SkyProviderCelestial extends IRenderHandler {
 					        GL11.glPushMatrix();
 					        GL11.glColor4d(1.0, 1.0, 1.0, 0.2);
 					        OpenGlHelper.glBlendFunc(GL11.GL_DST_ALPHA, GL11.GL_ONE_MINUS_DST_ALPHA, 1, 0);
-
-					        mc.renderEngine.bindTexture(citylights);
+					        
+					        if (light.lights > 950) {
+					            mc.renderEngine.bindTexture(citylights);
+					        } else if (light.lights > 650) {
+					            mc.renderEngine.bindTexture(citylights1);
+					        } else if (light.lights > 300) {
+					            mc.renderEngine.bindTexture(citylights0);
+					        }
 
 					        tessellator.startDrawingQuads();
 					        tessellator.addVertexWithUV(-size, 100.0D, -size, 0.0D + uvOffset, 0.0D);

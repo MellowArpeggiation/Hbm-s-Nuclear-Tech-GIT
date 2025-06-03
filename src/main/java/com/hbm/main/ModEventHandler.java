@@ -645,16 +645,19 @@ public class ModEventHandler {
 			event.world.setBlock(event.x, event.y, event.z, ModBlocks.furnace, 0, 2);
 			ModBlocks.furnace.onBlockPlacedBy(event.world, event.x, event.y, event.z, event.player, event.itemInHand);
 		}
-
-		if(event.block.getLightValue() > 10) {
+		if(event.y > 55) {
+			if(event.block.getLightValue() > 10) {
 			CelestialBody body = CelestialBody.getBody(event.world);
 
 			CBT_Lights lights = CelestialBody.getTrait(event.world, CBT_Lights.class);
-			if(lights == null) {
-				body.modifyTraits(new CBT_Lights());
-			} else {
-				lights.lights++;
-				body.modifyTraits(lights);
+
+				System.out.println(lights.lights);
+				if(lights == null) {
+					body.modifyTraits(new CBT_Lights());
+				} else {
+					lights.lights++;
+					body.modifyTraits(lights);
+				}
 			}
 		}
 	}
@@ -1631,17 +1634,23 @@ public class ModEventHandler {
 					event.world.setBlock(x, y, z, ModBlocks.gas_coal);
 			}
 		}
-		if(event.block.getLightValue() > 10) {
+		if(event.y > 55) {
+			if(event.block.getLightValue() > 10) {
 			CelestialBody body = CelestialBody.getBody(event.world);
 
 			CBT_Lights lights = CelestialBody.getTrait(event.world, CBT_Lights.class);
-			if(lights == null) {
-				body.modifyTraits(new CBT_Lights());
-			} else {
-				lights.lights--;
-				body.modifyTraits(lights);
+
+				if(lights == null) {
+					body.modifyTraits(new CBT_Lights());
+				} else {
+					lights.lights--;
+					body.modifyTraits(lights);
+					System.out.println(lights.lights);
+
+				}
 			}
 		}
+	
 
 		if(RadiationConfig.enablePollution && RadiationConfig.enableLeadFromBlocks) {
 			if(!ArmorRegistry.hasProtection(player, 3, HazardClass.PARTICLE_FINE)) {
