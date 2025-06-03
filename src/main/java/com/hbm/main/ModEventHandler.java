@@ -19,7 +19,6 @@ import com.hbm.dim.WorldTypeTeleport;
 import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
-import com.hbm.dim.trait.CBT_Impact;
 import com.hbm.dim.trait.CBT_Lights;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.missile.EntityRideableRocket;
@@ -72,7 +71,6 @@ import com.hbm.util.*;
 import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-import com.hbm.util.fauxpointtwelve.BlockPos;
 import com.hbm.world.PlanetGen;
 import com.hbm.world.generator.TimedGenerator;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -641,23 +639,24 @@ public class ModEventHandler {
 		if(SpaceConfig.allowNetherPortals && event.world.provider.dimensionId > 1 && event.block instanceof BlockFire) {
 			Blocks.portal.func_150000_e(event.world, event.x, event.y, event.z);
 		}
-	    Block placedBlock = event.block; 
-	    int x = event.x;
-	    int y = event.y;
-	    int z = event.z;
 
+		// sneaky sneaky space furnace
+		if(event.block == Blocks.furnace) {
+			event.world.setBlock(event.x, event.y, event.z, ModBlocks.furnace, 0, 2);
+			ModBlocks.furnace.onBlockPlacedBy(event.world, event.x, event.y, event.z, event.player, event.itemInHand);
+		}
 
-        if (event.block.getLightValue() > 10) {
+		if(event.block.getLightValue() > 10) {
 			CelestialBody body = CelestialBody.getBody(event.world);
 
-        	CBT_Lights lights = CelestialBody.getTrait(event.world, CBT_Lights.class);
-        	if(lights == null) {
-    			body.modifyTraits(new CBT_Lights());
-        	} else {
-        		lights.lights++;
-    			body.modifyTraits(lights);
-        	}
-        }
+			CBT_Lights lights = CelestialBody.getTrait(event.world, CBT_Lights.class);
+			if(lights == null) {
+				body.modifyTraits(new CBT_Lights());
+			} else {
+				lights.lights++;
+				body.modifyTraits(lights);
+			}
+		}
 	}
 
 	@SubscribeEvent
@@ -1632,17 +1631,17 @@ public class ModEventHandler {
 					event.world.setBlock(x, y, z, ModBlocks.gas_coal);
 			}
 		}
-        if (event.block.getLightValue() > 10) {
+		if(event.block.getLightValue() > 10) {
 			CelestialBody body = CelestialBody.getBody(event.world);
 
-        	CBT_Lights lights = CelestialBody.getTrait(event.world, CBT_Lights.class);
-        	if(lights == null) {
-    			body.modifyTraits(new CBT_Lights());
-        	} else {
-        		lights.lights--;
-    			body.modifyTraits(lights);
-        	}
-        }
+			CBT_Lights lights = CelestialBody.getTrait(event.world, CBT_Lights.class);
+			if(lights == null) {
+				body.modifyTraits(new CBT_Lights());
+			} else {
+				lights.lights--;
+				body.modifyTraits(lights);
+			}
+		}
 
 		if(RadiationConfig.enablePollution && RadiationConfig.enableLeadFromBlocks) {
 			if(!ArmorRegistry.hasProtection(player, 3, HazardClass.PARTICLE_FINE)) {
