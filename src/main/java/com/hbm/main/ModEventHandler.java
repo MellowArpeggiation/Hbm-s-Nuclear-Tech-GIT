@@ -21,11 +21,11 @@ import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Lights;
+import com.hbm.entity.mob.EntityCreeperTainted;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.missile.EntityRideableRocket;
 import com.hbm.entity.missile.EntityRideableRocket.RocketState;
 import com.hbm.entity.mob.ai.EntityAIFireGun;
-import com.hbm.entity.mob.EntityCreeperTainted;
 import com.hbm.entity.projectile.EntityBulletBaseMK4;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.train.EntityRailCarBase;
@@ -40,6 +40,7 @@ import com.hbm.hazard.HazardSystem;
 import com.hbm.hazard.type.HazardTypeNeutron;
 import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.Spaghetti;
+import com.hbm.inventory.recipes.loader.SerializableRecipe;
 import com.hbm.handler.HTTPHandler;
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
@@ -61,6 +62,7 @@ import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.PermaSyncPacket;
 import com.hbm.packet.toclient.PlayerInformPacket;
+import com.hbm.packet.toclient.SerializableRecipePacket;
 import com.hbm.particle.helper.BlackPowderCreator;
 import com.hbm.potion.HbmPotion;
 import com.hbm.tileentity.machine.TileEntityMachineRadarNT;
@@ -74,6 +76,8 @@ import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
 import com.hbm.world.PlanetGen;
 import com.hbm.world.generator.TimedGenerator;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -83,7 +87,9 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import net.minecraft.block.Block;
@@ -135,6 +141,7 @@ import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
@@ -150,6 +157,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.Level;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -206,7 +214,33 @@ public class ModEventHandler {
 					props.hasWarped = true;
 				}
 			}
+
+			if(GeneralConfig.enableServerRecipeSync && FMLCommonHandler.instance().getSide() == Side.SERVER && event.player instanceof EntityPlayerMP) {
+				File recDir = new File(MainRegistry.configDir.getAbsolutePath() + File.separatorChar + "hbmRecipes");
+
+				MainRegistry.logger.info("Sending recipes to client!");
+
+				boolean hasSent = false;
+
+				for(SerializableRecipe recipe : SerializableRecipe.recipeHandlers) {
+					File recFile = new File(recDir.getAbsolutePath() + File.separatorChar + recipe.getFileName());
+					if(recFile.exists() && recFile.isFile()) {
+						MainRegistry.logger.info("Sending recipe file: " + recFile.getName());
+						PacketDispatcher.wrapper.sendTo(new SerializableRecipePacket(recFile), (EntityPlayerMP) event.player);
+						hasSent = true;
+					}
+				}
+
+				if(hasSent) {
+					PacketDispatcher.wrapper.sendTo(new SerializableRecipePacket(true), (EntityPlayerMP) event.player);
+				}
+			}
 		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerLeftClient(ClientDisconnectionFromServerEvent event) {
+		SerializableRecipe.clearReceivedRecipes();
 	}
 
 	@SubscribeEvent
@@ -1663,6 +1697,26 @@ public class ModEventHandler {
 					player.addPotionEffect(new PotionEffect(HbmPotion.lead.id, 100, 1));
 				} else {
 					player.addPotionEffect(new PotionEffect(HbmPotion.lead.id, 100, 2));
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onAnvilRepair(AnvilRepairEvent event) {
+
+		// Anvil renaming no longer increments the repair cost
+		// Note: Forge has a bug, the names are wrong. Right is output, output is left, left is right
+		if(event.left == null && event.right != null && event.output != null) {
+			int oldRepairCost = event.output.getRepairCost();
+
+			if (oldRepairCost > 0) {
+				event.right.setRepairCost(oldRepairCost);
+			} else if (event.right.hasTagCompound()) {
+				NBTTagCompound nbt = event.right.getTagCompound();
+				nbt.removeTag("RepairCost");
+				if (nbt.hasNoTags()) {
+					event.right.setTagCompound(null);
 				}
 			}
 		}
