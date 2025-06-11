@@ -660,6 +660,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 					GL11.glRotated(celestialAngle * -360.0 - 60.0, 1.0, 0.0, 0.0);
 				} else {
 					GL11.glRotated(metric.angle, 1.0, 0.0, 0.0);
+					GL11.glRotated(metric.inclination, 0.0, 0.0, 1.0);
 				}
 				GL11.glRotatef(axialTilt + 90.0F, 0.0F, 1.0F, 0.0F);
 
@@ -925,7 +926,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 			GL11.glRotatef(-40.0F + (float)(seed % 800) * 0.1F - 5.0F, 1.0F, 0.0F, 0.0F);
 			GL11.glRotatef((float)(seed % 50) * 0.1F - 20.0F, 0.0F, 1.0F, 0.0F);
 			GL11.glRotatef((float)(seed % 80) * 0.1F - 2.5F, 0.0F, 0.0F, 1.0F);
-			GL11.glRotated((ticks / 600.0D) * 360.0D, 1.0F, 0.0F, 0.0F);
+			GL11.glRotated((ticks / 600.0D) * -360.0D, 1.0F, 0.0F, 0.0F);
 
 			GL11.glColor4f(color[0], color[1], color[2], 1F);
 
