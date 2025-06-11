@@ -15,6 +15,7 @@ import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.recipes.loader.GenericRecipe;
 import com.hbm.inventory.recipes.loader.GenericRecipes;
+import com.hbm.items.ItemEnums;
 import com.hbm.items.ItemEnums.EnumFuelAdditive;
 import com.hbm.items.ItemGenericPart.EnumPartType;
 import com.hbm.items.ModItems;
@@ -208,6 +209,11 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(new OreDictStack(KNO.dust()))
 				.inputFluids(new FluidStack(Fluids.SULFURIC_ACID, 500))
 				.outputFluids(new FluidStack(Fluids.NITRIC_ACID, 1_000)));
+		
+		this.register(new GenericRecipe("chem.coppersulf").setup(50, 100)
+				.inputFluids(new FluidStack(Fluids.AQUEOUS_COPPER, 500))
+				.outputItems(new ItemStack(ModItems.powder_nickel, 2), new ItemStack(ModItems.powder_copper, 2))
+				.outputFluids(new FluidStack(Fluids.COPPERSULFATE, 200)));
 
 		// Provided by cryodistil
 		// this.register(new GenericRecipe("chem.birkeland").setupNamed(200, 5_000)
