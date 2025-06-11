@@ -36,7 +36,6 @@ public class GasCentrifugeRecipes {
 		public static PseudoFluidType MINSOLSEP =	new PseudoFluidType ("MINSOLSEP", 500, 0,		NONE,		false,	new ItemStack(ModItems.crystal_cleaned, 1));
 		public static PseudoFluidType MINSOL	=	new PseudoFluidType ("MINSOL", 500, 500,	MINSOLSEP,	false,	new ItemStack(ModItems.powder_iron, 1));
 
-		public static PseudoFluidType AQUEOUS_NICKEL	= new PseudoFluidType("AQUEOUS_NICKEL", 		450,	0,	NONE,	false,	new ItemStack(ModItems.powder_titanium, 1), new ItemStack(ModItems.powder_nickel, 1));
 
 		
 		public String name;
@@ -101,14 +100,12 @@ public class GasCentrifugeRecipes {
 		fluidConversions.put(Fluids.PUF6, PseudoFluidType.PF6);
 		fluidConversions.put(Fluids.WATZ, PseudoFluidType.MUD);
 		fluidConversions.put(Fluids.MINSOL, PseudoFluidType.MINSOL);
-		fluidConversions.put(Fluids.AQUEOUS_NICKEL, PseudoFluidType.AQUEOUS_NICKEL);
 
 		gasCent.put(new FluidStack(1200, Fluids.UF6), new Object[] { new ItemStack[] {new ItemStack(ModItems.nugget_u238, 11), new ItemStack(ModItems.nugget_u235, 1), new ItemStack(ModItems.fluorite, 4)}, true, 4 });
 		gasCent.put(new FluidStack(1200, Fluids.UF6), new Object[] { new ItemStack[] {new ItemStack(ModItems.nugget_u238, 6), new ItemStack(ModItems.nugget_uranium_fuel, 6), new ItemStack(ModItems.fluorite, 4)}, false, 2 });
 		gasCent.put(new FluidStack(900, Fluids.PUF6), new Object[] { new ItemStack[] {new ItemStack(ModItems.nugget_pu238, 3), new ItemStack(ModItems.nugget_pu_mix, 6), new ItemStack(ModItems.fluorite, 3)}, false, 1 });
 		gasCent.put(new FluidStack(1000, Fluids.WATZ), new Object[] { new ItemStack[] {new ItemStack(ModItems.powder_iron, 1), new ItemStack(ModItems.powder_lead, 1), new ItemStack(ModItems.nuclear_waste_tiny, 1), new ItemStack(ModItems.dust, 2)}, false, 2 });
 		gasCent.put(new FluidStack(1000, Fluids.MINSOL), new Object[] { new ItemStack[] {new ItemStack(ModItems.powder_iron, 1)}, false, 2 });
-		gasCent.put(new FluidStack(450, Fluids.AQUEOUS_NICKEL), new Object[] { new ItemStack[] {new ItemStack(ModItems.powder_titanium, 1),new ItemStack(ModItems.powder_nickel, 1)}, false, 1 });
 
 	}
 }
