@@ -451,8 +451,8 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 			mc.renderEngine.bindTexture(noise);
 
-			shader.setTime(time);
-			shader.setTextureUnit(textureUnit);
+			shader.setUniform1f("iTime", time);
+			shader.setUniform1i("iChannel1", textureUnit);
 
 			tessellator.startDrawingQuads();
 			tessellator.addVertexWithUV(-shaderSize, 100.0D, -shaderSize, 0.0D, 0.0D);
@@ -540,8 +540,10 @@ public class SkyProviderCelestial extends IRenderHandler {
 		float time = ((float)world.getWorldTime() + partialTicks) / 800.0F;
 		int textureUnit = 0;
 
-		swarmShader.setTime(time);
-		swarmShader.setTextureUnit(textureUnit);
+		swarmShader.setUniform1f("iTime", time);
+		swarmShader.setUniform1i("iChannel1", textureUnit);
+
+		int offsetLocation = swarmShader.getUniformLocation("iOffset");
 
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glColor4f(0.0F, 0.0F, 0.0F, MathHelper.clamp_float(swarmScreenSize, 0, 1));
@@ -559,7 +561,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 				tessellator.startDrawing(GL11.GL_POINTS);
 				for(int i = 0; i < swarmCount; i += 3) {
-					swarmShader.setOffset(i);
+					swarmShader.setUniform1f(offsetLocation, i);
 
 					float t = i + time;
 					double x = Math.cos(t);
@@ -580,7 +582,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 				tessellator.startDrawing(GL11.GL_POINTS);
 				for(int i = 1; i < swarmCount; i += 3) {
-					swarmShader.setOffset(i);
+					swarmShader.setUniform1f(offsetLocation, i);
 
 					float t = i + time;
 					double x = Math.cos(t);
@@ -601,7 +603,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 				tessellator.startDrawing(GL11.GL_POINTS);
 				for(int i = 2; i < swarmCount; i += 3) {
-					swarmShader.setOffset(i);
+					swarmShader.setUniform1f(offsetLocation, i);
 
 					float t = i + time;
 					double x = Math.cos(t);
@@ -681,8 +683,8 @@ public class SkyProviderCelestial extends IRenderHandler {
 					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 					planetShader.use();
-					planetShader.setTime((float)-metric.phase);
-					planetShader.setOffset((float)uvOffset);
+					planetShader.setUniform1f("iTime", (float)-metric.phase);
+					planetShader.setUniform1f("iOffset", (float)uvOffset);
 
 					tessellator.startDrawingQuads();
 					tessellator.addVertexWithUV(-size, 100.0D, -size, 0.0D, 0.0D);
