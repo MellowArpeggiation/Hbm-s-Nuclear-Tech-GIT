@@ -20,6 +20,7 @@ import com.hbm.extprop.HbmLivingProps;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ItemVOTVdrive.Target;
+import com.hbm.lib.RefStrings;
 import com.hbm.render.shader.Shader;
 import com.hbm.util.AstronomyUtil;
 
@@ -46,9 +47,16 @@ public class CelestialBody {
 
 	public boolean canLand = false; // does this body have an associated dimension and a solid surface?
 
+	// Orbital elements
 	public float massKg = 0;
 	public float radiusKm = 0;
 	public float semiMajorAxisKm = 0; // Distance to the parent body
+	public float semiMinorAxisKm = 0;
+	public float eccentricity = 0;
+	public float inclination = 0;
+	public float ascendingNode = 0;
+	public float argumentPeriapsis = 0;
+
 	private int rotationalPeriod = 6 * 60 * 60; // Day length in seconds
 
 	public float axialTilt = 0;
@@ -56,6 +64,8 @@ public class CelestialBody {
 	private int minProcessingLevel = 0; // What level of technology can locate this body? This defines the minimum level, automatically adjusted based on stardar location
 
 	public ResourceLocation texture = null;
+	public ResourceLocation biomeMask = null;
+	public ResourceLocation cityMask = null;
 	public float[] color = new float[] {0.4F, 0.4F, 0.4F}; // When too small to render the texture
 
 	public String tidallyLockedTo = null;
@@ -80,7 +90,7 @@ public class CelestialBody {
 
 	public CelestialBody(String name) {
 		this.name = name;
-		this.texture = new ResourceLocation("hbm:textures/misc/space/" + name + ".png");
+		this.texture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/" + name + ".png");
 
 		nameToBodyMap.put(name, this);
 	}
@@ -103,8 +113,13 @@ public class CelestialBody {
 		return this;
 	}
 
-	public CelestialBody withSemiMajorAxis(float km) {
-		this.semiMajorAxisKm = km;
+	public CelestialBody withOrbitalParameters(float semiMajorAxisKm, float eccentricity, float argumentPeriapsisDegrees, float inclinationDegrees, float ascendingNodeDegrees) {
+		this.semiMajorAxisKm = semiMajorAxisKm;
+		this.semiMinorAxisKm = semiMajorAxisKm * (float)Math.sqrt(1 - eccentricity * eccentricity);
+		this.eccentricity = eccentricity;
+		this.argumentPeriapsis = (float)Math.toRadians(argumentPeriapsisDegrees);
+		this.inclination = (float)Math.toRadians(inclinationDegrees);
+		this.ascendingNode = (float)Math.toRadians(ascendingNodeDegrees);
 		return this;
 	}
 
@@ -123,8 +138,18 @@ public class CelestialBody {
 		return this;
 	}
 
-	public CelestialBody withTexture(String path) {
-		this.texture = new ResourceLocation(path);
+	public CelestialBody withTexture(ResourceLocation location) {
+		this.texture = location;
+		return this;
+	}
+
+	public CelestialBody withCityMask(ResourceLocation location) {
+		this.cityMask = location;
+		return this;
+	}
+
+	public CelestialBody withBiomeMask(ResourceLocation location) {
+		this.biomeMask = location;
 		return this;
 	}
 

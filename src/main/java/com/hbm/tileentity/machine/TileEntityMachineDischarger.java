@@ -36,12 +36,8 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 	public static long Gen = 20000000;
 	public static final int processSpeed = 100;
 	public static final int CoolDown = 400;
-	
-	private AudioWrapper audio;
 
-	private static final int[] slots_top = new int[] { 0 };
-	private static final int[] slots_bottom = new int[] { 1, 2 };
-	private static final int[] slots_side = new int[] { 3, 2 };
+	private AudioWrapper audio;
 
 	public TileEntityMachineDischarger() {
 		super(2);
@@ -104,7 +100,7 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
-		return p_94128_1_ == 0 ? slots_bottom : (p_94128_1_ == 1 ? slots_top : slots_side);
+		return new int[] { 0, 1 }; // hi my name is james and I copy paste furnace code without reading it
 	}
 
 	@Override
@@ -125,15 +121,15 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 	public long getPowerScaled(long i) {
 		return (power * i) / maxPower;
 	}
-	
+
 	public long getTempScaled(int i) {
 		return (temp * i) / maxtemp;
 	}
-	
+
 	public int getProgressScaled(int i) {
 		return (process * i) / processSpeed;
 	}
-	
+
 	public int getCoolDownScaled(int i) {
 		return (temp * i) / CoolDown;
 	}
@@ -143,11 +139,11 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 		if (temp <= 20 && slots[0] != null && MachineRecipes.mODE(slots[0], OreDictManager.SA326.ingot())) {
 			return true;
 		}
-		
+
 		if (temp <= 20 && slots[0] != null && MachineRecipes.mODE(slots[0], OreDictManager.U233.ingot())) {
 			return true;
 		}
-		
+
 		if (temp <= 20 && slots[0] != null && slots[0].getItem() == ModItems.ingot_electronium) {
 			return true;
 		}
@@ -166,10 +162,10 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 		process++;
 		if (process >= processSpeed) {
 
-		
+
 			process = 0;
 			temp = maxtemp;
-			
+
 			slots[0].stackSize--;
 			if (slots[0].stackSize <= 0 && slots[0].getItem() == ModItems.ingot_u233) {
 				power += Gen * 0.8;
@@ -193,11 +189,11 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 				EntityNukeExplosionMK3 ex = EntityNukeExplosionMK3.statFacFleija(worldObj, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, (int) 120);
 				if(!ex.isDead) {
 					worldObj.spawnEntityInWorld(ex);
-		
+
 					EntityCloudFleija cloud = new EntityCloudFleija(worldObj, (int) 120);
 					cloud.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
 					worldObj.spawnEntityInWorld(cloud);
-				}		
+				}
 			}
 			this.worldObj.playSoundEffect(this.xCoord, this.yCoord, this.zCoord, "ambient.weather.thunder", 10000.0F, 0.8F + this.worldObj.rand.nextFloat() * 0.2F);
 		}
@@ -208,7 +204,7 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 	public void updateEntity() {
 
 		if(!worldObj.isRemote) {
-			
+
 			power = Library.chargeItemsFromTE(slots, 1, power, maxPower);
 
 			if(canProcess()) {
@@ -220,13 +216,13 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 			if(worldObj.getTotalWorldTime() % 10 == 0) {
 				if(temp > 20) {
 					temp = temp - 5;
-				}	
+				}
 				if(temp < 20) { //70k for the love of fuck this was only when i was debugging
 					temp = 20;
 				}
-				
+
 			}
-			
+
 			if(temp > 20) {
 				if(worldObj.getTotalWorldTime() % 7 == 0) {
 					this.worldObj.playSoundEffect(this.xCoord, this.yCoord + 11, this.zCoord, "random.fizz", 0.5F, 0.5F);
@@ -242,7 +238,7 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 				data.setDouble("posX", xCoord + 0.5 + worldObj.rand.nextDouble() - 0.5);
 				data.setDouble("posZ", zCoord + 0.5 + worldObj.rand.nextDouble() -0.5);
 				data.setDouble("posY", yCoord + 1);
-				
+
 				MainRegistry.proxy.effectNT(data);
 			}
 
@@ -250,7 +246,7 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 		} else {
 
 			if(process > 0) {
-				
+
 				if(audio == null) {
 					audio = createAudioLoop();
 					audio.startSound();
@@ -258,7 +254,7 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 					audio = rebootAudio(audio);
 				}
 			} else {
-				
+
 				if(audio != null) {
 					audio.stopSound();
 					audio = null;
@@ -267,11 +263,11 @@ public class TileEntityMachineDischarger extends TileEntityMachineBase implement
 		}
 
 	}
-	
+
 	public AudioWrapper createAudioLoop() {
 		return MainRegistry.proxy.getLoopedSound("hbm:weapon.tauChargeLoop", xCoord, yCoord, zCoord, 1.0F, 10F, 1.0F);
 	}
-	
+
 
 
 	public void onChunkUnload() {

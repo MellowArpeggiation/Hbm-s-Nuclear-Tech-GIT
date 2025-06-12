@@ -72,7 +72,6 @@ public class CryoRecipes extends SerializableRecipe {
 		));
 
 
-
 		recipes.put(Fluids.DUNAAIR, new Quartet<>(
 			new FluidStack(Fluids.CARBONDIOXIDE, 70),
 			new FluidStack(Fluids.NITROGEN, 15),

@@ -62,8 +62,6 @@ public class PlanetGen {
 		registerDimension(SpaceConfig.tektoDimension, WorldProviderTekto.class);
 		registerDimension(SpaceConfig.thatmoDimension, WorldProviderThatmo.class);
 
-		overrideOverworldProvider();
-
     }
 
 	private static ArrayList<Integer> spaceDimensions = new ArrayList<>();

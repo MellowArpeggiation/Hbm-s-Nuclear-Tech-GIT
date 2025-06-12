@@ -1,67 +1,108 @@
 #version 120
 
 uniform float iTime;
-uniform sampler2D iChannel0;
-vec3 vPosition;
-vec2 vTexCoord;
+uniform sampler2D iChannel1;
 
-const float PI = 3.14159265359;
+varying vec3 vPosition;
 
-const float ditherMatrix[16] = float[16](
-    0.0,  8.0,  2.0, 10.0,
-   12.0,  4.0, 14.0,  6.0,
-    3.0, 11.0,  1.0,  9.0,
-   15.0,  7.0, 13.0,  5.0
-);
+const float pi = 3.1415927;
 
-// Function to retrieve dither value
-float getDitherValue(vec2 fragCoord) {
-    int x = int(mod(fragCoord.x, 4.0));
-    int y = int(mod(fragCoord.y, 4.0));
-    int index = y * 4 + x;
-    return ditherMatrix[index] / 16.0 - 0.5; // Normalize between -0.5 and 0.5
+//From Dave (https://www.shadertoy.com/view/XlfGWN)
+float hash13(vec3 p){
+	p  = fract(p * vec3(.16532,.17369,.15787));
+	p += dot(p.xyz, p.yzx + 19.19);
+	return fract(p.x * p.y * p.z);
 }
 
-float snoise(vec3 uv, float res) {
-    const vec3 s = vec3(1e0, 1e2, 1e3);
-    uv *= res;
-    vec3 uv0 = floor(mod(uv, res)) * s;
-    vec3 uv1 = floor(mod(uv + vec3(1.), res)) * s;
-    vec3 f = fract(uv);
-    f = f * f * (3.0 - 2.0 * f);
-    vec4 v = vec4(uv0.x + uv0.y + uv0.z, uv1.x + uv0.y + uv0.z,
-                  uv0.x + uv1.y + uv0.z, uv1.x + uv1.y + uv0.z);
-    vec4 r = fract(sin(v * 1e-1) * 1e3);
-    float r0 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
-    r = fract(sin((v + uv1.z - uv0.z) * 1e-1) * 1e3);
-    float r1 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
-    return mix(r0, r1, f.z) * 2.0 - 1.0;
+float hash(float x){ return fract(cos(x*124.123)*412.0); }
+float hash(vec2 x){ return fract(cos(dot(x.xy,vec2(2.31,53.21))*124.123)*412.0); }
+float hash(vec3 x){ return fract(cos(dot(x.xyz,vec3(2.31,53.21,17.7))*124.123)*412.0); }
+
+float sdSphere( vec3 p, float s ) {
+	return length(p)-s;
+}
+
+float sdCappedCylinder( vec3 p, vec2 h ) {
+	vec2 d = abs(vec2(length(p.xz),p.y)) - h;
+	return min(max(d.x,d.y),0.0) + length(max(d,0.0));
+}
+
+float sdTorus( vec3 p, vec2 t ) {
+	vec2 q = vec2(length(p.xz)-t.x,p.y);
+	return length(q)-t.y;
+}
+
+vec2 quantize(vec2 inp, vec2 period) {
+	return floor(inp / period) * period;
 }
 
 void main() {
-    vec2 uv = gl_TexCoord[0].xy;
-    uv = -1.0 + 2.0 * uv;
-    uv *= -2.0;
+	vec2 pp = quantize(gl_TexCoord[0].xy, vec2(0.00425, 0.00425));
+	//vec2 pp = gl_TexCoord[0].xy;
+	pp = -1.0 + 2.0 * pp;
+	pp *= 2.0;
 
-    float color = 3.0 - (2. * length(2. * uv));
+	vec3 lookAt = vec3(0.0, -0.1, 0.0);
 
-    vec3 coord = vec3(atan(uv.x, uv.y) / 3.2832 + 0.5, length(uv) * 0.3, 0.5);
+	float eyer = 2.0;
+	float eyea = 0.0;
+	float eyea2 = -0.22 * pi * 2.0;
 
-    for (int i = 1; i <= 7; i++) {
-        float power = pow(2.0, float(i));
-        color += (1.5 / power) * snoise(coord + vec3(0.0, -iTime * 0.05, iTime * 0.01), power * 16.0);
-    }
+	vec3 ro = vec3(
+		eyer * cos(eyea) * sin(eyea2),
+		eyer * cos(eyea2),
+		eyer * sin(eyea) * sin(eyea2)
+	);
 
-    vec4 fragColor = vec4(color, pow(max(color, 0.0), 2.0) * 0.4, pow(max(color, 0.0), 3.0) * 0.15, 1.0);
+	vec3 front = normalize(lookAt - ro);
+	vec3 left = normalize(cross(normalize(vec3(0.0, 1, -0.1)), front));
+	vec3 up = normalize(cross(front, left));
+	vec3 rd = normalize(front * 1.5 + left * pp.x + up * pp.y);
 
-    float brightness = dot(fragColor.rgb, vec3(0.299, 0.587, 0.114));
+	vec3 bh = vec3(0.0, 0.0, 0.0);
+	float bhr = 0.3;
+	float bhmass = 5.0;
+	bhmass *= 0.001; // premul G
 
-    float ditherValue = getDitherValue(gl_FragCoord.xy) * 1.0; // Small effect scale
-    fragColor.rgb += ditherValue;
+	vec3 p = ro;
+	vec3 pv = rd;
 
-    if (brightness < 0.1) {
-        gl_FragColor = vec4(fragColor.rgb, 0.1);
-    } else {
-        gl_FragColor = vec4(fragColor.rgb, 1.0);
-    }
+	p += pv * hash13(rd + vec3(iTime)) * 0.02;
+
+	float dt = 0.02;
+	vec3 col = vec3(0.0);
+	float alpha = 1.0;
+	float noncaptured = 1.0;
+
+	vec3 c1 = vec3(0.5, 0.35, 0.1);
+	vec3 c2 = vec3(1.0, 0.8, 0.6);
+
+	for(float t = 0.0; t < 1.0; t += 0.005) {
+		p += pv * dt * noncaptured;
+
+		vec3 bhv = bh - p;
+		float r = dot(bhv, bhv);
+		pv += normalize(bhv) * ((bhmass) / r);
+
+		noncaptured = smoothstep(0.0, 0.01, sdSphere(p - bh, bhr));
+
+		float dr = length(bhv.xz);
+		float da = atan(bhv.x, bhv.z);
+		vec2 ra = vec2(dr, da * (0.01 + (dr - bhr) * 0.002) + 2.0 * pi + iTime * 0.002);
+		ra *= vec2(10.0, 20.0);
+
+		vec3 dcol = mix(c2, c1, pow(length(bhv) - bhr, 2.0)) * max(0.0, texture2D(iChannel1, ra * vec2(0.1, 0.5)).r + 0.15) * (4.0 / ((0.001 + (length(bhv) - bhr) * 50.0)));
+
+		col += max(vec3(0.0), dcol * step(0.0, -sdTorus((p * vec3(1.0, 50.0, 1.0)) - bh, vec2(0.8, 0.99))) * noncaptured);
+		col += vec3(1.0, 0.9, 0.7) * (1.0 / vec3(dot(bhv, bhv)+  0.004)) * 0.002 * noncaptured  * clamp(r, 0.0, 1.0);
+		col -= 0.0004;
+
+		if(r < 0.5) {
+			alpha = 1.0;
+		} else {
+			alpha = col.r;
+		}
+	}
+
+	gl_FragColor = vec4(smoothstep(0.1, 0.6, col.r), smoothstep(0.5, 0.9, col.g), smoothstep(0.1, 0.9, col.b),alpha);
 }

@@ -13,8 +13,8 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.material.NTMMaterial.SmeltingBehavior;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemScraps;
-import com.hbm.util.I18nUtil;
 import com.hbm.util.ItemStackUtil;
+import com.hbm.util.i18n.I18nUtil;
 
 import net.minecraft.item.ItemStack;
 
@@ -177,7 +177,7 @@ public class Mats {
 
 	//Space extension alloys
 	public static final NTMMaterial MAT_GAAS		= makeSmeltable(_EX + 0,	GAAS,		0x6F4A57, 0x6F4A57, 0x6F4A57).setAutogen(NUGGET, BILLET).m();
-	public static final NTMMaterial MAT_STAINLESS	= makeSmeltable(_EX + 1,	STAINLESS,	0x4A4A4A, 0x4A4A4A, 0x4A4A4A).setAutogen(PLATE).m();
+	public static final NTMMaterial MAT_STAINLESS	= makeSmeltable(_EX + 1,	STAINLESS,	0xD8D8D8, 0x474747, 0x4A4A4A).setAutogen(PLATE, WELDEDPLATE, CASTPLATE).m();
 	public static final NTMMaterial MAT_RICH_MAGMA	= makeSmeltable(_EX + 2,	RICHMAGMA,	0x7F7F7F, 0x353555, 0xFF6212).n();
 
 	//Extension

@@ -227,8 +227,6 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		// Calculate eclipse
 		for(AstroMetric metric : metrics) {
-			double phase = Math.abs(metric.phase);
-
 			if(metric.apparentSize < 1) continue;
 
 			double sizeToArc = 0.0028; // due to rendering, the arc is not exactly 1deg = 1deg, this converts from apparentSize to 0-1
@@ -238,9 +236,9 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			double sunArc = sunSize * sizeToArc;
 			double minPhase = 1 - (planetArc + sunArc);
 			double maxPhase = 1 - (planetArc - sunArc);
-			if(phase < minPhase) continue;
+			if(metric.phaseObscure < minPhase) continue;
 
-			double thisEclipseAmount = 1 - (phase - maxPhase) / (minPhase - maxPhase);
+			double thisEclipseAmount = 1 - (metric.phaseObscure - maxPhase) / (minPhase - maxPhase);
 
 			eclipseAmount = Math.min(Math.max(eclipseAmount, thisEclipseAmount), 1.0);
 		}
@@ -764,6 +762,12 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		int phase = Math.round(8 - ((float)SolarSystem.calculateSingleAngle(worldObj, 0, body, body.satellites.get(0)) / 45 + 4));
 		if(phase >= 8) return 0;
 		return phase;
+	}
+
+	@Override
+	public double getHorizon() {
+		if(dimensionId == 0) return super.getHorizon();
+		return 63;
 	}
 
 	// This is the vanilla junk table, for replacing fish on dead worlds
