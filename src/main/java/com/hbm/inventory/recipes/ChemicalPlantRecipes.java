@@ -86,10 +86,8 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(new ComparableStack(Items.sugar, 10))
 				.outputFluids(new FluidStack(Fluids.ETHANOL, 1000)));
 
-		// Anaerobic decomposition
 		this.register(new GenericRecipe("chem.biogas").setupNamed(60, 100).setIcon(ModItems.gas_full, Fluids.BIOGAS.getID())
 				.inputItems(new ComparableStack(ModItems.biomass, 16))
-				.inputFluids(new FluidStack(Fluids.CARBONDIOXIDE, 250))
 				.outputFluids(new FluidStack(Fluids.BIOGAS, 2_000)));
 
 		this.register(new GenericRecipe("chem.biofuel").setupNamed(60, 100).setIcon(ModItems.canister_full, Fluids.BIOFUEL.getID())
@@ -209,7 +207,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(new OreDictStack(KNO.dust()))
 				.inputFluids(new FluidStack(Fluids.SULFURIC_ACID, 500))
 				.outputFluids(new FluidStack(Fluids.NITRIC_ACID, 1_000)));
-		
+
 		this.register(new GenericRecipe("chem.coppersulf").setup(50, 100)
 				.inputFluids(new FluidStack(Fluids.AQUEOUS_COPPER, 500))
 				.outputItems(new ItemStack(ModItems.powder_nickel, 2), new ItemStack(ModItems.powder_copper, 2))
