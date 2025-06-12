@@ -201,20 +201,20 @@ public class SolarSystem {
 
 				new CelestialBody("neidon")
 					.withMassRadius(2.1228e23F, 2_145)
-					.withSemiMajorAxis(409_355_192)
+					.withOrbitalParameters(409_355_192, 0.0534F, 0.0F, 2.02F, 184.0F)
 					.withRotationalPeriod(40_250)
 					.withColor(1f, 0.6862f, 0.5882f)
 					.withSatellites(
 
 					new CelestialBody("thatmo", SpaceConfig.thatmoDimension, Body.THATMO)
 						.withMassRadius(2.788e21F, 286)
-						.withSemiMajorAxis(32_301)
+						.withOrbitalParameters(32_301, 0.0534F, 0.0F, 4.02F, 284.0F)
 						.withRotationalPeriod(306_443)
 						.withTraits(new CBT_Atmosphere(Fluids.NITROGEN, 0.005F), new CBT_BATTLEFIELD()),
 
 					new CelestialBody("nissee") // words cannot express how much i actually fear this moon whenever im passing by it when playing opm. theres more that meets the eye and no one is brave enough to admit that
 						.withMassRadius(5.951e18F, 30)
-						.withSemiMajorAxis(487_744)
+						.withOrbitalParameters(487_744, 0.0534F, 0.0F, 45.02F, 84.0F)
 						.withRotationalPeriod(27_924)
 						.withMinProcessingLevel(3)
 					)

@@ -51,7 +51,7 @@ import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.dim.trait.CBT_Impact;
 import com.hbm.dim.trait.CBT_Lights;
-import com.hbm.dim.trait.CelestialBodyTrait.CBT_Destroyed;
+import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ModEventHandlerClient;
@@ -346,8 +346,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 			shader.use();
 			GL11.glScaled(194.5, 70.5, 94.5);
 			GL11.glRotated(90, 0, 0, 1);
-			int textureUnit = 0;
-
+			
 			mc.renderEngine.bindTexture(noise);
 			ResourceManager.sphere_v2.renderAll();
 
@@ -356,9 +355,8 @@ public class SkyProviderCelestial extends IRenderHandler {
 			// Fix orbital plane
 			GL11.glRotatef(-90.0F, 0, 1, 0);
 
-			shader.setTime((time * 0.05F));
-			shader.setTextureUnit(textureUnit);
-
+			shader.setUniform1f("iTime", time * 0.05F);
+			shader.setUniform1i("iChannel1", 0);
 
 			shader.stop();
 

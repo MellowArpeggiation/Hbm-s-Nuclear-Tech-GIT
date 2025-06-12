@@ -20,6 +20,7 @@ public class SpaceConfig {
 	public static int laytheDimension = 413_022;
 	public static int orbitDimension = 413_023;
 	public static int tektoDimension = 413_024;
+	public static int thatmoDimension = 413_025;
 
 	// Biome ID limit is 255
 
