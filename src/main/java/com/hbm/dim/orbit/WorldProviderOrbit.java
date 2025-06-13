@@ -82,7 +82,7 @@ public class WorldProviderOrbit extends WorldProvider {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
+	public float[] calcSunriseSunsetColors(float solarAngle, float partialTicks) {
 		return null;
 	}
 
@@ -103,8 +103,8 @@ public class WorldProviderOrbit extends WorldProvider {
 
 		float distanceFactor = MathHelper.clamp_float((semiMajorAxisKm - distanceStart) / (distanceEnd - distanceStart), 0F, 1F);
 
-		float celestialAngle = worldObj.getCelestialAngle(par1);
-		float celestialPhase = (1 - (celestialAngle + 0.5F) % 1) * 2 - 1;
+		float solarAngle = worldObj.getCelestialAngle(par1);
+		float celestialPhase = (1 - (solarAngle + 0.5F) % 1) * 2 - 1;
 		float starBrightness = (float)Library.smoothstep(Math.abs(celestialPhase), 0.6, 0.75);
 
 		return MathHelper.clamp_float(starBrightness, distanceFactor, 1F);
@@ -116,8 +116,8 @@ public class WorldProviderOrbit extends WorldProvider {
 		if(SolarSystem.kerbol.hasTrait(CBT_Destroyed.class))
 			return 0;
 
-		float celestialAngle = worldObj.getCelestialAngle(par1);
-		float celestialPhase = (1 - (celestialAngle + 0.5F) % 1) * 2 - 1;
+		float solarAngle = worldObj.getCelestialAngle(par1);
+		float celestialPhase = (1 - (solarAngle + 0.5F) % 1) * 2 - 1;
 
 		return 1 - (float)Library.smoothstep(Math.abs(celestialPhase), 0.6, 0.8);
 	}
