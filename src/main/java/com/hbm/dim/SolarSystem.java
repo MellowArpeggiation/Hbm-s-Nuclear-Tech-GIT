@@ -131,7 +131,7 @@ public class SolarSystem {
 
 						new CelestialBody("laythe", SpaceConfig.laytheDimension, Body.LAYTHE)
 							.withMassRadius(2.94e22F, 500)
-							.withOrbitalParameters(27_184, 0.0F, 0.0F, 0.0F, 0.0F)
+							.withOrbitalParameters(27_184, 0.0288F, 0.0F, 0.348F, 0.0F)
 							.withRotationalPeriod(52_981)
 							.withTidalLockingTo("jool")
 							.withMinProcessingLevel(3)
@@ -140,12 +140,12 @@ public class SolarSystem {
 
 						new CelestialBody("vall") //probably
 							.withMassRadius(3.109e21F, 300)
-							.withOrbitalParameters(43_152, 0.0F, 0.0F, 0.0F, 0.0F)
+							.withOrbitalParameters(43_152, 0.111F, 342.9F, 7.48F, 128.0F)
 							.withRotationalPeriod(105_962),
 
 						new CelestialBody("tylo") // what value is this planet gonna add???
 							.withMassRadius(4.233e22F, 600)
-							.withOrbitalParameters(68_500, 0.0F, 0.0F, 0.025F, 0.0F)
+							.withOrbitalParameters(68_500, 0.002F, 0.0F, 0.3F, 0.0F)
 							.withRotationalPeriod(211_926),
 
 						new CelestialBody("bop")

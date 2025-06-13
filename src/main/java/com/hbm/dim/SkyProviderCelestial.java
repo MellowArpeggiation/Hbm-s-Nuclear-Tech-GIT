@@ -661,8 +661,8 @@ public class SkyProviderCelestial extends IRenderHandler {
 					GL11.glRotated(celestialAngle * -360.0 - 60.0, 1.0, 0.0, 0.0);
 				} else {
 					GL11.glRotated(metric.angle, 1.0, 0.0, 0.0);
-					GL11.glRotated(metric.inclination, 0.0, 0.0, 1.0);
 				}
+				GL11.glRotated(metric.inclination, 0.0, 0.0, 1.0);
 				GL11.glRotatef(axialTilt + 90.0F, 0.0F, 1.0F, 0.0F);
 
 				tessellator.startDrawingQuads();
