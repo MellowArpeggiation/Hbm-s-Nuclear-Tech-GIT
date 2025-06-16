@@ -1,5 +1,6 @@
 package com.hbm.config;
 
+import com.hbm.tileentity.machine.oil.TileEntityMachineOilWell;
 import com.hbm.util.Compat;
 
 import cpw.mods.fml.common.Loader;
@@ -20,7 +21,7 @@ public class SpaceConfig {
 	public static int laytheDimension = 413_022;
 	public static int orbitDimension = 413_023;
 	public static int tektoDimension = 413_024;
-
+	
 	// Biome ID limit is 255
 
 	// NOTE: some popular mod biome IDs, try to avoid colliding with these

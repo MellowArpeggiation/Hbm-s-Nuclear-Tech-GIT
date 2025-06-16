@@ -42,6 +42,10 @@ public class WorldConfig {
 	public static int eveGasSpawn = 100;
 	public static int laytheOilSpawn = 100;
 
+	public static int munBrineSpawn = 100;
+	public static int minmusBrineSpawn = 100;
+
+	
 	public static boolean newBedrockOres = true;
 
 	public static int bedrockIronSpawn = 100;
