@@ -46,7 +46,8 @@ public class ItemOilDetector extends Item {
 			String reserveType = "";
 			if(reserve == ModBlocks.ore_gas)
 				reserveType = "_gas";
-
+			if(reserve == ModBlocks.ore_brine)
+				reserveType = "_brine";
 			if(direct) {
 				PacketDispatcher.wrapper.sendTo(new PlayerInformPacket(ChatBuilder.start("").nextTranslation(this.getUnlocalizedName() + ".bullseye" + reserveType).color(EnumChatFormatting.DARK_GREEN).flush(), ServerProxy.ID_DETONATOR), (EntityPlayerMP) player);
 			} else if(reserve != null) {
@@ -88,6 +89,8 @@ public class ItemOilDetector extends Item {
 			Block block = world.getBlock(x, i, z);
 			if(block == ModBlocks.ore_oil) return block;
 			if(block == ModBlocks.ore_gas) return block;
+			if(block == ModBlocks.ore_brine) return block;
+
 		}
 
 		return null;
