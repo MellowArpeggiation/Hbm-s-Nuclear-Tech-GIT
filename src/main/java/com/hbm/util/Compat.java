@@ -1,8 +1,6 @@
 package com.hbm.util;
 
 import com.hbm.config.GeneralConfig;
-import com.hbm.config.SpaceConfig;
-import com.hbm.dim.BiomeCollisionException;
 import com.hbm.handler.HazmatRegistry;
 import com.hbm.hazard.HazardRegistry;
 import com.hbm.inventory.FluidContainer;
@@ -40,6 +38,7 @@ public class Compat {
 	public static final String MOD_EIDS = "endlessids";
 	public static final String MOD_ANG = "angelica";
 	public static final String MOD_BOP = "BiomesOPlenty";
+	public static final String MOD_COFH = "CoFHCore";
 
 	public static Item tryLoadItem(String domain, String name) {
 		return (Item) Item.itemRegistry.getObject(getReg(domain, name));
