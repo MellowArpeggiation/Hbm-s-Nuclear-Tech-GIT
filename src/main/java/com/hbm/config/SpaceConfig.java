@@ -1,14 +1,11 @@
 package com.hbm.config;
 
-import com.hbm.tileentity.machine.oil.TileEntityMachineOilWell;
 import com.hbm.util.Compat;
 
 import cpw.mods.fml.common.Loader;
 import net.minecraftforge.common.config.Configuration;
 
 public class SpaceConfig {
-
-	public static int dunaoilSpawn = 100;
 
 	// Dimension ID limit is over 4 million, so go crazy
 	public static int moonDimension = 413_015;

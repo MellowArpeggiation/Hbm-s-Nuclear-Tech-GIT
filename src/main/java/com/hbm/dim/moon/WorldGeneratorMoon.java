@@ -18,7 +18,6 @@ import com.hbm.world.gen.NBTStructure.SpawnCondition;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 
@@ -58,6 +57,8 @@ public class WorldGeneratorMoon implements IWorldGenerator {
 		BlockOre.addValidBody(ModBlocks.ore_lithium, SolarSystem.Body.MUN);
 		BlockOre.addValidBody(ModBlocks.ore_quartz, SolarSystem.Body.MUN);
 		BlockOre.addValidBody(ModBlocks.ore_shale, SolarSystem.Body.MUN);
+
+		BlockOre.addValidBody(ModBlocks.ore_brine, SolarSystem.Body.MUN);
 	}
 
 	@Override
@@ -69,14 +70,15 @@ public class WorldGeneratorMoon implements IWorldGenerator {
 
 	private void generateMoon(World world, Random rand, int i, int j) {
 		int meta = CelestialBody.getMeta(world);
-		
+
 		if(WorldConfig.munBrineSpawn > 0 && rand.nextInt(WorldConfig.munBrineSpawn) == 0) {
 			int randPosX = i + rand.nextInt(16);
 			int randPosY = rand.nextInt(25);
 			int randPosZ = j + rand.nextInt(16);
 
-			OilBubble.spawnOil(world, randPosX, randPosY, randPosZ, 10 + rand.nextInt(7), ModBlocks.ore_brine, meta, Blocks.stone);
+			OilBubble.spawnOil(world, randPosX, randPosY, randPosZ, 10 + rand.nextInt(7), ModBlocks.ore_brine, meta, ModBlocks.moon_rock);
 		}
+
 		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.nickelSpawn, 8, 1, 43, ModBlocks.ore_nickel, meta, ModBlocks.moon_rock);
 		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.titaniumSpawn, 12, 4, 27, ModBlocks.ore_titanium, meta, ModBlocks.moon_rock);
 		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.lithiumSpawn,  6, 4, 8, ModBlocks.ore_lithium, meta, ModBlocks.moon_rock);

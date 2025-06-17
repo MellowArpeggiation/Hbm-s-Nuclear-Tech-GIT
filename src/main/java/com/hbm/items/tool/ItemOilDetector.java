@@ -3,6 +3,7 @@ package com.hbm.items.tool;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.BlockOreFluid;
 import com.hbm.main.ServerProxy;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.PlayerInformPacket;
@@ -44,10 +45,9 @@ public class ItemOilDetector extends Item {
 			}
 
 			String reserveType = "";
-			if(reserve == ModBlocks.ore_gas)
-				reserveType = "_gas";
-			if(reserve == ModBlocks.ore_brine)
-				reserveType = "_brine";
+			if(reserve instanceof BlockOreFluid)
+				reserveType = ((BlockOreFluid) reserve).getUnlocalizedReserveType();
+
 			if(direct) {
 				PacketDispatcher.wrapper.sendTo(new PlayerInformPacket(ChatBuilder.start("").nextTranslation(this.getUnlocalizedName() + ".bullseye" + reserveType).color(EnumChatFormatting.DARK_GREEN).flush(), ServerProxy.ID_DETONATOR), (EntityPlayerMP) player);
 			} else if(reserve != null) {
@@ -87,10 +87,7 @@ public class ItemOilDetector extends Item {
 	private Block searchDirect(World world, int x, int y, int z) {
 		for(int i =  y + 15; i > 5; i--) {
 			Block block = world.getBlock(x, i, z);
-			if(block == ModBlocks.ore_oil) return block;
-			if(block == ModBlocks.ore_gas) return block;
-			if(block == ModBlocks.ore_brine) return block;
-
+			if(block instanceof BlockOreFluid) return block;
 		}
 
 		return null;
