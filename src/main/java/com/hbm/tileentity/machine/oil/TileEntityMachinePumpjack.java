@@ -185,7 +185,7 @@ public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 		delay = IConfigurableMachine.grab(obj, "I:delay", delay);
 		oilMultiplier = IConfigurableMachine.grab(obj, "D:oilMultiplier", oilMultiplier);
 		gasMultiplier = IConfigurableMachine.grab(obj, "D:gasMultiplier", gasMultiplier);
-		drainChanceMultiplier = IConfigurableMachine.grab(obj, "D:drainChanceMultiplier", gasMultiplier);
+		drainChanceMultiplier = IConfigurableMachine.grab(obj, "D:drainChanceMultiplier", drainChanceMultiplier);
 	}
 
 	@Override
