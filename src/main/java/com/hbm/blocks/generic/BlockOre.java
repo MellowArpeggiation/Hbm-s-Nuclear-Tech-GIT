@@ -233,6 +233,10 @@ public class BlockOre extends Block implements IBlockMultiPass, IBlockMulti, ITo
 			world.setBlock(x, y, z, ModBlocks.ore_gas_empty, meta, 3);
 			world.setBlock(x, y - 1, z, ModBlocks.ore_gas, meta, 3);
 		}
+		if(world.getBlock(x, y - 1, z) == ModBlocks.ore_brine_empty) {
+			world.setBlock(x, y, z, ModBlocks.ore_brine_empty, meta, 3);
+			world.setBlock(x, y - 1, z, ModBlocks.ore_brine, meta, 3);
+		}
 	}
 
 	@Override

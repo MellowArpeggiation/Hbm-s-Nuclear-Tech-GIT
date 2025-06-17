@@ -1,5 +1,6 @@
 package com.hbm.config;
 
+import com.hbm.tileentity.machine.oil.TileEntityMachineOilWell;
 import com.hbm.util.Compat;
 
 import cpw.mods.fml.common.Loader;

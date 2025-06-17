@@ -46,6 +46,8 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 	protected static int petgasPerDepositMin = 10;
 	protected static int petgasPerDepositMax = 100;
 
+	protected static int brinePerDeposit = 300;
+
 	@Override
 	public String getName() {
 		return "container.oilWell";
@@ -140,6 +142,17 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 			if(tanks[0].getFill() > tanks[0].getMaxFill()) tanks[0].setFill(tanks[0].getMaxFill());
 			tanks[1].setFill(tanks[1].getFill() + (petgasPerDepositMin + worldObj.rand.nextInt((petgasPerDepositMax - petgasPerDepositMin + 1))));
 			if(tanks[1].getFill() > tanks[1].getMaxFill()) tanks[1].setFill(tanks[1].getMaxFill());
+
+			if(worldObj.rand.nextDouble() < drainChance) {
+				worldObj.setBlock(x, y, z, ModBlocks.ore_gas_empty, meta, 3);
+			}
+		}
+		if(block == ModBlocks.ore_brine) {
+			tanks[0].setTankType(Fluids.BRINE);
+			tanks[1].setTankType(Fluids.NONE);
+
+			tanks[0].setFill(tanks[0].getFill() + brinePerDeposit);
+			if(tanks[0].getFill() > tanks[0].getMaxFill()) tanks[0].setFill(tanks[0].getMaxFill());
 
 			if(worldObj.rand.nextDouble() < drainChance) {
 				worldObj.setBlock(x, y, z, ModBlocks.ore_gas_empty, meta, 3);
