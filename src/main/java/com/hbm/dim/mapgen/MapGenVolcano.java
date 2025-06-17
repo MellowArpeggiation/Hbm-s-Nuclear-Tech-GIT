@@ -1,6 +1,5 @@
 package com.hbm.dim.mapgen;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 
 import net.minecraft.block.Block;
@@ -9,11 +8,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.MapGenBase;
 
 public class MapGenVolcano extends MapGenBase {
-	
+
 	private int chancePerChunk = 100;
 	private int minSize = 32;
 	private int maxSize = 64;
-	
+
 	private Block coreBlock;
 	private Block materialBlock;
 
@@ -28,7 +27,7 @@ public class MapGenVolcano extends MapGenBase {
 
 		this.range = (maxSize / 8) + 1;
 	}
-	
+
 	public void setMaterial(Block coreBlock, Block mateBlock) {
 		this.coreBlock = coreBlock;
 		this.materialBlock = mateBlock;
@@ -83,7 +82,7 @@ public class MapGenVolcano extends MapGenBase {
 
 								if(x == 0 && z == 0 && SpaceConfig.enableVolcanoGen) blocks[index + 1] = coreBlock;
 							}
-							
+
 							break;
 						}
 					}

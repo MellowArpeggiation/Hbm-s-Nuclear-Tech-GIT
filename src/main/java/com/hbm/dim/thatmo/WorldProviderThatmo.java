@@ -4,17 +4,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.WorldProviderCelestial;
-import com.hbm.dim.laythe.SkyProviderLaytheSunset;
-import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_BATTLEFIELD;
 import com.hbm.entity.logic.EntityBomber;
-import com.hbm.explosion.vanillant.ExplosionVNT;
-import com.hbm.explosion.vanillant.standard.EntityProcessorCrossSmooth;
-import com.hbm.explosion.vanillant.standard.ExplosionEffectWeapon;
-import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
 import com.hbm.util.fauxpointtwelve.BlockPos;
 import com.hbm.world.WorldUtil;
 
@@ -40,7 +33,7 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 	public String getDimensionName() {
 		return "Thatmo";
 	}
-	
+
 	public static int chargetime;
 	public static float flashd;
 	public static float altitude;
@@ -51,151 +44,155 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 	public static float nmass;
 	public static float shielde;
 	public static float csyw;
-	public static ArrayList<Meteor> meteors = new ArrayList();
-	public static ArrayList<Meteor> fragments = new ArrayList();
-	public static ArrayList<Meteor> smoke = new ArrayList();
+	public static ArrayList<Meteor> meteors = new ArrayList<>();
+	public static ArrayList<Meteor> fragments = new ArrayList<>();
+	public static ArrayList<Meteor> smoke = new ArrayList<>();
+
 	@Override
 	public void updateWeather() {
 		super.updateWeather();
-        CBT_BATTLEFIELD war = CelestialBody.getTrait(worldObj, CBT_BATTLEFIELD.class);
-        //i am violating the genercizing philosphy mellow told me about, this shit sucks
-        //if other planets have the battlefield trait, what could be done....?
+		CBT_BATTLEFIELD war = CelestialBody.getTrait(worldObj, CBT_BATTLEFIELD.class);
+
+		// i am violating the genercizing philosphy mellow told me about, this shit sucks
+		// if other planets have the battlefield trait, what could be done....?
+
 		if(war != null) {
 			if(!worldObj.isRemote) {
-				for (Object p : worldObj.playerEntities) {
-			        long currentTime = System.currentTimeMillis();
-			        if(currentTime % 8000 < 50){
-			        	System.out.println("summoned");
-					    BlockPos playerPos = new BlockPos(((EntityPlayer)p).posX, ((EntityPlayer)p).posY, ((EntityPlayer)p).posZ);
-					    int radius = 40;
-					    Random rand = worldObj.rand;
-					    int offsetX = rand.nextInt(radius * 2 + 1) - radius;
-					    int offsetY = 60 + rand.nextInt(9); 
-					    int offsetZ = rand.nextInt(radius * 2 + 1) - radius;
-					    
-		
-					    BlockPos targetPos = playerPos.add(offsetX, 0, offsetZ);
+				for(Object p : worldObj.playerEntities) {
+					long currentTime = System.currentTimeMillis();
+					if(currentTime % 8000 < 50) {
+
+						BlockPos playerPos = new BlockPos(((EntityPlayer) p).posX, ((EntityPlayer) p).posY, ((EntityPlayer) p).posZ);
+						int radius = 40;
+
+						Random rand = worldObj.rand;
+						int offsetX = rand.nextInt(radius * 2 + 1) - radius;
+						int offsetZ = rand.nextInt(radius * 2 + 1) - radius;
+
+						BlockPos targetPos = playerPos.add(offsetX, 0, offsetZ);
 						EntityBomber bomber = EntityBomber.statFacCarpetJet(worldObj, targetPos.getX(), targetPos.getY(), targetPos.getZ());
 						bomber.posY = targetPos.getY() + 20;
-						WorldUtil.loadAndSpawnEntityInWorld(bomber);	
-						
-			        }		
+						WorldUtil.loadAndSpawnEntityInWorld(bomber);
+					}
+				}
+			}
 
-				}			
-			}	
-			
-		   	Random rand = new Random();
+			Random rand = new Random();
 
 			if(worldObj.isRemote) {
-	        if (chargetime <= 0 || chargetime <= 1000) {
-	            chargetime += 1;
-	            flashd = 0;
-	        } else if (chargetime >= 100) {
-	            flashd += 0.3f;
-	            flashd = Math.min(100.0f, flashd + 0.3f * (100.0f - flashd) * 0.15f);
+				if(chargetime <= 0 || chargetime <= 1000) {
+					chargetime += 1;
+					flashd = 0;
+				} else if(chargetime >= 100) {
+					flashd += 0.3f;
+					flashd = Math.min(100.0f, flashd + 0.3f * (100.0f - flashd) * 0.15f);
 
-	            if (flashd <= 5) {
-	                Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
-	            }
+					if(flashd <= 5) {
+						Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
+					}
 
-	            if (flashd >= 100) {
-	                chargetime = 0;
-	            }
-	        }
-		    if(chargetime == 285) {
-	            Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
-	    	}
-	        if ( chargetime >= 300 &&chargetime <= 430) {
-	        	if (scale <= 0 || scale <= 20) {
-	    	    scale += 1.5;
-	    	}
+					if(flashd >= 100) {
+						chargetime = 0;
+					}
+				}
 
-	    	if (scale >= 20) {
-	    	    scale = 20; 
-	    	    shield += 0.4f; 
-	    	    shield = Math.min(25.0f, shield + 0.5f * (25.0f - shield) * 0.15f);	        	
-	    	    nmass = Math.min(180.0f, nmass + 0.2f * (180.0f - nmass) * 0.15f);
-	    	    shielde = Math.min(15.0f, shielde + 0.6f * (15.0f - shielde) * 0.10f);	   
-	    	    csyw += 0.2f;
-	    	    csyw = Math.min(100.0f, csyw + 0.2f * (100.0f - csyw) * 0.15f);
+				if(chargetime == 285) {
+					Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
+				}
 
-	    	    }
+				if(chargetime >= 300 && chargetime <= 430) {
+					if(scale <= 0 || scale <= 20) {
+						scale += 1.5;
+					}
 
-	    	if (shield > 0) {
-	    	    if (cooldown <= 0 || cooldown <= 60) {
-	    	        cooldown += 0.5;
-	    	    }
+					if(scale >= 20) {
+						scale = 20;
+						shield += 0.4f;
+						shield = Math.min(25.0f, shield + 0.5f * (25.0f - shield) * 0.15f);
+						nmass = Math.min(180.0f, nmass + 0.2f * (180.0f - nmass) * 0.15f);
+						shielde = Math.min(15.0f, shielde + 0.6f * (15.0f - shielde) * 0.10f);
+						csyw += 0.2f;
+						csyw = Math.min(100.0f, csyw + 0.2f * (100.0f - csyw) * 0.15f);
+					}
 
-	    	    if (cooldown >= 60) {
-	            	reset();
+					if(shield > 0) {
+						if(cooldown <= 0 || cooldown <= 60) {
+							cooldown += 0.5;
+						}
 
-	    	    	}
-	    		}
-	        } else {
-	        reset();
-	        }
-	        if (altitude <= 400) {
-	            altitude += 5;
-	        }
-	        if (altitude >= 400) {
-	            altitude = 0;
-	            randPos = Minecraft.getMinecraft().theWorld.rand.nextFloat();
-	        }
-			for(Meteor meteor : meteors) {
-				meteor.update();
-			}
-			for(Meteor fragment : fragments) {
-				fragment.update();
-			}
-			for(Meteor smoke : smoke) {
-				smoke.update();
-			}	            
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			if(rand.nextInt(1)==0)
-	    	{
-	            	Meteor meteor = new Meteor((player.posX+rand.nextInt(16000))-8000, 2017, (player.posZ+rand.nextInt(16000))-8000);
-	            	meteors.add(meteor);
-	    	}
-			meteors.removeIf(x -> x.isDead);
-			fragments.removeIf(xx -> xx.isDead);
-			smoke.removeIf(xxx -> xxx.isDead);
-			
+						if(cooldown >= 60) {
+							reset();
+						}
+					}
+				} else {
+					reset();
+				}
+
+				if(altitude <= 400) {
+					altitude += 5;
+				}
+
+				if(altitude >= 400) {
+					altitude = 0;
+					randPos = Minecraft.getMinecraft().theWorld.rand.nextFloat();
+				}
+
+				for(Meteor meteor : meteors) {
+					meteor.update();
+				}
+
+				for(Meteor fragment : fragments) {
+					fragment.update();
+				}
+
+				for(Meteor smoke : smoke) {
+					smoke.update();
+				}
+
+				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+				if(rand.nextInt(1) == 0) {
+					Meteor meteor = new Meteor((player.posX + rand.nextInt(16000)) - 8000, 2017, (player.posZ + rand.nextInt(16000)) - 8000);
+					meteors.add(meteor);
+				}
+
+				meteors.removeIf(x -> x.isDead);
+				fragments.removeIf(xx -> xx.isDead);
+				smoke.removeIf(xxx -> xxx.isDead);
 			}
 		}
-			
- 
-		
 	}
+
 	private void reset() {
-	    cooldown = shield = scale = nmass = shielde = csyw = 0;
+		cooldown = shield = scale = nmass = shielde = csyw = 0;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Vec3 getSkyColor(Entity camera, float partialTicks) {
 		Vec3 ohshit = super.getSkyColor(camera, partialTicks);
-        float xalpha = (csyw <= 0) ? 0.0F : 0.5F - Math.min(0.5F, csyw / 100);   
-        float alpha = (flashd <= 0) ? 0.0F : 1.0F - Math.min(1.0F, flashd / 100);
+		float xalpha = (csyw <= 0) ? 0.0F : 0.5F - Math.min(0.5F, csyw / 100);
+		float alpha = (flashd <= 0) ? 0.0F : 1.0F - Math.min(1.0F, flashd / 100);
 
-		return Vec3.createVectorHelper(ohshit.xCoord + alpha + xalpha , ohshit.yCoord + alpha + xalpha, ohshit.zCoord + alpha + xalpha);
-		
+		return Vec3.createVectorHelper(ohshit.xCoord + alpha + xalpha, ohshit.yCoord + alpha + xalpha, ohshit.zCoord + alpha + xalpha);
+
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Vec3 getFogColor(float x, float y) {
 		Vec3 ohshit = super.getFogColor(x, y);
-        float xalpha = (csyw <= 0) ? 0.0F : 0.5F - Math.min(0.5F, csyw / 100);   
-        float alpha = (flashd <= 0) ? 0.0F : 1.0F - Math.min(1.0F, flashd / 100);
+		float xalpha = (csyw <= 0) ? 0.0F : 0.5F - Math.min(0.5F, csyw / 100);
+		float alpha = (flashd <= 0) ? 0.0F : 1.0F - Math.min(1.0F, flashd / 100);
 
-		return Vec3.createVectorHelper(ohshit.xCoord + alpha + xalpha , ohshit.yCoord + alpha + xalpha, ohshit.zCoord + alpha + xalpha);
+		return Vec3.createVectorHelper(ohshit.xCoord + alpha + xalpha, ohshit.yCoord + alpha + xalpha, ohshit.zCoord + alpha + xalpha);
 	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IRenderHandler getSkyRenderer() {
 		return new SkyProviderThatmo();
 	}
-	
+
 	@Override
 	public IChunkProvider createChunkGenerator() {
 		return new ChunkProviderThatmo(this.worldObj, this.getSeed(), false);
@@ -205,17 +202,18 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 	public Block getStone() {
 		return ModBlocks.sellafield_slaked;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getSunBrightness(float par1) {
 		float imsuper = super.getSunBrightness(par1);
-        float xalpha = (csyw <= 0) ? 0.0F : 0.5F - Math.min(0.5F, csyw / 100);   
-        float alpha = (flashd <= 0) ? 0.0F : 1.0F - Math.min(1.0F, flashd / 100);
+		float xalpha = (csyw <= 0) ? 0.0F : 0.5F - Math.min(0.5F, csyw / 100);
+		float alpha = (flashd <= 0) ? 0.0F : 1.0F - Math.min(1.0F, flashd / 100);
 		return imsuper * 0.1F + alpha + xalpha;
 	}
+
 	public class Meteor {
-		
+
 		public double posX;
 		public double posY;
 		public double posZ;
@@ -228,12 +226,11 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 		public boolean isDead = false;
 		public long age;
 		public MeteorType type;
-		
-		public Meteor(double posX, double posY, double posZ)
-		{
+
+		public Meteor(double posX, double posY, double posZ) {
 			this(posX, posY, posZ, MeteorType.STANDARD, -31.2, -20.8, 20);
 		}
-		
+
 		public Meteor(double posX, double posY, double posZ, MeteorType type, double motionX, double motionY, double motionZ) {
 			this.posX = posX;
 			this.posY = posY;
@@ -242,37 +239,25 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 			this.motionX = motionX;
 			this.motionY = motionY;
 			this.motionZ = motionZ;
-			//System.out.println("Added"+this.posX+" "+this.posY+" "+this.posZ);
 		}
-		
+
 		private void update() {
 			Random rand = new Random();
-			if(this.type != MeteorType.SMOKE && this.type != MeteorType.FRAGMENT)
-			{
-				Meteor meteor = new Meteor((this.posX+rand.nextInt(16))-8, (this.posY+rand.nextInt(16)), (this.posZ+rand.nextInt(16))-8, MeteorType.SMOKE,0,0,0);
-	        	smoke.add(meteor);
-	        	/*
-            	if(rand.nextInt(4)==0)
-            	{
-            		//double spreadY = rand.nextDouble()*(Math.abs(this.motionY*0.05d))-0.5;
-            		//double spreadZ = rand.nextDouble()*(Math.abs(this.motionZ*0.05d))-0.5;
-    				Meteor frag = new Meteor((this.posX+rand.nextInt(16))-8, (this.posY+rand.nextInt(16)), (this.posZ+rand.nextInt(16))-8, MeteorType.FRAGMENT,this.motionX*0.5,(this.motionY*0.5),(this.motionZ*0.5));
-    				fragments.add(frag);
-            	}
-            	*/
-	        	
+			if(this.type != MeteorType.SMOKE && this.type != MeteorType.FRAGMENT) {
+				Meteor meteor = new Meteor((this.posX + rand.nextInt(16)) - 8, (this.posY + rand.nextInt(16)), (this.posZ + rand.nextInt(16)) - 8, MeteorType.SMOKE, 0, 0, 0);
+				smoke.add(meteor);
 			}
-			if(this.posY <=500 && this.type != MeteorType.SMOKE)
-			{
-				this.isDead=true;
+
+			if(this.posY <= 500 && this.type != MeteorType.SMOKE) {
+				this.isDead = true;
 			}
-			if(this.type == MeteorType.SMOKE)
-			{
+
+			if(this.type == MeteorType.SMOKE) {
 				this.age++;
-				if(this.age >=60)
-				this.isDead=true;
+				if(this.age >= 60)
+					this.isDead = true;
 			}
-			
+
 			this.prevPosX = this.posX;
 			this.prevPosY = this.posY;
 			this.prevPosZ = this.posZ;
@@ -281,7 +266,7 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 			this.posZ += this.motionZ;
 		}
 	}
-	
+
 	public static enum MeteorType {
 		STANDARD,
 		FRAGMENT,

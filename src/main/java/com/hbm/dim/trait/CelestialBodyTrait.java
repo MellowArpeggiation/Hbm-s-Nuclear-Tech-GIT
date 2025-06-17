@@ -7,14 +7,13 @@ import com.google.common.collect.HashBiMap;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public abstract class CelestialBodyTrait {
 
 	// Similarly to fluid traits, we have classes, and instance members.
 	// For the simple traits, we'll just init both here rather than two places.
 
-	
+
 	public static class CBT_BATTLEFIELD extends CelestialBodyTrait { }
 	public static CBT_BATTLEFIELD BATTLE = new CBT_BATTLEFIELD();
 
@@ -23,7 +22,7 @@ public abstract class CelestialBodyTrait {
 	public static class CBT_COMPROMISED extends CelestialBodyTrait { }
 	public static CBT_COMPROMISED COMP = new CBT_COMPROMISED();
 
-	
+
 	// Constructor and loading
 	public static List<Class<? extends CelestialBodyTrait>> traitList = new ArrayList<Class<? extends CelestialBodyTrait>>();
 	public static HashBiMap<String, Class<? extends CelestialBodyTrait>> traitMap = HashBiMap.create();
@@ -53,7 +52,7 @@ public abstract class CelestialBodyTrait {
 
 	public void readFromBytes(ByteBuf buf) { }
 	public void writeToBytes(ByteBuf buf) { }
-	
+
 	public void update(boolean isremote) { }
 
 }

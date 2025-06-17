@@ -15,7 +15,6 @@ import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.dim.trait.CBT_Water;
 import com.hbm.dim.trait.CelestialBodyTrait;
-import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
@@ -74,7 +73,7 @@ public class CelestialBody {
 	public float ringTilt = 0;
 	public float[] ringColor = new float[] {0.5F, 0.5F, 0.5F};
 	public float ringSize = 2;
-	
+
 	public List<CelestialBody> satellites = new ArrayList<CelestialBody>(); // moon boyes
 	public CelestialBody parent = null;
 
@@ -362,7 +361,7 @@ public class CelestialBody {
 
 		setTraits(world, currentTraits);
 	}
-	
+
 	public static void updateChemistry(World world) {
 		boolean hasUpdated = false;
 		HashMap<Class<? extends CelestialBodyTrait>, CelestialBodyTrait> currentTraits = getTraits(world);
@@ -421,10 +420,12 @@ public class CelestialBody {
 			war.shield -= dmg;
 		} else {
 			war.health -= dmg;
-
 		}
+
 		setTraits(world, currentTraits);
 	}
+
+
 	// Static getters
 	// A lot of these are member getters but without having to check the celestial body exists
 	// If it doesn't exist, return the overworld as the default, may cause issues with terraforming the overworld
@@ -458,7 +459,7 @@ public class CelestialBody {
 	public static CelestialBody getBody(World world) {
 		return getBody(world.provider.dimensionId);
 	}
-	
+
 	public static Target getTarget(World world, int x, int z) {
 		if(inOrbit(world)) {
 			OrbitalStation station = !world.isRemote ? OrbitalStation.getStationFromPosition(x, z) : OrbitalStation.clientStation;
@@ -467,7 +468,7 @@ public class CelestialBody {
 
 		return new Target(getBody(world), false, true);
 	}
-	
+
 	public static CelestialBody getStar(World world) {
 		return getBody(world).getStar();
 	}
@@ -475,7 +476,7 @@ public class CelestialBody {
 	public static CelestialBody getPlanet(World world) {
 		return getBody(world).getPlanet();
 	}
-	
+
 
 	public static float getGravity(EntityLivingBase entity) {
 		if(inOrbit(entity.worldObj)) {

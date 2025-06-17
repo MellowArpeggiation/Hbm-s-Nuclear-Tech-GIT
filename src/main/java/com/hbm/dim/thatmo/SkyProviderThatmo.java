@@ -186,7 +186,7 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 			Vec3 vec = Vec3.createVectorHelper(fragment.posX - dx, fragment.posY - dy, fragment.posZ - dz);
 			Vec3 vec2 = Vec3.createVectorHelper(fragment.posX - dx, fragment.posY - dy, fragment.posZ - dz);
 			double l = Math.min(Minecraft.getMinecraft().gameSettings.renderDistanceChunks*16, vec.lengthVector());
-			double sf = Math.max(0.2,(312.5/(vec2.lengthVector()/l)));
+			// double sf = Math.max(0.2,(312.5/(vec2.lengthVector()/l)));
 			vec = vec.normalize();
 			Vec3 vecd = Vec3.createVectorHelper(vec.xCoord*l, vec.yCoord*l, vec.zCoord*l);
 			GL11.glTranslated( vecd.xCoord, vecd.yCoord , vecd.zCoord);
@@ -194,9 +194,9 @@ public class SkyProviderThatmo extends SkyProviderCelestial {
 			double quadratic = (-1*Math.pow(descent, 2)+(1517*descent))/82;
 			//float scalar = (float) (7000f/vec2.lengthVector());
 			float scalar = (float) (quadratic/vec2.lengthVector());
-				GL11.glScaled(scalar, scalar, scalar);
-				//System.out.println("scalar "+scalar);
-				renderGlow(new ResourceLocation(RefStrings.MODID + ":textures/particle/flare.png"), 1, 1, 1, partialTicks);
+			GL11.glScaled(scalar, scalar, scalar);
+			//System.out.println("scalar "+scalar);
+			renderGlow(new ResourceLocation(RefStrings.MODID + ":textures/particle/flare.png"), 1, 1, 1, partialTicks);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_FOG);
 			GL11.glPopMatrix();

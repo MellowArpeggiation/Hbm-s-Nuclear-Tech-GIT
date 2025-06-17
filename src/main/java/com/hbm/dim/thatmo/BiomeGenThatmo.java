@@ -5,7 +5,6 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.dim.BiomeGenBaseCelestial;
 import com.hbm.entity.mob.EntityMoonCow;
-import com.hbm.entity.mob.EntityScutterfish;
 import com.hbm.entity.mob.EntityTankbot;
 import com.hbm.entity.mob.EntityWarBehemoth;
 

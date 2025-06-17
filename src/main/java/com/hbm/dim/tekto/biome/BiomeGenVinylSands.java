@@ -3,7 +3,6 @@ package com.hbm.dim.tekto.biome;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.dim.BiomeGenBaseCelestial;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

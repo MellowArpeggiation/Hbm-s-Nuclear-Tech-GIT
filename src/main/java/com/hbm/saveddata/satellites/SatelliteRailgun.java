@@ -1,46 +1,34 @@
 package com.hbm.saveddata.satellites;
 
-import java.util.ArrayList;
-
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
-import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_War.Projectile;
 import com.hbm.dim.trait.CBT_War.ProjectileType;
-import com.hbm.entity.logic.EntityDeathBlast;
-import com.hbm.handler.ThreeInts;
-import com.hbm.interfaces.IControlReceiver;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.util.BeamPronter;
 import com.hbm.render.util.BeamPronter.EnumBeamType;
 import com.hbm.render.util.BeamPronter.EnumWaveType;
-import com.hbm.saveddata.satellites.Satellite.InterfaceActions;
-import com.hbm.saveddata.satellites.Satellite.Interfaces;
-import com.hbm.util.BufferUtil;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IModelCustom;
 
 public class SatelliteRailgun extends SatelliteWar {
+
 	//time to clean up this shit and make it PROPER.
 	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/particle/shockwave.png");
 	private static final ResourceLocation flash = new ResourceLocation("hbm:textures/misc/space/flare.png");
+
 	public SatelliteRailgun() {
-		
+
 	}
-	
+
 	private boolean canFire = false;
 	private boolean hasTarget = false;
 
@@ -48,15 +36,15 @@ public class SatelliteRailgun extends SatelliteWar {
 	public float interp;
 	public int cooldown;
 	private CelestialBody target;
-	
+
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setLong("lastOp", lastOp);
 	}
-	
+
 	public void readFromNBT(NBTTagCompound nbt) {
 		lastOp = nbt.getLong("lastOp");
 	}
-	
+
 	@Override
 	public void onClick(World world, int x, int z) {
 		fireAtTarget(target);
@@ -67,23 +55,23 @@ public class SatelliteRailgun extends SatelliteWar {
 		else {
 			canFire = true;
 		}
-	}	
-	
+	}
+
 	@Override
 	public void fire() {
-	    if (canFire) {
-	        interp += 0.5f;
-	        interp = Math.min(100.0f, interp + 0.3f * (100.0f - interp) * 0.15f);
+		if (canFire) {
+			interp += 0.5f;
+			interp = Math.min(100.0f, interp + 0.3f * (100.0f - interp) * 0.15f);
 
-	        if (interp >= 100) {
-	            interp = 0; 
-	            canFire = false;
-	        }
+			if (interp >= 100) {
+				interp = 0;
+				canFire = false;
+			}
 
-	    }
-		
+		}
+
 	}
-	
+
 	@Override
 	public void setTarget(CelestialBody body) {
 		target = CelestialBody.getBody(body.dimensionId);
@@ -92,7 +80,7 @@ public class SatelliteRailgun extends SatelliteWar {
 		}
 
 	}
-	
+
 	@Override
 	public void fireAtTarget(CelestialBody body) {
 		if(hasTarget) {
@@ -102,29 +90,30 @@ public class SatelliteRailgun extends SatelliteWar {
 				CBT_War war = target.getTrait(CBT_War.class);
 				if(war != null) {
 					float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat();
-					//TODO: be able to choose projectile types 
+					//TODO: be able to choose projectile types
 					Projectile projectile = new Projectile(100, 20, 50, 28 * rand * 5, 55, 20, ProjectileType.SMALL, body.dimensionId);
 					projectile.GUIangle = (int) (rand * 360);
 					war.launchProjectile(projectile);
 					System.out.println(war.health);
-					
+
 				}
-			}			
+			}
 		}
 	}
+
 	public void playsound() {
-        Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
+		Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
 	}
-	
+
 	@Override
 	public float[] getColor() {
 		return new float[] { 0.0F, 0.0F, 0.0F };
 	}
-	
+
 	public float getInterp() {
 		return interp;
 	}
-	
+
 	public int magSize() {
 		return 0;
 	}
