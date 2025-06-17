@@ -38,14 +38,44 @@ public class WorldConfig {
 	public static int bedrockOilSpawn = 200;
 	public static int meteoriteSpawn = 500;
 
+	// Space oils and ores
 	public static int dunaOilSpawn = 100;
 	public static int eveGasSpawn = 100;
 	public static int laytheOilSpawn = 100;
-
 	public static int munBrineSpawn = 100;
 	public static int minmusBrineSpawn = 100;
 
-	
+	public static int bedrockOilPerDeposit = 100;
+	public static int bedrockGasPerDepositMin = 10;
+	public static int bedrockGasPerDepositMax = 50;
+
+	public static int earthOilPerDeposit = 500;
+	public static int earthGasPerDepositMin = 100;
+	public static int earthGasPerDepositMax = 500;
+	public static double earthOilDrainChance = 0.05D;
+
+	public static int dunaOilPerDeposit = 200;
+	public static int dunaGasPerDepositMin = 100;
+	public static int dunaGasPerDepositMax = 500;
+	public static double dunaOilDrainChance = 0.1D;
+
+	public static int laytheOilPerDeposit = 500;
+	public static int laytheGasPerDepositMin = 100;
+	public static int laytheGasPerDepositMax = 500;
+	public static double laytheOilDrainChance = 0.05D;
+
+	public static int eveGasPerDeposit = 500;
+	public static int evePetPerDepositMin = 20;
+	public static int evePetPerDepositMax = 100;
+	public static double eveGasDrainChance = 0.05D;
+
+	public static int munBrinePerDeposit = 300;
+	public static double munBrineDrainChance = 0.05D;
+
+	public static int minmusBrinePerDeposit = 300;
+	public static double minmusBrineDrainChance = 0.05D;
+
+
 	public static boolean newBedrockOres = true;
 
 	public static int bedrockIronSpawn = 100;

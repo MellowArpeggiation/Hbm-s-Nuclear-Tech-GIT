@@ -5,10 +5,12 @@ import java.util.Map;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.BlockOre;
 import com.hbm.blocks.BlockEnums.EnumStoneType;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.dim.SolarSystem;
 import com.hbm.main.StructureManager;
 import com.hbm.world.feature.OilBubble;
 import com.hbm.world.gen.NBTStructure;
@@ -19,7 +21,6 @@ import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.structure.StructureComponent.BlockSelector;
@@ -60,6 +61,8 @@ public class WorldGeneratorMinmus implements IWorldGenerator {
 		}});
 
 		NBTStructure.registerNullWeight(SpaceConfig.minmusDimension, 18);
+
+		BlockOre.addValidBody(ModBlocks.ore_brine, SolarSystem.Body.MINMUS);
 	}
 
 	@Override
@@ -71,16 +74,15 @@ public class WorldGeneratorMinmus implements IWorldGenerator {
 
 	private void generateMinmus(World world, Random rand, int i, int j) {
 		int meta = CelestialBody.getMeta(world);
-		
-		
+
 		if(WorldConfig.minmusBrineSpawn > 0 && rand.nextInt(WorldConfig.minmusBrineSpawn) == 0) {
 			int randPosX = i + rand.nextInt(16);
 			int randPosY = rand.nextInt(25);
 			int randPosZ = j + rand.nextInt(16);
 
-			OilBubble.spawnOil(world, randPosX, randPosY, randPosZ, 10 + rand.nextInt(7), ModBlocks.ore_brine, meta, Blocks.stone);
+			OilBubble.spawnOil(world, randPosX, randPosY, randPosZ, 10 + rand.nextInt(7), ModBlocks.ore_brine, meta, ModBlocks.minmus_stone);
 		}
-		
+
         DungeonToolbox.generateOre(world, rand, i, j, 1, 16, 6, 40, ModBlocks.stone_resource, EnumStoneType.MALACHITE.ordinal(), ModBlocks.minmus_stone);
         DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.copperSpawn * 3, 12, 8, 56, ModBlocks.ore_copper, meta, ModBlocks.minmus_stone);
 	}
