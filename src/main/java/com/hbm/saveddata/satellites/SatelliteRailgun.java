@@ -14,6 +14,7 @@ import com.hbm.render.util.BeamPronter.EnumWaveType;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
@@ -106,8 +107,8 @@ public class SatelliteRailgun extends SatelliteWar {
 	}
 
 	@Override
-	public float[] getColor() {
-		return new float[] { 0.0F, 0.0F, 0.0F };
+	protected float[] getColor() {
+		return new float[] { 0.0F, 0.0F, 0.0F, 0.0F };
 	}
 
 	public float getInterp() {
@@ -130,62 +131,69 @@ public class SatelliteRailgun extends SatelliteWar {
 
 
 	@Override
-	public void render(World world, int x, int z, float interp, Minecraft mc) {
+	public void render(float partialTicks, WorldClient world, Minecraft mc, float solarAngle, long id) {
 		GL11.glPushMatrix();
+		{
 
-		GL11.glScaled(5, 5, 5);
+			GL11.glScaled(5, 5, 5);
+
+			double rounded = Math.round(id / 1000.0);
+			double x = ((id % 10) - 5) * 2;
+			double y = (((id / 10) % 10) - 5) * 2;
+
+			double xPos = Math.min(Math.max(-rounded + 30 + x, -50), 50);
+			double yPos = Math.min(Math.max(-rounded - 20 + y, -50), 50);
+
+			GL11.glTranslated(xPos, yPos, 20);
+			float fuck = this.getInterp();
+			float alped = 1.0F - Math.min(1.0F, fuck / 100);
+
+			GL11.glPushMatrix();
+			{
+
+				GL11.glColor4d(1, 1, 1, alped);
+
+				GL11.glTranslated(1, 5.5, 0);
+				GL11.glScaled(fuck * 0.2, fuck * 0.2, fuck * 0.2);
+				mc.renderEngine.bindTexture(flash);
+				ResourceManager.plane.renderAll();
+
+				mc.renderEngine.bindTexture(texture);
+				ResourceManager.plane.renderAll();
+
+			}
+			GL11.glPopMatrix();
+
+			GL11.glPushMatrix();
+			{
+
+				GL11.glTranslated(1, 5.5, 0);
+				BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2 , 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)1.6 * 1.2F * alped, alped * 0.2F );
+				BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.7 * 0.6F, alped * 0.6F );
+				BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2, 0), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x202060, 0x202060, (int)(world.getTotalWorldTime() / 5) % 1000, 35, 0.2F, 6, (float)0.2 * 0.1F, alped );
+				GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+				GL11.glDisable(GL11.GL_LIGHTING);
+				GL11.glEnable(GL11.GL_CULL_FACE);
+
+			}
+			GL11.glPopMatrix();
 
 
-		double rounded = Math.round(this.getID() / 1000.0);
-		x = ((this.getID() % 10) - 5) * 2;
-		double y = (((this.getID() / 10) % 10) - 5) * 2;
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glRotated(-90, 0, 0, 1);
 
-		double xPos = Math.min(Math.max(-rounded + 30 + x, -50), 50);
-		double yPos = Math.min(Math.max(-rounded - 20 + y, -50), 50);
+			GL11.glDepthRange(0.0, 1.0);
 
-		GL11.glTranslated(xPos, yPos, 20);
-		float fuck = this.getInterp();
-		float alped = 1.0F - Math.min(1.0F, fuck / 100);
+			//GL11.glDepthMask(false);
 
-		GL11.glPushMatrix();
-		GL11.glColor4d(1, 1, 1, alped);
+			mc.renderEngine.bindTexture(ResourceManager.sat_rail_tex);
+			ResourceManager.sat_rail.renderAll();
 
-		GL11.glTranslated(1, 5.5, 0);
-		GL11.glScaled(fuck * 0.2, fuck * 0.2, fuck * 0.2);
-		mc.renderEngine.bindTexture(flash);
-		ResourceManager.plane.renderAll();
+			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+			GL11.glEnable(GL11.GL_BLEND);
 
-
-		mc.renderEngine.bindTexture(texture);
-		ResourceManager.plane.renderAll();
-		GL11.glPopMatrix();
-
-		GL11.glPushMatrix();
-		GL11.glTranslated(1, 5.5, 0);
-		BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2 , 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)1.6 * 1.2F * alped, alped * 0.2F );
-		BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2, 0), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x202060, 0x202060, 0, 1, 0F, 6, (float)0.7 * 0.6F, alped * 0.6F );
-		BeamPronter.prontBeam(Vec3.createVectorHelper(0, fuck * 2, 0), EnumWaveType.RANDOM, EnumBeamType.SOLID, 0x202060, 0x202060, (int)(world.getTotalWorldTime() / 5) % 1000, 35, 0.2F, 6, (float)0.2 * 0.1F, alped );
-		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-
-		GL11.glPopMatrix();
-
-
-
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glRotated(-90, 0, 0, 1);
-
-		GL11.glDepthRange(0.0, 1.0);
-
-		//GL11.glDepthMask(false);
-
-		mc.renderEngine.bindTexture(ResourceManager.sat_rail_tex);
-		ResourceManager.sat_rail.renderAll();
-
-		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-		GL11.glEnable(GL11.GL_BLEND);
+		}
 		GL11.glPopMatrix();
 	}
 

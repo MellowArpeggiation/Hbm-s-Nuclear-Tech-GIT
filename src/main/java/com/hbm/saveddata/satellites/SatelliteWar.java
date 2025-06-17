@@ -50,8 +50,8 @@ public class SatelliteWar extends Satellite {
 	}
 
 	@Override
-	public float[] getColor() {
-		return new float[] { 0.0F, 0.0F, 0.0F };
+	protected float[] getColor() {
+		return new float[] { 0.0F, 0.0F, 0.0F, 0.0F };
 	}
 
 	public float getInterp() {
@@ -74,10 +74,6 @@ public class SatelliteWar extends Satellite {
 
 	public IModelCustom getModel() {
 		return null;
-	}
-
-	public void render(World world, int x, int z, float interp, Minecraft mc) {
-
 	}
 
 }

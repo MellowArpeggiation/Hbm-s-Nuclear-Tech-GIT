@@ -18,7 +18,6 @@ import com.hbm.main.ResourceManager;
 import com.hbm.render.shader.Shader;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
-import com.hbm.saveddata.satellites.SatelliteWar;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
@@ -235,20 +234,12 @@ public class SkyProviderCelestial extends IRenderHandler {
 				// JEFF BOZOS WOULD LIKE TO KNOW YOUR LOCATION
 				// ... to send you a pakedge :)))
 				if(world.provider.dimensionId == 0) {
-					renderSatellite(partialTicks, world, mc, solarAngle, 1916169, new float[] { 1.0F, 0.534F, 0.385F });
+					Satellite.renderDefault(partialTicks, world, mc, solarAngle, 1916169, new float[] { 1.0F, 0.534F, 0.385F, 1.0F });
 				}
 
 				// Light up the sky
-				for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-
-					if(entry.getValue() instanceof SatelliteWar) {
-						SatelliteWar satellite = (SatelliteWar) entry.getValue(); // It could be any type of satellite (e.g., Minigun, Cannon)
-
-						// Call the render method for each satellite (Minigun, Cannon, etc.)
-						satellite.render(world, entry.getKey(), entry.getKey(), satellite.interp, mc);
-					}
-
-					renderSatellite(partialTicks, world, mc, solarAngle, entry.getKey(), entry.getValue().getColor());
+				for(Map.Entry<Integer, Satellite> satelliteEntry : SatelliteSavedData.getClientSats().entrySet()) {
+					satelliteEntry.getValue().render(partialTicks, world, mc, solarAngle, satelliteEntry.getKey());
 				}
 			}
 
@@ -1150,37 +1141,6 @@ public class SkyProviderCelestial extends IRenderHandler {
 		float b = (colors[0] * 30.0F + colors[2] * 70.0F) / 100.0F;
 
 		return new float[] { r, g, b };
-	}
-
-	protected void renderSatellite(float partialTicks, WorldClient world, Minecraft mc, float solarAngle, long seed, float[] color) {
-		Tessellator tessellator = Tessellator.instance;
-
-		double ticks = (double)(System.currentTimeMillis() % (600 * 50)) / 50;
-
-		GL11.glPushMatrix();
-		{
-
-			GL11.glRotatef(solarAngle * -360.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(-40.0F + (float)(seed % 800) * 0.1F - 5.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef((float)(seed % 50) * 0.1F - 20.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef((float)(seed % 80) * 0.1F - 2.5F, 0.0F, 0.0F, 1.0F);
-			GL11.glRotated((ticks / 600.0D) * -360.0D, 1.0F, 0.0F, 0.0F);
-
-			GL11.glColor4f(color[0], color[1], color[2], 1F);
-
-			mc.renderEngine.bindTexture(planetTexture);
-
-			float size = 0.5F;
-
-			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV(-size, 100.0, -size, 0.0D, 0.0D);
-			tessellator.addVertexWithUV(size, 100.0, -size, 0.0D, 1.0D);
-			tessellator.addVertexWithUV(size, 100.0, size, 1.0D, 1.0D);
-			tessellator.addVertexWithUV(-size, 100.0, size, 1.0D, 0.0D);
-			tessellator.draw();
-
-		}
-		GL11.glPopMatrix();
 	}
 
 	// is just drawing a big cube with UVs prepared to draw a gradient

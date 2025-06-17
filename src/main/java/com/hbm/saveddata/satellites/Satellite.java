@@ -1,22 +1,31 @@
 package com.hbm.saveddata.satellites;
 
 import com.hbm.items.ModItems;
+import com.hbm.lib.RefStrings;
 import com.hbm.saveddata.SatelliteSavedData;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 public abstract class Satellite {
 
 	public static final List<Class<? extends Satellite>> satellites = new ArrayList<>();
 	public static final HashMap<Item, Class<? extends Satellite>> itemToClass = new HashMap<>();
+
+	private static final ResourceLocation satelliteTexture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/satellite.png");
 
 	public enum InterfaceActions {
 		HAS_MAP,		//lets the interface display loaded chunks
@@ -134,8 +143,46 @@ public abstract class Satellite {
 	public void onCoordAction(World world, EntityPlayer player, int x, int y, int z) { }
 
 
-	public abstract float[] getColor();
+	protected abstract float[] getColor();
 
+	public void render(float partialTicks, WorldClient world, Minecraft mc, float solarAngle, long id) {
+		renderDefault(partialTicks, world, mc, solarAngle, id, getColor());
+	}
+
+	public static void renderDefault(float partialTicks, WorldClient world, Minecraft mc, float solarAngle, long seed, float[] color) {
+		if(color[3] <= 0.0F) return;
+
+		Tessellator tessellator = Tessellator.instance;
+
+		double ticks = (double)(System.currentTimeMillis() % (600 * 50)) / 50;
+
+		GL11.glPushMatrix();
+		{
+
+			GL11.glRotatef(solarAngle * -360.0F, 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef(-40.0F + (float)(seed % 800) * 0.1F - 5.0F, 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef((float)(seed % 50) * 0.1F - 20.0F, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef((float)(seed % 80) * 0.1F - 2.5F, 0.0F, 0.0F, 1.0F);
+			GL11.glRotated((ticks / 600.0D) * -360.0D, 1.0F, 0.0F, 0.0F);
+
+			GL11.glColor4f(color[0], color[1], color[2], color[3]);
+
+			mc.renderEngine.bindTexture(satelliteTexture);
+
+			float size = 0.5F;
+
+			tessellator.startDrawingQuads();
+			tessellator.addVertexWithUV(-size, 100.0, -size, 0.0D, 0.0D);
+			tessellator.addVertexWithUV(size, 100.0, -size, 0.0D, 1.0D);
+			tessellator.addVertexWithUV(size, 100.0, size, 1.0D, 1.0D);
+			tessellator.addVertexWithUV(-size, 100.0, size, 1.0D, 0.0D);
+			tessellator.draw();
+
+		}
+		GL11.glPopMatrix();
+	}
+
+	// killing myself
 	public float getInterp() {
 		return 0;
 	}
