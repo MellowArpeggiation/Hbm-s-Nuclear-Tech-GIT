@@ -40,6 +40,8 @@ public class BiomeGenCraterBase extends BiomeGenBase {
 	private static int checkId(int id) {
 		if(!SpaceConfig.crashOnBiomeConflict) return id;
 
+		BiomeGenBase[] biomeList = BiomeGenBase.getBiomeGenArray();
+
 		// If we go outside the bounds, don't crash here, it'll crash elsewhere already, with a more useful message
 		if(id < biomeList.length && biomeList[id] != null && !(biomeList[id] instanceof BiomeGenCraterBase))
 			throw new BiomeCollisionException(biomeList[id]);
