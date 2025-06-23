@@ -38,7 +38,6 @@ public class DebugTeleporter extends Teleporter {
 	}
 
 	@Override
-
 	public void placeInPortal(Entity pEntity, double p2, double p3, double p4, float p5) {
 		int ix = (int)x;
 		int iy = (int)y;
@@ -50,7 +49,7 @@ public class DebugTeleporter extends Teleporter {
 					y = i + 5;
 					break;
 				}
-			}			
+			}
 		} else {
 			targetServer.getBlock(ix, MathHelper.clamp_int(iy, 1, 255), iz); // dummy load to maybe gen chunk
 		}
@@ -75,8 +74,10 @@ public class DebugTeleporter extends Teleporter {
 			manager.transferEntityToWorld(ridingEntity, fromDimension, sourceServer, targetServer, this);
 
 			Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(ridingEntity), targetServer);
-			if (newEntity != null) {
+			if(newEntity != null) {
 				newEntity.copyDataFrom(ridingEntity, true);
+				newEntity.posX = x;
+				newEntity.posZ = z;
 				targetServer.spawnEntityInWorld(newEntity);
 			}
 
@@ -103,8 +104,8 @@ public class DebugTeleporter extends Teleporter {
 
 		MinecraftServer mServer = MinecraftServer.getServer();
 		Side sidex = FMLCommonHandler.instance().getEffectiveSide();
-		if (sidex == Side.SERVER) {
-			if (player instanceof EntityPlayerMP) {
+		if(sidex == Side.SERVER) {
+			if(player instanceof EntityPlayerMP) {
 				EntityPlayerMP playerMP = (EntityPlayerMP) player;
 				WorldServer sourceServer = playerMP.getServerForPlayer();
 				WorldServer targetServer = (WorldServer) mServer.worldServerForDimension(dim);
