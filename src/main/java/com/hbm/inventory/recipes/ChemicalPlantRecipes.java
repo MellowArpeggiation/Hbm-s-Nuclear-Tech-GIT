@@ -155,7 +155,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.outputItems(new ItemStack(ModItems.ingot_bakelite)));
 
 		this.register(new GenericRecipe("chem.rubber").setup(100, 200)
-				.inputItems(new OreDictStack(S.dust()))
+				.inputItems(new OreDictStack(S.dust()), new OreDictStack(ZI.dust()))
 				.inputFluids(new FluidStack(Fluids.UNSATURATEDS, 500, GeneralConfig.enable528 ? 2 : 0))
 				.outputItems(new ItemStack(ModItems.ingot_rubber)));
 

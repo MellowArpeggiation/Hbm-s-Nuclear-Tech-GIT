@@ -36,16 +36,18 @@ public class BiomeGenCraterBase extends BiomeGenBase {
 		this.spawnableCaveCreatureList.clear();
 	}
 
-    // Tricking Java into letting us do shit before super is called
-    private static int checkId(int id) {
-        if(!SpaceConfig.crashOnBiomeConflict) return id;
+	// Tricking Java into letting us do shit before super is called
+	private static int checkId(int id) {
+		if(!SpaceConfig.crashOnBiomeConflict) return id;
 
-        // If we go outside the bounds, don't crash here, it'll crash elsewhere already, with a more useful message
-        if(id < biomeList.length && biomeList[id] != null && !(biomeList[id] instanceof BiomeGenCraterBase))
-            throw new BiomeCollisionException("Biome ID conflict, attempted to register NTM crater biome to ID " + id + " which is already in use. Please modify hbm.cfg to fix this error. Note that the maximum biome ID is 255, if you run out you MUST install EndlessIDs!");
+		BiomeGenBase[] biomeList = BiomeGenBase.getBiomeGenArray();
 
-        return id;
-    }
+		// If we go outside the bounds, don't crash here, it'll crash elsewhere already, with a more useful message
+		if(id < biomeList.length && biomeList[id] != null && !(biomeList[id] instanceof BiomeGenCraterBase))
+			throw new BiomeCollisionException(biomeList[id]);
+
+		return id;
+	}
 
 	public static class BiomeGenCrater extends BiomeGenCraterBase {
 
