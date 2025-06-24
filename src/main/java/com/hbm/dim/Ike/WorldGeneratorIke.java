@@ -6,8 +6,11 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockOre;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
+import com.hbm.dim.BiomeGenBaseCelestial;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
+import com.hbm.dim.WorldGeneratorCelestial;
+import com.hbm.dim.dres.biome.BiomeGenBaseDres;
 import com.hbm.main.StructureManager;
 import com.hbm.world.dungeon.AncientTomb;
 import com.hbm.world.gen.NBTStructure;
@@ -17,17 +20,18 @@ import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 
 public class WorldGeneratorIke implements IWorldGenerator {
 
 	public WorldGeneratorIke() {
 		NBTStructure.registerStructure(SpaceConfig.ikeDimension, new SpawnCondition() {{
-			structure = new JigsawPiece("ike_artifact", StructureManager.ike_artifact, -1);
-			spawnWeight = 4;
+			structure = new JigsawPiece("ike_artifact", StructureManager.ike_artifact, -5);
+			canSpawn = biome -> biome == BiomeGenIke.biome;
+			spawnWeight = 32;
+			
 		}});
-
-	
 		
 		NBTStructure.registerNullWeight(SpaceConfig.ikeDimension, 16);
 
