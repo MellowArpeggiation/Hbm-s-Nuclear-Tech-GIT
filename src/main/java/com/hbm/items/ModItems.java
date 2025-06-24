@@ -430,6 +430,7 @@ public class ModItems {
 	public static Item ingot_metal;
 	public static Item chemical_dye;
 	public static Item crayon;
+	public static Item divine_shard;
 
 	public static Item scuttertail;
 	public static Item saltleaf;
@@ -2579,7 +2580,8 @@ public class ModItems {
 		ingot_metal = new ItemEnumMulti(EnumIngotMetal.class, true, true).setUnlocalizedName("ingot_metal").setCreativeTab(null).setTextureName(RefStrings.MODID + ":ingot_metal");
 		chemical_dye = new ItemChemicalDye().setUnlocalizedName("chemical_dye").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":chemical_dye");
 		crayon = new ItemCrayon().setUnlocalizedName("crayon").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":crayon");
-
+		divine_shard = new Item().setUnlocalizedName("divine_shard").setCreativeTab(null).setTextureName(RefStrings.MODID + ":divine_shard");
+		
 		undefined = new ItemCustomLore().setUnlocalizedName("undefined").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":undefined");
 
 		billet_uranium = new Item().setUnlocalizedName("billet_uranium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":billet_uranium");
@@ -6025,6 +6027,7 @@ public class ModItems {
 		GameRegistry.registerItem(part_grip, part_grip.getUnlocalizedName());
 		GameRegistry.registerItem(hard_drive, hard_drive.getUnlocalizedName());
 		GameRegistry.registerItem(full_drive, full_drive.getUnlocalizedName());
+		GameRegistry.registerItem(divine_shard, divine_shard.getUnlocalizedName());
 
 		//Plant Products
 		GameRegistry.registerItem(plant_item, plant_item.getUnlocalizedName());

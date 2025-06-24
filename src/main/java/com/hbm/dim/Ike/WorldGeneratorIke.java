@@ -8,8 +8,11 @@ import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
+import com.hbm.main.StructureManager;
 import com.hbm.world.dungeon.AncientTomb;
 import com.hbm.world.gen.NBTStructure;
+import com.hbm.world.gen.NBTStructure.JigsawPiece;
+import com.hbm.world.gen.NBTStructure.SpawnCondition;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -19,6 +22,13 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorIke implements IWorldGenerator {
 
 	public WorldGeneratorIke() {
+		NBTStructure.registerStructure(SpaceConfig.ikeDimension, new SpawnCondition() {{
+			structure = new JigsawPiece("ike_artifact", StructureManager.ike_artifact, -1);
+			spawnWeight = 4;
+		}});
+
+	
+		
 		NBTStructure.registerNullWeight(SpaceConfig.ikeDimension, 16);
 
 		BlockOre.addValidBody(ModBlocks.ore_mineral, SolarSystem.Body.IKE);
