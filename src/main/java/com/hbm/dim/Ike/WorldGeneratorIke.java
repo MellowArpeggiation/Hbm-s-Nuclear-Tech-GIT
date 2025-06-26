@@ -11,6 +11,7 @@ import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.dim.WorldGeneratorCelestial;
 import com.hbm.dim.dres.biome.BiomeGenBaseDres;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.main.StructureManager;
 import com.hbm.world.dungeon.AncientTomb;
 import com.hbm.world.gen.NBTStructure;
@@ -29,7 +30,7 @@ public class WorldGeneratorIke implements IWorldGenerator {
 		NBTStructure.registerStructure(SpaceConfig.ikeDimension, new SpawnCondition() {{
 			structure = new JigsawPiece("ike_artifact", StructureManager.ike_artifact, -5);
 			canSpawn = biome -> biome == BiomeGenIke.biome;
-			spawnWeight = 32;
+			spawnWeight = 4;
 			
 		}});
 		
@@ -40,7 +41,7 @@ public class WorldGeneratorIke implements IWorldGenerator {
 		BlockOre.addValidBody(ModBlocks.ore_coltan, SolarSystem.Body.IKE);
 		BlockOre.addValidBody(ModBlocks.ore_asbestos, SolarSystem.Body.IKE);
 	}
-
+	
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if(world.provider.dimensionId == SpaceConfig.ikeDimension) {
