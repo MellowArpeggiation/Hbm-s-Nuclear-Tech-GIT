@@ -370,6 +370,7 @@ public class CentrifugeRecipes extends SerializableRecipe {
 
 		recipes.put(new OreDictStack(NI.ore()), new ItemStack[] {
 				new ItemStack(ModItems.chunk_ore, 2, ItemEnums.EnumChunkType.PENTLANDITE.ordinal()),
+				new ItemStack(ModItems.sulfur, 1),
 				new ItemStack(ModItems.powder_iron, 1),
 				new ItemStack(Blocks.gravel, 1) });
 
