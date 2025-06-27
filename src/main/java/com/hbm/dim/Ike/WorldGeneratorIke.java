@@ -24,7 +24,6 @@ public class WorldGeneratorIke implements IWorldGenerator {
 	public WorldGeneratorIke() {
 		NBTStructure.registerStructure(SpaceConfig.ikeDimension, new SpawnCondition() {{
 			structure = new JigsawPiece("ike_artifact", StructureManager.ike_artifact, -5);
-			canSpawn = biome -> biome == BiomeGenIke.biome;
 			spawnWeight = 4;
 		}});
 
