@@ -44,6 +44,7 @@ public class WorldConfig {
 	public static int laytheOilSpawn = 100;
 	public static int munBrineSpawn = 100;
 	public static int minmusBrineSpawn = 100;
+	public static int ikeBrineSpawn = 100;
 
 	public static int bedrockOilPerDeposit = 100;
 	public static int bedrockGasPerDepositMin = 10;
@@ -74,6 +75,9 @@ public class WorldConfig {
 
 	public static int minmusBrinePerDeposit = 300;
 	public static double minmusBrineDrainChance = 0.05D;
+
+	public static int ikeBrinePerDeposit = 300;
+	public static double ikeBrineDrainChance = 0.05D;
 
 
 	public static boolean newBedrockOres = true;
@@ -206,6 +210,9 @@ public class WorldConfig {
 		dunaOilSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.27S_oilSpawnRate", "Spawns an oil bubble every nTH chunk (on Duna)", 100);
 		laytheOilSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.28S_oilSpawnRate", "Spawns a DS oil bubble every nTH chunk (on Laythe)", 100);
 		eveGasSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.29S_gasSpawnRate", "Spawns a natural gas bubble every nTH chunk (on Eve)", 100);
+		munBrineSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.30S_brineSpawnRate", "Spawns a brine bubble every nTH chunk (on Mun)", 100);
+		minmusBrineSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.31S_brineSpawnRate", "Spawns a brine bubble every nTH chunk (on Minmus)", 100);
+		ikeBrineSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.32S_brineSpawnRate", "Spawns a brine bubble every nTH chunk (on Ike)", 100);
 
 		bedrockOilPerDeposit = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.O00_bedrockOilPerDeposit", "Oil extracted per bedrock oil block suck", bedrockOilPerDeposit);
 		bedrockGasPerDepositMin = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.O01_bedrockGasPerDepositMin", "Minimum natural gas extracted per bedrock oil block suck", bedrockGasPerDepositMin);
@@ -236,6 +243,9 @@ public class WorldConfig {
 
 		minmusBrinePerDeposit = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.O21_minmusBrinePerDeposit", "Brine extracted per Minmus brine block suck", minmusBrinePerDeposit);
 		minmusBrineDrainChance = CommonConfig.createConfigDouble(config, CATEGORY_OREGEN, "2.O22_minmusBrineDrainChance", "Chance for an Minmus brine block to become empty on suck", minmusBrineDrainChance);
+
+		ikeBrinePerDeposit = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.O23_ikeBrinePerDeposit", "Brine extracted per Ike brine block suck", ikeBrinePerDeposit);
+		ikeBrineDrainChance = CommonConfig.createConfigDouble(config, CATEGORY_OREGEN, "2.O24_ikeBrineDrainChance", "Chance for an Ike brine block to become empty on suck", ikeBrineDrainChance);
 
 		newBedrockOres = CommonConfig.createConfigBool(config, CATEGORY_OREGEN, "2.NB_newBedrockOres", "Enables the newer genreric bedrock ores", true);
 		bedrockIronSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.B00_bedrockIronWeight", "Spawn weight for iron bedrock ore", 100);

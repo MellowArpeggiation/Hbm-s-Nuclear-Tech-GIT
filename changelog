@@ -1,10 +1,12 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5378 - yeag](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5378)
-
 ## Added
-* BK-247 RBMK fuel recipes (it was in the last update but I forgor)
+* Brine on Ike, for the Mark Watneys
 
 ## Changed
-* Changed one little datatype in UniNodespace for a 23x performance improvement on endgame bases!
+* Added 3 nickel crystals to Martian start to unstick progression (produces 6 nickel ingots/12 stainless steel ingots at minimum, enough for an alkylation unit)
+* Removed templates in Martian start, they're gonna be axed and paper can be acquired via a sawmill
+* Slightly tweaked Duna lowland biomes to only spawn cobble at its lowest points, so you can surface mine iron deposits again
 
 ## Fixed
-* New chemplant doesn't activate achievement, making vocaloid plushies unobtainable :o
+* Bedrock ore losing planet data on reloading world/chunk
+* Crash when breaking a tool with silk touch or fortune active
+* Tool AoE breaking bedrock ore

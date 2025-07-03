@@ -10,6 +10,7 @@ import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.main.StructureManager;
 import com.hbm.world.dungeon.AncientTomb;
+import com.hbm.world.feature.OilBubble;
 import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.gen.NBTStructure.JigsawPiece;
 import com.hbm.world.gen.NBTStructure.SpawnCondition;
@@ -33,6 +34,8 @@ public class WorldGeneratorIke implements IWorldGenerator {
 		BlockOre.addValidBody(ModBlocks.ore_lithium, SolarSystem.Body.IKE);
 		BlockOre.addValidBody(ModBlocks.ore_coltan, SolarSystem.Body.IKE);
 		BlockOre.addValidBody(ModBlocks.ore_asbestos, SolarSystem.Body.IKE);
+
+		BlockOre.addValidBody(ModBlocks.ore_brine, SolarSystem.Body.IKE);
 	}
 
 	@Override
@@ -44,6 +47,14 @@ public class WorldGeneratorIke implements IWorldGenerator {
 
 	private void generateIke(World world, Random rand, int i, int j) {
 		int meta = CelestialBody.getMeta(world);
+
+		if(WorldConfig.ikeBrineSpawn > 0 && rand.nextInt(WorldConfig.ikeBrineSpawn) == 0) {
+			int randPosX = i + rand.nextInt(16);
+			int randPosY = rand.nextInt(25);
+			int randPosZ = j + rand.nextInt(16);
+
+			OilBubble.spawnOil(world, randPosX, randPosY, randPosZ, 10 + rand.nextInt(7), ModBlocks.ore_brine, meta, ModBlocks.ike_stone);
+		}
 
 		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.asbestosSpawn, 8, 3, 22, ModBlocks.ore_asbestos, meta, ModBlocks.ike_stone);
 		DungeonToolbox.generateOre(world, rand, i, j, WorldConfig.copperSpawn, 9, 4, 27, ModBlocks.ore_copper, meta, ModBlocks.ike_stone);

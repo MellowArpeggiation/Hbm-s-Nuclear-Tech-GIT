@@ -78,6 +78,7 @@ public class BlockOreFluid extends BlockOre {
 		if(meta == SolarSystem.Body.EVE.ordinal()) return WorldConfig.eveGasPerDeposit;
 		if(meta == SolarSystem.Body.MUN.ordinal()) return WorldConfig.munBrinePerDeposit;
 		if(meta == SolarSystem.Body.MINMUS.ordinal()) return WorldConfig.minmusBrinePerDeposit;
+		if(meta == SolarSystem.Body.IKE.ordinal()) return WorldConfig.ikeBrinePerDeposit;
 		return WorldConfig.earthOilPerDeposit;
 	}
 
@@ -96,6 +97,7 @@ public class BlockOreFluid extends BlockOre {
 		if(meta == SolarSystem.Body.EVE.ordinal()) return WorldConfig.eveGasDrainChance;
 		if(meta == SolarSystem.Body.MUN.ordinal()) return WorldConfig.munBrineDrainChance;
 		if(meta == SolarSystem.Body.MINMUS.ordinal()) return WorldConfig.minmusBrineDrainChance;
+		if(meta == SolarSystem.Body.IKE.ordinal()) return WorldConfig.ikeBrineDrainChance;
 		return WorldConfig.earthOilDrainChance;
 	}
 
