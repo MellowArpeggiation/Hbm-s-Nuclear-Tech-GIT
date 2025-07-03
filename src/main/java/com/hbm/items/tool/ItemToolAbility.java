@@ -58,7 +58,7 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.event.world.BlockEvent;
 
 public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIProvider, IItemControlReceiver, IKeybindReceiver {
-	
+
 	protected boolean isShears = false;
 	protected EnumToolType toolType;
 	protected EnumRarity rarity = EnumRarity.common;
@@ -69,7 +69,7 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 	protected boolean rockBreaker = false;
 
 	public static enum EnumToolType {
-		
+
 		PICKAXE(
 				Sets.newHashSet(new Material[] { Material.iron, Material.anvil, Material.rock, Material.glass }),
 				Sets.newHashSet(new Block[] { Blocks.cobblestone, Blocks.double_stone_slab, Blocks.stone_slab, Blocks.stone, Blocks.sandstone, Blocks.mossy_cobblestone, Blocks.iron_ore, Blocks.iron_block, Blocks.coal_ore, Blocks.gold_block, Blocks.gold_ore, Blocks.diamond_ore, Blocks.diamond_block, Blocks.ice, Blocks.netherrack, Blocks.lapis_ore, Blocks.lapis_block, Blocks.redstone_ore, Blocks.lit_redstone_ore, Blocks.rail, Blocks.detector_rail, Blocks.golden_rail, Blocks.activator_rail })
@@ -98,7 +98,7 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 		public Set<Material> materials = new HashSet();
 		public Set<Block> blocks = new HashSet();
 	}
-	
+
 	public ItemToolAbility setShears() {
 		this.isShears = true;
 		return this;
@@ -109,7 +109,7 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 		this.damage = damage;
 		this.movement = movement;
 		this.toolType = type;
-		
+
 		// hacky workaround, might be good to rethink this entire system
 		if(type == EnumToolType.MINER) {
 			this.setHarvestLevel("pickaxe", material.getHarvestLevel());
@@ -163,15 +163,15 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 
 		World world = player.worldObj;
 		Block block = world.getBlock(x, y, z);
-		
-		/* 
+
+		/*
 		 * The original implementation of this always returned FALSE which uses the vanilla block break code.
 		 * This one now returns TRUE when an ability applies and instead relies on breakExtraBlock, which has the minor
 		 * issue of only running on the sever, while the client uses the vanilla implementation. breakExtraBlock was only
 		 * meant to be used for AoE or vein miner and not for the block that's being mined, hence break EXTRA block.
 		 * The consequence was that the server would fail to break keyholes since breakExtraBlock is supposed to exclude
 		 * them, while the client happily removes the block, causing a desync.
-		 * 
+		 *
 		 * Since keyholes aren't processable and exempt from silk touch anyway, we just default to the vanilla implementation in every case.
 		 */
 		if(block == ModBlocks.stone_keyhole || block == ModBlocks.stone_keyhole_meta) return false;
@@ -187,7 +187,7 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 			preset.harvestAbility.preHarvestAll(preset.harvestAbilityLevel, world, player);
 
 			boolean skipRef = preset.areaAbility.onDig(preset.areaAbilityLevel, world, x, y, z, player, this);
-		
+
 			if(!skipRef) {
 				breakExtraBlock(world, x, y, z, player, x, y, z);
 			}
@@ -292,7 +292,7 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 		Block block = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 
-		if(!(canHarvestBlock(block, stack) || canShearBlock(block, stack, world, x, y, z)) || block == Blocks.bedrock || block == ModBlocks.stone_keyhole)
+		if(!(canHarvestBlock(block, stack) || canShearBlock(block, stack, world, x, y, z)) || block.getBlockHardness(world, x, y, z) == -1.0F || block == ModBlocks.stone_keyhole)
 			return;
 
 		Block refBlock = world.getBlock(refX, refY, refZ);
@@ -314,7 +314,7 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 
 	/** Assumes a canShearBlock check has passed, will most likely crash otherwise! */
 	public static void shearBlock(World world, int x, int y, int z, Block block, EntityPlayer player) {
-		
+
 		ItemStack held = player.getHeldItem();
 
 		IShearable target = (IShearable) block;
@@ -363,7 +363,7 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 					player.destroyCurrentEquippedItem();
 				}
 			}
-			
+
 			if(removedByPlayer && canHarvest) {
 				try {
 					blockCaptureDrops.invoke(block, true);
@@ -378,7 +378,7 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 				} catch (InvocationTargetException e) {
 					// Might be possible? Not in practice, though
 					MainRegistry.logger.error("Failed to capture drops for block " + block, e);
-				} 
+				}
 			}
 		}
 
@@ -435,9 +435,9 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 
 			NBTTagList nbtPresets = nbt.getTagList("abilityPresets", 10);
 			int numPresets = Math.min(nbtPresets.tagCount(), 99);
-			
+
 			presets = new ArrayList<ToolPreset>(numPresets);
-			
+
 			for(int i = 0; i < numPresets; i++) {
 				NBTTagCompound nbtPreset = nbtPresets.getCompoundTagAt(i);
 				ToolPreset preset = new ToolPreset();
@@ -538,12 +538,12 @@ public class ItemToolAbility extends ItemTool implements IDepthRockTool, IGUIPro
 
 	@Override
 	public void handleKeybind(EntityPlayer player, ItemStack stack, EnumKeybind keybind, boolean state) {
-		
+
 		if(keybind == EnumKeybind.ABILITY_CYCLE && state) {
 
 			World world = player.worldObj;
 			if(!canOperate(stack)) return;
-			
+
 			Configuration config = getConfiguration(stack);
 			if(config.presets.size() < 2 || world.isRemote) return;
 
