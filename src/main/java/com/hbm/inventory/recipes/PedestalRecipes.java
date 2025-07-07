@@ -27,10 +27,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 public class PedestalRecipes extends SerializableRecipe {
-	
+
 	public static List<PedestalRecipe> recipes = new ArrayList();
 	public static ArrayList<PedestalRecipe>[] recipeSets = new ArrayList[2];
-	
+
 	static { for(int i = 0; i < recipeSets.length; i++) recipeSets[i] = new ArrayList(); }
 
 	@Override
@@ -39,7 +39,8 @@ public class PedestalRecipes extends SerializableRecipe {
 		register(new PedestalRecipe(new ItemStack(ModItems.gun_light_revolver_dani),
 				null,							new OreDictStack(PB.plate()),						null,
 				new OreDictStack(GOLD.plate()),	new ComparableStack(ModItems.gun_light_revolver),	new OreDictStack(GOLD.plate()),
-				null,							new OreDictStack(PB.plate()),						null));
+				null,							new OreDictStack(PB.plate()),						null)
+				.extra(PedestalExtraCondition.NEW_MOON));
 
 		register(new PedestalRecipe(new ItemStack(ModItems.gun_maresleg_broken),
 				new ComparableStack(ModBlocks.barbed_wire),	new OreDictStack(WEAPONSTEEL.plate()),		new ComparableStack(ModBlocks.barbed_wire),
@@ -113,7 +114,7 @@ public class PedestalRecipes extends SerializableRecipe {
 				null,	new ComparableStack(ModItems.item_secret, 3, EnumSecretType.ABERRATOR),	null,
 				null,	null,																	null).set(1));
 	}
-	
+
 	public static void register(PedestalRecipe recipe) {
 		recipes.add(recipe);
 		int set = Math.abs(recipe.recipeSet) % recipeSets.length;
@@ -139,11 +140,11 @@ public class PedestalRecipes extends SerializableRecipe {
 	@Override
 	public void readRecipe(JsonElement recipe) {
 		JsonObject obj = (JsonObject) recipe;
-		
+
 		ItemStack output = this.readItemStack(obj.get("output").getAsJsonArray());
 		JsonArray inputArray = obj.get("input").getAsJsonArray();
 		AStack[] input = new AStack[9];
-		
+
 		for(int i = 0; i < 9; i++) {
 			JsonElement element = inputArray.get(i);
 			if(element.isJsonNull()) {
@@ -152,7 +153,7 @@ public class PedestalRecipes extends SerializableRecipe {
 				input[i] = this.readAStack(element.getAsJsonArray());
 			}
 		}
-		
+
 		PedestalRecipe rec = new PedestalRecipe(output, input);
 		if(obj.has("extra")) {
 			rec.extra = PedestalExtraCondition.valueOf(obj.get("extra").getAsString());
@@ -161,17 +162,17 @@ public class PedestalRecipes extends SerializableRecipe {
 		if(obj.has("set")) {
 			rec.recipeSet = obj.get("set").getAsInt();
 		}
-		
+
 		this.recipes.add(rec);
 	}
 
 	@Override
 	public void writeRecipe(Object recipe, JsonWriter writer) throws IOException {
 		PedestalRecipe rec = (PedestalRecipe) recipe;
-		
+
 		writer.name("output");
 		this.writeItemStack(rec.output, writer);
-		
+
 		writer.name("input").beginArray();
 		for(int i = 0; i < rec.input.length; i++) {
 			if(rec.input[i] == null) {
@@ -181,31 +182,31 @@ public class PedestalRecipes extends SerializableRecipe {
 			}
 		}
 		writer.endArray();
-		
+
 		writer.name("extra").value(rec.extra.name());
 		if(rec.recipeSet != 0) writer.name("set").value(rec.recipeSet);
 	}
-	
+
 	public static enum PedestalExtraCondition {
 		NONE, FULL_MOON, NEW_MOON, SUN, GOOD_KARMA, BAD_KARMA
 	}
-	
+
 	public static class PedestalRecipe {
 		public ItemStack output;
 		public AStack[] input;
 		public int recipeSet = 0;
 		public PedestalExtraCondition extra = PedestalExtraCondition.NONE;
-		
+
 		public PedestalRecipe(ItemStack output, AStack... input) {
 			this.output = output;
 			this.input = input;
 		}
-		
+
 		public PedestalRecipe extra(PedestalExtraCondition extra) {
 			this.extra = extra;
 			return this;
 		}
-		
+
 		public PedestalRecipe set(int set) {
 			this.recipeSet = set;
 			return this;

@@ -373,7 +373,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputFluids(new FluidStack(Fluids.NITRIC_ACID, 2_000), new FluidStack(Fluids.AMMONIA, 1_000))
 				.outputFluids(new FluidStack(Fluids.HYDRAZINE, 800)));
 
-		this.register(new GenericRecipe("chem.ammonia").setup(250, 1_000)
+		this.register(new GenericRecipe("chem.ammonia").setup(50, 100)
 				.inputFluids(new FluidStack(Fluids.NITROGEN, 600), new FluidStack(Fluids.WATER, 1_000))
 				.outputFluids(new FluidStack(Fluids.AMMONIA, 800)));
 
@@ -381,7 +381,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputFluids(new FluidStack(Fluids.AMMONIA, 350), new FluidStack(Fluids.BLOOD, 800))
 				.outputFluids(new FluidStack(Fluids.BLOODGAS, 1000)));
 
-		this.register(new GenericRecipe("chem.hcl").setup(250, 1_000)
+		this.register(new GenericRecipe("chem.hcl").setup(50, 100)
 				.inputFluids(new FluidStack(Fluids.HYDROGEN, 300), new FluidStack(Fluids.CHLORINE, 1000))
 				.outputFluids(new FluidStack(Fluids.HCL, 400)));
 
@@ -389,34 +389,38 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputFluids(new FluidStack(Fluids.AMMONIA, 500), new FluidStack(Fluids.NITROGEN, 1000))
 				.outputItems(new ItemStack(ModItems.ammonium_nitrate, 4)));
 
-		this.register(new GenericRecipe("chem.nmass").setup(250, 1_000)
+		this.register(new GenericRecipe("chem.nmass").setup(250, 10_000)
 				.inputFluids(new FluidStack(Fluids.SCHRABIDIC, 650), (new FluidStack(Fluids.IONGEL, 800)))
 				.inputItems(new ComparableStack(ModItems.pellet_charged, 1), new ComparableStack(ModItems.ingot_euphemium, 1))
 				.outputFluids(new FluidStack(Fluids.NMASS, 1000), new FluidStack(Fluids.WASTEGAS, 2000)));
 
-		this.register(new GenericRecipe("chem.masscake").setup(250, 1_000)
+		this.register(new GenericRecipe("chem.masscake").setup(200, 100)
 				.inputFluids(new FluidStack(Fluids.CMILK, 4000), new FluidStack(Fluids.CREAM, 1000)) // why not regular milk? well its because the refined products allow for higher mass cakes while still needing less milk
 				.inputItems(
 						new ComparableStack(Items.sugar, 8),				// if there is a hole in my logic i will shoot myself
 						new ComparableStack(Items.egg, 4))				//ex: since a cake needs 3 buckets of milk, c-milk is more dense, leading to it being only 4 buckets of condensed milk, thats 1 bucket per cake.
 				.outputItems(new ItemStack(Items.cake, 4)));
 
-		this.register(new GenericRecipe("chem.butter").setup(250, 1_000)
+		this.register(new GenericRecipe("chem.butter").setup(100, 100)
 				.inputFluids(new FluidStack(Fluids.EMILK, 1000))
 				.outputItems(new ItemStack(ModItems.butter)));
-		this.register(new GenericRecipe("chem.strawberryicecream").setup(250, 1_000)
+		this.register(new GenericRecipe("chem.strawberryicecream").setup(150, 100)
 				.inputFluids(new FluidStack(Fluids.CREAM, 1000))
 				.inputItems(new ComparableStack(ModItems.butter, 2), new ComparableStack(Blocks.packed_ice, 1), new ComparableStack(ModItems.strawberry, 4))
 				.outputItems(new ItemStack(ModItems.s_cream, 4)));
 
-		this.register(new GenericRecipe("chem.soil").setup(250, 1_000)
+		this.register(new GenericRecipe("chem.soil").setup(100, 1_000)
 				.inputFluids(new FluidStack(Fluids.WATER, 4000))
 				.inputItems(new ComparableStack(ModItems.ammonium_nitrate, 1), new ComparableStack(Blocks.gravel, 8))
 				.outputItems(new ItemStack(Blocks.dirt, 8)));
 
-		this.register(new GenericRecipe("chem.chloromethane").setup(250, 1_000)
+		this.register(new GenericRecipe("chem.chloromethane").setup(50, 1_000)
 				.inputFluids(new FluidStack(Fluids.GAS, 750), new FluidStack(Fluids.CHLORINE, 250))
 				.outputFluids(new FluidStack(Fluids.CHLOROMETHANE, 1000)));
+
+		this.register(new GenericRecipe("chem.nitricacidalt").setup(50, 1_000)
+				.inputFluids(new FluidStack(Fluids.WATER, 500), new FluidStack(Fluids.AMMONIA, 1000))
+				.outputFluids(new FluidStack(Fluids.NITRIC_ACID, 1_000)));
 
 		// WARNING: NILERED CHEMISTRY ZONE //
 		this.register(new GenericRecipe("chem.hydrapiss").setup(250, 1_000)
