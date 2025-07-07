@@ -1,12 +1,9 @@
-## Added
-* Brine on Ike, for the Mark Watneys
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5383 - me when mom brings home THE SLUDGE](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/2.0.17_X5383)
 
 ## Changed
-* Added 3 nickel crystals to Martian start to unstick progression (produces 6 nickel ingots/12 stainless steel ingots at minimum, enough for an alkylation unit)
-* Removed templates in Martian start, they're gonna be axed and paper can be acquired via a sawmill
-* Slightly tweaked Duna lowland biomes to only spawn cobble at its lowest points, so you can surface mine iron deposits again
+* Pedestal crafting requirement `NEW_MOON` now checks for an eclipse instead
+    * Must be during the day
+    * don't ask what this is
 
 ## Fixed
-* Bedrock ore losing planet data on reloading world/chunk
-* Crash when breaking a tool with silk touch or fortune active
-* Tool AoE breaking bedrock ore
+* Depth rock tools not breaking depth rock (sorry for grilling you abel, even I fucked this one up)
