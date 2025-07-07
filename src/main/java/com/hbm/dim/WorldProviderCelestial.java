@@ -161,12 +161,17 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 		// First fetch the suns true size
 		double sunSize = SolarSystem.calculateSunSize(body);
-
 		float solarAngle = worldObj.getCelestialAngle(partialTicks);
 
-		// Get our orrery of bodies
+		// Get our orrery of bodies, this is cached for reuse in sky rendering
 		metrics = SolarSystem.calculateMetricsFromBody(worldObj, partialTicks, body, solarAngle);
-		eclipseAmount = 0;
+
+		// Get our eclipse amount
+		eclipseAmount = getEclipseFactor(metrics, sunSize);
+	}
+
+	private double getEclipseFactor(List<AstroMetric> metrics, double sunSize) {
+		double factor = 0;
 
 		// Calculate eclipse
 		for(AstroMetric metric : metrics) {
@@ -181,10 +186,12 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			double maxPhase = 1 - (planetArc - sunArc);
 			if(metric.phaseObscure < minPhase) continue;
 
-			double thisEclipseAmount = 1 - (metric.phaseObscure - maxPhase) / (minPhase - maxPhase);
+			double thisFactor = 1 - (metric.phaseObscure - maxPhase) / (minPhase - maxPhase);
 
-			eclipseAmount = Math.min(Math.max(eclipseAmount, thisEclipseAmount), 1.0);
+			factor = Math.min(Math.max(factor, thisFactor), 1.0);
 		}
+
+		return factor;
 	}
 
 	@Override
@@ -627,6 +634,20 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		int phase = Math.round(8 - ((float)SolarSystem.calculateSingleAngle(worldObj, 0, body, body.satellites.get(0)) / 45 + 4));
 		if(phase >= 8) return 0;
 		return phase;
+	}
+
+	public boolean isEclipse() {
+		CelestialBody body = CelestialBody.getBody(worldObj);
+
+		// First fetch the suns true size
+		double sunSize = SolarSystem.calculateSunSize(body);
+		float solarAngle = worldObj.getCelestialAngle(0);
+
+		// Get our orrery of bodies, this is cached for reuse in sky rendering
+		metrics = SolarSystem.calculateMetricsFromBody(worldObj, 0, body, solarAngle);
+
+		// Get our eclipse amount
+		return getEclipseFactor(metrics, sunSize) > 0.0;
 	}
 
 	@Override
