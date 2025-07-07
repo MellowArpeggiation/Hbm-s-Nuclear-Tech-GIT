@@ -34,6 +34,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
+import net.minecraft.world.biome.BiomeGenMushroomIsland;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
@@ -296,6 +297,7 @@ public class EntityMappings {
 
 			if(biome == null) continue;
 			if(biome instanceof BiomeGenBaseCelestial) continue;
+			if(biome instanceof BiomeGenMushroomIsland) continue;
 
 			List<SpawnListEntry> spawns = biome.getSpawnableList(typeOfCreature);
 
