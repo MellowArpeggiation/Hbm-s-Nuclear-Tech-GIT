@@ -26,6 +26,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -447,6 +448,8 @@ public class CelestialBody {
 	}
 
 	public static float getGravity(EntityLivingBase entity) {
+		if(entity instanceof EntityWaterMob) return AstronomyUtil.STANDARD_GRAVITY;
+
 		if(inOrbit(entity.worldObj)) {
 			if(HbmLivingProps.hasGravity(entity)) {
 				OrbitalStation station = entity.worldObj.isRemote
