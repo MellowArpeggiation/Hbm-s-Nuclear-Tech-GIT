@@ -19,6 +19,7 @@ import com.hbm.world.WorldUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -132,6 +133,21 @@ public class LogicBlockActions {
 				vec.rotateAroundYDeg(36D);
 			}
 			world.setBlock(x, y, z, ModBlocks.block_steel);
+		}
+	};
+
+	public static Consumer<LogicBlock.TileEntityLogicBlock> SKELETON_MINIGUN = (tile) -> {
+		World world = tile.getWorldObj();
+		int x = tile.xCoord;
+		int y = tile.yCoord;
+		int z = tile.zCoord;
+		if (tile.phase == 1) {
+			Vec3NT vec = new Vec3NT(0, 0, 0);
+			EntitySkeleton mob = new EntitySkeleton(world);
+			mob.setPositionAndRotation(x, y, z, 0, 0);
+			mob.setCurrentItemOrArmor(0, new ItemStack(ModItems.gun_minigun_dual));
+			world.spawnEntityInWorld(mob);
+			world.setBlock(x, y, z, Blocks.air);
 		}
 	};
 
@@ -262,8 +278,9 @@ public class LogicBlockActions {
 		actions.put("PUZZLE_TEST", PUZZLE_TEST);
 		actions.put("MISSILE_STRIKE", MISSILE_STRIKE);
 		actions.put("IRRADIATE_ENTITIES_AOE", RAD_CONTAINMENT_SYSTEM);
+
+		//Mob Block Actions
+		actions.put("SKELETON_MINIGUN", SKELETON_MINIGUN);
 	}
-
-
 
 }
