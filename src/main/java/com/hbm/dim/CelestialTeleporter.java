@@ -13,7 +13,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 
-public class DebugTeleporter extends Teleporter {
+public class CelestialTeleporter extends Teleporter {
 
 	private final WorldServer sourceServer;
 	private final WorldServer targetServer;
@@ -26,7 +26,7 @@ public class DebugTeleporter extends Teleporter {
 
 	private EntityPlayerMP playerMP;
 
-	public DebugTeleporter(WorldServer sourceServer, WorldServer targetServer, EntityPlayerMP playerMP, double x, double y, double z, boolean grounded) {
+	public CelestialTeleporter(WorldServer sourceServer, WorldServer targetServer, EntityPlayerMP playerMP, double x, double y, double z, boolean grounded) {
 		super(targetServer);
 		this.sourceServer = sourceServer;
 		this.targetServer = targetServer;
@@ -97,7 +97,7 @@ public class DebugTeleporter extends Teleporter {
 		queuedTeleport = null;
 	}
 
-	private static DebugTeleporter queuedTeleport;
+	private static CelestialTeleporter queuedTeleport;
 
 	public static void teleport(EntityPlayer player, int dim, double x, double y, double z, boolean grounded) {
 		if(player.dimension == dim) return; // ignore if we're teleporting to the same place
@@ -110,7 +110,7 @@ public class DebugTeleporter extends Teleporter {
 				WorldServer sourceServer = playerMP.getServerForPlayer();
 				WorldServer targetServer = (WorldServer) mServer.worldServerForDimension(dim);
 
-				queuedTeleport = new DebugTeleporter(sourceServer, targetServer, playerMP, x, y, z, grounded);
+				queuedTeleport = new CelestialTeleporter(sourceServer, targetServer, playerMP, x, y, z, grounded);
 			}
 		}
 	}

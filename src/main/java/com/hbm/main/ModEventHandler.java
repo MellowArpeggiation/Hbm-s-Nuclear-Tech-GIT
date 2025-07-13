@@ -12,7 +12,7 @@ import com.hbm.config.RadiationConfig;
 import com.hbm.config.ServerConfig;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
-import com.hbm.dim.DebugTeleporter;
+import com.hbm.dim.CelestialTeleporter;
 import com.hbm.dim.WorldGeneratorCelestial;
 import com.hbm.dim.WorldProviderCelestial;
 import com.hbm.dim.WorldProviderEarth;
@@ -948,7 +948,7 @@ public class ModEventHandler {
 			if(event.phase == Phase.END) {
 				EntityRailCarBase.updateMotion(event.world);
 
-				DebugTeleporter.runQueuedTeleport();
+				CelestialTeleporter.runQueuedTeleport();
 
 				// Once per second, run atmospheric chemistry
 				if(event.world.getTotalWorldTime() % 20 == 0) {
@@ -1396,7 +1396,7 @@ public class ModEventHandler {
 
 				if(rx < minBuffer || rx > maxBuffer || rz < minBuffer || rz > maxBuffer) {
 					OrbitalStation station = OrbitalStation.getStationFromPosition((int)player.posX, (int)player.posZ);
-					DebugTeleporter.teleport(player, station.orbiting.dimensionId, rand.nextInt(SpaceConfig.maxProbeDistance * 2) - SpaceConfig.maxProbeDistance, 800, rand.nextInt(SpaceConfig.maxProbeDistance * 2) - SpaceConfig.maxProbeDistance, false);
+					CelestialTeleporter.teleport(player, station.orbiting.dimensionId, rand.nextInt(SpaceConfig.maxProbeDistance * 2) - SpaceConfig.maxProbeDistance, 800, rand.nextInt(SpaceConfig.maxProbeDistance * 2) - SpaceConfig.maxProbeDistance, false);
 				}
 			}
 
