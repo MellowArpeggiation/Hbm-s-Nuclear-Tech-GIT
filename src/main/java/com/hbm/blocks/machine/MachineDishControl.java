@@ -25,30 +25,13 @@ public class MachineDishControl extends BlockDummyable implements ITooltipProvid
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.blockIcon = iconRegister.registerIcon(RefStrings.MODID + ":machine_controller_side");
-	}
-
-	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean ext) {
 		addStandardInfo(stack, player, list, ext);
 		/*
 		list.add(EnumChatFormatting.GOLD + "Allows remote access to the StarDar");
 		list.add(EnumChatFormatting.YELLOW + "Right click stardar with reactor sensor to begin link");
 		list.add(EnumChatFormatting.YELLOW + "Right click controller with reactor sensor to link the StarDar");
-
 		 */
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int metadata) {
-
-		if(metadata == 0)
-			metadata = 3;
-
-		return blockIcon;
 	}
 
 	@Override
