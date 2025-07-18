@@ -91,6 +91,7 @@ public class ResourceManager {
 	public static final IModelCustom solarp = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/solar_panel.obj")).asVBO();
 	public static final IModelCustom stardar = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/antenna.obj")).asVBO();
 	public static final IModelCustom drive_processor = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/drive_processor.obj")).asVBO();
+	public static final IModelCustom dish_controller = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/dish_controller.obj")).asVBO();
 	public static final IModelCustom air_scrubber = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/air_scrubber.obj"));
 	public static final IModelCustom orbital_computer = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/spaceship_computer.obj")).asVBO();
 	public static final IModelCustom transporter_pad = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/transporter_pad.obj")).asVBO();
@@ -563,6 +564,7 @@ public class ResourceManager {
 	public static final ResourceLocation solarp_tex = new ResourceLocation(RefStrings.MODID, "textures/models/solar_panel.png"); //haha... "larp"
 	public static final ResourceLocation stardar_tex = new ResourceLocation(RefStrings.MODID, "textures/models/antenna.png");
 	public static final ResourceLocation drive_processor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/drive_processor.png");
+	public static final ResourceLocation dish_controller_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/dish_controller.png");
 	public static final ResourceLocation air_scrubber_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/air_scrubber.png");
 	public static final ResourceLocation orbital_computer_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/spaceship_computer.png");
 	public static final ResourceLocation transporter_pad_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/transporter_pad.png");

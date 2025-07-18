@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineDishControl;
+import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityDishControl;
 import com.hbm.util.ChatBuilder;
 
@@ -41,17 +42,26 @@ public class ItemReactorSensor extends Item {
 			world.playSoundAtEntity(player, "hbm:item.techBoop", 1.0F, 1.0F);
 			player.swingItem();
 			return true;
-
 		}
 		else if(b == ModBlocks.machine_dish_controller)
 		{
-			TileEntityDishControl entity = (TileEntityDishControl) world.getTileEntity(x,y,z);
+			if(stack.stackTagCompound == null) return false;
+
+			// Get Core
+			MachineDishControl controllerBlock = (MachineDishControl)b;
+			int[] corePos = controllerBlock.findCore(world, x, y, z);
+
+			// Get TileEntity
+			TileEntityDishControl entity = (TileEntityDishControl)world.getTileEntity(
+				corePos[0],
+				corePos[1],
+				corePos[2]
+			);
 
 			if(entity == null) return false;
 
 			if(!world.isRemote) {
 				SendMessage(player,"Stardar Linked!");
-
 				entity.TryLink(stack);
 			}
 
