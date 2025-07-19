@@ -31,7 +31,7 @@ public class RenderDishControl extends TileEntitySpecialRenderer implements IIte
 			}
 
 			bindTexture(ResourceManager.dish_controller_tex);
-			ResourceManager.dish_controller.renderPart("Base");
+			ResourceManager.dish_controller.renderAll();
 
 			GL11.glShadeModel(GL11.GL_FLAT);
 
@@ -43,15 +43,14 @@ public class RenderDishControl extends TileEntitySpecialRenderer implements IIte
 	public IItemRenderer getRenderer() {
 		return new ItemRenderBase() {
 			public void renderInventory() {
-				// GL11.glTranslated(0, -0.5, 0);
-				GL11.glScaled(7D, 7D, 7D);
+				GL11.glTranslated(0, -0.5, 0);
+				GL11.glScaled(6D, 6D, 6D);
 			}
 			public void renderCommon() {
 				GL11.glTranslated(0.5, 0, 0);
 				GL11.glShadeModel(GL11.GL_SMOOTH);
-
 				bindTexture(ResourceManager.dish_controller_tex);
-				ResourceManager.dish_controller.renderPart("Base");
+				ResourceManager.dish_controller.renderAll();
 				GL11.glShadeModel(GL11.GL_FLAT);
 			}
 		};
