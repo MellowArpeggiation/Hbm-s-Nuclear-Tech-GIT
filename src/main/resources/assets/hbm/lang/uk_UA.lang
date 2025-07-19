@@ -5894,6 +5894,7 @@ tile.reactor_element.name=Reactor Chamber
 tile.reactor_hatch.name=Reactor Access Hatch
 tile.reactor_inserter.name=Reactor Fuel Inserter
 tile.dish_control.name=Консоль дистанційного керування радіотелескопом StarDar
+tile.dish_control.desc=Дозволює дистанційно керувати радіотелескопом StarDar.$Щоб почати зв'язок - натисніть шифт + пкм дистанційним датчиком реактора по StarDar.$Потім зробіть теж саме, але вже по консолі, щоб завершити зв'язок.
 tile.red_barrel.name=Вибухова бочка
 tile.red_cable.name=Червономідний кабель
 tile.red_cable_classic.name=Червономідний кабель (Класичний)
