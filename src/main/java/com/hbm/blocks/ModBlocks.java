@@ -3490,7 +3490,7 @@ public class ModBlocks {
 		register(machine_diesel);
 		register(machine_combustion_engine);
 		GameRegistry.registerBlock(machine_controller, machine_controller.getUnlocalizedName());
-		GameRegistry.registerBlock(machine_dish_controller, machine_dish_controller.getUnlocalizedName());
+		register(machine_dish_controller);
 		GameRegistry.registerBlock(reactor_research, reactor_research.getUnlocalizedName());
 		GameRegistry.registerBlock(reactor_zirnox, reactor_zirnox.getUnlocalizedName());
 		GameRegistry.registerBlock(zirnox_destroyed, zirnox_destroyed.getUnlocalizedName());

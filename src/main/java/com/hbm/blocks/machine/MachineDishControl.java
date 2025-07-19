@@ -25,12 +25,6 @@ public class MachineDishControl extends BlockDummyable implements ITooltipProvid
 		super(p_i45386_1_);
 	}
 
-	/*
-list.add(EnumChatFormatting.GOLD + "Allows remote access to the StarDar");
-list.add(EnumChatFormatting.YELLOW + "Right click stardar with reactor sensor to begin link");
-list.add(EnumChatFormatting.YELLOW + "Right click controller with reactor sensor to link the StarDar");
- */
-
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int meta) {
 		if(meta >= 12) return new TileEntityDishControl();
@@ -69,12 +63,20 @@ list.add(EnumChatFormatting.YELLOW + "Right click controller with reactor sensor
 				}
 
 				// Get reference to the stardar
-				MachineStardar stardar = (MachineStardar) world.getBlock(entityDishControl.dish.xCoord, entityDishControl.dish.yCoord, entityDishControl.dish.zCoord);
+				MachineStardar stardar = (MachineStardar) world.getBlock(
+					entityDishControl.dish.xCoord,
+					entityDishControl.dish.yCoord,
+					entityDishControl.dish.zCoord
+				);
 
 				// Trigger the StarDar UI to open
-				stardar.onBlockActivated(world, entityDishControl.dish.xCoord, entityDishControl.dish.yCoord, entityDishControl.dish.zCoord, player, side, hitX, hitY, hitZ);
-
-				return true;
+				return stardar.onBlockActivated(
+					world,
+					entityDishControl.dish.xCoord,
+					entityDishControl.dish.yCoord,
+					entityDishControl.dish.zCoord,
+					player, side, hitX, hitY, hitZ
+				);
 			}
 
 			return false;
