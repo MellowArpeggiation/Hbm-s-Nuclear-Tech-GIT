@@ -46,7 +46,7 @@ public class NTMWorldGenerator implements IWorldGenerator {
 			structure = new JigsawPiece("spire", StructureManager.spire, -1);
 			spawnWeight = 2;
 		}});
-		
+
 		NBTStructure.registerStructure(0, new SpawnCondition() {{
 			canSpawn = biome -> !invalidBiomes.contains(biome);
 			start = d -> new MapGenNTMFeatures.Start(d.getW(), d.getX(), d.getY(), d.getZ());
@@ -103,13 +103,49 @@ public class NTMWorldGenerator implements IWorldGenerator {
 		}});
 
 		NBTStructure.registerNullWeight(0, 2, oceanBiomes::contains); //why the fuck did this change
-    
+
 		NBTStructure.registerStructure(0, new SpawnCondition() {{
 			canSpawn = biome -> biome == BiomeGenBase.plains;
 			structure = new JigsawPiece("dish", StructureManager.dish, -10);
 			minHeight = 53;
 			maxHeight = 65;
 			spawnWeight = 1;
+		}});
+
+		NBTStructure.registerStructure(0, new SpawnCondition() {{
+			sizeLimit = 128;
+			spawnWeight = 100000;
+			canSpawn = biome -> !invalidBiomes.contains(biome);
+			startPool = "start";
+			pools = new HashMap<String, NBTStructure.JigsawPool>() {{
+				put("start", new JigsawPool() {{
+					add(new JigsawPiece("desert_atom", StructureManager.desert_atom), 100);
+				}});
+				put("machines", new JigsawPool() {{
+					add(new JigsawPiece("boiler_big_1", StructureManager.boiler_big_1), 1);
+					add(new JigsawPiece("boiler_big_2", StructureManager.boiler_big_2), 1);
+					add(new JigsawPiece("boiler_big_3", StructureManager.boiler_big_3), 1);
+					add(new JigsawPiece("rack_1", StructureManager.rack_1), 1);
+					add(new JigsawPiece("rack_2", StructureManager.rack_2), 1);
+					add(new JigsawPiece("rack_3", StructureManager.rack_3), 1);
+					add(new JigsawPiece("rack_4", StructureManager.rack_4), 1);
+					add(new JigsawPiece("rack_5", StructureManager.rack_5), 1);
+					add(new JigsawPiece("rack_6", StructureManager.rack_6), 1);
+					add(new JigsawPiece("rack_7", StructureManager.rack_7), 1);
+					add(new JigsawPiece("rack_big_1", StructureManager.rack_big_1), 1);
+					add(new JigsawPiece("rack_big_2", StructureManager.rack_big_2), 1);
+					add(new JigsawPiece("rack_big_3", StructureManager.rack_big_3), 1);
+					add(new JigsawPiece("rack_big_4", StructureManager.rack_big_4), 1);
+					add(new JigsawPiece("rack_big_5", StructureManager.rack_big_5), 1);
+					add(new JigsawPiece("rack_big_6", StructureManager.rack_big_6), 1);
+				}});
+				put("basement_rooms", new JigsawPool() {{
+					add(new JigsawPiece("boiler_room", StructureManager.boiler_room), 1);
+					add(new JigsawPiece("boiler_wall", StructureManager.boiler_wall), 1);
+					add(new JigsawPiece("diesel_gen_room", StructureManager.diesel_gen_room), 1);
+					add(new JigsawPiece("diesel_gen_wall", StructureManager.diesel_gen_wall), 1);
+				}});
+			}};
 		}});
 
 		NBTStructure.registerNullWeight(0, 2, biome -> biome == BiomeGenBase.plains);
