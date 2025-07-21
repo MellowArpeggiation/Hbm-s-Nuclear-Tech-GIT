@@ -37,6 +37,8 @@ public class Compat {
 	public static final String MOD_TC = "tc";
 	public static final String MOD_EIDS = "endlessids";
 	public static final String MOD_ANG = "angelica";
+	public static final String MOD_BOP = "BiomesOPlenty";
+	public static final String MOD_COFH = "CoFHCore";
 
 	public static Item tryLoadItem(String domain, String name) {
 		return (Item) Item.itemRegistry.getObject(getReg(domain, name));

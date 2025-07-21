@@ -16,6 +16,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidTank;
 
@@ -79,6 +80,7 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 
 	public void setCustomName(String name) {
 		this.customName = name;
+		markDirty();
 	}
 
 	@Override
@@ -169,6 +171,8 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 				slots[b0] = ItemStack.loadItemStackFromNBT(nbt1);
 			}
 		}
+
+		customName = nbt.getString("name");
 	}
 
 	@Override
@@ -187,6 +191,10 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 			}
 		}
 		nbt.setTag("items", list);
+		
+		if (customName != null) {
+			nbt.setString("name", customName);
+		}
 	}
 
 	public void updateRedstoneConnection(DirPos pos) {
@@ -212,23 +220,28 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 		}
 	}
 
-	// TODO: Consume air from connected tanks if available	
+	// TODO: Consume air from connected tanks if available
 	public boolean breatheAir(int amount) {
-		CBT_Atmosphere atmosphere = worldObj.provider instanceof WorldProviderOrbit ? null : CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
+		return breatheAir(worldObj, xCoord, yCoord, zCoord, amount);
+	}
+
+	public static boolean breatheAir(World world, int x, int y, int z, int amount) {
+		CBT_Atmosphere atmosphere = world.provider instanceof WorldProviderOrbit ? null : CelestialBody.getTrait(world, CBT_Atmosphere.class);
 		if(atmosphere != null) {
 			if(atmosphere.hasFluid(Fluids.AIR, 0.19) || atmosphere.hasFluid(Fluids.OXYGEN, 0.09)) {
 				return true;
 			}
 		}
 
-		List<AtmosphereBlob> blobs = ChunkAtmosphereManager.proxy.getBlobs(worldObj, xCoord, yCoord, zCoord);
+		List<AtmosphereBlob> blobs = ChunkAtmosphereManager.proxy.getBlobs(world, x, y, z);
 		for(AtmosphereBlob blob : blobs) {
 			if(blob.hasFluid(Fluids.AIR, 0.19) || blob.hasFluid(Fluids.OXYGEN, 0.09)) {
 				blob.consume(amount);
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
+
 }

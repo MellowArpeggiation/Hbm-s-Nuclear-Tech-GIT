@@ -37,7 +37,7 @@ public class SolarSystemWorldSavedData extends WorldSavedData {
 	private HashMap<ChunkCoordIntPair, OrbitalStation> stations = new HashMap<>();
 
 	public static SolarSystemWorldSavedData get() {
-		return get(DimensionManager.getWorld(0));
+		return get(DimensionManager.getWorlds()[0]);
 	}
 
 	public static SolarSystemWorldSavedData get(World world) {
@@ -172,7 +172,7 @@ public class SolarSystemWorldSavedData extends WorldSavedData {
 	}
 
 	public ChunkCoordIntPair findFreeSpace() {
-		int size = SpaceConfig.maxProbeDistance / OrbitalStation.STATION_SIZE;
+		int size = SpaceConfig.maxStationDistance / OrbitalStation.STATION_SIZE;
 
 		// Has a guard so it doesn't loop forever on a spammed out world
 		ChunkCoordIntPair pos = new ChunkCoordIntPair(rand.nextInt(size * 2) - size, rand.nextInt(size * 2) - size);

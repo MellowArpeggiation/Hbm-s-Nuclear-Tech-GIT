@@ -5,7 +5,6 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
-import com.hbm.dim.CelestialBody;
 import com.hbm.main.StructureManager;
 import com.hbm.world.gen.NBTStructure;
 import com.hbm.world.gen.NBTStructure.JigsawPiece;
@@ -89,7 +88,7 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 	}
 
 	private void generateThatmo(World world, Random rand, int i, int j) {
-		int meta = CelestialBody.getMeta(world);
 
 	}
+
 }

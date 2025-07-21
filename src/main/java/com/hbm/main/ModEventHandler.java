@@ -5,9 +5,11 @@ import com.google.common.collect.Multimap;
 import com.hbm.blocks.IStepTickReceiver;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockAshes;
+import com.hbm.blocks.machine.BlockBeamBase;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.MobConfig;
 import com.hbm.config.RadiationConfig;
+import com.hbm.config.ServerConfig;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.DebugTeleporter;
@@ -20,11 +22,12 @@ import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.dim.trait.CelestialBodyTrait;
+import com.hbm.dim.trait.CBT_Lights;
+import com.hbm.entity.mob.EntityCreeperTainted;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.missile.EntityRideableRocket;
 import com.hbm.entity.missile.EntityRideableRocket.RocketState;
 import com.hbm.entity.mob.ai.EntityAIFireGun;
-import com.hbm.entity.mob.EntityCreeperTainted;
 import com.hbm.entity.projectile.EntityBulletBaseMK4;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
 import com.hbm.entity.train.EntityRailCarBase;
@@ -39,6 +42,7 @@ import com.hbm.hazard.HazardSystem;
 import com.hbm.hazard.type.HazardTypeNeutron;
 import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.Spaghetti;
+import com.hbm.inventory.recipes.loader.SerializableRecipe;
 import com.hbm.handler.HTTPHandler;
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
@@ -60,6 +64,7 @@ import com.hbm.packet.toclient.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toclient.PermaSyncPacket;
 import com.hbm.packet.toclient.PlayerInformPacket;
+import com.hbm.packet.toclient.SerializableRecipePacket;
 import com.hbm.particle.helper.BlackPowderCreator;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.SatelliteSavedData;
@@ -74,6 +79,9 @@ import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
 import com.hbm.world.PlanetGen;
 import com.hbm.world.generator.TimedGenerator;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -83,12 +91,15 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockFire;
+import net.minecraft.block.IGrowable;
 import net.minecraft.command.CommandGameRule;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -134,6 +145,7 @@ import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.player.AnvilRepairEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
@@ -149,6 +161,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.Level;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -205,7 +218,33 @@ public class ModEventHandler {
 					props.hasWarped = true;
 				}
 			}
+
+			if(GeneralConfig.enableServerRecipeSync && FMLCommonHandler.instance().getSide() == Side.SERVER && event.player instanceof EntityPlayerMP) {
+				File recDir = new File(MainRegistry.configDir.getAbsolutePath() + File.separatorChar + "hbmRecipes");
+
+				MainRegistry.logger.info("Sending recipes to client!");
+
+				boolean hasSent = false;
+
+				for(SerializableRecipe recipe : SerializableRecipe.recipeHandlers) {
+					File recFile = new File(recDir.getAbsolutePath() + File.separatorChar + recipe.getFileName());
+					if(recFile.exists() && recFile.isFile()) {
+						MainRegistry.logger.info("Sending recipe file: " + recFile.getName());
+						PacketDispatcher.wrapper.sendTo(new SerializableRecipePacket(recFile), (EntityPlayerMP) event.player);
+						hasSent = true;
+					}
+				}
+
+				if(hasSent) {
+					PacketDispatcher.wrapper.sendTo(new SerializableRecipePacket(true), (EntityPlayerMP) event.player);
+				}
+			}
 		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerLeftClient(ClientDisconnectionFromServerEvent event) {
+		SerializableRecipe.clearReceivedRecipes();
 	}
 
 	@SubscribeEvent
@@ -436,13 +475,15 @@ public class ModEventHandler {
 
 		Map<Integer, List<WeightedRandomObject>> slotPools = new HashMap<>();
 
+		float soot = PollutionHandler.getPollution(entity.worldObj, MathHelper.floor_double(event.x), MathHelper.floor_double(event.y), MathHelper.floor_double(event.z), PollutionType.SOOT); //uhfgfg
+
 		if(entity instanceof EntityZombie) {
-			if(world.rand.nextFloat() < 0.005F) { // full hazmat zombine
+			if(world.rand.nextFloat() < 0.005F && soot > 2) { // full hazmat zombine
 				equipFullSet(entity, ModItems.hazmat_helmet, ModItems.hazmat_plate, ModItems.hazmat_legs, ModItems.hazmat_boots);
 				return;
 			}
 
-			if(world.rand.nextFloat() < 0.005F) { // full security zombine
+			if(world.rand.nextFloat() < 0.005F && soot > 20) { // full security zombine
 				equipFullSet(entity, ModItems.security_helmet, ModItems.security_plate, ModItems.security_legs, ModItems.security_boots);
 				return;
 			}
@@ -474,8 +515,6 @@ public class ModEventHandler {
 			}));
 
 		} else if(entity instanceof EntitySkeleton) {
-			float soot = PollutionHandler.getPollution(entity.worldObj,
-				MathHelper.floor_double(event.x), MathHelper.floor_double(event.y), MathHelper.floor_double(event.z), PollutionType.SOOT); //uhfgfg
 
 			slotPools.put(4, createSlotPool(12000, new Object[][]{
 				{ModItems.gas_mask_m65, 16}, {ModItems.gas_mask_olde, 12}, {ModItems.mask_of_infamy, 8},
@@ -527,7 +566,7 @@ public class ModEventHandler {
 	}
 
 
-	private void assignItemsToEntity(EntityLivingBase entity, Map<Integer, List<WeightedRandomObject>> slotPools) {
+	public void assignItemsToEntity(EntityLivingBase entity, Map<Integer, List<WeightedRandomObject>> slotPools) {
 		for (Map.Entry<Integer, List<WeightedRandomObject>> entry : slotPools.entrySet()) {
 			int slot = entry.getKey();
 			List<WeightedRandomObject> pool = entry.getValue();
@@ -630,9 +669,32 @@ public class ModEventHandler {
 	public void onBlockPlaced(PlaceEvent event) {
 		if(event.world.isRemote) return;
 		boolean placeCancelled = ChunkAtmosphereManager.proxy.runEffectsOnBlock(event.world, event.block, event.x, event.y, event.z);
+		if(placeCancelled) return;
 
-		if(SpaceConfig.allowNetherPortals && !placeCancelled && event.world.provider.dimensionId > 1 && event.block instanceof BlockFire) {
+		if(event.block instanceof IGrowable) {
+			ChunkAtmosphereManager.proxy.trackPlant(event.world, event.x, event.y, event.z);
+		}
+
+		if(SpaceConfig.allowNetherPortals && event.world.provider.dimensionId > 1 && event.block instanceof BlockFire) {
 			Blocks.portal.func_150000_e(event.world, event.x, event.y, event.z);
+		}
+
+		// sneaky sneaky space furnace
+		if(event.block == Blocks.furnace) {
+			event.world.setBlock(event.x, event.y, event.z, ModBlocks.furnace, 0, 2);
+			ModBlocks.furnace.onBlockPlacedBy(event.world, event.x, event.y, event.z, event.player, event.itemInHand);
+		}
+
+		if(event.y >= event.world.provider.getHorizon()) {
+			if(event.block.getLightValue() > 10) {
+				CelestialBody body = CelestialBody.getBody(event.world);
+				CBT_Lights lights = body.getTrait(CBT_Lights.class);
+
+				if(lights == null) lights = new CBT_Lights();
+				lights.addLight(event.block, event.x, event.y, event.z);
+
+				body.modifyTraits(lights);
+			}
 		}
 	}
 
@@ -645,8 +707,16 @@ public class ModEventHandler {
 		if(event.current != null && event.current.getItem() == Items.water_bucket) {
 			ForgeDirection dir = ForgeDirection.getOrientation(event.target.sideHit);
 			CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(event.world, event.target.blockX + dir.offsetX, event.target.blockY + dir.offsetY, event.target.blockZ + dir.offsetZ);
-			if(ChunkAtmosphereManager.proxy.hasLiquidPressure(atmosphere)) {
-				event.world.provider.isHellWorld = false;
+			boolean hasLiquidPressure = ChunkAtmosphereManager.proxy.hasLiquidPressure(atmosphere);
+
+			if(Loader.isModLoaded(Compat.MOD_COFH)) {
+				if(!hasLiquidPressure) {
+					event.setCanceled(true);
+				}
+			} else {
+				if(hasLiquidPressure) {
+					event.world.provider.isHellWorld = false;
+				}
 			}
 		}
 	}
@@ -835,8 +905,12 @@ public class ModEventHandler {
 				}*/
 			}
 
+			List loadedEntityList = new ArrayList();
+			loadedEntityList.addAll(event.world.loadedEntityList); // ConcurrentModificationException my balls
 
-			for(Object e : event.world.loadedEntityList) {
+			int tickrate = Math.max(1, ServerConfig.ITEM_HAZARD_DROP_TICKRATE.get());
+
+			for(Object e : loadedEntityList) {
 
 				if(e instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer) e;
@@ -862,7 +936,7 @@ public class ModEventHandler {
 					}
 				}
 
-				if(event.phase == Phase.END) {
+				if(event.phase == Phase.END && event.world.getTotalWorldTime() % tickrate == 0) {
 					if(e instanceof EntityItem) {
 						EntityItem item = (EntityItem) e;
 						HazardSystem.updateDroppedItem(item);
@@ -1612,6 +1686,23 @@ public class ModEventHandler {
 			}
 		}
 
+		if(event.y > event.world.provider.getHorizon()) {
+			if(event.block.getLightValue() > 10) {
+				// Placing blocks onto beams counts as a break, but doesn't reduce light count
+				if(!(event.block instanceof BlockBeamBase)) {
+					CelestialBody body = CelestialBody.getBody(event.world);
+					CBT_Lights lights = body.getTrait(CBT_Lights.class);
+
+					if(lights == null) lights = new CBT_Lights();
+					lights.removeLight(event.block, event.x, event.y, event.z);
+
+					body.modifyTraits(lights);
+				}
+
+			}
+		}
+
+
 		if(RadiationConfig.enablePollution && RadiationConfig.enableLeadFromBlocks) {
 			if(!ArmorRegistry.hasProtection(player, 3, HazardClass.PARTICLE_FINE)) {
 
@@ -1625,6 +1716,26 @@ public class ModEventHandler {
 					player.addPotionEffect(new PotionEffect(HbmPotion.lead.id, 100, 1));
 				} else {
 					player.addPotionEffect(new PotionEffect(HbmPotion.lead.id, 100, 2));
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onAnvilRepair(AnvilRepairEvent event) {
+
+		// Anvil renaming no longer increments the repair cost
+		// Note: Forge has a bug, the names are wrong. Right is output, output is left, left is right
+		if(event.left == null && event.right != null && event.output != null) {
+			int oldRepairCost = event.output.getRepairCost();
+
+			if (oldRepairCost > 0) {
+				event.right.setRepairCost(oldRepairCost);
+			} else if (event.right.hasTagCompound()) {
+				NBTTagCompound nbt = event.right.getTagCompound();
+				nbt.removeTag("RepairCost");
+				if (nbt.hasNoTags()) {
+					event.right.setTagCompound(null);
 				}
 			}
 		}

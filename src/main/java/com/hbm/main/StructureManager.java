@@ -130,6 +130,7 @@ public class StructureManager {
 	public static final NBTStructure road = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/road.nbt"));
 	public static final NBTStructure tshape = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/tshapeintersex.nbt"));
 	public static final NBTStructure curve = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/curve.nbt"));
+	public static final NBTStructure spire = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/spire.nbt"));
 
 	// public static final NBTStructure test_rot = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-rot.nbt"));
 	// public static final NBTStructure test_jigsaw = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/test-jigsaw.nbt"));

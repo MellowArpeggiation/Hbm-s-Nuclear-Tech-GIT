@@ -58,10 +58,10 @@ public class RenderRocketCustom extends Render {
                 		GL11.glRotatef(0.0F, 0, 1, 0);
                 		GL11.glScalef(4, 24, 4);
                 		GL11.glTranslatef(0F, 0.9F, 0F);
-                		shader.setTime((time + interp));
 
                 		GL11.glColor4d(0, 0, 0, 0.5);
-                		shader.setTextureUnit(textureUnit);
+            			shader.setUniform1f("iTime", time + interp);
+            			shader.setUniform1i("iChannel1", 0);
 
 
                 		ResourceManager.hemisphere.renderAll();

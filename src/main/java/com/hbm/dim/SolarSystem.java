@@ -37,13 +37,13 @@ public class SolarSystem {
 		kerbol = new CelestialBody("kerbol")
 			.withMassRadius(1.757e28F, 261_600)
 			.withRotationalPeriod(432_000)
-			.withTexture("textures/environment/sun.png")
+			.withTexture(new ResourceLocation("textures/environment/sun.png"))
 			.withShader(new ResourceLocation(RefStrings.MODID, "shaders/blackhole.frag"), 3) // Only shows when CBT_Destroyed
 			.withSatellites(
 
 				new CelestialBody("moho", SpaceConfig.mohoDimension, Body.MOHO)
 					.withMassRadius(2.526e21F, 250)
-					.withSemiMajorAxis(5_263_138)
+					.withOrbitalParameters(5_263_138, 0.2F, 15.0F, 7.0F, 70.0F)
 					.withRotationalPeriod(210_000)
 					.withColor(0.4863F, 0.4F, 0.3456F)
 					.withBlockTextures(RefStrings.MODID + ":moho_stone", "", "", "")
@@ -52,7 +52,7 @@ public class SolarSystem {
 
 				new CelestialBody("eve", SpaceConfig.eveDimension, Body.EVE)
 					.withMassRadius(1.224e23F, 700)
-					.withSemiMajorAxis(9_832_684)
+					.withOrbitalParameters(9_832_684, 0.01F, 0.0F, 2.1F, 15.0F)
 					.withRotationalPeriod(80_500)
 					.withColor(0.408F, 0.298F, 0.553F)
 					.withBlockTextures(RefStrings.MODID + ":eve_stone_2", "", "", "")
@@ -62,30 +62,32 @@ public class SolarSystem {
 
 						new CelestialBody("gilly")
 							.withMassRadius(1.242e17F, 13)
-							.withSemiMajorAxis(31_500)
+							.withOrbitalParameters(31_500, 0.55F, 10.0F, 12.0F, 80.0F)
 							.withRotationalPeriod(28_255)
-							.withTexture("hbm:textures/misc/space/planet.png")
+							.withTexture(new ResourceLocation(RefStrings.MODID, "textures/misc/space/planet.png"))
 
 					),
 
 				new CelestialBody("kerbin", 0, Body.KERBIN) // overworld
 					.withMassRadius(5.292e22F, 600)
-					.withSemiMajorAxis(13_599_840)
+					.withOrbitalParameters(13_599_840, 0.0F, 0.0F, 0.0F, 0.0F)
 					.withRotationalPeriod(21_549)
 					.withColor(0.608F, 0.914F, 1.0F)
 					.withTraits(new CBT_Atmosphere(Fluids.AIR, 1D), new CBT_Water())
+					.withCityMask(new ResourceLocation(RefStrings.MODID, "textures/misc/space/kerbin_mask.png"))
+					.withBiomeMask(new ResourceLocation(RefStrings.MODID, "textures/misc/space/kerbin_biomes.png"))
 					.withSatellites(
 
 						new CelestialBody("mun", SpaceConfig.moonDimension, Body.MUN)
 							.withMassRadius(9.76e20F, 200)
-							.withSemiMajorAxis(12_000)
+							.withOrbitalParameters(12_000, 0.054F, 0.0F, 5.15F, 17.0F)
 							.withRotationalPeriod(138_984)
 							.withTidalLockingTo("kerbin")
 							.withBlockTextures(RefStrings.MODID + ":moon_rock", "", "", ""),
 
 						new CelestialBody("minmus", SpaceConfig.minmusDimension, Body.MINMUS)
 							.withMassRadius(2.646e19F, 60)
-							.withSemiMajorAxis(47_000)
+							.withOrbitalParameters(47_000, 0, 38.0F, 6.0F, 78.0F)
 							.withRotationalPeriod(40_400)
 							.withBlockTextures(RefStrings.MODID + ":minmus_stone", "", "", "")
 							.withTraits(new CBT_Water(Fluids.MILK))
@@ -94,17 +96,18 @@ public class SolarSystem {
 
 				new CelestialBody("duna", SpaceConfig.dunaDimension, Body.DUNA)
 					.withMassRadius(4.515e21F, 320)
-					.withSemiMajorAxis(20_726_155)
+					.withOrbitalParameters(20_726_155, 0.05F, 0.0F, 0.06F, 135.5F)
 					.withRotationalPeriod(65_518)
 					.withTidalLockingTo("ike")
 					.withColor(0.6471f, 0.2824f, 0.1608f)
 					.withBlockTextures(RefStrings.MODID + ":duna_rock", "", "", "")
 					.withTraits(new CBT_Atmosphere(Fluids.DUNAAIR, 0.1D))
+					.withCityMask(new ResourceLocation(RefStrings.MODID, "textures/misc/space/duna_mask.png"))
 					.withSatellites(
 
 						new CelestialBody("ike", SpaceConfig.ikeDimension, Body.IKE)
 							.withMassRadius(2.782e20F, 130)
-							.withSemiMajorAxis(3_200)
+							.withOrbitalParameters(3_200, 0.03F, 0.0F, 0.2F, 0.0F)
 							.withBlockTextures(RefStrings.MODID + ":ike_stone", "", "", "")
 							.withRotationalPeriod(65_518)
 							.withTidalLockingTo("duna")
@@ -114,7 +117,7 @@ public class SolarSystem {
 
 				new CelestialBody("dres", SpaceConfig.dresDimension, Body.DRES)
 					.withMassRadius(3.219e20F, 138)
-					.withSemiMajorAxis(40_839_348)
+					.withOrbitalParameters(40_839_348, 0.145F, 90.0F, 5.0F, 280.0F)
 					.withRotationalPeriod(34_800)
 					.withBlockTextures(RefStrings.MODID + ":dresbase", "", "", "")
 					.withMinProcessingLevel(2),
@@ -122,44 +125,45 @@ public class SolarSystem {
 
 				new CelestialBody("jool")
 					.withMassRadius(4.233e24F, 6_000)
-					.withSemiMajorAxis(68_773_560)
+					.withOrbitalParameters(68_773_560, 0.05F, 0.0F, 1.304F, 52.0F)
 					.withRotationalPeriod(36_000)
 					.withColor(0.4588f, 0.6784f, 0.3059f)
 					.withSatellites(
 
 						new CelestialBody("laythe", SpaceConfig.laytheDimension, Body.LAYTHE)
 							.withMassRadius(2.94e22F, 500)
-							.withSemiMajorAxis(27_184)
+							.withOrbitalParameters(27_184, 0.0288F, 0.0F, 0.348F, 0.0F)
 							.withRotationalPeriod(52_981)
 							.withTidalLockingTo("jool")
 							.withMinProcessingLevel(3)
-							.withTraits(new CBT_Atmosphere(Fluids.AIR, 0.45D).and(Fluids.XENON, 0.15D), new CBT_Water()),
+							.withTraits(new CBT_Atmosphere(Fluids.AIR, 0.45D).and(Fluids.XENON, 0.15D), new CBT_Water())
+							.withCityMask(new ResourceLocation(RefStrings.MODID, "textures/misc/space/laythe_mask.png")),
 
 						new CelestialBody("vall") //probably
 							.withMassRadius(3.109e21F, 300)
-							.withSemiMajorAxis(43_152)
+							.withOrbitalParameters(43_152, 0.111F, 342.9F, 7.48F, 128.0F)
 							.withRotationalPeriod(105_962),
 
 						new CelestialBody("tylo") // what value is this planet gonna add???
 							.withMassRadius(4.233e22F, 600)
-							.withSemiMajorAxis(68_500)
+							.withOrbitalParameters(68_500, 0.002F, 0.0F, 0.3F, 0.0F)
 							.withRotationalPeriod(211_926),
 
 						new CelestialBody("bop")
 							.withMassRadius(3.726e19F, 65)
-							.withSemiMajorAxis(128_500)
+							.withOrbitalParameters(128_500, 0.235F, 25.0F, 15F, 10.0F)
 							.withRotationalPeriod(544_507),
 
 						new CelestialBody("pol")
 							.withMassRadius(1.081e19F, 44)
-							.withSemiMajorAxis(179_890)
+							.withOrbitalParameters(179_890, 0.171F, 15.0F, 4.25F, 2.0F)
 							.withRotationalPeriod(901_902)
 
 					),
 
 				new CelestialBody("sarnus")
 					.withMassRadius(1.223e24F, 5_300)
-					.withSemiMajorAxis(125_798_522)
+					.withOrbitalParameters(125_798_522, 0.0534F, 0.0F, 2.02F, 184.0F)
 					.withRotationalPeriod(28_500)
 					.withColor(1f, 0.6862f, 0.5882f)
 					.withRings(10.0F, 3, 0.6F, 0.4F, 0.3F)
@@ -167,27 +171,27 @@ public class SolarSystem {
 
 					new CelestialBody("hale") //no
 						.withMassRadius(1.2166e16F, 6)
-						.withSemiMajorAxis(10_488)
+						.withOrbitalParameters(10_488, 0, 0.0F, 1.0F, 55.0F)
 						.withRotationalPeriod(23_555),
 
 					new CelestialBody("ovok") //nah
 						.withMassRadius(4.233e17F, 26)
-						.withSemiMajorAxis(12_169)
+						.withOrbitalParameters(12_169, 0.01F, 0.0F, 1.5F, 55.0F)
 						.withRotationalPeriod(29_440),
 
 					new CelestialBody("eeloo") //will add
 						.withMassRadius(1.115e21F, 210)
-						.withSemiMajorAxis(19_106)
+						.withOrbitalParameters(19_106, 0.0034F, 0.0F, 2.3F, 55.0F)
 						.withRotationalPeriod(57_915),
 
 					new CelestialBody("slate") //not you tho
 						.withMassRadius(2.965e22F, 540)
-						.withSemiMajorAxis(42_593)
+						.withOrbitalParameters(42_593, 0.04F, 0.0F, 2.3F, 55.0F)
 						.withRotationalPeriod(192_771),
 
 					new CelestialBody("tekto", SpaceConfig.tektoDimension, Body.TEKTO)
 						.withMassRadius(2.883e21F, 480)
-						.withSemiMajorAxis(67_355)
+						.withOrbitalParameters(67_355, 0.028F, 0.0F, 9.4F, 55.0F)
 						.withRotationalPeriod(57_915)
 						.withAxialTilt(25F)
 						.withMinProcessingLevel(3)
@@ -197,20 +201,20 @@ public class SolarSystem {
 
 				new CelestialBody("neidon")
 					.withMassRadius(2.1228e23F, 2_145)
-					.withSemiMajorAxis(409_355_192)
+					.withOrbitalParameters(409_355_192, 0.0534F, 0.0F, 2.02F, 184.0F)
 					.withRotationalPeriod(40_250)
 					.withColor(1f, 0.6862f, 0.5882f)
 					.withSatellites(
 
 					new CelestialBody("thatmo", SpaceConfig.thatmoDimension, Body.THATMO)
 						.withMassRadius(2.788e21F, 286)
-						.withSemiMajorAxis(32_301)
+						.withOrbitalParameters(32_301, 0.0534F, 0.0F, 4.02F, 284.0F)
 						.withRotationalPeriod(306_443)
 						.withTraits(new CBT_Atmosphere(Fluids.NITROGEN, 0.005F), new CBT_BATTLEFIELD()),
 
 					new CelestialBody("nissee") // words cannot express how much i actually fear this moon whenever im passing by it when playing opm. theres more that meets the eye and no one is brave enough to admit that
 						.withMassRadius(5.951e18F, 30)
-						.withSemiMajorAxis(487_744)
+						.withOrbitalParameters(487_744, 0.0534F, 0.0F, 45.02F, 84.0F)
 						.withRotationalPeriod(27_924)
 						.withMinProcessingLevel(3)
 					)
@@ -274,8 +278,10 @@ public class SolarSystem {
 
 		public double distance;
 		public double angle;
+		public double inclination;
 		public double apparentSize;
 		public double phase;
+		public double phaseObscure;
 
 		protected Vec3 position;
 
@@ -293,16 +299,24 @@ public class SolarSystem {
 	 */
 
 	// Create an ordered list for rendering all bodies within the system, minus the parent star
-	public static List<AstroMetric> calculateMetricsFromBody(World world, float partialTicks, double longitude, CelestialBody body) {
+	public static List<AstroMetric> calculateMetricsFromBody(World world, float partialTicks, CelestialBody body, float solarAngle) {
 		List<AstroMetric> metrics = new ArrayList<AstroMetric>();
 
-		// You know not the horrors I have suffered through, in order to fix tidal locking
-		double offset = (double)body.getRotationalPeriod() * (longitude / 360.0);
+		// You know not the horrors I have suffered through, in order to fix tidal locking even betterer
+		double rotOffset = -120.0F;
+		CelestialBody tidalLockedBody = body.tidallyLockedTo != null ? CelestialBody.getBody(body.tidallyLockedTo) : null;
+		if(tidalLockedBody != null) {
+			// If locked to parent, adjust child
+			if(tidalLockedBody.getPlanet() != body) {
+				tidalLockedBody = body;
+				rotOffset += 180.0F;
+			}
+		}
 
-		double ticks = ((double)world.getTotalWorldTime() + offset + partialTicks) * (double)AstronomyUtil.TIME_MULTIPLIER;
+		double ticks = ((double)world.getTotalWorldTime() + partialTicks) * (double)AstronomyUtil.TIME_MULTIPLIER;
 
 		// Get our XYZ coordinates of all bodies
-		calculatePositionsRecursive(metrics, null, body.getStar(), ticks);
+		calculatePositionsRecursive(metrics, null, body.getStar(), ticks, tidalLockedBody, solarAngle * 360.0, rotOffset);
 
 		// Get the metrics from a given body
 		calculateMetricsFromBody(metrics, body);
@@ -324,7 +338,7 @@ public class SolarSystem {
 		calculatePositionsRecursive(metrics, null, orbiting.getStar(), ticks);
 
 		// Add our orbiting satellite position
-		Vec3 position = calculatePosition(orbiting, altitude, ticks);
+		Vec3 position = calculatePositionSatellite(orbiting, altitude, ticks);
 		for(AstroMetric metric : metrics) {
 			if(metric.body == orbiting) {
 				position = position.addVector(metric.position.xCoord, metric.position.yCoord, metric.position.zCoord);
@@ -352,8 +366,8 @@ public class SolarSystem {
 		calculatePositionsRecursive(metrics, null, from.getStar(), ticks);
 
 		// Add our orbiting satellite position
-		Vec3 fromPos = calculatePosition(from, fromAltitude, ticks);
-		Vec3 toPos = calculatePosition(to, toAltitude, ticks);
+		Vec3 fromPos = calculatePositionSatellite(from, fromAltitude, ticks);
+		Vec3 toPos = calculatePositionSatellite(to, toAltitude, ticks);
 		for(AstroMetric metric : metrics) {
 			if(metric.body == from) {
 				fromPos = fromPos.addVector(metric.position.xCoord, metric.position.yCoord, metric.position.zCoord);
@@ -405,41 +419,89 @@ public class SolarSystem {
 
 	// Recursively calculate the XYZ position of all planets from polar coordinates + time
 	private static void calculatePositionsRecursive(List<AstroMetric> metrics, AstroMetric parentMetric, CelestialBody body, double ticks) {
+		calculatePositionsRecursive(metrics, parentMetric, body, ticks, null, 0, 0);
+	}
+
+	private static void calculatePositionsRecursive(List<AstroMetric> metrics, AstroMetric parentMetric, CelestialBody body, double ticks, CelestialBody lockBody, double solarAngle, double rotOffset) {
 		Vec3 parentPosition = parentMetric != null ? parentMetric.position : Vec3.createVectorHelper(0, 0, 0);
 
 		for(CelestialBody satellite : body.satellites) {
-			Vec3 position = calculatePosition(satellite, ticks).addVector(parentPosition.xCoord, parentPosition.yCoord, parentPosition.zCoord);
+			Vec3 position = satellite == lockBody
+				? calculatePositionFromAngle(satellite, solarAngle + calculateSiderealAngle(satellite, ticks) - Math.toDegrees(satellite.argumentPeriapsis) - Math.toDegrees(satellite.ascendingNode) + rotOffset)
+				: calculatePositionFromTime(satellite, ticks);
+			position = position.addVector(parentPosition.xCoord, parentPosition.yCoord, parentPosition.zCoord);
 			AstroMetric metric = new AstroMetric(satellite, position);
 
 			metrics.add(metric);
 
-			calculatePositionsRecursive(metrics, metric, satellite, ticks);
+			calculatePositionsRecursive(metrics, metric, satellite, ticks, lockBody, solarAngle, rotOffset);
 		}
 	}
 
 	// Calculates the position of the body around its parent
-	private static Vec3 calculatePosition(CelestialBody body, double ticks) {
-		// Get how far (in radians) a planet has gone around its parent
+	private static Vec3 calculatePositionFromTime(CelestialBody body, double ticks) {
+		// Get mean anomaly, or how far (in radians) a planet has gone around its parent
 		double yearTicks = body.getOrbitalPeriod() * (double)AstronomyUtil.TICKS_IN_DAY;
-		double angleRadians = 2 * Math.PI * (ticks / yearTicks);
+		double meanAnomaly = 2 * Math.PI * (ticks / yearTicks);
 
-		double x = body.semiMajorAxisKm * Math.cos(angleRadians);
-		double y = body.semiMajorAxisKm * Math.sin(angleRadians);
+		return calculatePosition(body, meanAnomaly);
+	}
+
+	private static Vec3 calculatePositionFromAngle(CelestialBody body, double angle) {
+		return calculatePosition(body, Math.toRadians(angle));
+	}
+
+	private static Vec3 calculatePosition(CelestialBody body, double meanAnomaly) {
+		double eccentricAnomaly = calculateEccentricAnomaly(meanAnomaly, body.eccentricity);
+
+		// Orbital plane
+		double x = body.semiMajorAxisKm * (Math.cos(eccentricAnomaly) - body.eccentricity);
+		double y = body.semiMinorAxisKm * Math.sin(eccentricAnomaly);
+		double z = 0;
+
+		// Rotate by argument of periapsis
+		double px = x;
+		x = Math.cos(body.argumentPeriapsis) * px - Math.sin(body.argumentPeriapsis) * y;
+		y = Math.sin(body.argumentPeriapsis) * px + Math.cos(body.argumentPeriapsis) * y;
+
+		// Rotate by inclination
+		z = Math.sin(body.inclination) * y;
+		y = Math.cos(body.inclination) * y;
+
+		// Rotate by longitude of ascending node
+		px = x;
+		x = Math.cos(body.ascendingNode) * px - Math.sin(body.ascendingNode) * y;
+		y = Math.sin(body.ascendingNode) * px + Math.cos(body.ascendingNode) * y;
+
+		return Vec3.createVectorHelper(x, y, z);
+	}
+
+	// Same but for an arbitrary satellite around a body
+	private static Vec3 calculatePositionSatellite(CelestialBody body, double altitude, double ticks) {
+		// The mean anomaly (angular position in circular orbit) measured in radians
+		double orbitalPeriod = 2 * Math.PI * Math.sqrt((altitude * altitude * altitude) / (AstronomyUtil.GRAVITATIONAL_CONSTANT * body.massKg));
+		orbitalPeriod /= (double)AstronomyUtil.SECONDS_IN_KSP_DAY;
+		double orbitTicks = orbitalPeriod * (double)AstronomyUtil.TICKS_IN_DAY;
+		double meanAnomaly = 2 * Math.PI * (ticks / orbitTicks);
+
+		double x = altitude / 1000 * Math.cos(meanAnomaly);
+		double y = altitude / 1000 * Math.sin(meanAnomaly);
 
 		return Vec3.createVectorHelper(x, y, 0);
 	}
 
-	// Same but for an arbitrary satellite around a body
-	private static Vec3 calculatePosition(CelestialBody body, double altitude, double ticks) {
-		double orbitalPeriod = 2 * Math.PI * Math.sqrt((altitude * altitude * altitude) / (AstronomyUtil.GRAVITATIONAL_CONSTANT * body.massKg));
-		orbitalPeriod /= (double)AstronomyUtil.SECONDS_IN_KSP_DAY;
-		double orbitTicks = orbitalPeriod * (double)AstronomyUtil.TICKS_IN_DAY;
-		double angleRadians = 2 * Math.PI * (ticks / orbitTicks);
+	private static final int ECCENTRICITY_ITERATION_COUNT = 4;
 
-		double x = altitude / 1000 * Math.cos(angleRadians);
-		double y = altitude / 1000 * Math.sin(angleRadians);
+	// Eccentric anomaly from mean, calculated backwards from:
+	//    M = E - e * sin(E)
+	// There is no analytical solution for the inverse of this function, so we iterate until close
+	private static double calculateEccentricAnomaly(double meanAnomaly, float eccentricity) {
+		double eccentricAnomaly = meanAnomaly;
+		for(int i = 0; i < ECCENTRICITY_ITERATION_COUNT; i++) {
+			eccentricAnomaly = meanAnomaly + eccentricity * Math.sin(eccentricAnomaly);
+		}
 
-		return Vec3.createVectorHelper(x, y, 0);
+		return eccentricAnomaly;
 	}
 
 	// Calculates the metrics for a given body in the system
@@ -471,12 +533,19 @@ public class SolarSystem {
 		metric.distance = position.distanceTo(metric.position);
 
 		// Calculate apparent size, for scaling in render
-		metric.apparentSize = getApparentSize(metric.body.radiusKm, metric.distance);
+		metric.apparentSize = getApparentSize(Math.min(metric.body.radiusKm, 3_000), metric.distance);
 
-		// Get angle in relation to 0, 0 (sun position, origin)
+		// Calculate angle in relation to 0, 0 (sun position, origin)
 		metric.angle = getApparentAngleDegrees(position, metric.position);
 
-		metric.phase = getApparentAngleDegrees(metric.position, position) / 180.0;
+		// Calculate angle above/below the orbital plane
+		metric.inclination = getApparentInclinationDegrees(position, metric.position);
+
+		// Calculate the current phase of the body (for crescent shading)
+		metric.phase = getPhase(position, metric.position);
+
+		// Calculate phase obscuring for eclipses
+		metric.phaseObscure = getPhaseObscure(position, metric.position);
 	}
 
 	private static double getApparentSize(double radius, double distance) {
@@ -488,6 +557,23 @@ public class SolarSystem {
 		double angleToTarget = Math.atan2(to.yCoord - from.yCoord, to.xCoord - from.xCoord);
 
 		return MathHelper.wrapAngleTo180_double(Math.toDegrees(angleToOrigin - angleToTarget));
+	}
+
+	private static double getApparentInclinationDegrees(Vec3 from, Vec3 to) {
+		double x = from.xCoord - to.xCoord;
+		double y = from.yCoord - to.yCoord;
+		double planeDistance = Math.sqrt(x * x + y * y);
+		double offsetDistance = from.zCoord - to.zCoord;
+
+		return MathHelper.wrapAngleTo180_double(Math.toDegrees(Math.atan2(offsetDistance, planeDistance)));
+	}
+
+	private static double getPhase(Vec3 from, Vec3 to) {
+		return getApparentAngleDegrees(to, from) / 180.0;
+	}
+
+	private static double getPhaseObscure(Vec3 from, Vec3 to) {
+		return Math.min(Math.abs(getPhase(from, to)), 1.0F - Math.abs(getApparentInclinationDegrees(from, to) / 180.0F));
 	}
 
 	// Calculates how large to render the sun in the sky from a given vantage point
@@ -529,7 +615,7 @@ public class SolarSystem {
 		calculatePositionsRecursive(metrics, null, orbiting.getStar(), ticks);
 
 		// Add our orbiting satellite position
-		Vec3 from = calculatePosition(orbiting, altitude, ticks);
+		Vec3 from = calculatePositionSatellite(orbiting, altitude, ticks);
 		Vec3 to = Vec3.createVectorHelper(0, 0, 0);
 		for(AstroMetric metric : metrics) {
 			if(metric.body == orbiting) {
@@ -540,6 +626,20 @@ public class SolarSystem {
 		}
 
 		return getApparentAngleDegrees(from, to);
+	}
+
+	public static double calculateSiderealAngle(World world, float partialTicks, CelestialBody body) {
+		double ticks = ((double)world.getTotalWorldTime() + partialTicks) * (double)AstronomyUtil.TIME_MULTIPLIER;
+
+		return calculateSiderealAngle(body, ticks);
+	}
+
+	public static double calculateSiderealAngle(CelestialBody body, double ticks) {
+		body = body.getPlanet();
+
+		Vec3 position = calculatePositionFromTime(body, ticks);
+
+		return Math.toDegrees(Math.atan2(position.yCoord, position.xCoord));
 	}
 
 

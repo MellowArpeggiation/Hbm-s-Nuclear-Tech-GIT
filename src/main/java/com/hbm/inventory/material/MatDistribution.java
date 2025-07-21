@@ -47,8 +47,9 @@ public class MatDistribution extends SerializableRecipe {
 		registerEntry(Items.minecart, MAT_IRON, INGOT.q(5));
 
 		//castables
-		registerEntry(ModItems.blade_titanium,				MAT_TITANIUM,		INGOT.q(2));
-		registerEntry(ModItems.blade_tungsten,				MAT_TUNGSTEN,		INGOT.q(2));
+		registerEntry(ModItems.blade_titanium,				MAT_TITANIUM,		INGOT.q(3));
+		registerEntry(ModItems.blade_tungsten,				MAT_TUNGSTEN,		INGOT.q(3));
+		registerEntry(ModItems.blade_syngas,				MAT_STAINLESS,		INGOT.q(3));
 		registerEntry(ModItems.blades_steel,				MAT_STEEL,			INGOT.q(4));
 		registerEntry(ModItems.blades_titanium,				MAT_TITANIUM, 		INGOT.q(4));
 		registerEntry(ModItems.blades_advanced_alloy,		MAT_ALLOY,			INGOT.q(4));
@@ -76,7 +77,7 @@ public class MatDistribution extends SerializableRecipe {
 		registerOre(OreDictManager.COAL.ore(), MAT_CARBON, GEM.q(3), MAT_STONE, QUART.q(1));
 		registerOre(OreDictManager.GOLD.ore(), MAT_GOLD, INGOT.q(2), MAT_LEAD, NUGGET.q(3), MAT_STONE, QUART.q(1));
 		registerOre(OreDictManager.U.ore(), MAT_URANIUM, INGOT.q(2), MAT_LEAD, NUGGET.q(3), MAT_STONE, QUART.q(1));
-		for(String ore : OreDictManager.TH232.all(MaterialShapes.ORE)) registerOre(ore, MAT_THORIUM, INGOT.q(2), MAT_URANIUM, NUGGET.q(3), MAT_STONE, QUART.q(1));
+		for(String ore : OreDictManager.TH232.all(MaterialShapes.ONLY_ORE)) registerOre(ore, MAT_THORIUM, INGOT.q(2), MAT_URANIUM, NUGGET.q(3), MAT_STONE, QUART.q(1));
 		registerOre(OreDictManager.CU.ore(), MAT_COPPER, INGOT.q(2), MAT_STONE, QUART.q(1));
 		registerOre(OreDictManager.NI.ore(), MAT_NICKEL, INGOT.q(2), MAT_STONE, QUART.q(1));
 		registerOre(OreDictManager.PB.ore(), MAT_LEAD, INGOT.q(2), MAT_GOLD, NUGGET.q(1), MAT_STONE, QUART.q(1));

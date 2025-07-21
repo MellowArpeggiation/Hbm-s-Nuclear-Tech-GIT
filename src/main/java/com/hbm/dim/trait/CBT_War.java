@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.dim.CelestialBody;
-import com.hbm.items.tool.ItemWandD;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -55,60 +54,51 @@ public class CBT_War extends CelestialBodyTrait {
 				float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat() * 160 - 80;
 				float randy = Minecraft.getMinecraft().theWorld.rand.nextFloat() * 90 - 80;
 
-				this.launchProjectile(Math.abs(20 + j * 10),
-				projectile.getSize(),
-				projectile.getDamage(),
-				(float) (projectile.getTranslateX()),
-				projectile.getTranslateY() - randy * j,
-				projectile.getTranslateZ() + rand * j,
-				type,
-				projectile.getTarget());
+				this.launchProjectile(Math.abs(20 + j * 10), projectile.getSize(), projectile.getDamage(), (float) (projectile.getTranslateX()), projectile.getTranslateY() - randy * j, projectile.getTranslateZ() + rand * j, type, projectile.getTarget());
 				projectile.GUIangle = projectile.GUIangle;
+			}
 
-    		   	}
-            this.destroyProjectile(projectile); 
-            
+			this.destroyProjectile(projectile);
 		}
 	}
-	
+
 	@Override
 	public void update(boolean isremote) {
-		
 		if(!isremote) {
-		    if (this != null) {
-		        for (int i = 0; i < this.getProjectiles().size(); i++) {
-		            Projectile projectile = this.getProjectiles().get(i);
+			if(this != null) {
+				for(int i = 0; i < this.getProjectiles().size(); i++) {
+					Projectile projectile = this.getProjectiles().get(i);
 
-		            projectile.update();
-		            float travel = projectile.getTravel();
+					projectile.update();
 
-		            if (projectile.getTravel() <= 0) {
-		                projectile.impact();
-		            }
-		            if (projectile.getAnimtime() >= 100) {
-		                this.destroyProjectile(projectile);
-		                World targetBody = MinecraftServer.getServer().worldServerForDimension(projectile.getTarget());
-		                i--;
-		                System.out.println("damaged: " + targetBody + " health left: " + this.health);
+					if(projectile.getTravel() <= 0) {
+						projectile.impact();
+					}
 
-		                if (this.health > 0) {
-		                    CelestialBody.damage(projectile.getDamage(), targetBody);
-		                } else if (this.health <= 0) {
-		                    CelestialBody target = CelestialBody.getPlanet(targetBody);
-		                    target.modifyTraits(targetBody, new CBT_Destroyed());
-		                    this.health = 0;
-		                }
-		            }
+					if(projectile.getAnimtime() >= 100) {
+						this.destroyProjectile(projectile);
+						World targetWorld = MinecraftServer.getServer().worldServerForDimension(projectile.getTarget());
+						i--;
+						System.out.println("damaged: " + targetWorld + " health left: " + this.health);
 
-		            if (projectile.getType() == ProjectileType.SPLITSHOT) {
-		                if (projectile.getTravel() <= 0) {
-		                    this.split(4, projectile, ProjectileType.SMALL);
-		                    this.destroyProjectile(projectile);
-		                    i--;
-		                }
-		            }
-		        }
-		    }
+						if(this.health > 0) {
+							CelestialBody.damage(projectile.getDamage(), targetWorld);
+						} else if(this.health <= 0) {
+							CelestialBody target = CelestialBody.getPlanet(targetWorld);
+							target.modifyTraits(new CBT_Destroyed());
+							this.health = 0;
+						}
+					}
+
+					if(projectile.getType() == ProjectileType.SPLITSHOT) {
+						if(projectile.getTravel() <= 0) {
+							this.split(4, projectile, ProjectileType.SMALL);
+							this.destroyProjectile(projectile);
+							i--;
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -133,7 +123,6 @@ public class CBT_War extends CelestialBodyTrait {
 			projectilesTag.setTag("projectile" + i, projTag);
 		}
 		nbt.setTag("projectiles", projectilesTag);
-
 	}
 
 	@Override
@@ -283,17 +272,16 @@ public class CBT_War extends CelestialBodyTrait {
 		}
 
 		public void impact() {
-
 			flashtime += 0.6f;
 			flashtime = Math.min(100.0f, flashtime + 0.1f * (100.0f - flashtime) * 0.15f);
 
 			if(flashtime >= 100) {
 				flashtime = 100;
 			}
+
 			if(animtime == 0) {
 				flashtime = 0;
 			}
-
 		}
 
 

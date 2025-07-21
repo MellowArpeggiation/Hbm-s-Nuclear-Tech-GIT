@@ -7,7 +7,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenLakes;
-import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
@@ -31,7 +30,7 @@ public class BiomeDecoratorCelestial extends BiomeDecorator {
 	// honestly MCP couldja give things better names pls?
 	public int lakeChancePerChunk = 0;
 	public Block lakeBlock = Blocks.water;
-	
+
 	private final Block stoneBlock;
 
 	public BiomeDecoratorCelestial(Block stoneBlock) {

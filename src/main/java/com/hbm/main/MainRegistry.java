@@ -980,6 +980,7 @@ public class MainRegistry {
 		new OreCave(ModBlocks.laythe_silt, 3).setDimension(SpaceConfig.laytheDimension).setThreshold(0.2D).setRangeMult(60).setYLevel(58).setMaxRange(14).setBlockOverride(ModBlocks.laythe_silt).setIgnoreWater(true).setStalagmites(false);
 
 		BedrockOre.init();
+		PlanetGen.overrideOverworldProvider(); // Doing it as late as possible
 
 		Compat.handleRailcraftNonsense();
 		SuicideThreadDump.register();
@@ -1775,6 +1776,19 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:tile.hazmat");
 		ignoreMappings.add("hbm:item.gun_cryocannon");
 		ignoreMappings.add("hbm:item.gun_cryolator_ammo");
+		ignoreMappings.add("hbm:item.canteen_fab");
+		ignoreMappings.add("hbm:item.fabsols_vodka");
+		ignoreMappings.add("hbm:item.test_nuke_igniter");
+		ignoreMappings.add("hbm:item.test_nuke_propellant");
+		ignoreMappings.add("hbm:item.test_nuke_tier1_shielding");
+		ignoreMappings.add("hbm:item.test_nuke_tier2_shielding");
+		ignoreMappings.add("hbm:item.test_nuke_tier1_bullet");
+		ignoreMappings.add("hbm:item.test_nuke_tier2_bullet");
+		ignoreMappings.add("hbm:item.test_nuke_tier1_target");
+		ignoreMappings.add("hbm:item.test_nuke_tier2_target");
+		ignoreMappings.add("hbm:tile.hadron_cooler");
+		ignoreMappings.add("hbm:tile.machine_transformer_20");
+		ignoreMappings.add("hbm:tile.machine_transformer_dnt_20");
 
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);

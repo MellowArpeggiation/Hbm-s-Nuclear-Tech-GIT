@@ -1,6 +1,9 @@
 package com.hbm.inventory.container;
 
+import com.hbm.inventory.SlotCraftingOutput;
 import com.hbm.inventory.SlotNonRetarded;
+import com.hbm.inventory.SlotTakeOnly;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -58,6 +61,11 @@ public class ContainerBase extends Container {
 		return slotOriginal;
 	}
 
+	/** Standard player inventory with default hotbar offset */
+	public void playerInv(InventoryPlayer invPlayer, int playerInvX, int playerInvY) {
+		playerInv(invPlayer, playerInvX, playerInvY, playerInvY + 58);
+	}
+
 	/** Used to quickly set up the player inventory */
 	public void playerInv(InventoryPlayer invPlayer, int playerInvX, int playerInvY, int playerHotbarY) {
 		for(int i = 0; i < 3; i++) {
@@ -89,6 +97,20 @@ public class ContainerBase extends Container {
 		}
 	}
 
+	public void addOutputSlots(EntityPlayer player, IInventory inv, int from, int x, int y, int rows, int cols) {
+		int slotSize = 18;
+		for(int row = 0; row < rows; row++) for(int col = 0; col < cols; col++) {
+			this.addSlotToContainer(new SlotCraftingOutput(player, inv, col + row * cols + from, x + col * slotSize, y + row * slotSize));
+		}
+	}
+
+	public void addTakeOnlySlots(IInventory inv, int from, int x, int y, int rows, int cols) {
+		int slotSize = 18;
+		for(int row = 0; row < rows; row++) for(int col = 0; col < cols; col++) {
+			this.addSlotToContainer(new SlotTakeOnly(inv, col + row * cols + from, x + col * slotSize, y + row * slotSize));
+		}
+	}
+
 	// Fixed mergeItemStack that actually respects stacksize limits AND whether the slot actually accepts the fucking item
 	@Override
 	protected boolean mergeItemStack(ItemStack stack, int fromInclusive, int toExclusive, boolean toPlayerInventory) {
@@ -114,7 +136,7 @@ public class ContainerBase extends Container {
 				if(targetStack != null && targetStack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getItemDamage() == targetStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, targetStack)) {
 					if(targetSlot.isItemValid(stack)) {
 						int l = targetStack.stackSize + stack.stackSize;
-	
+
 						if(l <= maxStackSize) {
 							stack.stackSize = 0;
 							targetStack.stackSize = l;
