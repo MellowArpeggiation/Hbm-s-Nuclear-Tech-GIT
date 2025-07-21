@@ -453,11 +453,13 @@ public class SolarSystem {
 
 		double distance = Math.min(body.radiusKm, ORRERY_MAX_RADIUS) * 1.42;
 		for(CelestialBody satellite : body.satellites) {
-			// distance is combined radii * hypotenuse (so cubes don't intersect at edges)
-			distance += MathHelper.clamp_double(satellite.radiusKm, ORRERY_MIN_RADIUS, ORRERY_MAX_RADIUS) * (1 + satellite.eccentricity * 8) * 3;
+			double extraDistance = MathHelper.clamp_double(satellite.radiusKm, ORRERY_MIN_RADIUS, ORRERY_MAX_RADIUS) * ((1 + satellite.eccentricity) * 2) * 1.42;
 			for(CelestialBody inner : satellite.satellites) {
-				distance += MathHelper.clamp_double(inner.radiusKm, ORRERY_MIN_RADIUS, ORRERY_MAX_RADIUS) * (1 + inner.eccentricity * 8) * 5;
+				extraDistance += MathHelper.clamp_double(inner.radiusKm, ORRERY_MIN_RADIUS, ORRERY_MAX_RADIUS) * ((1 + inner.eccentricity) * 2) * 2;
 			}
+
+			// distance is combined radii * hypotenuse (so cubes don't intersect at edges)
+			distance += extraDistance;
 
 			Vec3 position = calculatePositionFromTime(satellite, ticks, distance);
 			position = position.addVector(parentPosition.xCoord, parentPosition.yCoord, parentPosition.zCoord);
@@ -469,6 +471,8 @@ public class SolarSystem {
 			}
 
 			metrics.add(metric);
+
+			distance += extraDistance;
 
 			calculatePositionsRecursiveOrrery(metrics, metric, satellite, ticks, depth + 1);
 		}
