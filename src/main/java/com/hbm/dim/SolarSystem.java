@@ -270,9 +270,39 @@ public class SolarSystem {
 
 	}
 
+	public static class OrreryMetric {
+
+		// Similar to above, but just for exaggerated positions + orbital paths
+		public Vec3 position;
+		public Vec3[] orbitalPath;
+
+		public CelestialBody body;
+
+		private static final int PATH_RESOLUTION = 32;
+
+		public OrreryMetric(CelestialBody body, Vec3 position) {
+			this.body = body;
+			this.position = position;
+			this.orbitalPath = new Vec3[PATH_RESOLUTION];
+		}
+
+	}
+
 	/**
 	 * Celestial mechanics
 	 */
+
+	// Generates a map of positions and orbital paths, with non-linear scaling to compress
+	public static List<OrreryMetric> calculatePositionsOrrery(World world, float partialTicks) {
+		List<OrreryMetric> metrics = new ArrayList<OrreryMetric>();
+
+		double ticks = ((double)world.getTotalWorldTime() + partialTicks) * (double)AstronomyUtil.TIME_MULTIPLIER;
+
+		// Get our XYZ coordinates of all bodies
+		calculatePositionsRecursiveOrrery(metrics, null, CelestialBody.getBody(world).getStar(), ticks, 0);
+
+		return metrics;
+	}
 
 	// Create an ordered list for rendering all bodies within the system, minus the parent star
 	public static List<AstroMetric> calculateMetricsFromBody(World world, float partialTicks, CelestialBody body, float solarAngle) {
@@ -414,25 +444,56 @@ public class SolarSystem {
 		}
 	}
 
+	// Creates a "mock" system, with positions neatly divided
+	private static void calculatePositionsRecursiveOrrery(List<OrreryMetric> metrics, OrreryMetric parentMetric, CelestialBody body, double ticks, int depth) {
+		Vec3 parentPosition = parentMetric != null ? parentMetric.position : Vec3.createVectorHelper(0, 0, 0);
+
+		int p = 0;
+		for(CelestialBody satellite : body.satellites) {
+			double semimajor = (++p) * 10 / (1 << (depth * depth));
+
+			Vec3 position = calculatePositionFromTime(satellite, ticks, semimajor);
+			position = position.addVector(parentPosition.xCoord, parentPosition.yCoord, parentPosition.zCoord);
+
+			OrreryMetric metric = new OrreryMetric(satellite, position);
+			for(int i = 0; i < metric.orbitalPath.length; i++) {
+				metric.orbitalPath[i] = calculatePositionFromAngle(satellite, (float)i / metric.orbitalPath.length * 360, semimajor)
+					.addVector(parentPosition.xCoord, parentPosition.yCoord, parentPosition.zCoord);
+			}
+
+			metrics.add(metric);
+
+			calculatePositionsRecursiveOrrery(metrics, metric, satellite, ticks, depth + 1);
+		}
+	}
+
 	// Calculates the position of the body around its parent
 	private static Vec3 calculatePositionFromTime(CelestialBody body, double ticks) {
+		return calculatePositionFromTime(body, ticks, body.semiMajorAxisKm);
+	}
+
+	private static Vec3 calculatePositionFromTime(CelestialBody body, double ticks, double semiMajorAxis) {
 		// Get mean anomaly, or how far (in radians) a planet has gone around its parent
 		double yearTicks = body.getOrbitalPeriod() * (double)AstronomyUtil.TICKS_IN_DAY;
 		double meanAnomaly = 2 * Math.PI * (ticks / yearTicks);
 
-		return calculatePosition(body, meanAnomaly);
+		return calculatePosition(body, meanAnomaly, semiMajorAxis);
 	}
 
 	private static Vec3 calculatePositionFromAngle(CelestialBody body, double angle) {
-		return calculatePosition(body, Math.toRadians(angle));
+		return calculatePosition(body, Math.toRadians(angle), body.semiMajorAxisKm);
 	}
 
-	private static Vec3 calculatePosition(CelestialBody body, double meanAnomaly) {
+	private static Vec3 calculatePositionFromAngle(CelestialBody body, double angle, double semiMajorAxis) {
+		return calculatePosition(body, Math.toRadians(angle), semiMajorAxis);
+	}
+
+	private static Vec3 calculatePosition(CelestialBody body, double meanAnomaly, double semiMajorAxis) {
 		double eccentricAnomaly = calculateEccentricAnomaly(meanAnomaly, body.eccentricity);
 
 		// Orbital plane
-		double x = body.semiMajorAxisKm * (Math.cos(eccentricAnomaly) - body.eccentricity);
-		double y = body.semiMinorAxisKm * Math.sin(eccentricAnomaly);
+		double x = semiMajorAxis * (Math.cos(eccentricAnomaly) - body.eccentricity);
+		double y = semiMajorAxis * body.semiMinorAxisFactor * Math.sin(eccentricAnomaly);
 		double z = 0;
 
 		// Rotate by argument of periapsis
