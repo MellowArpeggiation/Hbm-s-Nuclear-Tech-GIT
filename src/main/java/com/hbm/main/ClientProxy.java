@@ -5,6 +5,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockBobble.TileEntityBobble;
 import com.hbm.blocks.generic.BlockEmitter.TileEntityEmitter;
 import com.hbm.blocks.generic.BlockLoot.TileEntityLoot;
+import com.hbm.blocks.generic.BlockOrrery.TileEntityOrrery;
 import com.hbm.blocks.generic.BlockPedestal.TileEntityPedestal;
 import com.hbm.blocks.generic.BlockPlushie.TileEntityPlushie;
 import com.hbm.blocks.generic.BlockSkeletonHolder.TileEntitySkeletonHolder;
@@ -473,6 +474,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonConverterHE.class, new RenderDysonConverterHE());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonConverterTU.class, new RenderDysonConverterTU());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDysonLauncher.class, new RenderDysonLauncher());
+		//pretty
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOrrery.class, new RenderOrrery());
 	}
 
 	@Override

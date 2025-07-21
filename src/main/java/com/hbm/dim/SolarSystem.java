@@ -27,8 +27,11 @@ public class SolarSystem {
 	public static CelestialBody kerbol;
 
 	// How much to scale celestial objects when rendering
-	public static final double RENDER_SCALE = 180F;
-	public static final double SUN_RENDER_SCALE = 4F;
+	public static final double RENDER_SCALE = 180;
+	public static final double SUN_RENDER_SCALE = 4;
+
+	public static final double ORRERY_MAX_RADIUS = 20_000;
+	public static final double ORRERY_MIN_RADIUS = 2_000;
 
 
 	public static void init() {
@@ -448,16 +451,20 @@ public class SolarSystem {
 	private static void calculatePositionsRecursiveOrrery(List<OrreryMetric> metrics, OrreryMetric parentMetric, CelestialBody body, double ticks, int depth) {
 		Vec3 parentPosition = parentMetric != null ? parentMetric.position : Vec3.createVectorHelper(0, 0, 0);
 
-		int p = 0;
+		double distance = Math.min(body.radiusKm, ORRERY_MAX_RADIUS) * 1.42;
 		for(CelestialBody satellite : body.satellites) {
-			double semimajor = (++p) * 10 / (1 << (depth * depth));
+			// distance is combined radii * hypotenuse (so cubes don't intersect at edges)
+			distance += MathHelper.clamp_double(satellite.radiusKm, ORRERY_MIN_RADIUS, ORRERY_MAX_RADIUS) * (1 + satellite.eccentricity * 8) * 3;
+			for(CelestialBody inner : satellite.satellites) {
+				distance += MathHelper.clamp_double(inner.radiusKm, ORRERY_MIN_RADIUS, ORRERY_MAX_RADIUS) * (1 + inner.eccentricity * 8) * 5;
+			}
 
-			Vec3 position = calculatePositionFromTime(satellite, ticks, semimajor);
+			Vec3 position = calculatePositionFromTime(satellite, ticks, distance);
 			position = position.addVector(parentPosition.xCoord, parentPosition.yCoord, parentPosition.zCoord);
 
 			OrreryMetric metric = new OrreryMetric(satellite, position);
 			for(int i = 0; i < metric.orbitalPath.length; i++) {
-				metric.orbitalPath[i] = calculatePositionFromAngle(satellite, (float)i / metric.orbitalPath.length * 360, semimajor)
+				metric.orbitalPath[i] = calculatePositionFromAngle(satellite, (float)i / metric.orbitalPath.length * 360, distance)
 					.addVector(parentPosition.xCoord, parentPosition.yCoord, parentPosition.zCoord);
 			}
 

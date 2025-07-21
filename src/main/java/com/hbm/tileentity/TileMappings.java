@@ -13,6 +13,7 @@ import com.hbm.blocks.generic.BlockEmitter.TileEntityEmitter;
 import com.hbm.blocks.generic.BlockFissure.TileEntityFissure;
 import com.hbm.blocks.generic.BlockGlyphidSpawner.TileEntityGlpyhidSpawner;
 import com.hbm.blocks.generic.BlockLoot.TileEntityLoot;
+import com.hbm.blocks.generic.BlockOrrery.TileEntityOrrery;
 import com.hbm.blocks.generic.BlockPedestal.TileEntityPedestal;
 import com.hbm.blocks.generic.BlockPlushie.TileEntityPlushie;
 import com.hbm.blocks.generic.BlockSkeletonHolder.TileEntitySkeletonHolder;
@@ -419,6 +420,8 @@ public class TileMappings {
 		put(TileEntityDysonConverterTU.class, "tileentity_dyson_converter_tu");
 		put(TileEntityDysonConverterHE.class, "tileentity_dyson_converter_he");
 		put(TileEntityDysonConverterAnatmogenesis.class, "tileentity_dyson_converter_anatmogenesis");
+
+		put(TileEntityOrrery.class, "tileentity_orrery");
 	}
 
 	private static void putPile() {

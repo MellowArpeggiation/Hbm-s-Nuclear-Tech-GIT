@@ -6306,6 +6306,7 @@ tile.ore_verticium.name=Dollar Green Mineral
 tile.ore_volcano.name=Geothermal Vent
 tile.ore_weidanium.name=Weidite
 tile.ore_zinc.name=Zinc Ore
+tile.orrery.name=Orrery
 tile.pa_beamline.name=Beamline
 tile.pa_beamline.desc=Optional part, connects different accelerator parts.$Also allows to cheaply extend the ring's size,$for meeting dipole coil size requirements.
 tile.pa_detector.name=Particle Detector
