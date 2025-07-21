@@ -106,10 +106,17 @@ public class TileEntityMachineTurbineGas extends TileEntityMachineBase implement
 				}
 			}
 
-			if(autoMode) { //power production depending on power requirement
+			if(autoMode) { //power production depending on power requirement and fuel level
 
-				//scales the slider proportionally to the power gauge
-				int powerSliderTarget = 60 - (int) (60 * power / maxPower);
+				int powerSliderTarget;
+
+				//when low on fuel, decrease consumption linearly
+				if(tanks[0].getFill() * 10 > tanks[0].getMaxFill()) {
+					powerSliderTarget = 60 - (int) (60 * power / maxPower); //scales the slider proportionally to the power gauge
+				}
+				else {
+					powerSliderTarget = (int) ( tanks[0].getFill() * 0.0001 * (60 - (int) (60 * power / maxPower)) );
+				}
 
 				if(powerSliderTarget > powerSliderPos) { //makes the auto slider slide instead of snapping into position
 					powerSliderPos++;
@@ -612,8 +619,11 @@ public class TileEntityMachineTurbineGas extends TileEntityMachineBase implement
 	@Callback(direct = true, limit = 4)
 	@Optional.Method(modid = "OpenComputers")
 	public Object[] setThrottle(Context context, Arguments args) {
-		powerSliderPos = (int) (args.checkInteger(0) * 60D / 100D);
-		return new Object[] {};
+		double input = args.checkInteger(0) * 60D / 100D;
+		if (input < 0 || input > 100)
+			return new Object[] {null, "Input out of range."};
+		powerSliderPos = (int) (input);
+		return new Object[] {true};
 	}
 
 	@Callback(direct = true, limit = 4)
