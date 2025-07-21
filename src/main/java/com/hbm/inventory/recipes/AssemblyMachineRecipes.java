@@ -908,7 +908,8 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
 						new OreDictStack(CA.dust(), 4),
 						new OreDictStack(LI.dust(), 12),
 						new ComparableStack(ModItems.motor, 1),
-						new ComparableStack(ModItems.blades_titanium, 2)));
+						new ComparableStack(ModItems.blades_titanium, 1),
+						new ComparableStack(ModItems.blades_titanium, 1)));
 		this.register(new GenericRecipe("ass.alkylation").setup(400, 100).outputItems(new ItemStack(ModBlocks.machine_alkylation))
 				.inputItems(
 						new OreDictStack(ANY_CONCRETE.any(), 12),
