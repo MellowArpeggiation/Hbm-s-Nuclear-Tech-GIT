@@ -807,7 +807,8 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(
 						new OreDictStack(OSMIRIDIUM.plateWelded(), 4),
 						new OreDictStack(STAINLESS.plate(), 64),
-						new ComparableStack(ModBlocks.steel_scaffold, 128),
+						new ComparableStack(ModBlocks.steel_scaffold, 64),
+						new ComparableStack(ModBlocks.steel_scaffold, 64),
 						new ComparableStack(ModItems.turbine_syngas, 8),
 						new ComparableStack(ModBlocks.machine_transformer_dnt, 2),
 						new ComparableStack(ModItems.plate_dineutronium, 8),
@@ -820,7 +821,8 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
 						new ComparableStack(ModItems.crystal_xen),
 						new ComparableStack(ModBlocks.fusion_conductor, 16),
 						new ComparableStack(ModItems.circuit, 4, EnumCircuitType.QUANTUM),
-						new OreDictStack(BSCCO.wireDense(), 128)));
+						new OreDictStack(BSCCO.wireDense(), 64),
+						new OreDictStack(BSCCO.wireDense(), 64)));
 		this.register(new GenericRecipe("ass.dysonconverterhe").setup(6_000, 100).outputItems(new ItemStack(ModBlocks.dyson_converter_he, 1))
 				.inputItems(
 						new OreDictStack(OSMIRIDIUM.plateWelded(), 2),
@@ -967,7 +969,8 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(
 						new OreDictStack(STEEL.plateWelded(), 12),
 						new OreDictStack(AL.pipe(), 24),
-						new OreDictStack(ANY_CONCRETE.any(), 128),
+						new OreDictStack(ANY_CONCRETE.any(), 64),
+						new OreDictStack(ANY_CONCRETE.any(), 64),
 						new OreDictStack(ANY_PLASTIC.ingot(), 16),
 						new ComparableStack(ModBlocks.steel_scaffold, 64),
 						new ComparableStack(ModItems.circuit, 4, EnumCircuitType.ADVANCED)));
