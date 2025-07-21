@@ -979,6 +979,9 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
 						new OreDictStack(ANY_PLASTIC.ingot(), 8),
 						new ComparableStack(ModBlocks.steel_scaffold, 64),
 						new ComparableStack(ModItems.circuit, 4, EnumCircuitType.BASIC)));
+		this.register(new GenericRecipe("ass.orrery").setup(400, 100).outputItems(new ItemStack(ModBlocks.orrery, 1))
+				.inputItems(new OreDictStack(KEY_ANYGLASS, 16), new ComparableStack(ModItems.circuit, 12, EnumCircuitType.ADVANCED))
+				.inputFluids(new FluidStack(Fluids.TRITIUM, 2_000)));
 
 		// stations
 		this.register(new GenericRecipe("ass.orbitalstationport").setup(400, 100).outputItems(new ItemStack(ModBlocks.orbital_station_port, 1))
