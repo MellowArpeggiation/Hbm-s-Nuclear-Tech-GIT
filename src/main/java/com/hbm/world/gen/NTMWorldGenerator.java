@@ -114,35 +114,44 @@ public class NTMWorldGenerator implements IWorldGenerator {
 
 		NBTStructure.registerStructure(0, new SpawnCondition() {{
 			sizeLimit = 128;
-			spawnWeight = 100000;
+			spawnWeight = 100;
 			canSpawn = biome -> !invalidBiomes.contains(biome);
 			startPool = "start";
 			pools = new HashMap<String, NBTStructure.JigsawPool>() {{
 				put("start", new JigsawPool() {{
-					add(new JigsawPiece("desert_atom", StructureManager.desert_atom), 100);
+					add(new JigsawPiece("desert_atom", StructureManager.desert_atom), 1);
 				}});
-				put("machines", new JigsawPool() {{
-					add(new JigsawPiece("boiler_big_1", StructureManager.boiler_big_1), 1);
-					add(new JigsawPiece("boiler_big_2", StructureManager.boiler_big_2), 1);
-					add(new JigsawPiece("boiler_big_3", StructureManager.boiler_big_3), 1);
+				put("racks_2", new JigsawPool() {{
+					add(new JigsawPiece("rack_small_1", StructureManager.rack_small_1), 1);
+					add(new JigsawPiece("rack_small_2", StructureManager.rack_small_2), 1);
+					add(new JigsawPiece("rack_small_3", StructureManager.rack_small_3), 1);
+					add(new JigsawPiece("rack_small_4", StructureManager.rack_small_4), 1);
+					add(new JigsawPiece("rack_small_5", StructureManager.rack_small_5), 1);
+					add(new JigsawPiece("rack_small_6", StructureManager.rack_small_6), 1);
+					add(new JigsawPiece("rack_small_7", StructureManager.rack_small_7), 1);
+				}});
+				put("racks", new JigsawPool() {{
 					add(new JigsawPiece("rack_1", StructureManager.rack_1), 1);
 					add(new JigsawPiece("rack_2", StructureManager.rack_2), 1);
 					add(new JigsawPiece("rack_3", StructureManager.rack_3), 1);
 					add(new JigsawPiece("rack_4", StructureManager.rack_4), 1);
 					add(new JigsawPiece("rack_5", StructureManager.rack_5), 1);
 					add(new JigsawPiece("rack_6", StructureManager.rack_6), 1);
-					add(new JigsawPiece("rack_7", StructureManager.rack_7), 1);
-					add(new JigsawPiece("rack_big_1", StructureManager.rack_big_1), 1);
-					add(new JigsawPiece("rack_big_2", StructureManager.rack_big_2), 1);
-					add(new JigsawPiece("rack_big_3", StructureManager.rack_big_3), 1);
-					add(new JigsawPiece("rack_big_4", StructureManager.rack_big_4), 1);
-					add(new JigsawPiece("rack_big_5", StructureManager.rack_big_5), 1);
-					add(new JigsawPiece("rack_big_6", StructureManager.rack_big_6), 1);
 				}});
-				put("basement_rooms", new JigsawPool() {{
+				put("diesel_gen", new JigsawPool() {{
+					add(new JigsawPiece("diesel_gen_1", StructureManager.diesel_gen_1), 1);
+					add(new JigsawPiece("diesel_gen_2", StructureManager.diesel_gen_2), 1);
+					add(new JigsawPiece("diesel_gen_3", StructureManager.diesel_gen_3), 1);
+					fallback = "diesel_gen";
+				}});
+				put("boiler_big", new JigsawPool() {{
+					add(new JigsawPiece("boiler_big_1", StructureManager.boiler_big_1), 1);
+					add(new JigsawPiece("boiler_big_2", StructureManager.boiler_big_2), 1);
+					add(new JigsawPiece("boiler_big_3", StructureManager.boiler_big_3), 1);
+				}});
+				put("mango", new JigsawPool() {{
 					add(new JigsawPiece("boiler_room", StructureManager.boiler_room), 1);
-					add(new JigsawPiece("boiler_wall", StructureManager.boiler_wall), 1);
-					add(new JigsawPiece("diesel_gen_room", StructureManager.diesel_gen_room), 1);
+					add(new JigsawPiece("boiler_room_wall", StructureManager.boiler_room_wall), 1);
 					add(new JigsawPiece("diesel_gen_wall", StructureManager.diesel_gen_wall), 1);
 				}});
 			}};

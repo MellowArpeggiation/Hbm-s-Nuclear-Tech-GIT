@@ -1119,34 +1119,55 @@ public class NBTStructure {
 
 		private Component buildNextComponent(Random rand, SpawnCondition spawn, JigsawPool pool, Component fromComponent, JigsawConnection fromConnection) {
 			JigsawPiece nextPiece = pool.get(rand);
-			if(nextPiece == null) return null;
+			if(nextPiece == null) {
+				MainRegistry.logger.warn("[Jigsaw] Pool returned null piece: " + fromConnection.poolName);
+				return null;
+			}
 
 			List<JigsawConnection> connectionPool = getConnectionPool(nextPiece, fromConnection);
-			if(connectionPool == null) return null;
+			if(connectionPool == null || connectionPool.isEmpty()) {
+				MainRegistry.logger.warn("[Jigsaw] No valid connections in piece: " + nextPiece.name);
+				return null;
+			}
 
 			JigsawConnection toConnection = connectionPool.get(rand.nextInt(connectionPool.size()));
-
-			// Rotate our incoming piece to plug it in
 			int nextCoordBase = fromComponent.getNextCoordBase(fromConnection, toConnection, rand);
 
 			BlockPos pos = getConnectionTargetPosition(fromComponent, fromConnection);
-
-			// offset the starting point to the connecting point
 			int ox = nextPiece.structure.rotateX(toConnection.pos.x, toConnection.pos.z, nextCoordBase);
 			int oy = toConnection.pos.y;
 			int oz = nextPiece.structure.rotateZ(toConnection.pos.x, toConnection.pos.z, nextCoordBase);
 
-			return new Component(spawn, nextPiece, rand, pos.getX() - ox, pos.getY() - oy, pos.getZ() - oz, nextCoordBase).connectedFrom(toConnection);
+			try {
+				return new Component(spawn, nextPiece, rand, pos.getX() - ox, pos.getY() - oy, pos.getZ() - oz, nextCoordBase).connectedFrom(toConnection);
+			} catch(Exception ex) {
+				MainRegistry.logger.error("[Jigsaw] Failed to create component for piece: " + nextPiece.name, ex);
+				return null;
+			}
 		}
 
 		private List<JigsawConnection> getConnectionPool(JigsawPiece nextPiece, JigsawConnection fromConnection) {
+			Map<String, List<JigsawConnection>> connMap;
 			if(fromConnection.dir == ForgeDirection.DOWN) {
-				return nextPiece.structure.toTopConnections.get(fromConnection.targetName);
+				connMap = nextPiece.structure.toTopConnections;
 			} else if(fromConnection.dir == ForgeDirection.UP) {
-				return nextPiece.structure.toBottomConnections.get(fromConnection.targetName);
+				connMap = nextPiece.structure.toBottomConnections;
+			} else {
+				connMap = nextPiece.structure.toHorizontalConnections;
 			}
 
-			return nextPiece.structure.toHorizontalConnections.get(fromConnection.targetName);
+			if(connMap == null) {
+				MainRegistry.logger.warn("[Jigsaw] Missing connection map for: " + nextPiece.name);
+				return null;
+			}
+
+			List<JigsawConnection> pool = connMap.get(fromConnection.targetName);
+			if(pool == null || pool.isEmpty()) {
+				MainRegistry.logger.warn("[Jigsaw] No matching connection targets for: " + fromConnection.targetName + " in piece: " + nextPiece.name);
+				return null;
+			}
+
+			return pool;
 		}
 
 		private int getDistanceTo(StructureBoundingBox box) {
