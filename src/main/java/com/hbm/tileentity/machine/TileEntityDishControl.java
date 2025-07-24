@@ -2,26 +2,11 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineStardar;
-import com.hbm.blocks.machine.ReactorResearch;
-import com.hbm.handler.CompatHandler;
-import com.hbm.interfaces.IControlReceiver;
-import com.hbm.inventory.container.ContainerReactorControl;
-import com.hbm.inventory.gui.GUIReactorControl;
-import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemReactorSensor;
-import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -30,11 +15,13 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 
 public class TileEntityDishControl extends TileEntityMachineBase {
+
+	private TileEntityMachineStardar dish;
+	public int[] linkPosition = new int[3];
+	public boolean isLinked;
+	private boolean foundLink = false;
 
 	public TileEntityDishControl() {
 		super(0);
@@ -57,7 +44,6 @@ public class TileEntityDishControl extends TileEntityMachineBase {
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		NBTTagList list = new NBTTagList();
 
 		nbt.setBoolean("isLinked", isLinked);
 
@@ -67,11 +53,6 @@ public class TileEntityDishControl extends TileEntityMachineBase {
 			nbt.setInteger("linkPosZ", linkPosition[2]);
 		}
 	}
-
-	public TileEntityMachineStardar dish;
-	public int[] linkPosition = new int[3];
-	public boolean isLinked;
-	private boolean foundLink;
 
 	@Override
 	public void updateEntity() {
@@ -83,7 +64,24 @@ public class TileEntityDishControl extends TileEntityMachineBase {
 			foundLink = true;
 		}
 
-		this.networkPackNT(150);
+		this.networkPackNT(15);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public TileEntityMachineStardar getLinkedDishClientSafe() {
+		if (dish == null && isLinked) {
+			TileEntity te = worldObj.getTileEntity(linkPosition[0], linkPosition[1], linkPosition[2]);
+			if (te instanceof TileEntityMachineStardar) {
+				dish = (TileEntityMachineStardar) te;
+			}
+		}
+		return dish;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public boolean starDarHasDisk() {
+		TileEntityMachineStardar link = getLinkedDishClientSafe();
+		return link != null && link.slots[0] != null;
 	}
 
 	@Override
@@ -142,7 +140,7 @@ public class TileEntityDishControl extends TileEntityMachineBase {
 
 		if(b == ModBlocks.machine_stardar) {
 
-			int[] pos = ((MachineStardar) ModBlocks.machine_stardar).findCore(worldObj, x, y, z);
+			int[] pos = ((MachineStardar)ModBlocks.machine_stardar).findCore(worldObj, x, y, z);
 
 			if(pos != null) {
 
@@ -151,7 +149,6 @@ public class TileEntityDishControl extends TileEntityMachineBase {
 				if(tile instanceof TileEntityMachineStardar) {
 					// Dish linked successfully
 					linkPosition = pos;
-					dish = (TileEntityMachineStardar) tile;
 					return true;
 				}
 			}

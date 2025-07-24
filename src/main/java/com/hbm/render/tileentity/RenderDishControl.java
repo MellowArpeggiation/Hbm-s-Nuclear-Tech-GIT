@@ -4,6 +4,7 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
+import com.hbm.tileentity.machine.TileEntityDishControl;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -14,6 +15,9 @@ public class RenderDishControl extends TileEntitySpecialRenderer implements IIte
 
 	@Override
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float interp) {
+		if(!(te instanceof TileEntityDishControl)) return;
+		TileEntityDishControl control = (TileEntityDishControl) te;
+
 		GL11.glPushMatrix();
 		{
 
@@ -31,7 +35,16 @@ public class RenderDishControl extends TileEntitySpecialRenderer implements IIte
 			}
 
 			bindTexture(ResourceManager.dish_controller_tex);
-			ResourceManager.dish_controller.renderAll();
+			ResourceManager.dish_controller.renderPart("dish_control");
+			ResourceManager.dish_controller.renderPart("joystick");
+
+			if (control.starDarHasDisk()) {
+				ResourceManager.dish_controller.renderPart("drive");
+			}
+
+			//if(control.isLinked) {
+				//TileEntityMachineStardar stardar = (TileEntityMachineStardar) te.getWorldObj().getTileEntity(control.linkPosition[0], control.linkPosition[1], control.linkPosition[2]);
+			//}
 
 			GL11.glShadeModel(GL11.GL_FLAT);
 

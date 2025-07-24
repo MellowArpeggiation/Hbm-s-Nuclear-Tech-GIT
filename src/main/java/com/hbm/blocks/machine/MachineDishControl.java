@@ -1,23 +1,16 @@
 package com.hbm.blocks.machine;
 
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.tileentity.TileEntityProxyCombo;
-import com.hbm.tileentity.machine.TileEntityAirScrubber;
 import com.hbm.tileentity.machine.TileEntityDishControl;
-import com.hbm.util.BobMathUtil;
 import com.hbm.util.ChatBuilder;
-import com.hbm.util.i18n.I18nUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class MachineDishControl extends BlockDummyable implements ITooltipProvider {
@@ -52,8 +45,9 @@ public class MachineDishControl extends BlockDummyable implements ITooltipProvid
 			if( e instanceof TileEntityDishControl ) {
 				TileEntityDishControl entityDishControl = (TileEntityDishControl) e;
 				// Check if a dish was not assigned
-				if (entityDishControl.dish == null)
+				if (entityDishControl.isLinked == false)
 				{
+					// No StarDar linked
 					player.addChatMessage(ChatBuilder.start("[").color(EnumChatFormatting.DARK_AQUA)
 						.nextTranslation(this.getUnlocalizedName() + ".name").color(EnumChatFormatting.DARK_AQUA)
 						.next("] ").color(EnumChatFormatting.DARK_AQUA)
@@ -62,19 +56,19 @@ public class MachineDishControl extends BlockDummyable implements ITooltipProvid
 					return false;
 				}
 
-				// Get reference to the stardar
-				MachineStardar stardar = (MachineStardar) world.getBlock(
-					entityDishControl.dish.xCoord,
-					entityDishControl.dish.yCoord,
-					entityDishControl.dish.zCoord
+				// Get StarDar
+				MachineStardar stardarBlock = (MachineStardar) world.getBlock(
+					entityDishControl.linkPosition[0],
+					entityDishControl.linkPosition[1],
+					entityDishControl.linkPosition[2]
 				);
 
 				// Trigger the StarDar UI to open
-				return stardar.onBlockActivated(
+				return stardarBlock.onBlockActivated(
 					world,
-					entityDishControl.dish.xCoord,
-					entityDishControl.dish.yCoord,
-					entityDishControl.dish.zCoord,
+					entityDishControl.linkPosition[0],
+					entityDishControl.linkPosition[1],
+					entityDishControl.linkPosition[2],
 					player, side, hitX, hitY, hitZ
 				);
 			}
