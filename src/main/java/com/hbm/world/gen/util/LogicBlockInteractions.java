@@ -1,14 +1,12 @@
 package com.hbm.world.gen.util;
 
 import com.hbm.blocks.generic.LogicBlock;
-import com.hbm.blocks.generic.LogicBlock.TileEntityLogicBlock;
 import com.hbm.items.ModItems;
 import com.hbm.potion.HbmPotion;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -23,13 +21,8 @@ public class LogicBlockInteractions {
 	public static LinkedHashMap<String, Consumer<Object[]>> interactions = new LinkedHashMap<>();
 
 	public static Consumer<Object[]> TEST = (array) -> {
-		World world = (World) array[0];
 		LogicBlock.TileEntityLogicBlock logic = (LogicBlock.TileEntityLogicBlock) array[1];
-		int x = (int) array[2];
-		int y = (int) array[3];
-		int z = (int) array[4];
 		EntityPlayer player = (EntityPlayer) array[5];
-		int side = (int) array[6];
 
 		if(logic.phase > 1) return;
 

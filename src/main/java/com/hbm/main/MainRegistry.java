@@ -1707,6 +1707,22 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:tile.machine_transformer_20");
 		ignoreMappings.add("hbm:tile.machine_transformer_dnt_20");
 		ignoreMappings.add("hbm:item.levitation_unit");
+		ignoreMappings.add("hbm:item.letter");
+		ignoreMappings.add("hbm:item.chopper_head");
+		ignoreMappings.add("hbm:item.chopper_gun");
+		ignoreMappings.add("hbm:item.chopper_torso");
+		ignoreMappings.add("hbm:item.chopper_tail");
+		ignoreMappings.add("hbm:item.chopper_wing");
+		ignoreMappings.add("hbm:item.chopper_blades");
+		ignoreMappings.add("hbm:item.component_emitter");
+		ignoreMappings.add("hbm:item.component_limiter");
+		ignoreMappings.add("hbm:item.bottle2_korl_special");
+		ignoreMappings.add("hbm:item.bottle2_fritz_special");
+		ignoreMappings.add("hbm:item.journal_pip");
+		ignoreMappings.add("hbm:item.journal_bj");
+		ignoreMappings.add("hbm:item.journal_silver");
+		ignoreMappings.add("hbm:tile.machine_arc_furnace_off");
+		ignoreMappings.add("hbm:tile.machine_arc_furnace_on");
 
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);
