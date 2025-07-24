@@ -1,9 +1,18 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5383 - me when mom brings home THE SLUDGE](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/2.0.17_X5383)
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5397 - i need you, i need you, i need you, but i wish you were dead](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5397)
+
+## Added
+* Celestial Orrery
+    * Shows the current position of all celestial bodies as a hologram
+* Occasionally Heavy Boots
+    * Temporarily increases gravity on low gravity worlds when holding crouch
+* More `en_AU` translations
+* Space specific recipes to the new assembler (let us know if we missed any!)
 
 ## Changed
-* Pedestal crafting requirement `NEW_MOON` now checks for an eclipse instead
-    * Must be during the day
-    * don't ask what this is
+* DNT flight boost now activated by holding sprint key
+* Day and Night crafting requirement adjusted
+    * whatever that means
 
 ## Fixed
-* Depth rock tools not breaking depth rock (sorry for grilling you abel, even I fucked this one up)
+* Flying Laythe squids
+* Missing tank textures for aqueous nickel/copper, and brine
