@@ -142,6 +142,7 @@ public class NTMWorldGenerator implements IWorldGenerator {
 					add(new JigsawPiece("diesel_gen_1", StructureManager.diesel_gen_1), 1);
 					add(new JigsawPiece("diesel_gen_2", StructureManager.diesel_gen_2), 1);
 					add(new JigsawPiece("diesel_gen_3", StructureManager.diesel_gen_3), 1);
+					add(new JigsawPiece("diesel_gen_4", StructureManager.diesel_gen_1), 1);
 					fallback = "diesel_gen";
 				}});
 				put("boiler_big", new JigsawPool() {{
@@ -153,6 +154,7 @@ public class NTMWorldGenerator implements IWorldGenerator {
 					add(new JigsawPiece("boiler_room", StructureManager.boiler_room), 1);
 					add(new JigsawPiece("boiler_room_wall", StructureManager.boiler_room_wall), 1);
 					add(new JigsawPiece("diesel_gen_wall", StructureManager.diesel_gen_wall), 1);
+					add(new JigsawPiece("diesel_gen_room", StructureManager.diesel_gen_room), 1);
 				}});
 			}};
 		}});
