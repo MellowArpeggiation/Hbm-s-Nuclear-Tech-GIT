@@ -64,7 +64,7 @@ public class StructureManager {
 	public static final NBTStructure diesel_gen_room = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/atom/diesel_gen_room.nbt"));
 	public static final NBTStructure diesel_gen_wall = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/atom/diesel_gen_wall.nbt"));
 	public static final NBTStructure rack_1 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/atom/rack_1.nbt"));
-	public static final NBTStructure rack_2 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/atom/racK_2.nbt"));
+	public static final NBTStructure rack_2 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/atom/rack_2.nbt"));
 	public static final NBTStructure rack_3 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/atom/rack_3.nbt"));
 	public static final NBTStructure rack_4 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/atom/rack_4.nbt"));
 	public static final NBTStructure rack_5 = new NBTStructure(new ResourceLocation(RefStrings.MODID, "structures/atom/rack_5.nbt"));
