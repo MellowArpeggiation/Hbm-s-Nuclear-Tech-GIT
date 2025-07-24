@@ -63,6 +63,15 @@ public class MicroBlocksCompatHandler {
 		registerMicroBlockCompat(ModBlocks.tile_lab);
 		registerMicroBlockCompat(ModBlocks.tile_lab_cracked);
 		registerMicroBlockCompat(ModBlocks.tile_lab_broken);
+
+		// Space
+		registerMicroBlockCompat(ModBlocks.deco_stainless);
+		registerMicroBlockCompat(ModBlocks.meteor_polished);
+		registerMicroBlockCompat(ModBlocks.meteor_brick);
+		registerMicroBlockCompat(ModBlocks.meteor_brick_mossy);
+		registerMicroBlockCompat(ModBlocks.meteor_brick_cracked);
+		registerMicroBlockCompat(ModBlocks.meteor_brick_chiseled);
+		registerMicroBlockCompat(ModBlocks.meteor_pillar);
 	}
 
 	private static void registerMicroBlockCompat(Block block) {
