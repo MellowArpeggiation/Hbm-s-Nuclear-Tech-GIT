@@ -9,6 +9,7 @@ public class RadiationConfig {
 
 	public static int fogRad = 100;
 	public static int fogCh = 20;
+	public static int fogCap = 3;
 	public static double hellRad = 0.1;
 	public static int worldRad = 10;
 	public static int worldRadThreshold = 20;
@@ -36,13 +37,14 @@ public class RadiationConfig {
 	public static double sootFogThreshold = 35D;
 	public static double sootFogDivisor = 120D;
 	public static double smokeStackSootMult = 0.8;
-	
+
 	public static void loadFromConfig(Configuration config) {
 
 		final String CATEGORY_NUKE = CommonConfig.CATEGORY_RADIATION;
 
 		fogRad = CommonConfig.createConfigInt(config, CATEGORY_NUKE, "FOG_00_threshold", "Radiation in RADs required for fog to spawn", 100);
 		fogCh = CommonConfig.createConfigInt(config, CATEGORY_NUKE, "FOG_01_threshold", "1:n chance of fog spawning every second", 20);
+		fogCap = CommonConfig.createConfigInt(config, CATEGORY_NUKE, "FOG_02_cap", "Maximum fog particles spawned per tick", fogCap);
 		hellRad = CommonConfig.createConfigDouble(config, CATEGORY_NUKE, "AMBIENT_00_nether", "RAD/s in the nether", 0.1D);
 		worldRadEffects = CommonConfig.createConfigBool(config, CATEGORY_NUKE, "RADWORLD_00_toggle", "Whether high radiation levels should perform changes in the world", true);
 		worldRad = CommonConfig.createConfigInt(config, CATEGORY_NUKE, "RADWORLD_01_amount", "How many block operations radiation can perform per tick", 10);
@@ -53,7 +55,7 @@ public class RadiationConfig {
 		enableChunkRads = CommonConfig.createConfigBool(config, CATEGORY_NUKE, "RADIATION_01_enableChunkRads", "Toggles the world radiation system (chunk radiation only, some blocks use an AoE!)", true);
 		enablePRISM = CommonConfig.createConfigBool(config, CATEGORY_NUKE, "RADIATION_99_enablePRISM", "Enables the new 3D resistance-aware PRISM radiation system", false);
 		if(enablePRISM) ChunkRadiationManager.proxy = new ChunkRadiationHandlerPRISM();
-		
+
 		fogCh = CommonConfig.setDef(fogCh, 20);
 
 		final String CATEGORY_HAZ = CommonConfig.CATEGORY_HAZARD;

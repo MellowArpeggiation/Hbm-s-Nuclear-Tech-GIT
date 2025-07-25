@@ -76,6 +76,8 @@ public class ChunkRadiationHandlerSimple extends ChunkRadiationHandler {
 			radiation.clear();
 			World world = entry.getKey();
 
+			int farts = 0;
+
 			for(Entry<ChunkCoordIntPair, Float> chunk : buff.entrySet()) {
 
 				if(chunk.getValue() == 0)
@@ -100,8 +102,8 @@ public class ChunkRadiationHandlerSimple extends ChunkRadiationHandler {
 							radiation.put(newCoord, chunk.getValue() * percent);
 						}
 
-						float rad = radiation.get(newCoord);
-						if(rad > RadiationConfig.fogRad && world != null && world.rand.nextInt(RadiationConfig.fogCh) == 0 && world.getChunkProvider().chunkExists(coord.chunkXPos, coord.chunkZPos)) {
+						if(farts < RadiationConfig.fogCap && world != null && radiation.get(newCoord) > RadiationConfig.fogRad && world.rand.nextInt(RadiationConfig.fogCh) == 0 && world.getChunkProvider().chunkExists(coord.chunkXPos, coord.chunkZPos)) {
+							farts++;
 
 							int x = coord.chunkXPos * 16 + world.rand.nextInt(16);
 							int z = coord.chunkZPos * 16 + world.rand.nextInt(16);

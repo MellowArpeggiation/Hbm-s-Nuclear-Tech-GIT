@@ -578,7 +578,8 @@ public class NBTStructure {
 		if(definition.block instanceof BlockSign) return INBTTransformable.transformMetaDeco(definition.meta, coordBaseMode);
 		if(definition.block instanceof BlockLadder) return INBTTransformable.transformMetaDeco(definition.meta, coordBaseMode);
 		if(definition.block instanceof BlockTripWireHook) return INBTTransformable.transformMetaDirectional(definition.meta, coordBaseMode);
-		if(definition.block == Blocks.vine) return INBTTransformable.transformMetaVine(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockVine) return INBTTransformable.transformMetaVine(definition.meta, coordBaseMode);
+		if(definition.block instanceof BlockTrapDoor) return INBTTransformable.transformMetaTrapdoor(definition.meta, coordBaseMode);
 		return definition.meta;
 	}
 
@@ -684,7 +685,8 @@ public class NBTStructure {
 		}
 
 		protected JigsawPool getPool(String name) {
-			return pools.get(name).clone();
+			JigsawPool pool = pools.get(name);
+			return pool != null ? pool.clone() : null;
 		}
 
 		// Builds all of the pools into neat rows and columns, for editing and debugging!
@@ -995,6 +997,18 @@ public class NBTStructure {
 			return false;
 		}
 
+		protected boolean isFullyContainedBy(StructureBoundingBox box) {
+			StructureBoundingBox thisBox = getBoundingBox();
+			if(thisBox == null) return false;
+
+			if(thisBox.minX >= box.minX && thisBox.maxX <= box.maxX
+			&& thisBox.minY >= box.minY && thisBox.maxY <= box.maxY
+			&& thisBox.minZ >= box.minZ && thisBox.maxZ <= box.maxZ)
+				return true;
+
+			return false;
+		}
+
 	}
 
 	public static class Start extends StructureStart {
@@ -1055,13 +1069,17 @@ public class NBTStructure {
 						}
 
 						JigsawPool nextPool = spawn.getPool(fromConnection.poolName);
+						if(nextPool == null) {
+							MainRegistry.logger.warn("[Jigsaw] Jigsaw block points to invalid pool: " + fromConnection.poolName);
+							continue;
+						}
 
 						Component nextComponent = null;
 
 						// Iterate randomly through the pool, attempting each piece until one fits
 						while(nextPool.totalWeight > 0) {
 							nextComponent = buildNextComponent(rand, spawn, nextPool, fromComponent, fromConnection);
-							if(nextComponent != null && !fromComponent.hasIntersectionIgnoringSelf(components, nextComponent.getBoundingBox())) break;
+							if(nextComponent != null && (nextComponent.isFullyContainedBy(fromComponent.getBoundingBox()) || !fromComponent.hasIntersectionIgnoringSelf(components, nextComponent.getBoundingBox()))) break;
 							nextComponent = null;
 						}
 
