@@ -156,6 +156,10 @@ public class NTMWorldGenerator implements IWorldGenerator {
 					add(new JigsawPiece("diesel_gen_wall", StructureManager.diesel_gen_wall), 1);
 					add(new JigsawPiece("diesel_gen_room", StructureManager.diesel_gen_room), 1);
 				}});
+				put("hallway", new JigsawPool() {{
+					add(new JigsawPiece("hallway", StructureManager.hallway), 1);
+					add(new JigsawPiece("hallway_storage", StructureManager.hallway_storage), 1);
+				}});
 			}};
 		}});
 
