@@ -150,6 +150,7 @@ public class TileMappings {
 		put(TileEntityFF.class, "tileentity_forcefield");
 		put(TileEntityForceField.class, "tileentity_machine_field");
 		put(TileEntityReactorControl.class, "tileentity_reactor_remote_control");
+		put(TileEntityDishControl.class, "tileentity_dish_control");
 		put(TileEntityWasteDrum.class, "tileentity_waste_drum");
 		put(TileEntityDecon.class, "tileentity_decon");
 		put(TileEntityMachineSatDock.class, "tileentity_miner_dock");

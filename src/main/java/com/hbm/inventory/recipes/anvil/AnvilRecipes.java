@@ -243,6 +243,15 @@ public class AnvilRecipes extends SerializableRecipe {
 				}, new AnvilOutput(new ItemStack(ModBlocks.machine_assembly_machine))).setTier(2));
 
 		constructionRecipes.add(new AnvilConstructionRecipe(
+			new AStack[] {
+				new OreDictStack(KEY_PLANKS, 6),
+				new OreDictStack(STEEL.plate(), 8),
+				new ComparableStack(ModItems.circuit, 1, EnumCircuitType.ANALOG),
+				new ComparableStack(ModItems.circuit, 8, EnumCircuitType.VACUUM_TUBE),
+				new ComparableStack(ModBlocks.pole_satellite_receiver, 1),
+			}, new AnvilOutput(new ItemStack(ModBlocks.machine_dish_controller))).setTier(3));
+
+		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
 						new OreDictStack(KEY_COBBLESTONE, 8),
 						new OreDictStack(KEY_PLANKS, 16),

@@ -1172,6 +1172,7 @@ public class ModBlocks {
 	public static Block zirnox_destroyed;
 
 	public static Block machine_controller;
+	public static Block machine_dish_controller;
 
 	public static Block machine_spp_bottom;
 	public static Block machine_spp_top;
@@ -2514,6 +2515,7 @@ public class ModBlocks {
 		reactor_zirnox = new ReactorZirnox(Material.iron).setBlockName("machine_zirnox").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		zirnox_destroyed = new ZirnoxDestroyed(Material.iron).setBlockName("zirnox_destroyed").setHardness(100.0F).setResistance(800.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":block_steel");
 		machine_controller = new MachineReactorControl(Material.iron).setBlockName("machine_controller").setHardness(5.0F).setResistance(10.0F).setCreativeTab(null);
+		machine_dish_controller = new MachineDishControl(Material.iron).setBlockName("dish_control").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel_machine");
 
 		machine_cryo_distill = new MachineCryoDistill(Material.iron).setBlockName("machine_cryo_distill").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":block_steel");
 
@@ -3509,6 +3511,7 @@ public class ModBlocks {
 		register(machine_diesel);
 		register(machine_combustion_engine);
 		GameRegistry.registerBlock(machine_controller, machine_controller.getUnlocalizedName());
+		register(machine_dish_controller);
 		GameRegistry.registerBlock(reactor_research, reactor_research.getUnlocalizedName());
 		GameRegistry.registerBlock(reactor_zirnox, reactor_zirnox.getUnlocalizedName());
 		GameRegistry.registerBlock(zirnox_destroyed, zirnox_destroyed.getUnlocalizedName());
