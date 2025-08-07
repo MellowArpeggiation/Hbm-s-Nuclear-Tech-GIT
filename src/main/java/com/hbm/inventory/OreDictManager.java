@@ -182,7 +182,8 @@ public class OreDictManager {
 	public static final DictFrame MINGRADE = new DictFrame("Mingrade");
 	public static final DictFrame ALLOY = new DictFrame("AdvancedAlloy");
 	/** NICKEL */
-	public static final DictFrame NI = new DictFrame("Nickel");
+	public static final DictFrame NI = new DictFrame("NickelPure");
+	public static final DictFrame NIM = new DictFrame("Nickel"); // Compat with "ferrous metal" so thermal isn't invalidated and neither is our intended progression!
 	/** TUNGSTEN */
 	public static final DictFrame W = new DictFrame("Tungsten");
 	/** ALUMINUM */
@@ -278,7 +279,7 @@ public class OreDictManager {
 	public static final DictFrame RICHMAGMA = new DictFrame("RichMagma");
 	public static final DictFrame FLOUR = new DictFrame("foodFlour");
 	public static final DictFrame PENTLANDITE = new DictFrame("Pentlandite");
-	
+
 	/*
 	 * HAZARDS, MISC
 	 */
@@ -436,6 +437,7 @@ public class OreDictManager {
 		 * STABLE
 		 */
 		NI																	.ingot(ingot_nickel)												.dust(powder_nickel)            .plate(plate_nickel) 			.block(block_nickel)		.oreAll(ore_nickel) 												.nugget(nugget_nickel);
+		NIM																	.dust(fromOne(chunk_ore, EnumChunkType.PENTLANDITE)); // dust selected for compat reasons
 		TI																	.ingot(ingot_titanium)												.dust(powder_titanium)			.plate(plate_titanium)			.block(block_titanium)		.oreAll(ore_titanium);
 		CU																	.ingot(ingot_copper)												.dust(powder_copper)			.plate(plate_copper)			.block(block_copper)		.ore(ore_gneiss_copper) .oreAll(ore_copper);
 		MINGRADE															.ingot(ingot_red_copper)											.dust(powder_red_copper)		.billet(billet_red_copper)		.block(block_red_copper);
@@ -625,7 +627,6 @@ public class OreDictManager {
 			if(mat.smeltable == SmeltingBehavior.SMELTABLE) {
 				if(mat.autogen.contains(MaterialShapes.CASTPLATE)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.CASTPLATE.name() + name, new ItemStack(ModItems.plate_cast, 1, mat.id));
 				if(mat.autogen.contains(MaterialShapes.WELDEDPLATE)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.WELDEDPLATE.name() + name, new ItemStack(ModItems.plate_welded, 1, mat.id));
-				if(mat.autogen.contains(MaterialShapes.HEAVY_COMPONENT)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.HEAVY_COMPONENT.name() + name, new ItemStack(ModItems.heavy_component, 1, mat.id));
 				if(mat.autogen.contains(MaterialShapes.DENSEWIRE)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.DENSEWIRE.name() + name, new ItemStack(ModItems.wire_dense, 1, mat.id));
 			}
 			if(mat.autogen.contains(MaterialShapes.BOLT)) for(String name : mat.names) OreDictionary.registerOre(MaterialShapes.BOLT.name() + name, new ItemStack(ModItems.bolt, 1, mat.id));
@@ -772,7 +773,7 @@ public class OreDictManager {
 		ANY_RUBBER.addPrefix(INGOT, true);
 		ANY_PLASTIC.addPrefix(INGOT, true).addPrefix(DUST, true).addPrefix(BLOCK, true).addPrefix(GRIP, true).addPrefix(STOCK, true);
 		ANY_HARDPLASTIC.addPrefix(INGOT, true).addPrefix(STOCK, true).addPrefix(GRIP, true);
-		ANY_RESISTANTALLOY.addPrefix(INGOT, true).addPrefix(DUST, true).addPrefix(CASTPLATE, true).addPrefix(WELDEDPLATE, true).addPrefix(HEAVY_COMPONENT, true).addPrefix(BLOCK, true)
+		ANY_RESISTANTALLOY.addPrefix(INGOT, true).addPrefix(DUST, true).addPrefix(CASTPLATE, true).addPrefix(WELDEDPLATE, true).addPrefix(BLOCK, true)
 		.addPrefix(LIGHTBARREL, true).addPrefix(HEAVYBARREL, true).addPrefix(LIGHTRECEIVER, true).addPrefix(HEAVYRECEIVER, true);
 		ANY_BISMOIDBRONZE.addPrefix(INGOT, true).addPrefix(CASTPLATE, true).addPrefix(LIGHTBARREL, true).addPrefix(HEAVYBARREL, true).addPrefix(LIGHTRECEIVER, true).addPrefix(HEAVYRECEIVER, true);
 		ANY_TAR.addPrefix(ANY, false);
@@ -852,7 +853,7 @@ public class OreDictManager {
 		public String plate() {			return PLATE.name()				+ mats[0]; }
 		public String plateCast() {		return CASTPLATE.name()			+ mats[0]; }
 		public String plateWelded() {	return WELDEDPLATE.name()		+ mats[0]; }
-		public String heavyComp() {		return HEAVY_COMPONENT.name()	+ mats[0]; }
+		@Deprecated public String heavyComp() { return WELDEDPLATE.name() + mats[0]; }
 		public String wireFine() {		return WIRE.name()				+ mats[0]; }
 		public String wireDense() {		return DENSEWIRE.name()			+ mats[0]; }
 		public String shell() {			return SHELL.name()				+ mats[0]; }
@@ -1119,7 +1120,7 @@ public class OreDictManager {
 		public String plate() {			return PLATE.name()				+ groupName; }
 		public String plateCast() {		return CASTPLATE.name()			+ groupName; }
 		public String plateWelded() {	return WELDEDPLATE.name()		+ groupName; }
-		public String heavyComp() {		return HEAVY_COMPONENT.name()	+ groupName; }
+		@Deprecated public String heavyComp() { return WELDEDPLATE.name() + groupName; }
 		public String wireFine() {		return WIRE.name()				+ groupName; }
 		public String wireDense() {		return DENSEWIRE.name()			+ groupName; }
 		public String billet() {		return BILLET.name()			+ groupName; }

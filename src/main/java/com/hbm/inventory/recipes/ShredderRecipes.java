@@ -213,12 +213,12 @@ public class ShredderRecipes extends SerializableRecipe {
 		ShredderRecipes.setRecipe(Items.carrot, new ItemStack(Items.sugar, 1));
 		ShredderRecipes.setRecipe(ModItems.crystal_cleaned, new ItemStack(ModItems.mineral_dust, 4));
 		ShredderRecipes.setRecipe(ModBlocks.laythe_coral_block, new ItemStack(ModItems.powder_calcium, 4));
-		
+
 		ShredderRecipes.setRecipe(new ItemStack(ModBlocks.ore_mineral, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.mineral_dust, 1)); // it was deserved
 
-		
+
 		ShredderRecipes.setRecipe(ModItems.bean_roast,  new ItemStack(ModItems.powder_coffee, 1));
-		
+
 		//BYPRODUCTS
 		//ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_byproduct, 1, 0), new ItemStack(ModItems.powder_iron, 10));
 		//ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_byproduct, 1, 1), new ItemStack(ModItems.powder_copper, 10));
@@ -234,11 +234,11 @@ public class ShredderRecipes extends SerializableRecipe {
 		ShredderRecipes.setRecipe(DictFrame.fromOne(ModBlocks.stone_resource, EnumStoneType.LIMESTONE), new ItemStack(ModItems.powder_calcium, 4));
 		ShredderRecipes.setRecipe(DictFrame.fromOne(ModBlocks.stone_resource, EnumStoneType.CALCIUM), new ItemStack(ModItems.powder_calcium, 6));
 		ShredderRecipes.setRecipe(ModItems.can_empty, new ItemStack(ModItems.powder_aluminium, 2));
-		ShredderRecipes.setRecipe(ModBlocks.machine_well, new ItemStack(ModItems.powder_steel, 32));
 		ShredderRecipes.setRecipe(DictFrame.fromOne(ModItems.chunk_ore, EnumChunkType.RARE), new ItemStack(ModItems.powder_desh_mix));
 		ShredderRecipes.setRecipe(Blocks.sand, new ItemStack(ModItems.dust, 2));
 		ShredderRecipes.setRecipe(ModBlocks.block_slag, new ItemStack(ModItems.powder_cement, 4));
-		ShredderRecipes.setRecipe(ModBlocks.ore_aluminium, DictFrame.fromOne(ModItems.chunk_ore, EnumChunkType.CRYOLITE, 2));
+		ShredderRecipes.setRecipe(new ItemStack(ModBlocks.ore_aluminium, 1, OreDictionary.WILDCARD_VALUE), DictFrame.fromOne(ModItems.chunk_ore, EnumChunkType.CRYOLITE, 2));
+		ShredderRecipes.setRecipe(new ItemStack(ModBlocks.ore_nickel, 1, OreDictionary.WILDCARD_VALUE), DictFrame.fromOne(ModItems.chunk_ore, EnumChunkType.PENTLANDITE, 2));
 
 		List<ItemStack> logs = OreDictionary.getOres("logWood");
 		List<ItemStack> planks = OreDictionary.getOres("plankWood");
@@ -302,12 +302,12 @@ public class ShredderRecipes extends SerializableRecipe {
 		ShredderRecipes.setRecipe(ModItems.crystal_zinc, new ItemStack(ModItems.powder_zinc, 3));
 
 		/* Misc recycling */
-		ShredderRecipes.setRecipe(ModBlocks.steel_poles, new ItemStack(ModItems.powder_steel_tiny, 3));
-		ShredderRecipes.setRecipe(ModBlocks.steel_roof, new ItemStack(ModItems.powder_steel_tiny, 13));
-		ShredderRecipes.setRecipe(ModBlocks.steel_wall, new ItemStack(ModItems.powder_steel_tiny, 13));
-		ShredderRecipes.setRecipe(ModBlocks.steel_corner, new ItemStack(ModItems.powder_steel_tiny, 26));
+		ShredderRecipes.setRecipe(ModBlocks.steel_poles, new ItemStack(ModItems.powder_steel_tiny, 2));
+		ShredderRecipes.setRecipe(ModBlocks.steel_roof, new ItemStack(ModItems.powder_steel_tiny, 9));
+		ShredderRecipes.setRecipe(ModBlocks.steel_wall, new ItemStack(ModItems.powder_steel_tiny, 9));
+		ShredderRecipes.setRecipe(ModBlocks.steel_corner, new ItemStack(ModItems.powder_steel_tiny, 18));
 		ShredderRecipes.setRecipe(ModBlocks.steel_beam, new ItemStack(ModItems.powder_steel_tiny, 3));
-		ShredderRecipes.setRecipe(new ItemStack(ModBlocks.steel_scaffold, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.powder_steel_tiny, 7));
+		ShredderRecipes.setRecipe(new ItemStack(ModBlocks.steel_scaffold, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModItems.powder_steel_tiny, 4));
 		ShredderRecipes.setRecipe(ModItems.coil_copper, new ItemStack(ModItems.powder_red_copper, 1));
 		ShredderRecipes.setRecipe(ModItems.coil_copper_torus, new ItemStack(ModItems.powder_red_copper, 2));
 		ShredderRecipes.setRecipe(ModItems.coil_advanced_alloy, new ItemStack(ModItems.powder_advanced_alloy, 1));
@@ -323,7 +323,6 @@ public class ShredderRecipes extends SerializableRecipe {
 		ShredderRecipes.setRecipe(ModBlocks.chain, new ItemStack(ModItems.powder_steel_tiny, 1));
 		ShredderRecipes.setRecipe(ModBlocks.steel_grate, new ItemStack(ModItems.powder_steel_tiny, 3));
 		ShredderRecipes.setRecipe(ModItems.pipes_steel, new ItemStack(ModItems.powder_steel, 27));
-		ShredderRecipes.setRecipe(ModBlocks.machine_fluidtank, new ItemStack(ModItems.powder_steel, 16));
 		ShredderRecipes.setRecipe(new ItemStack(ModItems.bedrock_ore, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.gravel));
 
 		/* Sellafite scrapping */
@@ -398,9 +397,9 @@ public class ShredderRecipes extends SerializableRecipe {
 
 		/* AR COMPAT */
 		Block arMoonTurf = Compat.tryLoadBlock(Compat.MOD_AR, "turf");
-		if(arMoonTurf != null && gcMoonBlock != Blocks.air) ShredderRecipes.setRecipe(arMoonTurf, new ItemStack(ModBlocks.moon_turf)); //i assume it's moon turf
+		if(arMoonTurf != null && arMoonTurf != Blocks.air) ShredderRecipes.setRecipe(arMoonTurf, new ItemStack(ModBlocks.moon_turf)); //i assume it's moon turf
 		Block arMoonTurfDark = Compat.tryLoadBlock(Compat.MOD_AR, "turfDark");
-		if(arMoonTurfDark != null && gcMoonBlock != Blocks.air) ShredderRecipes.setRecipe(arMoonTurfDark, new ItemStack(ModBlocks.moon_turf)); //probably moon dirt? would have helped if i had ever played AR for more than 5 seconds
+		if(arMoonTurfDark != null && arMoonTurfDark != Blocks.air) ShredderRecipes.setRecipe(arMoonTurfDark, new ItemStack(ModBlocks.moon_turf)); //probably moon dirt? would have helped if i had ever played AR for more than 5 seconds
 	}
 
 	/**
@@ -412,8 +411,9 @@ public class ShredderRecipes extends SerializableRecipe {
 
 		List<ItemStack> matches = OreDictionary.getOres("dust" + name);
 
-		if(matches != null && !matches.isEmpty())
-			return matches.get(0).copy();
+		if(matches != null && !matches.isEmpty()) {
+			return Compat.getPreferredOreOutput(matches);
+		}
 
 		return new ItemStack(ModItems.scrap);
 	}

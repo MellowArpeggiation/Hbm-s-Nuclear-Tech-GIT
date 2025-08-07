@@ -34,10 +34,10 @@ import net.minecraft.item.ItemStack;
 public abstract class SerializableRecipe {
 
 	public static final Gson gson = new Gson();
-	public static List<SerializableRecipe> recipeHandlers = new ArrayList<>();
-	public static List<IRecipeRegisterListener> additionalListeners = new ArrayList<>();
+	public static List<SerializableRecipe> recipeHandlers = new ArrayList();
+	public static List<IRecipeRegisterListener> additionalListeners = new ArrayList();
 
-	public static Map<String, InputStream> recipeSyncHandlers = new HashMap<>();
+	public static Map<String, InputStream> recipeSyncHandlers = new HashMap();
 
 	public boolean modified = false;
 
@@ -85,7 +85,9 @@ public abstract class SerializableRecipe {
 		recipeHandlers.add(new PedestalRecipes());
 
 		//GENERIC
+		recipeHandlers.add(AssemblyMachineRecipes.INSTANCE);
 		recipeHandlers.add(ChemicalPlantRecipes.INSTANCE);
+		recipeHandlers.add(PUREXRecipes.INSTANCE);
 
 		recipeHandlers.add(new MatDistribution());
 		recipeHandlers.add(new CryoRecipes());
@@ -109,6 +111,8 @@ public abstract class SerializableRecipe {
 
 		MainRegistry.logger.info("Starting recipe init!");
 
+		GenericRecipes.clearPools();
+		
 		for(SerializableRecipe recipe : recipeHandlers) {
 
 			recipe.deleteRecipes();
@@ -241,7 +245,7 @@ public abstract class SerializableRecipe {
 		JsonObject json = gson.fromJson(reader, JsonObject.class);
 		JsonArray recipes = json.get("recipes").getAsJsonArray();
 		for(JsonElement recipe : recipes) {
-			this.readRecipe(recipe);
+			if(recipe != null) this.readRecipe(recipe);
 		}
 	}
 

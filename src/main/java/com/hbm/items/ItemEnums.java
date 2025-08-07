@@ -54,7 +54,8 @@ public class ItemEnums {
 		RARE,
 		MALACHITE,
 		CRYOLITE,
-		PENTLANDITE
+		PENTLANDITE,
+		MOONSTONE
 	}
 
 	public static enum EnumAchievementType {
@@ -88,6 +89,10 @@ public class ItemEnums {
 	}
 
 	public static enum EnumIngotMetal {
-		INGOT, COUNTER, KEY, BEACON, CASING, CLOCKWORK, BAR, DETECTOR
+		SCRAP, INGOT, COUNTER, KEY, BEACON, CASING, CLOCKWORK, BAR, DETECTOR
+	}
+
+	public static enum EnumExpensiveType {
+		STEEL_PLATING, HEAVY_FRAME, CIRCUIT, LEAD_PLATING, FERRO_PLATING, COMPUTER, BRONZE_TUBES
 	}
 }

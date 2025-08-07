@@ -187,7 +187,6 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		GL11.glShadeModel(GL11.GL_FLAT);
 		GL11.glPopMatrix();
 
-
 		
 		
 		/*
