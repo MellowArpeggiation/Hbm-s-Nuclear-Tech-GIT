@@ -1,12 +1,12 @@
 package com.hbm.inventory.recipes;
 
+import static com.hbm.inventory.OreDictManager.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import static com.hbm.inventory.OreDictManager.*;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,6 +14,7 @@ import com.google.gson.stream.JsonWriter;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.FluidStack;
 import com.hbm.inventory.OreDictManager;
+import com.hbm.inventory.OreDictManager.DictFrame;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
@@ -22,14 +23,13 @@ import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
 import com.hbm.items.ItemGenericPart.EnumPartType;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemCircuit.EnumCircuitType;
-import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.items.machine.ItemArcElectrode.EnumElectrodeType;
+import com.hbm.items.machine.ItemFluidIcon;
 
 import net.minecraft.item.ItemStack;
 
 public class ArcWelderRecipes extends SerializableRecipe {
-	
+
 	public static List<ArcWelderRecipe> recipes = new ArrayList();
 
 	@Override
@@ -72,7 +72,7 @@ public class ArcWelderRecipes extends SerializableRecipe {
 				new OreDictStack(ZR.plateCast(), 2)));
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.plate_welded, 1, Mats.MAT_ALUMINIUM.id), 300, 10_000L,
 				new OreDictStack(AL.plateCast(), 2)));
-		
+
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.plate_welded, 1, Mats.MAT_STAINLESS.id), 250, 20_000L,
 				new OreDictStack(STAINLESS.plateCast(), 2)));
 		//late-game fusion
@@ -87,7 +87,7 @@ public class ArcWelderRecipes extends SerializableRecipe {
 		//pre-DFC
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.plate_welded, 1, Mats.MAT_OSMIRIDIUM.id), 6_000, 20_000_000L, new FluidStack(Fluids.REFORMGAS, 16_000),
 				new OreDictStack(OSMIRIDIUM.plateCast(), 2)));
-		
+
 		//Missile Parts
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.thruster_small), 60, 1_000L, new OreDictStack(STEEL.plate(), 4), new OreDictStack(AL.wireFine(), 4), new OreDictStack(CU.plate(), 4)));
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.thruster_medium), 100, 2_000L, new OreDictStack(STEEL.plate(), 8), new ComparableStack(ModItems.motor, 1), new OreDictStack(GRAPHITE.ingot(), 8)));
@@ -123,57 +123,57 @@ public class ArcWelderRecipes extends SerializableRecipe {
 
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.insert_cmb), 600, 50_000L, new FluidStack(Fluids.NEON, 2_000),
 				new OreDictStack(CMB.plate(), 2), new OreDictStack(U238.ingot())));
-		
+
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.sat_mapper), 600, 10_000L, new ComparableStack(ModItems.sat_base), new ComparableStack(ModItems.sat_head_mapper)));
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.sat_scanner), 600, 10_000L, new ComparableStack(ModItems.sat_base), new ComparableStack(ModItems.sat_head_scanner)));
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.sat_radar), 600, 10_000L, new ComparableStack(ModItems.sat_base), new ComparableStack(ModItems.sat_head_radar)));
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.sat_laser), 600, 50_000L, new ComparableStack(ModItems.sat_base), new ComparableStack(ModItems.sat_head_laser)));
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.sat_resonator), 600, 50_000L, new ComparableStack(ModItems.sat_base), new ComparableStack(ModItems.sat_head_resonator)));
-		
+
 		recipes.add(new ArcWelderRecipe(new ItemStack(ModBlocks.machine_xenon_thruster), 200, 50_000L, new FluidStack(Fluids.ARGON, 1_000), new OreDictStack(W.plateWelded(), 2), new ComparableStack(ModItems.plate_stainless, 6), new ComparableStack(ModItems.arc_electrode, 1, EnumElectrodeType.GRAPHITE)));
 
-		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.rp_fuselage_20_1), 120, 50_000L, new OreDictStack(STAINLESS.plateWelded(), 1), new ComparableStack(ModItems.seg_20), new OreDictStack(TI.shell(), 1)));
-		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.rp_fuselage_20_3), 130, 52_000L, new OreDictStack(STAINLESS.plateWelded(), 2), new ComparableStack(ModItems.seg_20), new ComparableStack(ModItems.rp_fuselage_20_1)));
-		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.rp_fuselage_20_6), 140, 56_000L, new OreDictStack(STAINLESS.plateWelded(), 4), new ComparableStack(ModItems.seg_20), new ComparableStack(ModItems.rp_fuselage_20_3)));
-		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.rp_fuselage_20_12), 150, 60_000L, new FluidStack(Fluids.OXYGEN, 500), new OreDictStack(STAINLESS.plateWelded(), 8), new ComparableStack(ModItems.seg_20), new OreDictStack(TI.shell(), 6)));
+		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.rp_fuselage_20_1), 100, 20_000L, new OreDictStack(STAINLESS.plateWelded(), 1), new ComparableStack(ModItems.seg_20, 2), new OreDictStack(TI.shell(), 1))); // 1 welded stainless, 1 titanium shell
+		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.rp_fuselage_20_3), 150, 30_000L, new OreDictStack(STAINLESS.plateWelded(), 1), new ComparableStack(ModItems.rp_fuselage_20_1), new OreDictStack(TI.shell(), 2))); // 2 weld stain, 3 tit shells
+		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.rp_fuselage_20_6), 200, 50_000L, new OreDictStack(STAINLESS.plateWelded(), 2), new ComparableStack(ModItems.rp_fuselage_20_3), new OreDictStack(TI.shell(), 3))); // 4 wain, 6 titties
+		recipes.add(new ArcWelderRecipe(new ItemStack(ModItems.rp_fuselage_20_12), 250, 60_000L, new FluidStack(Fluids.OXYGEN, 500), new OreDictStack(STAINLESS.plateWelded(), 4), new ComparableStack(ModItems.rp_fuselage_20_6), new OreDictStack(TI.shell(), 6))); // 8 win, 12 tit
 
 	}
-	
+
 	public static HashMap getRecipes() {
 
 		HashMap<Object, Object> recipes = new HashMap<Object, Object>();
-		
+
 		for(ArcWelderRecipe recipe : ArcWelderRecipes.recipes) {
-			
+
 			int size = recipe.ingredients.length + (recipe.fluid != null ? 1 : 0);
 			Object[] array = new Object[size];
-			
+
 			for(int i = 0; i < recipe.ingredients.length; i++) {
 				array[i] = recipe.ingredients[i];
 			}
-			
+
 			if(recipe.fluid != null) array[size - 1] = ItemFluidIcon.make(recipe.fluid);
-			
+
 			recipes.put(array, recipe.output);
 		}
-		
+
 		return recipes;
 	}
-	
+
 	public static ArcWelderRecipe getRecipe(ItemStack... inputs) {
-		
+
 		outer:
 		for(ArcWelderRecipe recipe : recipes) {
 
 			List<AStack> recipeList = new ArrayList();
 			for(AStack ingredient : recipe.ingredients) recipeList.add(ingredient);
-			
+
 			for(int i = 0; i < inputs.length; i++) {
-				
+
 				ItemStack inputStack = inputs[i];
 
 				if(inputStack != null) {
-					
+
 					boolean hasMatch = false;
 					Iterator<AStack> iterator = recipeList.iterator();
 
@@ -192,10 +192,10 @@ public class ArcWelderRecipes extends SerializableRecipe {
 					}
 				}
 			}
-			
+
 			if(recipeList.isEmpty()) return recipe;
 		}
-		
+
 		return null;
 	}
 
@@ -217,46 +217,46 @@ public class ArcWelderRecipes extends SerializableRecipe {
 	@Override
 	public void readRecipe(JsonElement recipe) {
 		JsonObject obj = (JsonObject) recipe;
-		
+
 		AStack[] inputs = this.readAStackArray(obj.get("inputs").getAsJsonArray());
 		FluidStack fluid = obj.has("fluid") ? this.readFluidStack(obj.get("fluid").getAsJsonArray()) : null;
 		ItemStack output = this.readItemStack(obj.get("output").getAsJsonArray());
 		int duration = obj.get("duration").getAsInt();
 		long consumption = obj.get("consumption").getAsLong();
-		
+
 		recipes.add(new ArcWelderRecipe(output, duration, consumption, fluid, inputs));
 	}
 
 	@Override
 	public void writeRecipe(Object obj, JsonWriter writer) throws IOException {
 		ArcWelderRecipe recipe = (ArcWelderRecipe) obj;
-		
+
 		writer.name("inputs").beginArray();
 		for(AStack aStack : recipe.ingredients) {
 			this.writeAStack(aStack, writer);
 		}
 		writer.endArray();
-		
+
 		if(recipe.fluid != null) {
 			writer.name("fluid");
 			this.writeFluidStack(recipe.fluid, writer);
 		}
-		
+
 		writer.name("output");
 		this.writeItemStack(recipe.output, writer);
 
 		writer.name("duration").value(recipe.duration);
 		writer.name("consumption").value(recipe.consumption);
 	}
-	
+
 	public static class ArcWelderRecipe {
-		
+
 		public AStack[] ingredients;
 		public FluidStack fluid;
 		public ItemStack output;
 		public int duration;
 		public long consumption;
-		
+
 		public ArcWelderRecipe(ItemStack output, int duration, long consumption, FluidStack fluid, AStack... ingredients) {
 			this.ingredients = ingredients;
 			this.fluid = fluid;
@@ -264,7 +264,7 @@ public class ArcWelderRecipes extends SerializableRecipe {
 			this.duration = duration;
 			this.consumption = consumption;
 		}
-		
+
 		public ArcWelderRecipe(ItemStack output, int duration, long consumption, AStack... ingredients) {
 			this(output, duration, consumption, null, ingredients);
 		}
