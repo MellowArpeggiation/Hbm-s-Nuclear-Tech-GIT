@@ -439,6 +439,8 @@ public class ModItems {
 
 	public static Item scuttertail;
 	public static Item saltleaf;
+	public static Item leaf_rubber;
+	public static Item leaf_pet;
 
 	public static Item undefined;
 
@@ -1103,7 +1105,9 @@ public class ModItems {
 	public static Item teacup;
 	public static Item teacup_empty;
 	public static Item bottle_honey;
-
+	public static Item paraffin_seeds;
+	
+	
 	public static Item boat_rubber;
 	public static Item cart;
 	public static Item train;
@@ -2857,6 +2861,8 @@ public class ModItems {
 		ingot_palladium = new ItemCustomLore().setUnlocalizedName("ingot_palladium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":ingot_palladium");
 		scuttertail = new Item().setUnlocalizedName("scuttertail").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":scuttertail");
 		saltleaf = new Item().setUnlocalizedName("saltleaf").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":salt_leaf");
+		leaf_rubber = new Item().setUnlocalizedName("rubber_leaves").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":rubber_leaves");
+		leaf_pet = new Item().setUnlocalizedName("pet_leaves").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":pet_leaves");
 
 		crystal_coal = new Item().setUnlocalizedName("crystal_coal").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":crystal_coal");
 		crystal_iron = new Item().setUnlocalizedName("crystal_iron").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":crystal_iron");
@@ -3447,7 +3453,7 @@ public class ModItems {
 		teacup_empty = new Item().setUnlocalizedName("teacup_empty").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":teacup");
 		teacup = new ItemEnergy().makeGlass().setUnlocalizedName("teacup").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":teacup_full");
 		bottle_honey = new ItemEnergy().makeGlass().setUnlocalizedName("bottle_honey").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":bottle_honey");
-
+		paraffin_seeds = new ItemSeedFood(1, 0.2F, ModBlocks.crop_paraffin, ModBlocks.rubber_farmland).setUnlocalizedName("paraffin_seeds").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":paraffin_seeds");
 		canned_conserve = (ItemEnumMulti) new ItemConserve().setUnlocalizedName("canned_conserve").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":canned");
 		can_key = new Item().setUnlocalizedName("can_key").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":can_key");
 
@@ -6062,7 +6068,8 @@ public class ModItems {
 		GameRegistry.registerItem(plant_item, plant_item.getUnlocalizedName());
 		GameRegistry.registerItem(scuttertail, scuttertail.getUnlocalizedName());
 		GameRegistry.registerItem(saltleaf, saltleaf.getUnlocalizedName());
-
+		GameRegistry.registerItem(leaf_rubber, leaf_rubber.getUnlocalizedName());
+		GameRegistry.registerItem(leaf_pet, leaf_pet.getUnlocalizedName());
 		//Teleporter Parts
 		//GameRegistry.registerItem(telepad, telepad.getUnlocalizedName());
 		GameRegistry.registerItem(entanglement_kit, entanglement_kit.getUnlocalizedName());
@@ -7363,6 +7370,7 @@ public class ModItems {
 		GameRegistry.registerItem(teacup_empty, teacup_empty.getUnlocalizedName());
 		GameRegistry.registerItem(teacup, teacup.getUnlocalizedName());
 		GameRegistry.registerItem(bottle_honey, bottle_honey.getUnlocalizedName());
+		GameRegistry.registerItem(paraffin_seeds, paraffin_seeds.getUnlocalizedName());
 
 
 		//Armor mods

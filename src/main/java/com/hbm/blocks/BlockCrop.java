@@ -11,6 +11,7 @@ import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
+import com.hbm.items.ItemEnums.EnumTarType;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -81,9 +82,15 @@ public class BlockCrop extends BlockBush implements IGrowable {
 		if(this == ModBlocks.crop_tea) {
 			return meta == 7 ? ModItems.tea_leaf : ModItems.teaseeds;
 		}
+		if(this == ModBlocks.crop_paraffin) {
+			return ModItems.paraffin_seeds;
+
+		}
+		
 
 		return Item.getItemFromBlock(this);
 	}
+
 
 	/**
 	 * The type of render function that is called for this block
@@ -164,6 +171,15 @@ public class BlockCrop extends BlockBush implements IGrowable {
 			for(int i = 0; i < 3 + fortune; ++i) {
 				if(world.rand.nextInt(15) <= metadata) {
 					ret.add(new ItemStack(ModItems.teaseeds, 1, 0));
+				}
+			}
+		}
+		
+	    if(this == ModBlocks.crop_paraffin && metadata >= 7) {
+			for(int i = 0; i < 3 + fortune; ++i) {
+				if(world.rand.nextInt(15) <= metadata) {
+				       ret.add(new ItemStack(ModItems.paraffin_seeds));				        
+					ret.add(new ItemStack(ModItems.oil_tar, 1, EnumTarType.PARAFFIN.ordinal()));
 				}
 			}
 		}

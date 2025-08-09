@@ -11,6 +11,7 @@ import com.hbm.inventory.fluid.Fluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
+import scala.reflect.internal.Trees.Return;
 
 public class BlockOreFluid extends BlockOre {
 
@@ -25,6 +26,7 @@ public class BlockOreFluid extends BlockOre {
 		OIL,
 		GAS,
 		BRINE,
+		TCRUDE,
 	}
 
 	public BlockOreFluid(Material mat, Block empty, ReserveType type) {
@@ -50,6 +52,7 @@ public class BlockOreFluid extends BlockOre {
 			return Fluids.OIL;
 		case GAS: return Fluids.GAS;
 		case BRINE: return Fluids.BRINE;
+		case TCRUDE: return Fluids.CHLORINE; // placeholder
 		default: return Fluids.NONE;
 		}
 	}
@@ -58,6 +61,7 @@ public class BlockOreFluid extends BlockOre {
 		switch(type) {
 		case OIL: return Fluids.GAS;
 		case GAS: return Fluids.PETROLEUM;
+		case TCRUDE: return Fluids.HGAS;
 		default: return Fluids.NONE;
 		}
 	}
@@ -67,6 +71,7 @@ public class BlockOreFluid extends BlockOre {
 		switch(type) {
 		case OIL: return 250;
 		case GAS: return 100;
+		case TCRUDE: return 70;
 		default: return 0;
 		}
 	}

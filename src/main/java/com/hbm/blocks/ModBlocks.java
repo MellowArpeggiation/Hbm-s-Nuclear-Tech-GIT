@@ -189,6 +189,8 @@ public class ModBlocks {
 	public static Block ore_tikite;
 	public static Block ore_brine_empty;
 
+	public static Block ore_tekto;
+	public static Block ore_tekto_empty;
 
 	public static Block block_thorium;
 	public static Block block_thorium_fuel;
@@ -570,6 +572,7 @@ public class ModBlocks {
 		@Override public boolean isToolNotRequired() { return false; }
 		@Override public int getMaterialMobility() { return 1; }
 	};
+	public static Block crop_paraffin;
 
 	public static Block waste_earth;
 	public static Block waste_mycelium;
@@ -1574,6 +1577,9 @@ public class ModBlocks {
 
 		ore_brine_empty = new BlockOre(Material.rock).setBlockName("ore_brine_empty").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":ore_oil_empty");
 		ore_brine = new BlockOreFluid(Material.rock, ore_brine_empty, ReserveType.BRINE).setBlockName("ore_brine").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":ore_brine");
+		
+		ore_tekto_empty = new BlockOre(Material.rock).setBlockName("ore_tekto_emtpy").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":ore_oil_empty");
+		ore_tekto = new BlockOreFluid(Material.rock, ore_tekto_empty, ReserveType.TCRUDE).setBlockName("ore_tekto").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":ore_tekto");
 
 		ore_tikite = new BlockDragonProof(Material.rock).setBlockName("ore_tikite").setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F).setBlockTextureName(RefStrings.MODID + ":ore_tikite_alt");
 
@@ -1943,12 +1949,13 @@ public class ModBlocks {
 		laythe_kelp = new BlockKelp().setBlockName("laythe_kelp").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F);
 		laythe_short = new BlockWaterPlant().setBlockName("laythe_seagrass").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":laythe_seagrass");
 		laythe_glow = new BlockWaterPlant().setBlockName("laythe_glowgrass").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F).setLightLevel(1.0F).setBlockTextureName(RefStrings.MODID + ":laythe_glowgrass");
-		crop_strawberry = new BlockCrop(ModBlocks.rubber_farmland, (atmosphere) -> atmosphere.hasFluid(Fluids.AIR, 0.1) || atmosphere.hasFluid(Fluids.OXYGEN, 0.1)).setBlockName("crop_strawberry").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":strawberry");
+		crop_strawberry = new BlockCrop(Blocks.farmland, (atmosphere) -> atmosphere.hasFluid(Fluids.AIR, 0.1) || atmosphere.hasFluid(Fluids.OXYGEN, 0.1)).setBlockName("crop_strawberry").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":strawberry");
 		crop_coffee = new BlockCrop(Blocks.farmland, (atmosphere) -> atmosphere.hasFluid(Fluids.AIR, 0.1) || atmosphere.hasFluid(Fluids.OXYGEN, 0.1)).setBlockName("crop_coffee").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":coffee");
 		crop_tea = new BlockCrop(Blocks.farmland,(atmosphere) -> atmosphere.hasFluid(Fluids.AIR, 0.1) || atmosphere.hasFluid(Fluids.OXYGEN, 0.1)).setBlockName("crop_tea").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":tea");
 		laythe_coral = new BlockCoral().setBlockName("laythe_coral").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":laythe_coral");
 		laythe_coral_block = new BlockEnumMulti(Material.coral, BlockCoral.EnumCoral.class, false, true).setHardness(0.5F).setBlockName("laythe_coral_block").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setBlockTextureName(RefStrings.MODID + ":laythe_coral_block");
 		vine_phosphor = new BlockHangingVine(thick_foliage).setBlockName("vine_phosphor").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.5F);
+		crop_paraffin = new BlockCrop(ModBlocks.rubber_farmland, (atmosphere) -> atmosphere.hasFluid(Fluids.TEKTOAIR, 0.1) ||atmosphere.hasFluid(Fluids.CHLORINE, 0.1)).setBlockName("crop_paraffin").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":paraffin");
 
 		waste_earth = new WasteEarth(Material.ground, true).setBlockName("waste_earth").setStepSound(Block.soundTypeGrass).setCreativeTab(MainRegistry.blockTab).setHardness(0.6F).setBlockTextureName(RefStrings.MODID + ":waste_earth");
 		waste_mycelium = new WasteEarth(Material.ground, true).setBlockName("waste_mycelium").setStepSound(Block.soundTypeGrass).setLightLevel(1F).setCreativeTab(MainRegistry.blockTab).setHardness(0.6F).setBlockTextureName(RefStrings.MODID + ":waste_mycelium_side");
@@ -2827,6 +2834,8 @@ public class ModBlocks {
 		GameRegistry.registerBlock(ore_shale, ItemBlockBase.class, ore_shale.getUnlocalizedName());
 		GameRegistry.registerBlock(ore_brine, ItemBlockLore.class, ore_brine.getUnlocalizedName());
 		GameRegistry.registerBlock(ore_brine_empty, ItemBlockLore.class, ore_brine_empty.getUnlocalizedName());
+		GameRegistry.registerBlock(ore_tekto, ItemBlockLore.class, ore_tekto.getUnlocalizedName());
+		GameRegistry.registerBlock(ore_tekto_empty, ItemBlockLore.class, ore_tekto_empty.getUnlocalizedName());
 
 		//Rare Minerals
 		GameRegistry.registerBlock(ore_australium, ItemBlockBase.class, ore_australium.getUnlocalizedName());
@@ -3252,6 +3261,7 @@ public class ModBlocks {
 		register(plant_dead);
 		register(reeds);
 		register(crop_strawberry);
+		register(crop_paraffin);
 		register(crop_coffee);
 		register(crop_tea);
 		register(vine_phosphor);

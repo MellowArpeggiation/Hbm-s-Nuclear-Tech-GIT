@@ -153,6 +153,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
+import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -1081,6 +1082,23 @@ public class ModEventHandler {
 
 		if(e instanceof EntityPlayer && ((EntityPlayer)e).inventory.armorInventory[2] != null && ((EntityPlayer)e).inventory.armorInventory[2].getItem() instanceof ArmorFSB)
 			((ArmorFSB)((EntityPlayer)e).inventory.armorInventory[2].getItem()).handleFall((EntityPlayer)e, event.distance);
+	}
+	
+	//this exists!?
+	@SubscribeEvent
+	public void onUseHoe(UseHoeEvent event) {
+	    World world = event.world;
+	    int x = event.x;
+	    int y = event.y;
+	    int z = event.z;
+
+	    Block block = world.getBlock(x, y, z);
+
+	    if (block == ModBlocks.rubber_grass || block == ModBlocks.rubber_silt) {
+	        world.setBlock(x, y, z, ModBlocks.rubber_farmland);
+	        event.current.damageItem(1, event.entityPlayer); 
+	        event.setResult(Result.ALLOW); 
+	    }
 	}
 
 	private static final UUID fopSpeed = UUID.fromString("e5a8c95d-c7a0-4ecf-8126-76fb8c949389");

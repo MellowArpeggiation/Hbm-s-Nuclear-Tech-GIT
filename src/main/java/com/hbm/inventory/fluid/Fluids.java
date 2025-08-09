@@ -246,6 +246,8 @@ public class Fluids {
 	public static FluidType AQUEOUS_NICKEL;
 	public static FluidType HGAS;
 	public static FluidType CONCRETE;
+	public static FluidType VINYL;
+	public static FluidType TCRUDE;
 
 	/* Lagacy names for compatibility purposes */
 	@Deprecated public static FluidType ACID;	//JAOPCA uses this, apparently
@@ -518,7 +520,9 @@ public class Fluids {
 		BAUXITE_SOLUTION =		new FluidType("BAUXITE_SOLUTION",	0xE2560F, 3, 0, 3, EnumSymbol.ACID).addTraits(new FT_Corrosive(40), LIQUID, VISCOUS);
 		ALUMINA =				new FluidType("ALUMINA",			0xDDFFFF, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		AQUEOUS_NICKEL =		new FluidType("AQUEOUS_NICKEL",		0xDACEBA, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
-		CONCRETE =				new FluidType("CONCRETE",		0xA2A2A2, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
+		CONCRETE =			new FluidType("CONCRETE",		0xA2A2A2, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
+		VINYL =			new FluidType("VINYL",		0xA2A2A2, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
+		TCRUDE =			new FluidType("TCRUDE",		0xA2A2A2, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
@@ -651,6 +655,9 @@ public class Fluids {
 		metaOrder.add(CONGLOMERA);
 		metaOrder.add(DICYANOACETYLENE);
 		metaOrder.add(HGAS);
+		metaOrder.add(VINYL);
+		metaOrder.add(TCRUDE);
+
 		//processing fluids
 		metaOrder.add(SALIENT);
 		metaOrder.add(SEEDSLURRY);
