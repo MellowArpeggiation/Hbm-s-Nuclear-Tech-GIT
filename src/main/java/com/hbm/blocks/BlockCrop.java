@@ -179,7 +179,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 			for(int i = 0; i < 3 + fortune; ++i) {
 				if(world.rand.nextInt(15) <= metadata) {
 				       ret.add(new ItemStack(ModItems.paraffin_seeds));				        
-					ret.add(new ItemStack(ModItems.oil_tar, 1, EnumTarType.PARAFFIN.ordinal()));
+					ret.add(new ItemStack(ModItems.oil_tar, 1, EnumTarType.WAX.ordinal()));
 				}
 			}
 		}

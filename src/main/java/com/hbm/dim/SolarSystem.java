@@ -199,6 +199,9 @@ public class SolarSystem {
 						.withAxialTilt(25F)
 						.withMinProcessingLevel(3)
 						.withTraits(new CBT_Atmosphere(Fluids.TEKTOAIR, 1.5F), new CBT_Water(Fluids.CCL)) // :)
+						.withBlockTextures(RefStrings.MODID + ":basalt", "", "", "")
+						
+						
 
 				),
 

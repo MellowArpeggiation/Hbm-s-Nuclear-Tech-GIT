@@ -4,7 +4,10 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
+import com.hbm.config.WorldConfig;
+import com.hbm.dim.CelestialBody;
 import com.hbm.dim.tekto.biome.BiomeGenBaseTekto;
+import com.hbm.world.feature.OilBubble;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
@@ -26,6 +29,17 @@ public class WorldGeneratorTekto implements IWorldGenerator {
 		int x = cx + rand.nextInt(16);
 		int z = cz + rand.nextInt(16);
 		int y = world.getHeightValue(x, z);
+		int meta = CelestialBody.getMeta(world);
+
+		
+		if(WorldConfig.tektoOilSpawn > 0 && rand.nextInt(WorldConfig.tektoOilSpawn) == 0) {
+			int randPosX = cx + rand.nextInt(16);
+			int randPosY = rand.nextInt(25);
+			int randPosZ = cz + rand.nextInt(16);
+			System.out.println("spawned" + randPosX + randPosZ);
+			OilBubble.spawnOil(world, randPosX, randPosY, randPosZ, 10 + rand.nextInt(7), ModBlocks.ore_tekto, meta, ModBlocks.basalt);
+		}
+		
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 
 		for(int vx = 0; vx < 16; vx++) {

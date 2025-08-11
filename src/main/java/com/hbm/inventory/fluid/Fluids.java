@@ -248,7 +248,8 @@ public class Fluids {
 	public static FluidType CONCRETE;
 	public static FluidType VINYL;
 	public static FluidType TCRUDE;
-
+	public static FluidType CBENZ; //chlorobenzene 
+	
 	/* Lagacy names for compatibility purposes */
 	@Deprecated public static FluidType ACID;	//JAOPCA uses this, apparently
 
@@ -522,7 +523,8 @@ public class Fluids {
 		AQUEOUS_NICKEL =		new FluidType("AQUEOUS_NICKEL",		0xDACEBA, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		CONCRETE =			new FluidType("CONCRETE",		0xA2A2A2, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		VINYL =			new FluidType("VINYL",		0xA2A2A2, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
-		TCRUDE =			new FluidType("TCRUDE",		0xA2A2A2, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
+		TCRUDE =			new FluidType("TCRUDE",		0x051914, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
+		CBENZ =			new FluidType("CBENZ",		0x91C6BB, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
@@ -657,6 +659,7 @@ public class Fluids {
 		metaOrder.add(HGAS);
 		metaOrder.add(VINYL);
 		metaOrder.add(TCRUDE);
+		metaOrder.add(CBENZ);
 
 		//processing fluids
 		metaOrder.add(SALIENT);

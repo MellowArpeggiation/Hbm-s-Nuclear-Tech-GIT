@@ -65,6 +65,12 @@ public class WorldConfig {
 	public static int laytheGasPerDepositMax = 500;
 	public static double laytheOilDrainChance = 0.05D;
 
+	public static int tektoOilSpawn = 100;
+	public static int tektoOilPerDeposit = 500;
+	public static int tektoGasPerDepositMin = 100;
+	public static int tektoGasPerDepositMax = 500;
+	public static double tektoOilDrainChance = 0.05D;
+	
 	public static int eveGasPerDeposit = 500;
 	public static int evePetPerDepositMin = 20;
 	public static int evePetPerDepositMax = 100;
@@ -246,6 +252,13 @@ public class WorldConfig {
 
 		ikeBrinePerDeposit = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.O23_ikeBrinePerDeposit", "Brine extracted per Ike brine block suck", ikeBrinePerDeposit);
 		ikeBrineDrainChance = CommonConfig.createConfigDouble(config, CATEGORY_OREGEN, "2.O24_ikeBrineDrainChance", "Chance for an Ike brine block to become empty on suck", ikeBrineDrainChance);
+
+		tektoOilSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.33S_tektoOilSpawnRate", "Spawns a Tekto oil bubble every nTH chunk (on Tekto)", 100);
+		tektoOilPerDeposit = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.O25_tektoOilPerDeposit", "Oil extracted per Tekto oil block suck", tektoOilPerDeposit);
+		tektoGasPerDepositMin = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.O26_tektoGasPerDepositMin", "Minimum natural gas extracted per Tekto oil block suck", tektoGasPerDepositMin);
+		tektoGasPerDepositMax = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.O27_tektoGasPerDepositMax", "Maximum natural gas extracted per Tekto oil block suck", tektoGasPerDepositMax);
+		tektoOilDrainChance = CommonConfig.createConfigDouble(config, CATEGORY_OREGEN, "2.O28_tektoOilDrainChance", "Chance for a Tekto oil block to become empty on suck", tektoOilDrainChance);
+
 
 		newBedrockOres = CommonConfig.createConfigBool(config, CATEGORY_OREGEN, "2.NB_newBedrockOres", "Enables the newer genreric bedrock ores", true);
 		bedrockIronSpawn = CommonConfig.createConfigInt(config, CATEGORY_OREGEN, "2.B00_bedrockIronWeight", "Spawn weight for iron bedrock ore", 100);

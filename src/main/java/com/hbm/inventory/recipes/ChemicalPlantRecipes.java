@@ -187,7 +187,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(new ComparableStack(Items.wheat), new ComparableStack(Items.dye, 2, 3))
 				.inputFluids(new FluidStack(Fluids.LUBRICANT, 400), new FluidStack(Fluids.PEROXIDE, 500))
 				.outputItems(new ItemStack(ModItems.chocolate, 4)));
-
+		
 		this.register(new GenericRecipe("chem.epearl").setup(100, 300)
 				.inputItems(new OreDictStack(DIAMOND.dust(), 1))
 				.inputFluids(new FluidStack(Fluids.XPJUICE, 500))

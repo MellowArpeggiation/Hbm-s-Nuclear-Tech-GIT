@@ -2,6 +2,7 @@ package com.hbm.blocks;
 
 import java.util.Random;
 
+import com.hbm.inventory.recipes.ChemicalPlantRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
@@ -26,11 +27,12 @@ public class BlockRubberLeaves extends Block {
 		this.setTickRandomly(true);
 	}
 
-	
-
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-		return ModItems.ingot_polymer;
+		if(this == ModBlocks.pet_leaves) {
+			return ModItems.leaf_pet;
+		}
+		return ModItems.leaf_rubber;
 	}
 
 	public boolean renderAsNormalBlock() {
