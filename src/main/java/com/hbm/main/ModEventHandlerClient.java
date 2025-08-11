@@ -228,7 +228,7 @@ public class ModEventHandlerClient {
 						((ILookOverlay) entity).printHook(event, world, 0, 0, 0);
 					}
 				}
-				
+
 				GL11.glColor4f(1F, 1F, 1F, 1F);
 			}
 
@@ -913,6 +913,7 @@ public class ModEventHandlerClient {
 			QuickManualAndWiki qmaw = qmawTimestamp > Clock.get_ms() - 100 ? lastQMAW : null;
 
 			if(qmaw != null) {
+				QuickManualAndWiki.clearHistory();
 				Minecraft.getMinecraft().thePlayer.closeScreen();
 				FMLCommonHandler.instance().showGuiScreen(new GuiQMAW(qmaw));
 			}
@@ -950,7 +951,7 @@ public class ModEventHandlerClient {
 					ItemDepletedFuel.class,
 					ItemFluidDuct.class
 				);
-				
+
 				String prefix = "Gun ";
 				//int gunScale = 16;
 				//int defaultScale = 1;
@@ -1064,11 +1065,11 @@ public class ModEventHandlerClient {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onClientTickLast(ClientTickEvent event) {
-		
+
 		Minecraft mc = Minecraft.getMinecraft();
 		long millis = Clock.get_ms();
 		if(millis == 0) millis = System.currentTimeMillis();
-		
+
 		if(GeneralConfig.enableLoadScreenReplacement && loadingScreenReplacementRetry < 25 && !(mc.loadingScreen instanceof LoadingScreenRendererNT) && millis > lastLoadScreenReplacement + 5_000) {
 			mc.loadingScreen = new LoadingScreenRendererNT(mc);
 			lastLoadScreenReplacement = millis;
@@ -1166,7 +1167,7 @@ public class ModEventHandlerClient {
 	public void onRenderWorldLastEvent(RenderWorldLastEvent event) {
 
 		Clock.update();
-		
+
 		BlockRebar.renderRebar(Minecraft.getMinecraft().theWorld.loadedTileEntityList, event.partialTicks);
 
 		GL11.glPushMatrix();
@@ -1257,7 +1258,7 @@ public class ModEventHandlerClient {
 
 				if(chestplate.thermal) thermalSights = true;
 			}
-			
+
 			if(player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemGunBaseNT && ItemGunBaseNT.aimingProgress == 1) {
 				ItemGunBaseNT gun = (ItemGunBaseNT) player.getHeldItem().getItem();
 				for(int i = 0; i < gun.getConfigCount(); i++) if(gun.getConfig(player.getHeldItem(), i).hasThermalSights(player.getHeldItem())) thermalSights = true;

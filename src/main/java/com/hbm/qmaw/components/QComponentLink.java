@@ -24,23 +24,23 @@ public class QComponentLink extends ManualElement {
 	protected FontRenderer font;
 	protected int color = 0x0094FF;
 	protected int hoverColor = 0xFFD800;
-	
+
 	protected static RenderItem itemRender = new RenderItem();
-	
+
 	public QComponentLink(String link, String text) {
 		this.text = text;
 		this.link = link;
-		
+
 		QuickManualAndWiki qmaw = QMAWLoader.qmaw.get(link);
 		if(qmaw == null) {
 			this.color = this.hoverColor = 0xFF7F7F;
 		} else {
 			this.icon = qmaw.icon;
 		}
-		
+
 		this.font = Minecraft.getMinecraft().fontRenderer;
 	}
-	
+
 	public QComponentLink setColor(int color, int hoverColor) {
 		this.color = color;
 		this.hoverColor = hoverColor;
@@ -59,9 +59,9 @@ public class QComponentLink extends ManualElement {
 
 	@Override
 	public void render(boolean isMouseOver, int x, int y, int mouseX, int mouseY) {
-		
+
 		if(this.icon != null) {
-			
+
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 			Minecraft mc = Minecraft.getMinecraft();
@@ -73,17 +73,18 @@ public class QComponentLink extends ManualElement {
 			RenderHelper.disableStandardItemLighting();
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glPopMatrix();
-			
+
 			x += 18;
 			y += (16 - font.FONT_HEIGHT) / 2;
 		}
-		
+
 		font.drawString(text, x, y, isMouseOver ? hoverColor : color);
 	}
 
 	@Override public void onClick() {
 		QuickManualAndWiki qmaw = QMAWLoader.qmaw.get(link);
 		if(qmaw != null) {
+			QuickManualAndWiki.pushHistory(QuickManualAndWiki.currentPage);
 			Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
 			FMLCommonHandler.instance().showGuiScreen(new GuiQMAW(qmaw));
 		}
