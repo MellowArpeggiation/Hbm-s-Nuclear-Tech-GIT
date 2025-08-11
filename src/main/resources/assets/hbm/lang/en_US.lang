@@ -1543,6 +1543,7 @@ hbm.key.dash=Dash
 hbm.key.gunPrimary=Primary Fire
 hbm.key.gunSecondary=Secondary Fire
 hbm.key.gunTertitary=Gun Sights
+hbm.key.slamkey=Slam
 hbm.key.toggleBack=Toggle Jetpack
 hbm.key.toggleHUD=Toggle HUD
 hbm.key.toggleMagnet=Toggle Magnet
