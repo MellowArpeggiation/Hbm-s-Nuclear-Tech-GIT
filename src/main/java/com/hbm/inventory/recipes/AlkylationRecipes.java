@@ -46,10 +46,10 @@ public class AlkylationRecipes extends SerializableRecipe {
 			new FluidStack(Fluids.PEROXIDE, 20) // "dehydrogenated sulfuric acid", aka we don't have that so sulfuric precursor, add water and sulfur to get a full loop
 		));
 		
-		recipes.put(Fluids.AROMATICS, new Triplet<>( 
+		recipes.put(Fluids.XYLENE, new Triplet<>( 
 				new FluidStack(Fluids.CCL, 60),
-				new FluidStack(Fluids.REFORMGAS, 70),
-				new FluidStack(Fluids.CHLOROMETHANE, 10)
+				new FluidStack(Fluids.REFORMGAS, 100),
+				new FluidStack(Fluids.CHLOROMETHANE, 50)
 			));
 		
 		recipes.put(Fluids.CHLOROETHANE, new Triplet<>( 
