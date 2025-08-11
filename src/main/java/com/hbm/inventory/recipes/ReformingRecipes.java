@@ -69,6 +69,17 @@ public class ReformingRecipes extends SerializableRecipe {
 				new FluidStack(Fluids.REFORMGAS, 35),
 				new FluidStack(Fluids.HYDROGEN, 15)
 				));
+		
+		recipes.put(Fluids.HALOLIGHT, new Triplet(
+				new FluidStack(Fluids.UNSATURATEDS, 50),
+				new FluidStack(Fluids.REFORMGAS, 35),
+				new FluidStack(Fluids.HCL, 10)
+				));
+		recipes.put(Fluids.HGAS, new Triplet(
+				new FluidStack(Fluids.AROMATICS, 60),
+				new FluidStack(Fluids.CHLOROMETHANE, 25),
+				new FluidStack(Fluids.HCL, 10)
+				));
 
 	}
 	

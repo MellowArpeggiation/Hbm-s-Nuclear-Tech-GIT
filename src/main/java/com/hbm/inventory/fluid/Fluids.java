@@ -249,7 +249,8 @@ public class Fluids {
 	public static FluidType VINYL;
 	public static FluidType TCRUDE;
 	public static FluidType CBENZ; //chlorobenzene 
-	
+	public static FluidType HALOLIGHT;
+
 	/* Lagacy names for compatibility purposes */
 	@Deprecated public static FluidType ACID;	//JAOPCA uses this, apparently
 
@@ -525,6 +526,7 @@ public class Fluids {
 		VINYL =			new FluidType("VINYL",		0xA2A2A2, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		TCRUDE =			new FluidType("TCRUDE",		0x051914, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		CBENZ =			new FluidType("CBENZ",		0x91C6BB, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
+		HALOLIGHT =			new FluidType("HALOLIGHT",		0x91C6BB, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
@@ -660,7 +662,8 @@ public class Fluids {
 		metaOrder.add(VINYL);
 		metaOrder.add(TCRUDE);
 		metaOrder.add(CBENZ);
-
+		metaOrder.add(HALOLIGHT);
+		
 		//processing fluids
 		metaOrder.add(SALIENT);
 		metaOrder.add(SEEDSLURRY);
