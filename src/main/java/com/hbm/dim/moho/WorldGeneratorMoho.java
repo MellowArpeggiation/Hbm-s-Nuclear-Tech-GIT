@@ -11,10 +11,10 @@ import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.main.StructureManager;
-import com.hbm.world.gen.NBTStructure;
-import com.hbm.world.gen.NBTStructure.JigsawPiece;
-import com.hbm.world.gen.NBTStructure.JigsawPool;
-import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.nbt.NBTStructure;
+import com.hbm.world.gen.nbt.JigsawPiece;
+import com.hbm.world.gen.nbt.JigsawPool;
+import com.hbm.world.gen.nbt.SpawnCondition;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -26,7 +26,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorMoho implements IWorldGenerator {
 
 	public WorldGeneratorMoho() {
-		NBTStructure.registerStructure(SpaceConfig.mohoDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.mohoDimension, new SpawnCondition("moho_base") {{
 			spawnWeight = 4;
 			minHeight = 63 - 11;
 			maxHeight = 63;

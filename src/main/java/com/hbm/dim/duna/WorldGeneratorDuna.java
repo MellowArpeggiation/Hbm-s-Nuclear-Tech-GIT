@@ -12,9 +12,9 @@ import com.hbm.dim.SolarSystem;
 import com.hbm.dim.WorldTypeTeleport;
 import com.hbm.main.StructureManager;
 import com.hbm.world.feature.OilBubble;
-import com.hbm.world.gen.NBTStructure;
-import com.hbm.world.gen.NBTStructure.JigsawPiece;
-import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.nbt.NBTStructure;
+import com.hbm.world.gen.nbt.JigsawPiece;
+import com.hbm.world.gen.nbt.SpawnCondition;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -24,7 +24,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorDuna implements IWorldGenerator {
 
 	public WorldGeneratorDuna() {
-		NBTStructure.registerStructure(SpaceConfig.dunaDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.dunaDimension, new SpawnCondition("duna_comms") {{
 			structure = new JigsawPiece("duna_comms", StructureManager.duna_comms, -1);
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 			spawnWeight = 4;

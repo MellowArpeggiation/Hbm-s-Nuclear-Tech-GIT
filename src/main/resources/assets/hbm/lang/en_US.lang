@@ -761,6 +761,10 @@ commands.satellite.satellite_descended=Satellite successfully descended.
 commands.satellite.satellite_orbited=Satellite launched.
 commands.satellite.should_be_run_as_player=This command should be run by a player!
 
+commands.locate.no_match=No structures with that name!
+commands.locate.none_found=No structures found nearby!
+commands.locate.success.coordinates=Structure %s found at %d, %d
+
 commands.station.no_stations=No launched stations found!
 commands.station.invalid_station=You must enter a station ID or name!
 commands.station.no_match=No station matching that ID or name!
@@ -5192,6 +5196,8 @@ potion.hbm_slippery=Butterfingers
 
 purex.recycle=Reprocessing of %s
 purex.schrab=Schrabidium extraction from %s
+
+qmaw.tab=[ Press %s for help ]
 
 radar.clearMap=Clear Map
 radar.detectMissiles=Detect Missiles

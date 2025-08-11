@@ -12,7 +12,7 @@ import com.hbm.dim.eve.biome.BiomeGenBaseEve;
 import com.hbm.dim.eve.genlayer.WorldGenElectricVolcano;
 import com.hbm.dim.eve.genlayer.WorldGenEveSpike;
 import com.hbm.world.feature.OilBubble;
-import com.hbm.world.gen.NBTStructure;
+import com.hbm.world.gen.nbt.NBTStructure;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
