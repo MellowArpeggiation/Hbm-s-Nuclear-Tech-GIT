@@ -47,7 +47,7 @@ public class BlockNTSapling extends BlockSapling {
 	    @Override
 	    @SideOnly(Side.CLIENT)
 	    public IIcon getIcon(int side, int meta) {
-	        return (meta == 0) ? this.textures[0] : this.textures[1];
+	        return textures[meta];
 	    }
 
 	    @Override
@@ -90,10 +90,10 @@ public class BlockNTSapling extends BlockSapling {
 	    public void func_149878_d(World world, int x, int y, int z, Random rand) {
 	        int meta = world.getBlockMetadata(x, y, z);
 	        WorldGenAbstractTree treeGen = new TTree(true, 3, 4, 6, 3, 2, false, ModBlocks.vinyl_log, ModBlocks.pet_leaves);
-
+	        
 	        switch (meta) {
 	            case 0:
-	       	  treeGen = new TTree(true, 3, 4, 6, 3, 2, false, ModBlocks.vinyl_log, ModBlocks.pet_leaves);
+	       	  treeGen = new TTree(false, 2, 4, 5, 3, 2, false, ModBlocks.vinyl_log, ModBlocks.pet_leaves);
 	                break;
 	            case 1:
 	                treeGen = new TTree(true, 2, 5, 7, 4, 3, false, ModBlocks.pvc_log, ModBlocks.rubber_leaves);
@@ -129,13 +129,7 @@ public class BlockNTSapling extends BlockSapling {
 	        this.func_149878_d(world, x, y, z, random);
 	    }
 	   
-	    public String getUnlocalizedName(ItemStack stack) {
-	        int meta = stack.getItemDamage();
-	        if (meta < 0 || meta >= saplings.length) {
-	            meta = 0;
-	        }
-	        return super.getUnlocalizedName() + "." + saplings[meta].toString();
-	    }
+
 	    
 	    
 }
