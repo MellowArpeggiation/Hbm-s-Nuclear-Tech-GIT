@@ -27,7 +27,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import scala.reflect.api.Quasiquotes.Quasiquote.api;
 
 import java.util.List;
 
