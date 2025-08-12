@@ -3,9 +3,11 @@ package com.hbm.dim.tekto;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.BlockOre;
 import com.hbm.config.SpaceConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
+import com.hbm.dim.SolarSystem;
 import com.hbm.dim.tekto.biome.BiomeGenBaseTekto;
 import com.hbm.world.feature.OilBubble;
 
@@ -17,6 +19,10 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 
 public class WorldGeneratorTekto implements IWorldGenerator {
+
+	public WorldGeneratorTekto() {
+		BlockOre.addValidBody(ModBlocks.ore_tekto, SolarSystem.Body.TEKTO);
+	}
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {

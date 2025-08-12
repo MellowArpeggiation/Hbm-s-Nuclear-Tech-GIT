@@ -31,7 +31,7 @@ public class WorldGeneratorDuna implements IWorldGenerator {
 		}});
 		NBTStructure.registerNullWeight(SpaceConfig.dunaDimension, 20);
 
-        BlockOre.addValidBody(ModBlocks.ore_oil, SolarSystem.Body.DUNA);
+		BlockOre.addValidBody(ModBlocks.ore_oil, SolarSystem.Body.DUNA);
 	}
 
 	@Override

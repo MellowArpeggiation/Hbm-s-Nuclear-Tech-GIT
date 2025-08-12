@@ -41,10 +41,10 @@ public class WorldGeneratorLaythe implements IWorldGenerator {
 			spawnWeight = 6;
 		}});
 
-        BlockOre.addValidBody(ModBlocks.ore_emerald, SolarSystem.Body.LAYTHE);
-        BlockOre.addValidBody(ModBlocks.ore_lapis, SolarSystem.Body.LAYTHE);
-        BlockOre.addValidBody(ModBlocks.ore_asbestos, SolarSystem.Body.LAYTHE);
-        BlockOre.addValidBody(ModBlocks.ore_oil, SolarSystem.Body.LAYTHE);
+		BlockOre.addValidBody(ModBlocks.ore_emerald, SolarSystem.Body.LAYTHE);
+		BlockOre.addValidBody(ModBlocks.ore_lapis, SolarSystem.Body.LAYTHE);
+		BlockOre.addValidBody(ModBlocks.ore_asbestos, SolarSystem.Body.LAYTHE);
+		BlockOre.addValidBody(ModBlocks.ore_oil, SolarSystem.Body.LAYTHE);
 	}
 
 	@Override
