@@ -120,7 +120,7 @@ public class MixerRecipes extends SerializableRecipe {
 		register(Fluids.AQUEOUS_COPPER, new MixerRecipe(1000, 80).setStack1(new FluidStack(Fluids.BRINE, 250)).setSolid(new ComparableStack(ModItems.chunk_ore, 1, ItemEnums.EnumChunkType.MALACHITE)));
 
 		register(Fluids.PERFLUOROMETHYL, new MixerRecipe(1000, 20).setStack1(new FluidStack(Fluids.PETROLEUM, 1000)).setStack2(new FluidStack(Fluids.UNSATURATEDS, 500)).setSolid(new OreDictStack(F.dust())));
-		register(Fluids.VINYL, new MixerRecipe(250, 20).setStack1(new FluidStack(Fluids.HCL, 1000)).setSolid(new ComparableStack(ModBlocks.pvc_log)),
+		register(Fluids.VINYL, new MixerRecipe(250, 20).setStack1(new FluidStack(Fluids.RADIOSOLVENT, 1000)).setSolid(new ComparableStack(ModBlocks.pvc_log)),
 				new MixerRecipe(500, 20).setStack1(new FluidStack(Fluids.HGAS, 500)).setStack2(new FluidStack(Fluids.UNSATURATEDS, 250)).setSolid(new ComparableStack(ModItems.powder_cadmium)));
 		register(Fluids.CBENZ, new MixerRecipe(250, 20).setStack1(new FluidStack(Fluids.HCL, 500)).setSolid(new ComparableStack(ModItems.leaf_pet, 32)));
 		
