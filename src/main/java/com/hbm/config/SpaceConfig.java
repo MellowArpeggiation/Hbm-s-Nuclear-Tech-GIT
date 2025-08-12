@@ -1,5 +1,8 @@
 package com.hbm.config;
 
+import java.util.HashMap;
+
+import com.hbm.dim.BiomeCollisionException;
 import com.hbm.util.Compat;
 
 import cpw.mods.fml.common.Loader;
@@ -120,38 +123,56 @@ public class SpaceConfig {
 		int defaultBiomeOffset = Loader.isModLoaded(Compat.MOD_EIDS) ? 12_000 : 0;
 
 		final String CATEGORY_BIOME = CommonConfig.CATEGORY_BIOMES;
-		moonBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.02_moonBiome", "Mun Biome ID", moonBiome + defaultBiomeOffset);
-		dunaBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.03_dunaBiome", "Duna Biome ID", dunaBiome + defaultBiomeOffset);
-		dunaLowlandsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.04_dunaLowlandsBiome", "Duna Lowlands Biome ID", dunaLowlandsBiome + defaultBiomeOffset);
-		dunaPolarBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.05_dunaPolarBiome", "Duna Polar Biome ID", dunaPolarBiome + defaultBiomeOffset);
-		dunaHillsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.06_dunaHillsBiome", "Duna Hills Biome ID", dunaHillsBiome + defaultBiomeOffset);
-		dunaPolarHillsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.07_dunaPolarHillsBiome", "Duna Polar Hills Biome ID", dunaPolarHillsBiome + defaultBiomeOffset);
-		eveBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.08_eveBiome", "Eve Biome ID", eveBiome + defaultBiomeOffset);
-		eveMountainsBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.09_eveMountainsBiome", "Eve Mountains Biome ID", eveMountainsBiome + defaultBiomeOffset);
-		eveOceanBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.10_eveOceanBiome", "Eve Ocean Biome ID", eveOceanBiome + defaultBiomeOffset);
-		eveSeismicBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.12_eveSeismicBiome", "Eve Seismic Biome ID", eveSeismicBiome + defaultBiomeOffset);
-		eveRiverBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.24_eveRiverBiome", "Eve River Biome ID", eveRiverBiome + defaultBiomeOffset);
-		ikeBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.13_ikeBiome", "Ike Biome ID", ikeBiome + defaultBiomeOffset);
-		laytheBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.14_laytheBiome", "Laythe Biome ID", laytheBiome + defaultBiomeOffset);
-		laytheOceanBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.15_laytheOceanBiome", "Laythe Ocean Biome ID", laytheOceanBiome + defaultBiomeOffset);
-		laythePolarBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.16_laythePolarBiome", "Laythe Polar Biome ID", laythePolarBiome + defaultBiomeOffset);
-		minmusBasinBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.17_minmusBasinsBiome", "Minmus Basins Biome ID", minmusBasinBiome + defaultBiomeOffset);
-		minmusBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.18_minmusBiome", "Minmus Biome ID", minmusBiome + defaultBiomeOffset);
-		mohoBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.19_mohoBiome", "Moho Biome ID", mohoBiome + defaultBiomeOffset);
-		dresBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.20_dresBiome", "Dres Biome ID", dresBiome + defaultBiomeOffset);
-		dresBasinBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.21_dresBasinsBiome", "Dres Basins Biome ID", dresBasinBiome + defaultBiomeOffset);
-		mohoBasaltBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.22_mohoBasaltBiome", "Moho Basalt Biome ID", mohoBasaltBiome + defaultBiomeOffset);
-		orbitBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.23_orbitBiome", "Space Biome ID", orbitBiome + defaultBiomeOffset);
-		laytheCoastBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.24_laytheCoastBiome", "Laythe Coast Biome ID", laytheCoastBiome + defaultBiomeOffset);
-		mohoLavaBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.25_mohoLavaBiome", "Moho Lava Biome ID", mohoLavaBiome + defaultBiomeOffset);
-		mohoPlateauBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.26_mohoPlateauBiome", "Moho Plateau Biome ID", mohoPlateauBiome + defaultBiomeOffset);
-		tektoPolyvinylBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.27_tektoPolyvinylBiome", "Tekto Polyvinyl Biome ID", tektoPolyvinylBiome + defaultBiomeOffset);
-		tektoHalogenHillBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.28_tektoHalogenHillBiome", "Tekto Halogen Hills Biome ID", tektoHalogenHillBiome + defaultBiomeOffset);
-		tektoRiverBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.29_tektoRiverBiome", "Tekto River Biome ID", tektoRiverBiome + defaultBiomeOffset);
-		tektoForestBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.30_tektoForestBiome", "Tekto Forest Biome ID", tektoForestBiome + defaultBiomeOffset);
-		tektoVinylIslandBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.31_tektoVinylSandsBiome", "Tekto Vinyl Sands Biome ID", tektoVinylIslandBiome + defaultBiomeOffset);
-		thatmoBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.31_thatmoBiome", "Thatmo Biome ID", thatmoBiome + defaultBiomeOffset);
+		moonBiome = createConfigBiome(config, CATEGORY_BIOME, "16.02_moonBiome", "Mun Biome ID", moonBiome + defaultBiomeOffset);
+		dunaBiome = createConfigBiome(config, CATEGORY_BIOME, "16.03_dunaBiome", "Duna Biome ID", dunaBiome + defaultBiomeOffset);
+		dunaLowlandsBiome = createConfigBiome(config, CATEGORY_BIOME, "16.04_dunaLowlandsBiome", "Duna Lowlands Biome ID", dunaLowlandsBiome + defaultBiomeOffset);
+		dunaPolarBiome = createConfigBiome(config, CATEGORY_BIOME, "16.05_dunaPolarBiome", "Duna Polar Biome ID", dunaPolarBiome + defaultBiomeOffset);
+		dunaHillsBiome = createConfigBiome(config, CATEGORY_BIOME, "16.06_dunaHillsBiome", "Duna Hills Biome ID", dunaHillsBiome + defaultBiomeOffset);
+		dunaPolarHillsBiome = createConfigBiome(config, CATEGORY_BIOME, "16.07_dunaPolarHillsBiome", "Duna Polar Hills Biome ID", dunaPolarHillsBiome + defaultBiomeOffset);
+		eveBiome = createConfigBiome(config, CATEGORY_BIOME, "16.08_eveBiome", "Eve Biome ID", eveBiome + defaultBiomeOffset);
+		eveMountainsBiome = createConfigBiome(config, CATEGORY_BIOME, "16.09_eveMountainsBiome", "Eve Mountains Biome ID", eveMountainsBiome + defaultBiomeOffset);
+		eveOceanBiome = createConfigBiome(config, CATEGORY_BIOME, "16.10_eveOceanBiome", "Eve Ocean Biome ID", eveOceanBiome + defaultBiomeOffset);
+		eveSeismicBiome = createConfigBiome(config, CATEGORY_BIOME, "16.12_eveSeismicBiome", "Eve Seismic Biome ID", eveSeismicBiome + defaultBiomeOffset);
+		eveRiverBiome = createConfigBiome(config, CATEGORY_BIOME, "16.24_eveRiverBiome", "Eve River Biome ID", eveRiverBiome + defaultBiomeOffset);
+		ikeBiome = createConfigBiome(config, CATEGORY_BIOME, "16.13_ikeBiome", "Ike Biome ID", ikeBiome + defaultBiomeOffset);
+		laytheBiome = createConfigBiome(config, CATEGORY_BIOME, "16.14_laytheBiome", "Laythe Biome ID", laytheBiome + defaultBiomeOffset);
+		laytheOceanBiome = createConfigBiome(config, CATEGORY_BIOME, "16.15_laytheOceanBiome", "Laythe Ocean Biome ID", laytheOceanBiome + defaultBiomeOffset);
+		laythePolarBiome = createConfigBiome(config, CATEGORY_BIOME, "16.16_laythePolarBiome", "Laythe Polar Biome ID", laythePolarBiome + defaultBiomeOffset);
+		minmusBasinBiome = createConfigBiome(config, CATEGORY_BIOME, "16.17_minmusBasinsBiome", "Minmus Basins Biome ID", minmusBasinBiome + defaultBiomeOffset);
+		minmusBiome = createConfigBiome(config, CATEGORY_BIOME, "16.18_minmusBiome", "Minmus Biome ID", minmusBiome + defaultBiomeOffset);
+		mohoBiome = createConfigBiome(config, CATEGORY_BIOME, "16.19_mohoBiome", "Moho Biome ID", mohoBiome + defaultBiomeOffset);
+		dresBiome = createConfigBiome(config, CATEGORY_BIOME, "16.20_dresBiome", "Dres Biome ID", dresBiome + defaultBiomeOffset);
+		dresBasinBiome = createConfigBiome(config, CATEGORY_BIOME, "16.21_dresBasinsBiome", "Dres Basins Biome ID", dresBasinBiome + defaultBiomeOffset);
+		mohoBasaltBiome = createConfigBiome(config, CATEGORY_BIOME, "16.22_mohoBasaltBiome", "Moho Basalt Biome ID", mohoBasaltBiome + defaultBiomeOffset);
+		orbitBiome = createConfigBiome(config, CATEGORY_BIOME, "16.23_orbitBiome", "Space Biome ID", orbitBiome + defaultBiomeOffset);
+		laytheCoastBiome = createConfigBiome(config, CATEGORY_BIOME, "16.24_laytheCoastBiome", "Laythe Coast Biome ID", laytheCoastBiome + defaultBiomeOffset);
+		mohoLavaBiome = createConfigBiome(config, CATEGORY_BIOME, "16.25_mohoLavaBiome", "Moho Lava Biome ID", mohoLavaBiome + defaultBiomeOffset);
+		mohoPlateauBiome = createConfigBiome(config, CATEGORY_BIOME, "16.26_mohoPlateauBiome", "Moho Plateau Biome ID", mohoPlateauBiome + defaultBiomeOffset);
+		tektoPolyvinylBiome = createConfigBiome(config, CATEGORY_BIOME, "16.27_tektoPolyvinylBiome", "Tekto Polyvinyl Biome ID", tektoPolyvinylBiome + defaultBiomeOffset);
+		tektoHalogenHillBiome = createConfigBiome(config, CATEGORY_BIOME, "16.28_tektoHalogenHillBiome", "Tekto Halogen Hills Biome ID", tektoHalogenHillBiome + defaultBiomeOffset);
+		tektoRiverBiome = createConfigBiome(config, CATEGORY_BIOME, "16.29_tektoRiverBiome", "Tekto River Biome ID", tektoRiverBiome + defaultBiomeOffset);
+		tektoForestBiome = createConfigBiome(config, CATEGORY_BIOME, "16.30_tektoForestBiome", "Tekto Forest Biome ID", tektoForestBiome + defaultBiomeOffset);
+		tektoVinylIslandBiome = createConfigBiome(config, CATEGORY_BIOME, "16.31_tektoVinylSandsBiome", "Tekto Vinyl Sands Biome ID", tektoVinylIslandBiome + defaultBiomeOffset);
 
+		// TODO: Uncomment once thatmo is added proper
+		// thatmoBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.31_thatmoBiome", "Thatmo Biome ID", thatmoBiome + defaultBiomeOffset);
+	}
+
+	private static HashMap<Integer, String> registeredIds = new HashMap<>();
+
+	private static int createConfigBiome(Configuration config, String category, String name, String comment, int def) {
+		int value = CommonConfig.createConfigInt(config, category, name, comment, def);
+
+		if(registeredIds.containsKey(value)) {
+			throw new BiomeCollisionException(String.format("Biome ID conflict, attempted to register NTM Space biome on top of another:"
+				+ "\nBiome config 1: %s"
+				+ "\nBiome config 2: %s"
+				+ "\nPlease modify hbm.cfg to fix this error. Note that the maximum biome ID is 255, if you run out you MUST install EndlessIDs!", name, registeredIds.get(value)));
+		}
+
+		registeredIds.put(value, name);
+
+		return value;
 	}
 
 }

@@ -14,4 +14,8 @@ public class BiomeCollisionException extends RuntimeException {
 		super(String.format(EXCEPTION_MESSAGE, conflictsWith.biomeID, conflictsWith.biomeName, conflictsWith.getBiomeClass().getName()));
 	}
 
+	public BiomeCollisionException(String message) {
+		super(message);
+	}
+
 }
