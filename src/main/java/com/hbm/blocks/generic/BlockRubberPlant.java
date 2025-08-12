@@ -73,7 +73,7 @@ public class BlockRubberPlant extends BlockEnumMulti {
 
 	@Override
 	public int damageDropped(int meta) {
-		return meta;
+	    return meta;
 	}
 
 	@Override

@@ -2506,7 +2506,7 @@ public class ModBlocks {
 		boxcar = new DecoBlock(Material.iron).setBlockName("boxcar").setStepSound(Block.soundTypeMetal).setHardness(10.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab).setBlockTextureName(RefStrings.MODID + ":boxcar");
 		boat = new DecoBlock(Material.iron).setBlockName("boat").setStepSound(Block.soundTypeMetal).setHardness(10.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab).setBlockTextureName(RefStrings.MODID + ":asphalt");
 
-		war_controller = new WarController().setBlockName("war_controller").setStepSound(Block.soundTypeMetal).setHardness(10.0F).setResistance(10.0F).setCreativeTab(MainRegistry.blockTab).setBlockTextureName(RefStrings.MODID + ":steel");
+		war_controller = new WarController().setBlockName("war_controller").setStepSound(Block.soundTypeMetal).setHardness(10.0F).setResistance(10.0F).setCreativeTab(null).setBlockTextureName(RefStrings.MODID + ":steel");
 		
 		machine_well = new MachineOilWell().setBlockName("machine_well").setHardness(5.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":machine_well");
 		machine_pumpjack = new MachinePumpjack().setBlockName("machine_pumpjack").setHardness(5.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab).setBlockTextureName(RefStrings.MODID + ":machine_pumpjack");
@@ -3262,6 +3262,7 @@ public class ModBlocks {
 		register(laythe_coral);
 		register(laythe_coral_block);
 		register(plant_dead);
+		register(rubber_plant);
 		register(reeds);
 		register(crop_strawberry);
 		register(crop_paraffin);
@@ -3343,7 +3344,6 @@ public class ModBlocks {
 		GameRegistry.registerBlock(rubber_leaves, rubber_leaves.getUnlocalizedName());
 		GameRegistry.registerBlock(rubber_grass, rubber_grass.getUnlocalizedName());
 		GameRegistry.registerBlock(rubber_silt, rubber_silt.getUnlocalizedName());
-		GameRegistry.registerBlock(rubber_plant, rubber_plant.getUnlocalizedName());
 		GameRegistry.registerBlock(spike_cacti, spike_cacti.getUnlocalizedName());
 		GameRegistry.registerBlock(rubber_farmland, rubber_farmland.getUnlocalizedName());
 		GameRegistry.registerBlock(vinyl_sand, vinyl_sand.getUnlocalizedName());
