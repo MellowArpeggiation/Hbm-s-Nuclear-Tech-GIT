@@ -736,6 +736,8 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_SAND, laythe_silt);
 		OreDictionary.registerOre(KEY_SAND, eve_silt);
 		OreDictionary.registerOre(KEY_SAND, moon_turf);
+		OreDictionary.registerOre(KEY_SAND, rubber_silt);
+		OreDictionary.registerOre(KEY_SAND, vinyl_sand);
 
 		OreDictionary.registerOre(KEY_STONE, duna_rock);
 		OreDictionary.registerOre(KEY_COBBLESTONE, duna_cobble);
