@@ -6,10 +6,15 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 import com.hbm.main.StructureManager;
-import com.hbm.world.gen.NBTStructure;
-import com.hbm.world.gen.NBTStructure.JigsawPiece;
-import com.hbm.world.gen.NBTStructure.JigsawPool;
-import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.nbt.JigsawPiece;
+import com.hbm.world.gen.nbt.JigsawPool;
+import com.hbm.world.gen.nbt.NBTStructure;
+import com.hbm.world.gen.nbt.NBTStructure.JigsawConnection;
+import com.hbm.world.gen.nbt.NBTStructure.Component;
+import com.hbm.world.gen.nbt.NBTStructure.Start;
+import com.hbm.world.gen.nbt.SpawnCondition;
+import com.hbm.world.gen.nbt.NBTStructure.GenStructure;
+
 import com.hbm.world.gen.component.Component.ConcreteBricks;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -21,15 +26,15 @@ import net.minecraft.world.gen.structure.StructureComponent.BlockSelector;
 public class WorldGeneratorThatmo implements IWorldGenerator {
 
 	public WorldGeneratorThatmo() {
-		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition("thatmotest") {{
 			structure = new JigsawPiece("thatmotest", StructureManager.THATMOTESTMO, -1);
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 		}});
-		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition("thatmo2") {{
 			structure = new JigsawPiece("thatmotest2", StructureManager.thatmo2, 1);
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 		}});
-		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition("trenches") {{
 			JigsawPiece rupture = new JigsawPiece("trenches", StructureManager.trenches, -1);
 			rupture.conformToTerrain = true;
 			spawnWeight = 2;
@@ -55,11 +60,11 @@ public class WorldGeneratorThatmo implements IWorldGenerator {
 		}});
 		*/
 
-		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.thatmoDimension, new SpawnCondition("city") {{
 			sizeLimit = 128;
 			canSpawn = biome -> biome.heightVariation < 0.1F;
 			startPool = "default";
-			pools = new HashMap<String, NBTStructure.JigsawPool>() {{
+			pools = new HashMap<String, JigsawPool>() {{
 				put("default", new JigsawPool() {{
 					add(new JigsawPiece("intersection", StructureManager.intersection, 0){{ alignToTerrain = true; }}, 1);
 					add(new JigsawPiece("road_1", StructureManager.road, 0){{ conformToTerrain = true; }}, 1);
