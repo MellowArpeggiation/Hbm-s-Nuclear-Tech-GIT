@@ -229,6 +229,7 @@ public class OreDictManager {
 	public static final DictFrame PVC = new DictFrame("PVC");
 	public static final DictFrame LATEX = new DictFrame("Latex");
 	public static final DictFrame RUBBER = new DictFrame("Rubber");
+	public static final DictFrame SEMTEX = new DictFrame("Semtex");
 	public static final DictFrame MAGTUNG = new DictFrame("MagnetizedTungsten");
 	public static final DictFrame CMB = new DictFrame("CMBSteel");
 	public static final DictFrame DESH = new DictFrame("Desh");
@@ -473,6 +474,7 @@ public class OreDictManager {
 		//PET																	.ingot(ingot_pet);
 		PC																	.ingot(ingot_pc);
 		PVC																	.ingot(ingot_pvc);
+		SEMTEX																.ingot(ingot_semtex)																												.block(block_semtex);
 		MAGTUNG																.ingot(ingot_magnetized_tungsten)									.dust(powder_magnetized_tungsten)								.block(block_magnetized_tungsten);
 		CMB																	.ingot(ingot_combine_steel)											.dust(powder_combine_steel)		.plate(plate_combine_steel)		.block(block_combine_steel);
 		DESH		.nugget(nugget_desh)									.ingot(ingot_desh)													.dust(powder_desh)												.block(block_desh);
