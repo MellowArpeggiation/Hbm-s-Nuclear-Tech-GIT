@@ -77,6 +77,7 @@ public class SpaceConfig {
 	public static int tektoForestBiome = 89;
 	public static int tektoVinylIslandBiome = 88;
 
+	public static int thatmoBiome = 87;
 
 
 
@@ -148,7 +149,9 @@ public class SpaceConfig {
 		tektoHalogenHillBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.28_tektoHalogenHillBiome", "Tekto Halogen Hills Biome ID", tektoHalogenHillBiome + defaultBiomeOffset);
 		tektoRiverBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.29_tektoRiverBiome", "Tekto River Biome ID", tektoRiverBiome + defaultBiomeOffset);
 		tektoForestBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.30_tektoForestBiome", "Tekto Forest Biome ID", tektoForestBiome + defaultBiomeOffset);
-		tektoVinylIslandBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.31_tektoVinylIslandBiome", "Tekto Vinyl Island Biome ID", tektoVinylIslandBiome + defaultBiomeOffset);
+		tektoVinylIslandBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.31_tektoVinylSandsBiome", "Tekto Vinyl Sands Biome ID", tektoVinylIslandBiome + defaultBiomeOffset);
+		thatmoBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.31_thatmoBiome", "Thatmo Biome ID", thatmoBiome + defaultBiomeOffset);
+
 	}
 
 }

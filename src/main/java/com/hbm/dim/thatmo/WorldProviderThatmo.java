@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.WorldProviderCelestial;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_BATTLEFIELD;
@@ -26,7 +27,7 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 
 	@Override
 	public void registerWorldChunkManager() {
-		this.worldChunkMgr = new WorldChunkManagerHell(new BiomeGenThatmo(89), dimensionId);
+		this.worldChunkMgr = new WorldChunkManagerHell(new BiomeGenThatmo(SpaceConfig.thatmoBiome), dimensionId);
 	}
 
 	@Override
