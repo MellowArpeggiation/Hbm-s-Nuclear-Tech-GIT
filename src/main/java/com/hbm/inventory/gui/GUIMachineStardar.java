@@ -274,10 +274,10 @@ public class GUIMachineStardar extends GuiInfoContainer {
 		        int satX = (int) (guiLeft + starX + offsetX - 65); 
 		        int satY = (int) (guiTop + starY + offsetY + 55); 
 
-		        if (checkClick(mx, my, satX - 4, satY - 4, 16, 16)) {
-					drawCustomInfoStat(mx - guiLeft, my - guiTop, satX - 2, satY - 2, 12, 12, satX + 8, satY + 10, I18nUtil.resolveKey(entry.getKey().toString()));
+		        //if (checkClick(mx, my, satX - 4, satY - 4, 16, 16)) {
+					//drawCustomInfoStat(mx - guiLeft, my - guiTop, satX - 2, satY - 2, 12, 12, satX + 8, satY + 10, I18nUtil.resolveKey(entry.getKey().toString()));
 
-		        }
+		        //}
 		    }	
 		}else {
 			if(checkClick(mx, my, 9, 9, 158, 108)) {
