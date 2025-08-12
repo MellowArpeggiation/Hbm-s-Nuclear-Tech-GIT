@@ -7,7 +7,6 @@ import com.hbm.blocks.ModBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -17,7 +16,7 @@ public class BlockRubberPlant extends BlockEnumMulti {
 	public BlockRubberPlant() {
 		super(Material.plants, EnumRubberPlantType.class, false, true);
 	}
-	
+
 	public static enum EnumRubberPlantType {
 		GRASS,
 		FERN,
@@ -38,7 +37,7 @@ public class BlockRubberPlant extends BlockEnumMulti {
 		super.onNeighborBlockChange(world, x, y, z, block);
 		this.checkAndDropBlock(world, x, y, z);
 	}
-	
+
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if(!this.canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
@@ -73,7 +72,7 @@ public class BlockRubberPlant extends BlockEnumMulti {
 
 	@Override
 	public int damageDropped(int meta) {
-	    return meta;
+		return meta;
 	}
 
 	@Override

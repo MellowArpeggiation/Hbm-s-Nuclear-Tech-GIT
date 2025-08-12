@@ -3279,7 +3279,7 @@ public class ModBlocks {
 		GameRegistry.registerBlock(moon_turf, moon_turf.getUnlocalizedName());
 
 		GameRegistry.registerBlock(moon_rock, moon_rock.getUnlocalizedName());
-		register(sapling_pvc, ItemBlockNamedMetaSapling.class);
+		register(sapling_pvc);
 
 		GameRegistry.registerBlock(duna_sands, duna_sands.getUnlocalizedName());
 		GameRegistry.registerBlock(duna_cobble, duna_cobble.getUnlocalizedName());

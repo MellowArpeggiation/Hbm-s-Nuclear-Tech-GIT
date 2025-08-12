@@ -1,17 +1,12 @@
 package com.hbm.blocks;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
-import java.util.Map.Entry;
 
 import com.hbm.dim.trait.CBT_Atmosphere;
-import com.hbm.inventory.fluid.FluidType;
-import com.hbm.inventory.fluid.Fluids;
-import com.hbm.items.ModItems;
 import com.hbm.items.ItemEnums.EnumTarType;
+import com.hbm.items.ModItems;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -19,7 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -31,28 +25,28 @@ public class BlockCrop extends BlockBush implements IGrowable {
 
 	protected int maxGrowthStage = 7;
 	protected Block soilsBlocks;
-	 @SideOnly(Side.CLIENT)
+
+	@SideOnly(Side.CLIENT)
 	protected IIcon[] blockIcons;
+
 	private Predicate<CBT_Atmosphere> atmospherePredicate;
 
 	public BlockCrop(Block block, Predicate<CBT_Atmosphere> atmospherePredicate) {
 		setTickRandomly(true);
-	    float f = 0.5F;
-	    setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
-	    setHardness(0.0F);
-	    setStepSound(soundTypeGrass);
-	    disableStats();
-	    this.soilsBlocks = block;
+		float f = 0.5F;
+		setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
+		setHardness(0.0F);
+		setStepSound(soundTypeGrass);
+		disableStats();
+		this.soilsBlocks = block;
 
-        this.atmospherePredicate = atmospherePredicate;
-
+		this.atmospherePredicate = atmospherePredicate;
 	}
-	
 
-    public boolean canBreathe(CBT_Atmosphere atmosphere) {
-        return this.atmospherePredicate.test(atmosphere);
-    }
-	    
+	public boolean canBreathe(CBT_Atmosphere atmosphere) {
+		return this.atmospherePredicate.test(atmosphere);
+	}
+
 	/**
 	 * is the block grass, dirt or farmland
 	 */
@@ -84,13 +78,10 @@ public class BlockCrop extends BlockBush implements IGrowable {
 		}
 		if(this == ModBlocks.crop_paraffin) {
 			return ModItems.paraffin_seeds;
-
 		}
-		
 
 		return Item.getItemFromBlock(this);
 	}
-
 
 	/**
 	 * The type of render function that is called for this block
@@ -118,7 +109,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
-		return  world.getBlock(x, y - 1, z).canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this);
+		return world.getBlock(x, y - 1, z).canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this);
 	}
 
 	/*
@@ -155,11 +146,11 @@ public class BlockCrop extends BlockBush implements IGrowable {
 	@Override
 	public int quantityDropped(int meta, int fortune, Random rand) {
 		if(meta == 7) { //dividing is probably better, but thats the point?? plus i want players to fully grow their crops
-			return(4);
+			return 4;
 		} else {
-			return (meta/2);
+			return meta / 2;
 		}
-		
+
 	}
 
 	@Override
@@ -174,11 +165,11 @@ public class BlockCrop extends BlockBush implements IGrowable {
 				}
 			}
 		}
-		
-	    if(this == ModBlocks.crop_paraffin && metadata >= 7) {
+
+		if(this == ModBlocks.crop_paraffin && metadata >= 7) {
 			for(int i = 0; i < 3 + fortune; ++i) {
 				if(world.rand.nextInt(15) <= metadata) {
-				       ret.add(new ItemStack(ModItems.paraffin_seeds));				        
+					ret.add(new ItemStack(ModItems.paraffin_seeds));
 					ret.add(new ItemStack(ModItems.oil_tar, 1, EnumTarType.WAX.ordinal()));
 				}
 			}
