@@ -76,9 +76,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 	public void updateWeather() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
 
-		// what in the fuck are you smoking holy shit man
-		// I am keeping this for posterity
-		// jesus fuck man
+		// funi get world from world (don't do this pls)
 		// World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
 
 		if(!worldObj.isRemote) {
@@ -102,25 +100,22 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			}
 		}
 
-		if(atmosphere != null && atmosphere.getPressure() > 0.5F) {
-			double pressure = atmosphere != null ? atmosphere.getPressure() : 0;
+		double pressure = atmosphere != null ? atmosphere.getPressure() : 0;
 
-			// Will prevent water from existing, will be unset immediately before using a bucket if inside a pressurized room
-			isHellWorld = !worldObj.isRemote && pressure <= 0.2F && !Loader.isModLoaded(Compat.MOD_COFH);
+		// Will prevent water from existing, will be unset immediately before using a bucket if inside a pressurized room
+		isHellWorld = !worldObj.isRemote && pressure <= 0.2F && !Loader.isModLoaded(Compat.MOD_COFH);
 
-			if(pressure > 0.5F) {
-				super.updateWeather();
-				return;
-			}
-
-			this.worldObj.getWorldInfo().setRainTime(0);
-			this.worldObj.getWorldInfo().setRaining(false);
-			this.worldObj.getWorldInfo().setThunderTime(0);
-			this.worldObj.getWorldInfo().setThundering(false);
-			this.worldObj.rainingStrength = 0.0F;
-			this.worldObj.thunderingStrength = 0.0F;
+		if(pressure > 0.5F) {
+			super.updateWeather();
+			return;
 		}
 
+		this.worldObj.getWorldInfo().setRainTime(0);
+		this.worldObj.getWorldInfo().setRaining(false);
+		this.worldObj.getWorldInfo().setThunderTime(0);
+		this.worldObj.getWorldInfo().setThundering(false);
+		this.worldObj.rainingStrength = 0.0F;
+		this.worldObj.thunderingStrength = 0.0F;
 	}
 
 	// Can be overridden to provide fog changing events based on weather
