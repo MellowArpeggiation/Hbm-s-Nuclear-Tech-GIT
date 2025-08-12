@@ -1062,7 +1062,9 @@ public class MainRegistry {
 		event.registerServerCommand(new CommandStations());
 		event.registerServerCommand(new CommandPacketInfo());
 		event.registerServerCommand(new CommandReloadServer());
+		event.registerServerCommand(new CommandLocate());
 		event.registerServerCommand(new CommandTotalTime());
+		ArcFurnaceRecipes.registerFurnaceSmeltables(); // because we have to wait for other mods to take their merry ass time to register recipes
 	}
 
 	@EventHandler
@@ -1822,6 +1824,10 @@ public class MainRegistry {
 		ignoreMappings.add("hbm:tile.machine_arc_furnace_off");
 		ignoreMappings.add("hbm:tile.machine_arc_furnace_on");
 		ignoreMappings.add("hbm:item.heavy_component");
+		ignoreMappings.add("hbm:item.mp_w_20");
+		ignoreMappings.add("hbm:item.mp_f_20");
+		ignoreMappings.add("hbm:item.mp_thruster_10_kerosene_tec");
+		ignoreMappings.add("hbm:item.mp_thruster_15_kerosene_tec");
 
 		/// REMAP ///
 		remapItems.put("hbm:item.gadget_explosive8", ModItems.early_explosive_lenses);

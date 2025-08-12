@@ -1438,6 +1438,7 @@ public class ModBlocks {
 	public static Block wand_loot;
 	public static Block wand_jigsaw;
 	public static Block wand_logic;
+	public static Block wand_tandem;
 
 	public static Block logic_block;
 
@@ -2777,6 +2778,7 @@ public class ModBlocks {
 		wand_loot = new BlockWandLoot().setBlockName("wand_loot").setBlockTextureName(RefStrings.MODID + ":wand_loot");
 		wand_jigsaw = new BlockWandJigsaw().setBlockName("wand_jigsaw").setBlockTextureName(RefStrings.MODID + ":wand_jigsaw");
 		wand_logic = new BlockWandLogic().setBlockName("wand_logic").setBlockTextureName(RefStrings.MODID + ":wand_logic");
+		wand_tandem = new BlockWandTandem().setBlockName("wand_tandem").setBlockTextureName(RefStrings.MODID + ":wand_tandem");
 
 		logic_block = new LogicBlock().setBlockName("logic_block").setBlockTextureName(RefStrings.MODID + ":logic_block");
 
@@ -4090,6 +4092,7 @@ public class ModBlocks {
 		register(wand_loot);
 		register(wand_jigsaw);
 		register(wand_logic);
+		register(wand_tandem);
 
 		register(logic_block);
 	}

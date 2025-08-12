@@ -11,9 +11,9 @@ import com.hbm.dim.SolarSystem;
 import com.hbm.dim.laythe.biome.BiomeGenBaseLaythe;
 import com.hbm.main.StructureManager;
 import com.hbm.world.feature.OilBubble;
-import com.hbm.world.gen.NBTStructure;
-import com.hbm.world.gen.NBTStructure.JigsawPiece;
-import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.nbt.NBTStructure;
+import com.hbm.world.gen.nbt.JigsawPiece;
+import com.hbm.world.gen.nbt.SpawnCondition;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -24,18 +24,18 @@ import net.minecraft.world.chunk.IChunkProvider;
 public class WorldGeneratorLaythe implements IWorldGenerator {
 
 	public WorldGeneratorLaythe() {
-		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition("laythe_nuke_sub") {{
 			structure = new JigsawPiece("laythe_nuke_sub", StructureManager.nuke_sub);
 			canSpawn = biome -> biome == BiomeGenBaseLaythe.laytheOcean;
 			maxHeight = 54;
 			spawnWeight = 6;
 		}});
-		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition("laythe_vertibird") {{
 			structure = new JigsawPiece("laythe_vertibird", StructureManager.vertibird, -3);
 			canSpawn = biome -> biome.rootHeight >= 0;
 			spawnWeight = 6;
 		}});
-		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.laytheDimension, new SpawnCondition("laythe_crashed_vertibird") {{
 			structure = new JigsawPiece("laythe_crashed_vertibird", StructureManager.crashed_vertibird, -10);
 			canSpawn = biome -> biome.rootHeight >= 0;
 			spawnWeight = 6;

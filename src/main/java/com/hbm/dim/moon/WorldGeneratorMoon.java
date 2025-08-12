@@ -11,10 +11,10 @@ import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.main.StructureManager;
 import com.hbm.world.feature.OilBubble;
-import com.hbm.world.gen.NBTStructure;
-import com.hbm.world.gen.NBTStructure.JigsawPiece;
-import com.hbm.world.gen.NBTStructure.JigsawPool;
-import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.nbt.NBTStructure;
+import com.hbm.world.gen.nbt.JigsawPiece;
+import com.hbm.world.gen.nbt.JigsawPool;
+import com.hbm.world.gen.nbt.SpawnCondition;
 import com.hbm.world.generator.DungeonToolbox;
 
 import cpw.mods.fml.common.IWorldGenerator;
@@ -26,7 +26,7 @@ public class WorldGeneratorMoon implements IWorldGenerator {
 	public WorldGeneratorMoon() {
 		JigsawPiece munBase = new JigsawPiece("mun_base", StructureManager.mun_base) {{ alignToTerrain = true; heightOffset = -1; }};
 
-		NBTStructure.registerStructure(SpaceConfig.moonDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.moonDimension, new SpawnCondition("mun_base") {{
 			spawnWeight = 6;
 			sizeLimit = 32;
 			startPool = "start";

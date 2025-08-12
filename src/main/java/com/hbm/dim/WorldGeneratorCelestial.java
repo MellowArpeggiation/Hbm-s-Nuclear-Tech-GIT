@@ -17,10 +17,10 @@ import com.hbm.world.PlanetGen;
 import com.hbm.world.feature.BedrockOre;
 import com.hbm.world.feature.BedrockOre.BedrockOreDefinition;
 import com.hbm.world.feature.DepthDeposit;
-import com.hbm.world.gen.NBTStructure;
-import com.hbm.world.gen.NBTStructure.JigsawPiece;
-import com.hbm.world.gen.NBTStructure.JigsawPool;
-import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.nbt.NBTStructure;
+import com.hbm.world.gen.nbt.JigsawPiece;
+import com.hbm.world.gen.nbt.JigsawPool;
+import com.hbm.world.gen.nbt.SpawnCondition;
 import com.hbm.world.gen.component.Component.CrabSpawners;
 import com.hbm.world.gen.component.Component.GreenOoze;
 import com.hbm.world.gen.component.Component.MeteorBricks;
@@ -56,13 +56,13 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
 			put(ModBlocks.concrete_colored, new GreenOoze());
 		}};
 
-		NBTStructure.registerStructure(new SpawnCondition() {{
+		NBTStructure.registerStructure(new SpawnCondition("meteor_dungeon") {{
 			minHeight = 32;
 			maxHeight = 32;
 			sizeLimit = 128;
 			canSpawn = biome -> biome.rootHeight >= 0;
 			startPool = "start";
-			pools = new HashMap<String, NBTStructure.JigsawPool>() {{
+			pools = new HashMap<String, JigsawPool>() {{
 				put("start", new JigsawPool() {{
 					add(new JigsawPiece("meteor_core", StructureManager.meteor_core) {{ blockTable = bricks; }}, 1);
 				}});

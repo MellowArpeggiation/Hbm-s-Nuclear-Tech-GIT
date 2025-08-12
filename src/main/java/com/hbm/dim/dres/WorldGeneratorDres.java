@@ -13,10 +13,10 @@ import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.dim.dres.biome.BiomeGenBaseDres;
 import com.hbm.main.StructureManager;
-import com.hbm.world.gen.NBTStructure;
-import com.hbm.world.gen.NBTStructure.JigsawPiece;
-import com.hbm.world.gen.NBTStructure.JigsawPool;
-import com.hbm.world.gen.NBTStructure.SpawnCondition;
+import com.hbm.world.gen.nbt.NBTStructure;
+import com.hbm.world.gen.nbt.JigsawPiece;
+import com.hbm.world.gen.nbt.JigsawPool;
+import com.hbm.world.gen.nbt.SpawnCondition;
 import com.hbm.world.gen.component.Component.LabTiles;
 import com.hbm.world.generator.DungeonToolbox;
 
@@ -33,7 +33,7 @@ public class WorldGeneratorDres implements IWorldGenerator {
             put(ModBlocks.tile_lab, new LabTiles(0.2F));
         }};
 
-		NBTStructure.registerStructure(SpaceConfig.dresDimension, new SpawnCondition() {{
+		NBTStructure.registerStructure(SpaceConfig.dresDimension, new SpawnCondition("dres_rbmk") {{
 			spawnWeight = 4;
 			minHeight = 40;
 			maxHeight = 40;
