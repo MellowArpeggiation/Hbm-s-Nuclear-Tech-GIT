@@ -71,9 +71,11 @@ public class SpaceConfig {
 
 	public static int ikeBiome = 93;
 
-	public static int tektoPolyvinyl = 92;
-	public static int tektoHalogenHill = 91;
-	public static int tektoRiver = 90;
+	public static int tektoPolyvinylBiome = 92;
+	public static int tektoHalogenHillBiome = 91;
+	public static int tektoRiverBiome = 90;
+	public static int tektoForestBiome = 89;
+	public static int tektoVinylIslandBiome = 88;
 
 
 
@@ -142,6 +144,11 @@ public class SpaceConfig {
 		laytheCoastBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.24_laytheCoastBiome", "Laythe Coast Biome ID", laytheCoastBiome + defaultBiomeOffset);
 		mohoLavaBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.25_mohoLavaBiome", "Moho Lava Biome ID", mohoLavaBiome + defaultBiomeOffset);
 		mohoPlateauBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.26_mohoPlateauBiome", "Moho Plateau Biome ID", mohoPlateauBiome + defaultBiomeOffset);
+		tektoPolyvinylBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.27_tektoPolyvinylBiome", "Tekto Polyvinyl Biome ID", tektoPolyvinylBiome + defaultBiomeOffset);
+		tektoHalogenHillBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.28_tektoHalogenHillBiome", "Tekto Halogen Hills Biome ID", tektoHalogenHillBiome + defaultBiomeOffset);
+		tektoRiverBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.29_tektoRiverBiome", "Tekto River Biome ID", tektoRiverBiome + defaultBiomeOffset);
+		tektoForestBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.30_tektoForestBiome", "Tekto Forest Biome ID", tektoForestBiome + defaultBiomeOffset);
+		tektoVinylIslandBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.31_tektoVinylIslandBiome", "Tekto Vinyl Island Biome ID", tektoVinylIslandBiome + defaultBiomeOffset);
 	}
 
 }
