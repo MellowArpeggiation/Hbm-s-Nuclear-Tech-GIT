@@ -71,7 +71,7 @@ public class ItemWandD extends Item {
 					player.addChatMessage(new ChatComponentText("Set teleport target to: " + target.getBody().getUnlocalizedName()));
 				}
 			}
-		}
+		} else {
 			if(!player.isSneaking()) {
 				// TESTING: View atmospheric data
 				CBT_Atmosphere atmosphere = CelestialBody.getTrait(world, CBT_Atmosphere.class);
@@ -122,7 +122,8 @@ public class ItemWandD extends Item {
 				}
 				*/
 			}
-		
+		}
+
 		return stack;
 	}
 
