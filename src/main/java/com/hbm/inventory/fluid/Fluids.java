@@ -526,7 +526,7 @@ public class Fluids {
 		VINYL =			new FluidType("VINYL",		0xA2A2A2, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		TCRUDE =			new FluidType("TCRUDE",		0x051914, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		CBENZ =			new FluidType("CBENZ",		0x91C6BB, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
-		HALOLIGHT =			new FluidType("HALOLIGHT",		0x91C6BB, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
+		HALOLIGHT =			new FluidType("HALOLIGHT",		0xB6F9CF, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
