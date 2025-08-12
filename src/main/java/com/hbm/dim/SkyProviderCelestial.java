@@ -606,8 +606,9 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 			mc.renderEngine.bindTexture(SolarSystem.kerbol.texture);
 
-			WorldProviderCelestial celestialProvider = (WorldProviderCelestial) world.provider;
-			float[] sunColor = celestialProvider.getSunColor();
+			float[] sunColor = world.provider instanceof WorldProviderCelestial
+				? ((WorldProviderCelestial) world.provider).getSunColor()
+				: new float[] { 1.0F, 1.0F, 1.0F };
 
 			GL11.glColor4f(sunColor[0], sunColor[1], sunColor[2], visibility);
 			tessellator.startDrawingQuads();
