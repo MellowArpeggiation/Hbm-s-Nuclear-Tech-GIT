@@ -114,7 +114,6 @@ public class BlockAirPump extends BlockContainer implements ILookOverlay, IBlock
 			return true;
 			
 		} else if(!player.isSneaking()) {
-			FMLNetworkHandler.openGui(player, MainRegistry.instance, 0, world, x, y, z);
 			return true;
 			
 		} else if(player.isSneaking()){
