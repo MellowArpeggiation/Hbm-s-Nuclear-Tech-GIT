@@ -82,7 +82,7 @@ public class RubberGrass extends Block {
 	@Override
 	public boolean canSustainPlant(IBlockAccess world, int x, int y, int z, ForgeDirection direction, IPlantable plantable) {
 		
-		return true;
+		return false;
 	}
 
 }

@@ -114,20 +114,5 @@ public class BlockRubberCacti extends BlockEnumMulti {
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		return null;
 	}
-	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		int meta = world.getBlockMetadata(x, y, z);
-		if(meta == EnumBushType.CACT.ordinal()) {
-			if (!world.isRemote && entity instanceof EntityPlayer) {
-				world.createExplosion(entity, x, y, z, 4.0F, false); 
-				world.setBlockToAir(x, y, z); 
-				EntityMist mist = new EntityMist(world);
-				mist.setType(Fluids.CHLORINE);
-				mist.setPosition(x, y, z);
-				mist.setArea(8, 5.5F);
-				world.spawnEntityInWorld(mist);
-			}
-	    
-	    }
-	}
+
 }
