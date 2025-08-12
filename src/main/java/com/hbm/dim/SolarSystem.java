@@ -212,7 +212,7 @@ public class SolarSystem {
 					.withColor(1f, 0.6862f, 0.5882f)
 					.withSatellites(
 
-					new CelestialBody("thatmo", SpaceConfig.thatmoDimension, Body.THATMO)
+					new CelestialBody("thatmo")
 						.withMassRadius(2.788e21F, 286)
 						.withOrbitalParameters(32_301, 0.0534F, 0.0F, 4.02F, 284.0F)
 						.withRotationalPeriod(306_443)

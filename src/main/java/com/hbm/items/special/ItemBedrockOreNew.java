@@ -270,6 +270,7 @@ public class ItemBedrockOreNew extends Item {
 				T("nonmetal",	o(MAT_CHLOROCALCITE, 24),o(MAT_COAL, 12),				o(MAT_FLUORITE, 6),		o(MAT_SILICON, 3)),
 				T("crystal",		o(MAT_ASBESTOS, 24),		o(MAT_SODALITE, 12),			o(MAT_DIAMOND, 6),		o(MAT_SODALITE, 3))
 				);
+			/*
 			register(
 				SolarSystem.Body.THATMO,
 				T("light",		o(MAT_CRYOLITE, 24),		o(MAT_TITANIUM, 12),			o(MAT_GALLIUM, 6),		o(MAT_HAFNIUM, 3)),
@@ -279,6 +280,7 @@ public class ItemBedrockOreNew extends Item {
 				T("nonmetal",	o(MAT_CHLOROCALCITE, 24),o(MAT_COAL, 12),				o(MAT_FLUORITE, 6),		o(MAT_SILICON, 3)),
 				T("crystal",		o(MAT_ASBESTOS, 24),		o(MAT_SODALITE, 12),			o(MAT_DIAMOND, 6),		o(MAT_SODALITE, 3))
 				);
+				*/
 		}
 
 		public CelestialBedrockOreType[] types;
