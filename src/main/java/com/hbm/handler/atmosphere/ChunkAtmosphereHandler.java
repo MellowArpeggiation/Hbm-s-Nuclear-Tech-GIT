@@ -213,7 +213,7 @@ public class ChunkAtmosphereHandler {
 			if(block instanceof BlockCrop) {
 				canExist = ((BlockCrop) block).canBreathe(atmosphere);
 			} else if(block instanceof BlockNTSapling) {
-				canExist = !(atmosphere == null || (!atmosphere.hasFluid(Fluids.TEKTOAIR, 0.1) && atmosphere.hasFluid(Fluids.CHLORINE, 0.1)));
+				canExist = !(atmosphere == null || (!atmosphere.hasFluid(Fluids.TEKTOAIR, 0.1) && !atmosphere.hasFluid(Fluids.CHLORINE, 0.1)));
 			} else {
 				canExist = !(atmosphere == null || (!atmosphere.hasFluid(Fluids.OXYGEN, 0.01) && !atmosphere.hasFluid(Fluids.AIR, 0.1)));
 			}
