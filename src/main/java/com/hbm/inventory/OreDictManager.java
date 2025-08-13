@@ -470,10 +470,10 @@ public class OreDictManager {
 		POLYMER																.ingot(ingot_polymer)												.dust(powder_polymer)											.block(block_polymer);
 		BAKELITE															.ingot(ingot_bakelite)												.dust(powder_bakelite)											.block(block_bakelite);
 		LATEX									.gem(ball_resin)			.ingot(ingot_biorubber);
-		RUBBER																.ingot(ingot_rubber)																												.block(block_rubber);
+		RUBBER																.ingot(ingot_rubber)												.dust(powder_rubber)											.block(block_rubber);
 		//PET																	.ingot(ingot_pet);
 		PC																	.ingot(ingot_pc);
-		PVC																	.ingot(ingot_pvc);
+		PVC																	.ingot(ingot_pvc)													.dust(powder_pvc);
 		SEMTEX																.ingot(ingot_semtex)																												.block(block_semtex);
 		MAGTUNG																.ingot(ingot_magnetized_tungsten)									.dust(powder_magnetized_tungsten)								.block(block_magnetized_tungsten);
 		CMB																	.ingot(ingot_combine_steel)											.dust(powder_combine_steel)		.plate(plate_combine_steel)		.block(block_combine_steel);
@@ -751,6 +751,7 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_COBBLESTONE, minmus_regolith);
 		OreDictionary.registerOre(KEY_STONE, minmus_smooth);
 		OreDictionary.registerOre(KEY_STONE, minmus_stone);
+
 		OreDictionary.registerOre(KEY_STICK, stick_pvc);
 
 		for(NTMMaterial mat : Mats.orderedList) {

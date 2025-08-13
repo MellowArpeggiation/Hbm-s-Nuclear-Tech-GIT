@@ -611,6 +611,8 @@ public class ModItems {
 	public static Item powder_dura_steel;
 	public static Item powder_polymer;
 	public static Item powder_bakelite;
+	public static Item powder_rubber;
+	public static Item powder_pvc;
 	public static Item powder_euphemium;
 	public static Item powder_meteorite;
 
@@ -1106,8 +1108,8 @@ public class ModItems {
 	public static Item teacup_empty;
 	public static Item bottle_honey;
 	public static Item paraffin_seeds;
-	
-	
+
+
 	public static Item boat_rubber;
 	public static Item cart;
 	public static Item train;
@@ -2961,6 +2963,8 @@ public class ModItems {
 		powder_dura_steel = new ItemCustomLore().setUnlocalizedName("powder_dura_steel").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_dura_steel");
 		powder_polymer = new ItemCustomLore().setUnlocalizedName("powder_polymer").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_polymer");
 		powder_bakelite = new ItemCustomLore().setUnlocalizedName("powder_bakelite").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_bakelite");
+		powder_rubber = new ItemCustomLore().setUnlocalizedName("powder_rubber").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_rubber");
+		powder_pvc = new ItemCustomLore().setUnlocalizedName("powder_pvc").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_pvc");
 		powder_euphemium = new ItemCustomLore().setRarity(EnumRarity.epic).setUnlocalizedName("powder_euphemium").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_euphemium");
 		powder_wd2004_tiny = new ItemCustomLore().setRarity(EnumRarity.epic).setUnlocalizedName("powder_wd2004_tiny").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_wd2004_tiny");
 		powder_wd2004 = new ItemCustomLore().setRarity(EnumRarity.epic).setUnlocalizedName("powder_wd2004").setCreativeTab(MainRegistry.partsTab).setTextureName(RefStrings.MODID + ":powder_wd2004");
@@ -5718,6 +5722,8 @@ public class ModItems {
 		GameRegistry.registerItem(powder_dura_steel, powder_dura_steel.getUnlocalizedName());
 		GameRegistry.registerItem(powder_polymer, powder_polymer.getUnlocalizedName());
 		GameRegistry.registerItem(powder_bakelite, powder_bakelite.getUnlocalizedName());
+		GameRegistry.registerItem(powder_rubber, powder_rubber.getUnlocalizedName());
+		GameRegistry.registerItem(powder_pvc, powder_pvc.getUnlocalizedName());
 		GameRegistry.registerItem(powder_schrabidium, powder_schrabidium.getUnlocalizedName());
 		GameRegistry.registerItem(powder_schrabidate, powder_schrabidate.getUnlocalizedName());
 		GameRegistry.registerItem(powder_magnetized_tungsten, powder_magnetized_tungsten.getUnlocalizedName());

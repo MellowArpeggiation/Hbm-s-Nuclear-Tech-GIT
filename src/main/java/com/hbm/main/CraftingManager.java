@@ -1197,6 +1197,8 @@ public class CraftingManager {
 
 		addRecipeAuto(new ItemStack(ModBlocks.plushie, 1, PlushieType.YOMI.ordinal()), "LCR", 'L', "cropCarrot", 'C', ModItems.rag, 'R', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.VACUUM_TUBE));
 		addRecipeAuto(new ItemStack(ModBlocks.plushie, 1, PlushieType.NUMBERNINE.ordinal()), " C ", "LCR", " C ", 'L', ModItems.cigarette, 'C', ModItems.rag, 'R', COAL.gem());
+
+		addShapelessAuto(new ItemStack(ModItems.stick_pvc, 16), new ItemStack(ModBlocks.pvc_log));
 	}
 
 	public static void crumple() {
