@@ -18,7 +18,6 @@ import com.hbm.blocks.turret.*;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.block.*;
 import com.hbm.items.bomb.ItemPrototypeBlock;
-import com.hbm.items.machine.ItemCassette.SoundType;
 import com.hbm.items.special.ItemOreBlock;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
@@ -28,8 +27,6 @@ import com.hbm.tileentity.machine.storage.TileEntityFileCabinet;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
@@ -45,7 +42,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import cpw.mods.fml.common.Loader;
 
 import java.util.ArrayList;
-import java.util.AbstractMap.SimpleEntry;
 
 public class ModBlocks {
 
@@ -1958,7 +1954,7 @@ public class ModBlocks {
 		laythe_coral = new BlockCoral().setBlockName("laythe_coral").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":laythe_coral");
 		laythe_coral_block = new BlockEnumMulti(Material.coral, BlockCoral.EnumCoral.class, false, true).setHardness(0.5F).setBlockName("laythe_coral_block").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setBlockTextureName(RefStrings.MODID + ":laythe_coral_block");
 		vine_phosphor = new BlockHangingVine(thick_foliage).setBlockName("vine_phosphor").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.5F);
-		crop_paraffin = new BlockCrop(ModBlocks.rubber_farmland, (atmosphere) -> atmosphere.hasFluid(Fluids.TEKTOAIR, 0.1) ||atmosphere.hasFluid(Fluids.CHLORINE, 0.1), false).setBlockName("crop_paraffin").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":paraffin");
+		crop_paraffin = new BlockCrop(ModBlocks.rubber_farmland, (atmosphere) -> atmosphere.hasFluid(Fluids.TEKTOAIR, 0.1) || atmosphere.hasFluid(Fluids.CHLORINE, 0.1), false).setBlockName("crop_paraffin").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":paraffin");
 		sapling_pvc = new BlockNTSapling().setBlockName("sapling").setCreativeTab(MainRegistry.partsTab);
 
 		waste_earth = new WasteEarth(Material.ground, true).setBlockName("waste_earth").setStepSound(Block.soundTypeGrass).setCreativeTab(MainRegistry.blockTab).setHardness(0.6F).setBlockTextureName(RefStrings.MODID + ":waste_earth");

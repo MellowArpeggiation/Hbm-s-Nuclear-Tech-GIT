@@ -1,8 +1,27 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5418 - drink all the shampoo in the house](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5418)
-
 ## Added
+* More processing recipes for PVC and vinyl logs
+    * PVC sticks now craftable
+    * New powders for rubber and PVC
+* Config for Thatmo biome (unreleased but registered, so we need it to fix conflicts)
 
 ## Changed
+* Sawmill will turn PVC sticks into regular dust instead of sawdust
+* Update CN translation
 
 ## Fixed
-* Slam key localization missing
+* Missing sapling localization
+* DCM geysers zap you like the Eve lightning volcanoes
+* DCM geyser particles fly off in the wrong direction
+* Saplings breaking when planted on valid soil
+* Tekto crops growing in CO2 hydrobays
+* Missing Tekto silt/sand oredict
+* Pumps not working on Tekto silt/sand
+* Artillery spewing shells every tick
+* Scutterblood can now be coked (actually fits into the 16,000mB limit now)
+* Rubber leaves not decaying
+* Rubber leaves not shearable
+* Rubber leaves not vein minable
+* Crash with processed drives in VAB
+* Non-crop plants able to be grown in vacuums and invalid atmospheres
+* Tekto plants won't grow on non-grass silt or silt farmland
+* Zinc disappears when placed into crucible

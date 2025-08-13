@@ -71,7 +71,6 @@ import com.hbm.render.item.block.ItemRenderBlock;
 import com.hbm.render.item.block.ItemRenderDecoBlock;
 import com.hbm.render.item.weapon.*;
 import com.hbm.render.loader.HmfModelLoader;
-import com.hbm.render.model.ModelEel;
 import com.hbm.render.model.ModelDepthSquid;
 import com.hbm.render.model.ModelMoonCow;
 import com.hbm.render.model.ModelPigeon;

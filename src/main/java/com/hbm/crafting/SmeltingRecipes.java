@@ -4,7 +4,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.BlockEnums.EnumMeteorType;
 import com.hbm.blocks.generic.BlockNTMFlower.EnumFlowerType;
 import com.hbm.inventory.OreDictManager.DictFrame;
-import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemArcElectrode.EnumElectrodeType;
 import com.hbm.items.ItemEnums.EnumBriquetteType;
