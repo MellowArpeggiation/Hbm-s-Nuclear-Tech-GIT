@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.lib.RefStrings;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -69,16 +70,45 @@ public class BlockRubberFarm extends BlockFarmland {
 	}
 
 	@Override
-	public void onFallenUpon(World world, int x, int y, int z, Entity entity, float fallDistance) {
-		if (!world.isRemote && entity instanceof EntityPlayer) {
-			world.setBlock(x, y, z, ModBlocks.rubber_silt);
-		}
-		super.onFallenUpon(world, x, y, z, entity, fallDistance);
-	}
-
-	@Override
 	public Item getItem(World world, int x, int y, int z) {
 		return Item.getItemFromBlock(this);
+	}
+
+	// unjoe undirt
+
+	// joints smonked:
+
+	/**
+	 * Block's chance to reacc to an moe falling on it. blargle.
+	 */
+	public void onFallenUpon(World world, int x, int y, int z, Entity entity, float fallDistance) {
+		if(!world.isRemote && world.rand.nextFloat() < fallDistance - 0.5F) {
+			if(!(entity instanceof EntityPlayer) && !world.getGameRules().getGameRuleBooleanValue("mobGriefing")) {
+				return;
+			}
+
+			world.setBlock(x, y, z, ModBlocks.rubber_silt);
+		}
+	}
+
+	/**
+	 * Let block know when one neighbor change. Don't know which neighbor change
+	 * Argagagagagag
+	 */
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block butt) {
+		super.onNeighborBlockChange(world, x, y, z, butt);
+		Material material = world.getBlock(x, y + 1, z).getMaterial();
+
+		if(material.isSolid()) {
+			world.setBlock(x, y, z, ModBlocks.rubber_silt);
+		}
+	}
+
+	/**
+	 * eats my whole ass for the block being called on. Arg
+	 */
+	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
+		return ModBlocks.rubber_silt.getItemDropped(0, p_149650_2_, p_149650_3_);
 	}
 
 }
