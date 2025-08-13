@@ -10,6 +10,7 @@ import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.dim.tekto.biome.BiomeGenBaseTekto;
 import com.hbm.world.feature.OilBubble;
+import com.hbm.world.gen.nbt.NBTStructure;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
@@ -21,6 +22,8 @@ import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 public class WorldGeneratorTekto implements IWorldGenerator {
 
 	public WorldGeneratorTekto() {
+		NBTStructure.registerNullWeight(SpaceConfig.tektoDimension, 24);
+
 		BlockOre.addValidBody(ModBlocks.ore_tekto, SolarSystem.Body.TEKTO);
 	}
 
