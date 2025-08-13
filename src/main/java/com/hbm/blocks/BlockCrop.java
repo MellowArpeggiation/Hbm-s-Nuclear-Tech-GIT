@@ -24,7 +24,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class BlockCrop extends BlockBush implements IGrowable {
 
 	protected int maxGrowthStage = 7;
-	protected Block soilsBlocks;
+	protected Block soilBlock;
 
 	@SideOnly(Side.CLIENT)
 	protected IIcon[] blockIcons;
@@ -38,8 +38,8 @@ public class BlockCrop extends BlockBush implements IGrowable {
 		setHardness(0.0F);
 		setStepSound(soundTypeGrass);
 		disableStats();
-		this.soilsBlocks = block;
 
+		this.soilBlock = block;
 		this.atmospherePredicate = atmospherePredicate;
 	}
 
@@ -52,7 +52,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 	 */
 	@Override
 	protected boolean canPlaceBlockOn(Block block) {
-		return this.soilsBlocks == block;
+		return block == this.soilBlock;
 	}
 
 	public void incrementGrowStage(World world, Random rand, int x, int y, int z) {

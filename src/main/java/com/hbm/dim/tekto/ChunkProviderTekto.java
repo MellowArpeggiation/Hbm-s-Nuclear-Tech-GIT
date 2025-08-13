@@ -30,8 +30,8 @@ public class ChunkProviderTekto extends ChunkProviderCelestial {
 
 		if(biomesForGeneration[0] == BiomeGenBaseTekto.vinylsands) {
 			volcano.func_151539_a(this, worldObj, x, z, buffer.blocks);
-
 		}
+
 		caveGenV3.func_151539_a(this, worldObj, x, z, buffer.blocks);
 
 		// how many times do I gotta say BEEEEG
