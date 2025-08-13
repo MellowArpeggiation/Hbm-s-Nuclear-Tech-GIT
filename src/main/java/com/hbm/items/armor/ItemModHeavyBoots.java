@@ -7,12 +7,20 @@ import com.hbm.handler.ArmorModHandler;
 import com.hbm.util.AstronomyUtil;
 import com.hbm.util.i18n.I18nUtil;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 
 public class ItemModHeavyBoots extends ItemArmorMod {
 
@@ -71,6 +79,46 @@ public class ItemModHeavyBoots extends ItemArmorMod {
 	@Override
 	public boolean isValidArmor(ItemStack stack, int armorType, Entity entity) {
 		return armorType == 3;
+	}
+
+	@Override
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+		return "hbm:textures/armor/heavy_boots.png";
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void armorRender(RenderPlayerEvent.SetArmorModel event, ItemStack armor) {
+		RenderPlayer renderer = event.renderer;
+		ModelBiped modelbiped = renderer.modelArmor;
+		modelbiped.bipedHead.showModel = false;
+		modelbiped.bipedHeadwear.showModel = false;
+		modelbiped.bipedBody.showModel = false;
+		modelbiped.bipedRightArm.showModel = false;
+		modelbiped.bipedLeftArm.showModel = false;
+		modelbiped.bipedRightLeg.showModel = true;
+		modelbiped.bipedLeftLeg.showModel = true;
+		modelbiped.onGround = renderer.modelBipedMain.onGround;
+		modelbiped.isRiding = renderer.modelBipedMain.isRiding;
+		modelbiped.isChild = renderer.modelBipedMain.isChild;
+
+		EntityPlayer player = event.entityPlayer;
+
+		float interp = event.partialRenderTick;
+
+		float swingRight = player.prevLimbSwingAmount + (player.limbSwingAmount - player.prevLimbSwingAmount) * interp;
+		float swingLeft = player.limbSwing - player.limbSwingAmount * (1.0F - interp);
+		if(player.isChild()) swingLeft *= 3.0F;
+		if(swingRight > 1.0F) swingRight = 1.0F;
+
+		float yawHead = player.prevRotationYawHead + (player.rotationYawHead - player.prevRotationYawHead) * interp;
+		float yawOffset = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * interp;
+		float yaw = yawHead - yawOffset;
+		float yawWrapped = MathHelper.wrapAngleTo180_float(yawHead - yawOffset);
+		float pitch = player.rotationPitch;
+
+		modelbiped.setLivingAnimations(player, swingLeft, swingRight, interp);
+		Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(this.getArmorTexture(armor, event.entity, 3, null)));
+		modelbiped.render(event.entityPlayer, swingLeft, swingRight, yawWrapped, yaw, pitch, 0.0625F);
 	}
 
 }
