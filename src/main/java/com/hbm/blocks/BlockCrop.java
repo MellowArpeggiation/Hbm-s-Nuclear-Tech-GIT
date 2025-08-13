@@ -31,7 +31,9 @@ public class BlockCrop extends BlockBush implements IGrowable {
 
 	private Predicate<CBT_Atmosphere> atmospherePredicate;
 
-	public BlockCrop(Block block, Predicate<CBT_Atmosphere> atmospherePredicate) {
+	public boolean canHydro;
+
+	public BlockCrop(Block block, Predicate<CBT_Atmosphere> atmospherePredicate, boolean canHydro) {
 		setTickRandomly(true);
 		float f = 0.5F;
 		setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
@@ -41,6 +43,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 
 		this.soilBlock = block;
 		this.atmospherePredicate = atmospherePredicate;
+		this.canHydro = canHydro;
 	}
 
 	public boolean canBreathe(CBT_Atmosphere atmosphere) {
