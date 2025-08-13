@@ -6,7 +6,6 @@ import java.util.Random;
 
 import com.hbm.dim.tekto.TTree;
 import com.hbm.lib.RefStrings;
-import com.hbm.util.EnumUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -36,6 +35,11 @@ public class BlockNTSapling extends BlockSapling implements IBlockMulti {
 	}
 
 	@Override
+	protected boolean canPlaceBlockOn(Block block) {
+		return block == ModBlocks.rubber_silt || block == ModBlocks.rubber_grass || block == ModBlocks.rubber_farmland;
+	}
+
+	@Override
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		textures = new IIcon[EnumSapling.values().length];
 		for(int i = 0; i < EnumSapling.values().length; i++) {
@@ -59,10 +63,6 @@ public class BlockNTSapling extends BlockSapling implements IBlockMulti {
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side) {
-		return this.isValidPosition(world, x, y, z, -1);
-	}
-
-	public boolean isValidPosition(World world, int x, int y, int z, int metadata) {
 		Block soil = world.getBlock(x, y - 1, z);
 		return soil == ModBlocks.rubber_grass || soil == ModBlocks.rubber_silt || soil.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this);
 	}

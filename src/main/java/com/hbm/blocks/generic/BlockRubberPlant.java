@@ -29,7 +29,7 @@ public class BlockRubberPlant extends BlockEnumMulti {
 	}
 
 	protected boolean canPlaceBlockOn(Block block) {
-		return block == ModBlocks.rubber_grass;
+		return block == ModBlocks.rubber_grass || block == ModBlocks.rubber_silt || block == ModBlocks.rubber_farmland;
 	}
 
 	@Override

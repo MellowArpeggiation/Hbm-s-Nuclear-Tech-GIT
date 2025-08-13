@@ -50,7 +50,7 @@ public class BlockRubberCacti extends BlockEnumMulti {
 	}
 
 	protected boolean canPlaceBlockOn(Block block) {
-		return block == ModBlocks.vinyl_sand || block == ModBlocks.rubber_grass;
+		return block == ModBlocks.vinyl_sand || block == ModBlocks.rubber_grass || block == ModBlocks.rubber_silt || block == ModBlocks.rubber_farmland;
 	}
 
 	@Override

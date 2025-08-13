@@ -4,17 +4,19 @@ import java.util.Random;
 
 import com.hbm.items.ModItems;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockRubberLeaves extends Block {
+public class BlockRubberLeaves extends BlockLeaves {
 
-	public BlockRubberLeaves(Material mat) {
-		super(mat);
-		this.setTickRandomly(true);
+	public BlockRubberLeaves() {
+		super();
 	}
 
 	@Override
@@ -25,15 +27,12 @@ public class BlockRubberLeaves extends Block {
 		return ModItems.leaf_rubber;
 	}
 
-	public boolean renderAsNormalBlock() {
-		return true;
-	}
-
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
 
+	@Override
 	protected boolean canSilkHarvest() {
 		return false;
 	}
@@ -59,6 +58,42 @@ public class BlockRubberLeaves extends Block {
 				}
 			}
 		}
+	}
+
+	// Resetting some leaf stuff back to `Block` implementation, as we don't use biome colours, and we like our leaves dense
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getBlockColor() {
+		return 0xFFFFFF;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getRenderColor(int meta) {
+		return 0xFFFFFF;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int colorMultiplier(IBlockAccess world, int x, int y, int z) {
+		return 0xFFFFFF;
+	}
+
+	@Override
+	public IIcon getIcon(int side, int meta) {
+		return this.blockIcon;
+	}
+
+	@Override
+	public String[] func_150125_e() {
+		// we don't use `ItemLeaves` so just give nothing
+		return null;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
+		return side == 0 && this.minY > 0.0D ? true : (side == 1 && this.maxY < 1.0D ? true : (side == 2 && this.minZ > 0.0D ? true : (side == 3 && this.maxZ < 1.0D ? true : (side == 4 && this.minX > 0.0D ? true : (side == 5 && this.maxX < 1.0D ? true : !world.getBlock(x, y, z).isOpaqueCube())))));
 	}
 
 }
