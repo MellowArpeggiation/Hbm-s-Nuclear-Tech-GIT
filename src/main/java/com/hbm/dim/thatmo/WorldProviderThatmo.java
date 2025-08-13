@@ -9,13 +9,13 @@ import com.hbm.dim.CelestialBody;
 import com.hbm.dim.WorldProviderCelestial;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_BATTLEFIELD;
 import com.hbm.entity.logic.EntityBomber;
+import com.hbm.main.MainRegistry;
 import com.hbm.util.fauxpointtwelve.BlockPos;
 import com.hbm.world.WorldUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
@@ -81,6 +81,8 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 			Random rand = new Random();
 
 			if(worldObj.isRemote) {
+				EntityPlayer player = MainRegistry.proxy.me();
+
 				if(chargetime <= 0 || chargetime <= 1000) {
 					chargetime += 1;
 					flashd = 0;
@@ -89,7 +91,7 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 					flashd = Math.min(100.0f, flashd + 0.3f * (100.0f - flashd) * 0.15f);
 
 					if(flashd <= 5) {
-						Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
+						player.playSound("hbm:misc.fireflash", 10F, 1F);
 					}
 
 					if(flashd >= 100) {
@@ -98,7 +100,7 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 				}
 
 				if(chargetime == 285) {
-					Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
+					player.playSound("hbm:misc.impact", 10F, 1F);
 				}
 
 				if(chargetime >= 300 && chargetime <= 430) {
@@ -135,7 +137,7 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 
 				if(altitude >= 400) {
 					altitude = 0;
-					randPos = Minecraft.getMinecraft().theWorld.rand.nextFloat();
+					randPos = worldObj.rand.nextFloat();
 				}
 
 				for(Meteor meteor : meteors) {
@@ -150,7 +152,6 @@ public class WorldProviderThatmo extends WorldProviderCelestial {
 					smoke.update();
 				}
 
-				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				if(rand.nextInt(1) == 0) {
 					Meteor meteor = new Meteor((player.posX + rand.nextInt(16000)) - 8000, 2017, (player.posZ + rand.nextInt(16000)) - 8000);
 					meteors.add(meteor);

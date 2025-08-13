@@ -15,6 +15,7 @@ import com.hbm.handler.ImpactWorldHandler;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.FluidStack;
 import com.hbm.inventory.fluid.Fluids;
+import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.saveddata.satellites.SatelliteRailgun;
@@ -94,7 +95,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 					SatelliteRailgun war = (SatelliteRailgun) entry.getValue();
 
 					if(war.getInterp() >= 1 && war.interp <= 9) {
-						Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.fireflash", 10F, 1F);
+						MainRegistry.proxy.me().playSound("hbm:misc.fireflash", 10F, 1F);
 					}
 				}
 			}

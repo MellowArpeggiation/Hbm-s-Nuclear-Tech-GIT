@@ -6,16 +6,11 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 import com.hbm.main.StructureManager;
+import com.hbm.world.gen.component.Component.ConcreteBricks;
 import com.hbm.world.gen.nbt.JigsawPiece;
 import com.hbm.world.gen.nbt.JigsawPool;
 import com.hbm.world.gen.nbt.NBTStructure;
-import com.hbm.world.gen.nbt.NBTStructure.JigsawConnection;
-import com.hbm.world.gen.nbt.NBTStructure.Component;
-import com.hbm.world.gen.nbt.NBTStructure.Start;
 import com.hbm.world.gen.nbt.SpawnCondition;
-import com.hbm.world.gen.nbt.NBTStructure.GenStructure;
-
-import com.hbm.world.gen.component.Component.ConcreteBricks;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;

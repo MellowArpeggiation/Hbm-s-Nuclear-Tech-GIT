@@ -2,11 +2,11 @@ package com.hbm.dim.trait;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.hbm.dim.CelestialBody;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
@@ -51,10 +51,11 @@ public class CBT_War extends CelestialBodyTrait {
 		//currently kind of temp, there might be a better way to generalize this
 		if(projectile.getTravel() <= 0) {
 			for(int j = 0; j < amount; j++) {
-				float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat() * 160 - 80;
-				float randy = Minecraft.getMinecraft().theWorld.rand.nextFloat() * 90 - 80;
+				Random rand = new Random();
+				float randX = rand.nextFloat() * 160 - 80;
+				float randY = rand.nextFloat() * 90 - 80;
 
-				this.launchProjectile(Math.abs(20 + j * 10), projectile.getSize(), projectile.getDamage(), (float) (projectile.getTranslateX()), projectile.getTranslateY() - randy * j, projectile.getTranslateZ() + rand * j, type, projectile.getTarget());
+				this.launchProjectile(Math.abs(20 + j * 10), projectile.getSize(), projectile.getDamage(), (float) (projectile.getTranslateX()), projectile.getTranslateY() - randY * j, projectile.getTranslateZ() + randX * j, type, projectile.getTarget());
 				projectile.GUIangle = projectile.GUIangle;
 			}
 

@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.function.Predicate;
 
 import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.handler.atmosphere.IPlantableBreathing;
 import com.hbm.items.ItemEnums.EnumTarType;
 import com.hbm.items.ModItems;
 
@@ -21,7 +22,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class BlockCrop extends BlockBush implements IGrowable {
+public class BlockCrop extends BlockBush implements IGrowable, IPlantableBreathing {
 
 	protected int maxGrowthStage = 7;
 	protected Block soilBlock;
@@ -46,6 +47,7 @@ public class BlockCrop extends BlockBush implements IGrowable {
 		this.canHydro = canHydro;
 	}
 
+	@Override
 	public boolean canBreathe(CBT_Atmosphere atmosphere) {
 		return this.atmospherePredicate.test(atmosphere);
 	}

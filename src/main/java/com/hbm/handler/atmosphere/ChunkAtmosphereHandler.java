@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.hbm.blocks.BlockCrop;
-import com.hbm.blocks.BlockNTSapling;
 import com.hbm.config.GeneralConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.orbit.WorldProviderOrbit;
@@ -210,10 +208,8 @@ public class ChunkAtmosphereHandler {
 			canExist = hasLiquidPressure(atmosphere);
 		} else if(requiresCO2) {
 			// TODO: Make plants rely on CO2 once CO2 is more readily available (via natural gas most likely)
-			if(block instanceof BlockCrop) {
-				canExist = ((BlockCrop) block).canBreathe(atmosphere);
-			} else if(block instanceof BlockNTSapling) {
-				canExist = !(atmosphere == null || (!atmosphere.hasFluid(Fluids.TEKTOAIR, 0.1) && !atmosphere.hasFluid(Fluids.CHLORINE, 0.1)));
+			if(block instanceof IPlantableBreathing) {
+				canExist = ((IPlantableBreathing) block).canBreathe(atmosphere);
 			} else {
 				canExist = !(atmosphere == null || (!atmosphere.hasFluid(Fluids.OXYGEN, 0.01) && !atmosphere.hasFluid(Fluids.AIR, 0.1)));
 			}

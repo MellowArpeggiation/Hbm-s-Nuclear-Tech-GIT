@@ -5,6 +5,9 @@ import java.util.Locale;
 import java.util.Random;
 
 import com.hbm.dim.tekto.TTree;
+import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.handler.atmosphere.IPlantableBreathing;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.lib.RefStrings;
 
 import cpw.mods.fml.relauncher.Side;
@@ -21,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class BlockNTSapling extends BlockSapling implements IBlockMulti {
+public class BlockNTSapling extends BlockSapling implements IBlockMulti, IPlantableBreathing {
 
 	public static enum EnumSapling {
 		VINYL,
@@ -32,6 +35,11 @@ public class BlockNTSapling extends BlockSapling implements IBlockMulti {
 
 	public BlockNTSapling() {
 		super();
+	}
+
+	@Override
+	public boolean canBreathe(CBT_Atmosphere atmosphere) {
+		return atmosphere != null && (atmosphere.hasFluid(Fluids.TEKTOAIR, 0.1) || atmosphere.hasFluid(Fluids.CHLORINE, 0.1));
 	}
 
 	@Override
