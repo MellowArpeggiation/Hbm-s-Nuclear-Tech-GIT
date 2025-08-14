@@ -1,5 +1,11 @@
 package com.hbm.inventory.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -11,19 +17,13 @@ import com.hbm.inventory.container.ContainerStardar;
 import com.hbm.items.ItemVOTVdrive;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.toserver.NBTControlPacket;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityMachineStardar;
 import com.hbm.util.i18n.I18nUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import org.lwjgl.input.Keyboard;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.Tessellator;
@@ -110,7 +110,7 @@ public class GUIMachineStardar extends GuiInfoContainer {
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		pushScissor(9, 9, 158, 108);
 
-		if(star.radarMode != true) {
+		if(!star.radarMode) {
 			if(!Mouse.isButtonDown(0)) {
 				velocityX *= 0.85;
 				velocityY *= 0.85;
@@ -119,53 +119,53 @@ public class GUIMachineStardar extends GuiInfoContainer {
 				starX = MathHelper.clamp_float(starX, -256 + 158, 256);
 				starY = MathHelper.clamp_float(starY, -256 + 108, 256);
 			}
-	
+
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 				starY++;
 			}
-	
+
 			if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
 				starY--;
 			}
-	
+
 			if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
 				starX++;
 			}
-	
+
 			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
 				starX--;
 			}
-	
+
 			if(star.heightmap == null) {
 				Minecraft.getMinecraft().getTextureManager().bindTexture(nightTexture);
 				drawTexturedModalRect(guiLeft, guiTop, (int) starX * -1, (int) starY * -1, 256, 256);
-	
+
 				Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-	
+
 				for(POI peepee : pList) {
 					int px = (int) (guiLeft + starX + peepee.offsetX);
 					int py = (int) (guiTop + starY + peepee.offsetY);
-	
+
 					drawTexturedModalRect(px, py, xSize + peepee.body.getProcessingLevel(currentBody) * 8, 0, 8, 8);
 				}
 			} else {
 				if(star.updateHeightmap) {
 					for(int i = 0; i < star.heightmap.length; i++) {
 						int h = star.heightmap[i] % 16 * 16;
-	
+
 						int r = 0;
 						int g = h;
 						int b = 0;
 						int a = 255;
-	
+
 						groundColors[i] = a << 24 | r << 16 | g << 8 | b;
 					}
-	
+
 					groundTexture.updateDynamicTexture();
-	
+
 					star.updateHeightmap = false;
 				}
-	
+
 				mc.getTextureManager().bindTexture(groundMap);
 				func_146110_a(guiLeft, guiTop, (int) starX * -1 - 256 - 9, (int) starY * -1 - 256 - 9, 256, 256, 512, 512);
 			}
@@ -181,74 +181,70 @@ public class GUIMachineStardar extends GuiInfoContainer {
 			}
 			Minecraft.getMinecraft().getTextureManager().bindTexture(nightTexture);
 			drawTexturedModalRect(guiLeft, guiTop, (int) starX * -1, (int) starY * -1, 256, 256);
-			
+
 			if(CelestialBody.getBody(star.getWorldObj()).hasTrait(CBT_War.class)) {
 				CBT_War wardat = CelestialBody.getTrait(star.getWorldObj(), CBT_War.class);
-			        for (int i = 0; i < wardat.getProjectiles().size(); i++) {
-			            CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
-			            int projvel = (int) projectile.getTravel();
+					for (int i = 0; i < wardat.getProjectiles().size(); i++) {
+						CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
+						int projvel = (int) projectile.getTravel();
 						Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 
-				        float randomAngle = projectile.GUIangle;
-				        float offsetX = (float) Math.cos(Math.toRadians(randomAngle)) * projvel;
-				        float offsetY = (float) Math.sin(Math.toRadians(randomAngle)) * projvel;
+						float randomAngle = projectile.GUIangle;
+						float offsetX = (float) Math.cos(Math.toRadians(randomAngle)) * projvel;
+						float offsetY = (float) Math.sin(Math.toRadians(randomAngle)) * projvel;
 
-				        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+						Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 
-				        long currentTime = System.currentTimeMillis();
+						long currentTime = System.currentTimeMillis();
 
-				        if (currentTime % 300 < 120) { 
-				            drawTexturedModalRect(
-				                (int) (guiLeft + starX + offsetX + 85),  
-				                (int) (guiTop + starY + offsetY + 60),
-				                xSize + 1 * 44, 0, 8, 8
-				            );
-				        }
-				    }
+						if (currentTime % 300 < 120) {
+							drawTexturedModalRect(
+								(int) (guiLeft + starX + offsetX + 85),
+								(int) (guiTop + starY + offsetY + 60),
+								xSize + 1 * 44, 0, 8, 8
+							);
+						}
+					}
 				}
-			
+
 			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
+				float radius = 20 + (entry.getKey() / 1000);
+				float initialAngle = (entry.getKey() / 1000) * 10f;
 
-			    float radius = 20 + (entry.getKey() / 1000);  
-			    float initialAngle = (entry.getKey() / 1000) * 10f;
-			   
-			    long currentTime = System.currentTimeMillis();
-			    
-			    
-			    float angle = ((currentTime / 80) % 360 + initialAngle) % 360; 
-			    
-			    
-			    float offsetX = (float) Math.cos(Math.toRadians(angle)) * radius;
-			    float offsetY = (float) Math.sin(Math.toRadians(angle)) * radius;
+				long currentTime = System.currentTimeMillis();
 
-			    Minecraft.getMinecraft().getTextureManager().bindTexture(texture); 
+				float angle = ((currentTime / 80) % 360 + initialAngle) % 360;
 
-			    drawTexturedModalRect(
-			        (int) (guiLeft + starX + offsetX + 85), 
-			        (int) (guiTop + starY + offsetY + 60),  
-			        xSize + 1 * 8, 0, 8, 8  
-			    );
-			
+				float offsetX = (float) Math.cos(Math.toRadians(angle)) * radius;
+				float offsetY = (float) Math.sin(Math.toRadians(angle)) * radius;
+
+				Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+
+				drawTexturedModalRect(
+					(int) (guiLeft + starX + offsetX + 85),
+					(int) (guiTop + starY + offsetY + 60),
+					xSize + 1 * 8, 0, 8, 8
+				);
 			}
 
-            GL11.glPushMatrix();
+			GL11.glPushMatrix();
 
 			Minecraft.getMinecraft().getTextureManager().bindTexture(CelestialBody.getBody(star.getWorldObj()).texture);
 
-            Tessellator tessellator = Tessellator.instance;
-            tessellator.startDrawingQuads();
-            int offsetX = 85; 
-            int offsetY = 60;  
-            
-            tessellator.addVertexWithUV(guiLeft + starX + offsetX - 5, guiTop + starY + offsetY + 11, 0, 0, 1); 
-            tessellator.addVertexWithUV(guiLeft + starX + offsetX + 11, guiTop + starY + offsetY + 11, 0, 1, 1); 
-            tessellator.addVertexWithUV(guiLeft + starX + offsetX + 11, guiTop + starY + offsetY - 5, 0, 1, 0); 
-            tessellator.addVertexWithUV(guiLeft + starX + offsetX - 5, guiTop + starY + offsetY - 5, 0, 0, 0);  
+			Tessellator tessellator = Tessellator.instance;
+			tessellator.startDrawingQuads();
+			int offsetX = 85;
+			int offsetY = 60;
 
-            tessellator.draw();
-            
-            GL11.glPopMatrix();
-            
+			tessellator.addVertexWithUV(guiLeft + starX + offsetX - 5, guiTop + starY + offsetY + 11, 0, 0, 1);
+			tessellator.addVertexWithUV(guiLeft + starX + offsetX + 11, guiTop + starY + offsetY + 11, 0, 1, 1);
+			tessellator.addVertexWithUV(guiLeft + starX + offsetX + 11, guiTop + starY + offsetY - 5, 0, 1, 0);
+			tessellator.addVertexWithUV(guiLeft + starX + offsetX - 5, guiTop + starY + offsetY - 5, 0, 0, 0);
+
+			tessellator.draw();
+
+			GL11.glPopMatrix();
+
 		}
 		popScissor();
 	}
@@ -256,36 +252,14 @@ public class GUIMachineStardar extends GuiInfoContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mx, int my) {
 		ItemStack slotStack = inventorySlots.getSlot(0).getStack();
-		if(star.radarMode) {
-		    for (Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
 
-			    float radius = 20 + (entry.getKey() / 1000);  
-			    float initialAngle = (entry.getKey() / 1000) * 10f;
-			   
-			    long currentTime = System.currentTimeMillis();
-			    
-			    
-			    float angle = ((currentTime / 80) % 360 + initialAngle) % 360; 
-			    
-			    
-			    float offsetX = (float) Math.cos(Math.toRadians(angle)) * radius;
-			    float offsetY = (float) Math.sin(Math.toRadians(angle)) * radius;
-
-		        int satX = (int) (guiLeft + starX + offsetX - 65); 
-		        int satY = (int) (guiTop + starY + offsetY + 55); 
-
-		        //if (checkClick(mx, my, satX - 4, satY - 4, 16, 16)) {
-					//drawCustomInfoStat(mx - guiLeft, my - guiTop, satX - 2, satY - 2, 12, 12, satX + 8, satY + 10, I18nUtil.resolveKey(entry.getKey().toString()));
-
-		        //}
-		    }	
-		}else {
+		if(!star.radarMode) {
 			if(checkClick(mx, my, 9, 9, 158, 108)) {
 				if(star.heightmap == null) {
 					for(POI poi : pList) {
 						int px = (int) (starX + poi.offsetX);
 						int py = (int) (starY + poi.offsetY);
-			
+
 						// Has a small buffer area around the POI to improve click targeting
 						drawCustomInfoStat(mx - guiLeft, my - guiTop, px - 2, py - 2, 12, 12, px + 8, py + 10, I18nUtil.resolveKey("body." + poi.body.name), "Processing Tier: " + poi.body.getProcessingLevel(currentBody));
 					}
@@ -333,8 +307,6 @@ public class GUIMachineStardar extends GuiInfoContainer {
 				}
 			}
 		}
-
-
 	}
 
 	private String landingInfo(int x, int z) {
@@ -428,7 +400,7 @@ public class GUIMachineStardar extends GuiInfoContainer {
 
 			PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(data, star.xCoord, star.yCoord, star.zCoord));
 		}
-		
+
 		// Clicking RAD will activate Orrey Mode
 		if(checkClick(x, y, 129, 123, 18, 18)) {
 			mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));

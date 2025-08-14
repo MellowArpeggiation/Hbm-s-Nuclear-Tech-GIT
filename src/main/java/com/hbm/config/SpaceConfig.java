@@ -153,9 +153,7 @@ public class SpaceConfig {
 		tektoRiverBiome = createConfigBiome(config, CATEGORY_BIOME, "16.29_tektoRiverBiome", "Tekto River Biome ID", tektoRiverBiome + defaultBiomeOffset);
 		tektoForestBiome = createConfigBiome(config, CATEGORY_BIOME, "16.30_tektoForestBiome", "Tekto Forest Biome ID", tektoForestBiome + defaultBiomeOffset);
 		tektoVinylIslandBiome = createConfigBiome(config, CATEGORY_BIOME, "16.31_tektoVinylSandsBiome", "Tekto Vinyl Sands Biome ID", tektoVinylIslandBiome + defaultBiomeOffset);
-
-		// TODO: Uncomment once thatmo is added proper
-		// thatmoBiome = CommonConfig.createConfigInt(config, CATEGORY_BIOME, "16.31_thatmoBiome", "Thatmo Biome ID", thatmoBiome + defaultBiomeOffset);
+		thatmoBiome = createConfigBiome(config, CATEGORY_BIOME, "16.32_thatmoBiome", "Thatmo Biome ID", thatmoBiome + defaultBiomeOffset);
 	}
 
 	private static HashMap<Integer, String> registeredIds = new HashMap<>();

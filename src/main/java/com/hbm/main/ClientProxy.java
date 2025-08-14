@@ -71,7 +71,6 @@ import com.hbm.render.item.block.ItemRenderBlock;
 import com.hbm.render.item.block.ItemRenderDecoBlock;
 import com.hbm.render.item.weapon.*;
 import com.hbm.render.loader.HmfModelLoader;
-import com.hbm.render.model.ModelEel;
 import com.hbm.render.model.ModelDepthSquid;
 import com.hbm.render.model.ModelMoonCow;
 import com.hbm.render.model.ModelPigeon;
@@ -1062,7 +1061,7 @@ public class ClientProxy extends ServerProxy {
 				Color color = new Color(data.getInteger("color"));
 				fx.setCustomColor(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
 			}
-			fx.setAtmosphericPressure(pressure);
+			if(!data.hasKey("skipPressure")) fx.setAtmosphericPressure(pressure);
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 		}
 

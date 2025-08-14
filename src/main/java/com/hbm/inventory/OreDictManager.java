@@ -26,9 +26,6 @@ import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.inventory.material.NTMMaterial.SmeltingBehavior;
-import com.hbm.inventory.recipes.GasCentrifugeRecipes;
-import com.hbm.inventory.recipes.MixerRecipes;
-import com.hbm.inventory.recipes.MixerRecipes.MixerRecipe;
 import com.hbm.items.ModItems;
 import com.hbm.items.ItemEnums.EnumAshType;
 import com.hbm.items.ItemEnums.EnumBriquetteType;
@@ -470,10 +467,10 @@ public class OreDictManager {
 		POLYMER																.ingot(ingot_polymer)												.dust(powder_polymer)											.block(block_polymer);
 		BAKELITE															.ingot(ingot_bakelite)												.dust(powder_bakelite)											.block(block_bakelite);
 		LATEX									.gem(ball_resin)			.ingot(ingot_biorubber);
-		RUBBER																.ingot(ingot_rubber)																												.block(block_rubber);
+		RUBBER																.ingot(ingot_rubber)												.dust(powder_rubber)											.block(block_rubber);
 		//PET																	.ingot(ingot_pet);
 		PC																	.ingot(ingot_pc);
-		PVC																	.ingot(ingot_pvc);
+		PVC																	.ingot(ingot_pvc)													.dust(powder_pvc);
 		SEMTEX																.ingot(ingot_semtex)																												.block(block_semtex);
 		MAGTUNG																.ingot(ingot_magnetized_tungsten)									.dust(powder_magnetized_tungsten)								.block(block_magnetized_tungsten);
 		CMB																	.ingot(ingot_combine_steel)											.dust(powder_combine_steel)		.plate(plate_combine_steel)		.block(block_combine_steel);
@@ -736,6 +733,8 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_SAND, laythe_silt);
 		OreDictionary.registerOre(KEY_SAND, eve_silt);
 		OreDictionary.registerOre(KEY_SAND, moon_turf);
+		OreDictionary.registerOre(KEY_SAND, rubber_silt);
+		OreDictionary.registerOre(KEY_SAND, vinyl_sand);
 
 		OreDictionary.registerOre(KEY_STONE, duna_rock);
 		OreDictionary.registerOre(KEY_COBBLESTONE, duna_cobble);
@@ -749,6 +748,7 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_COBBLESTONE, minmus_regolith);
 		OreDictionary.registerOre(KEY_STONE, minmus_smooth);
 		OreDictionary.registerOre(KEY_STONE, minmus_stone);
+
 		OreDictionary.registerOre(KEY_STICK, stick_pvc);
 
 		for(NTMMaterial mat : Mats.orderedList) {

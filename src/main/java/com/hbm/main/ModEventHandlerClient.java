@@ -608,6 +608,10 @@ public class ModEventHandlerClient {
 			if(armor != null && armor.getItem() instanceof JetpackBase) {
 				((ItemArmorMod)armor.getItem()).modRender(event, armor);
 			}
+
+			if(armor != null && armor.getItem() instanceof ItemModHeavyBoots) {
+				((ItemModHeavyBoots)armor.getItem()).armorRender(event, armor);
+			}
 		}
 
 		if(player.getCurrentArmor(2) == null && !player.isPotionActive(Potion.invisibility)) {
@@ -1092,16 +1096,16 @@ public class ModEventHandlerClient {
 				for(int i = 1; i < 4; i++) if(player.stepHeight == i + discriminator) player.stepHeight = defaultStepSize;
 			}
 		}
-		
+
 		if (!mc.isGamePaused() && event.phase == Phase.END) {
 			for(CelestialBody body : CelestialBody.getAllBodies()) {
 				if(SolarSystemWorldSavedData.getClientTraits(body.name) != null) {
 				for(CelestialBodyTrait trait : SolarSystemWorldSavedData.getClientTraits(body.name).values()) {
-						trait.update(true);		
+						trait.update(true);
 					}
 				}
 			}
-			
+
 		    CBT_War war = CelestialBody.getTrait(mc.theWorld, CBT_War.class);
 
 		    if (war != null) {
@@ -1114,7 +1118,7 @@ public class ModEventHandlerClient {
 		            }
 		        }
 		    }
-		
+
 		if(event.phase == Phase.END) {
 
 			if(ClientConfig.GUN_VISUAL_RECOIL.get()) {

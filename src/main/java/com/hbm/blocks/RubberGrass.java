@@ -2,37 +2,24 @@ package com.hbm.blocks;
 
 import java.util.Random;
 
-import com.hbm.config.GeneralConfig;
-import com.hbm.config.RadiationConfig;
 import com.hbm.lib.RefStrings;
-import com.hbm.potion.HbmPotion;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockMushroom;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidBase;
 
 public class RubberGrass extends Block {
-	
+
 	@SideOnly(Side.CLIENT)
 	private IIcon iconTop;
 	@SideOnly(Side.CLIENT)
@@ -59,7 +46,6 @@ public class RubberGrass extends Block {
 
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-		
 		return Item.getItemFromBlock(this);
 	}
 
@@ -67,10 +53,9 @@ public class RubberGrass extends Block {
 	public int quantityDropped(Random p_149745_1_) {
 		return 1;
 	}
-	
+
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-		
 		if(this == ModBlocks.rubber_grass) {
 			Block b = world.getBlock(x, y + 1, z);
 			if(b instanceof BlockLiquid || b instanceof BlockFluidBase || b.isNormalCube()) {
@@ -78,10 +63,9 @@ public class RubberGrass extends Block {
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean canSustainPlant(IBlockAccess world, int x, int y, int z, ForgeDirection direction, IPlantable plantable) {
-		
 		return false;
 	}
 

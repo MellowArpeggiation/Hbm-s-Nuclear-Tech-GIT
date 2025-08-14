@@ -1,17 +1,19 @@
 package com.hbm.blocks;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import com.hbm.dim.tekto.TTree;
+import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.handler.atmosphere.IPlantableBreathing;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.MainRegistry;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,22 +24,35 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class BlockNTSapling extends BlockSapling {
+public class BlockNTSapling extends BlockSapling implements IBlockMulti, IPlantableBreathing {
 
-	private static String[] saplings = new String[] { "vinyl", "pvc" };
+	public static enum EnumSapling {
+		VINYL,
+		PVC,
+	}
 
 	private IIcon[] textures;
 
 	public BlockNTSapling() {
 		super();
+	}
 
+	@Override
+	public boolean canBreathe(CBT_Atmosphere atmosphere) {
+		return atmosphere != null && (atmosphere.hasFluid(Fluids.TEKTOAIR, 0.1) || atmosphere.hasFluid(Fluids.CHLORINE, 0.1));
+	}
+
+	@Override
+	protected boolean canPlaceBlockOn(Block block) {
+		return block == ModBlocks.rubber_silt || block == ModBlocks.rubber_grass || block == ModBlocks.rubber_farmland;
 	}
 
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		textures = new IIcon[this.saplings.length];
-		for (int i = 0; i < this.saplings.length; i++) {
-			textures[i] = iconRegister.registerIcon(RefStrings.MODID + ":sapling_" + this.saplings[i]);
+		textures = new IIcon[EnumSapling.values().length];
+		for(int i = 0; i < EnumSapling.values().length; i++) {
+			EnumSapling sapling = EnumSapling.values()[i];
+			textures[i] = iconRegister.registerIcon(RefStrings.MODID + ":sapling_" + sapling.name().toLowerCase(Locale.US));
 		}
 	}
 
@@ -49,33 +64,27 @@ public class BlockNTSapling extends BlockSapling {
 
 	@Override
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-		for (int i = 0; i < this.saplings.length; i++) {
+		for(int i = 0; i < EnumSapling.values().length; i++) {
 			list.add(new ItemStack(item, 1, i));
 		}
 	}
 
 	@Override
 	public boolean canPlaceBlockOnSide(World world, int x, int y, int z, int side) {
-		return this.isValidPosition(world, x, y, z, -1);
-	}
-
-	public boolean isValidPosition(World world, int x, int y, int z, int metadata) {
 		Block soil = world.getBlock(x, y - 1, z);
-		return soil == ModBlocks.rubber_grass || soil == ModBlocks.rubber_silt
-				|| soil.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this);
+		return soil == ModBlocks.rubber_grass || soil == ModBlocks.rubber_silt || soil.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this);
 	}
 
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
 		Block soil = world.getBlock(x, y - 1, z);
-		return (world.getFullBlockLightValue(x, y, z) >= 8 || world.canBlockSeeTheSky(x, y, z)) && soil != null
-				&& soil.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this);
+		return (world.getFullBlockLightValue(x, y, z) >= 8 || world.canBlockSeeTheSky(x, y, z)) && soil != null && soil.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this);
 	}
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
-		if (!world.isRemote) {
-			if (world.getBlockLightValue(x, y + 1, z) >= 9 && random.nextInt(7) == 0) {
+		if(!world.isRemote) {
+			if(world.getBlockLightValue(x, y + 1, z) >= 9 && random.nextInt(7) == 0) {
 				this.func_149878_d(world, x, y, z, random);
 			}
 		}
@@ -84,10 +93,9 @@ public class BlockNTSapling extends BlockSapling {
 	@Override
 	public void func_149878_d(World world, int x, int y, int z, Random rand) {
 		int meta = world.getBlockMetadata(x, y, z);
-		WorldGenAbstractTree treeGen = new TTree(true, 3, 4, 6, 3, 2, false, ModBlocks.vinyl_log,
-				ModBlocks.pet_leaves);
+		WorldGenAbstractTree treeGen = new TTree(true, 3, 4, 6, 3, 2, false, ModBlocks.vinyl_log, ModBlocks.pet_leaves);
 
-		switch (meta) {
+		switch(meta) {
 		case 0:
 			treeGen = new TTree(false, 2, 4, 5, 3, 2, false, ModBlocks.vinyl_log, ModBlocks.pet_leaves);
 			break;
@@ -96,7 +104,7 @@ public class BlockNTSapling extends BlockSapling {
 			break;
 		}
 
-		if (treeGen != null) {
+		if(treeGen != null) {
 			world.setBlockToAir(x, y, z);
 			if (!treeGen.generate(world, rand, x, y, z)) {
 				world.setBlock(x, y, z, this, meta, 2);
@@ -122,6 +130,17 @@ public class BlockNTSapling extends BlockSapling {
 	@Override
 	public void func_149853_b(World world, Random random, int x, int y, int z) {
 		this.func_149878_d(world, x, y, z, random);
+	}
+
+	@Override
+	public int getSubCount() {
+		return EnumSapling.values().length;
+	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+		EnumSapling sapling = EnumSapling.values()[stack.getItemDamage()];
+		return super.getUnlocalizedName() + "_" + sapling.name().toLowerCase(Locale.US);
 	}
 
 }
