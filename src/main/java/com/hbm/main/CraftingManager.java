@@ -213,12 +213,16 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModItems.turbine_tungsten, 1), new Object[] { "BBB", "BSB", "BBB", 'B', ModItems.blade_tungsten, 'S', DURA.ingot() });
 		addRecipeAuto(new ItemStack(ModItems.ring_starmetal, 1), new Object[] { " S ", "S S", " S ", 'S', STAR.ingot() });
 		addRecipeAuto(new ItemStack(ModItems.flywheel_beryllium, 1), new Object[] { "IBI", "BTB", "IBI", 'B', BE.block(), 'I', IRON.plateCast(), 'T', DURA.pipe() });
-		
+
 		addShapelessAuto(new ItemStack(ModItems.cmug_empty, 1), new Object[] {Items.clay_ball });
 		addRecipeAuto(new ItemStack(ModItems.glass_empty, 1), new Object[] { "G G", "GGG", " G ", 'G', Blocks.glass });
 		addShapelessAuto(new ItemStack(ModItems.teacup_empty, 1), new Object[] {Items.clay_ball, ModItems.powder_calcium});
-		addShapelessAuto(new ItemStack(ModBlocks.vinyl_planks, 1), new Object[] {ModBlocks.vinyl_log});
-		addShapelessAuto(new ItemStack(ModBlocks.pvc_planks, 1), new Object[] {ModBlocks.pvc_log});
+
+		addRecipeAuto(new ItemStack(ModItems.stick_vinyl, 3), new Object[] { "L", "L", 'L', ModBlocks.vinyl_planks });
+		addRecipeAuto(new ItemStack(ModItems.stick_pvc, 3), new Object[] { "L", "L", 'L', ModBlocks.pvc_planks });
+
+		addShapelessAuto(new ItemStack(ModBlocks.vinyl_planks, 4), new ItemStack(ModBlocks.vinyl_log));
+		addShapelessAuto(new ItemStack(ModBlocks.pvc_planks, 4), new ItemStack(ModBlocks.pvc_log));
 
 		addShapelessAuto(new ItemStack(ModItems.powder_poison), new Object[] { DictFrame.fromOne(ModBlocks.plant_flower, EnumFlowerType.NIGHTSHADE) });
 		addShapelessAuto(new ItemStack(ModItems.syringe_metal_stimpak), new Object[] { ModItems.syringe_metal_empty, Items.carrot, DictFrame.fromOne(ModBlocks.plant_flower, EnumFlowerType.FOXGLOVE) }); //xander root and broc flower
@@ -228,7 +232,6 @@ public class CraftingManager {
 		addShapelessAuto(new ItemStack(Items.string, 3), new Object[] { DictFrame.fromOne(ModBlocks.plant_flower, EnumFlowerType.WEED) });
 		addRecipeAuto(new ItemStack(Items.paper, 3), new Object[] { "SSS", 'S', ModItems.powder_sawdust });
 		addRecipeAuto(new ItemStack(Items.paper, 3), new Object[] { "LL", 'L', ModBlocks.vinyl_planks });
-		addRecipeAuto(new ItemStack(ModItems.stick_pvc, 3), new Object[] { "LL", 'L', ModBlocks.pvc_planks });
 
 		addRecipeAuto(new ItemStack(ModItems.wrench, 1), new Object[] { " S ", " IS", "I  ", 'S', STEEL.ingot(), 'I', IRON.ingot() });
 		addRecipeAuto(new ItemStack(ModItems.wrench_flipped, 1), new Object[] { "S", "D", "W", 'S', Items.iron_sword, 'D', ModItems.ducttape, 'W', ModItems.wrench });
@@ -1201,8 +1204,6 @@ public class CraftingManager {
 
 		addRecipeAuto(new ItemStack(ModBlocks.plushie, 1, PlushieType.YOMI.ordinal()), "LCR", 'L', "cropCarrot", 'C', ModItems.rag, 'R', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.VACUUM_TUBE));
 		addRecipeAuto(new ItemStack(ModBlocks.plushie, 1, PlushieType.NUMBERNINE.ordinal()), " C ", "LCR", " C ", 'L', ModItems.cigarette, 'C', ModItems.rag, 'R', COAL.gem());
-
-		addShapelessAuto(new ItemStack(ModItems.stick_pvc, 16), new ItemStack(ModBlocks.pvc_log));
 	}
 
 	public static void crumple() {

@@ -3171,8 +3171,8 @@ public class ModBlocks {
 
 		//Tiles
 		GameRegistry.registerBlock(vinyl_tile, ItemBlockBlastInfo.class, vinyl_tile.getUnlocalizedName()); //i would rather die than dip into fucking blocks with subtypes again
-		GameRegistry.registerBlock(vinyl_planks, ItemBlockBlastInfo.class, vinyl_planks.getUnlocalizedName()); 
-		GameRegistry.registerBlock(pvc_planks, ItemBlockBlastInfo.class, pvc_planks.getUnlocalizedName()); 
+		GameRegistry.registerBlock(vinyl_planks, vinyl_planks.getUnlocalizedName());
+		GameRegistry.registerBlock(pvc_planks, pvc_planks.getUnlocalizedName());
 
 		GameRegistry.registerBlock(tile_lab, tile_lab.getUnlocalizedName());
 		GameRegistry.registerBlock(tile_lab_cracked, tile_lab_cracked.getUnlocalizedName());

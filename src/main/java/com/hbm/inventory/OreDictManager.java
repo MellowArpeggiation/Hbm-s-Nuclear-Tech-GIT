@@ -749,8 +749,14 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_STONE, minmus_smooth);
 		OreDictionary.registerOre(KEY_STONE, minmus_stone);
 
-		OreDictionary.registerOre(KEY_STICK, stick_pvc);
+		OreDictionary.registerOre(KEY_LOG, vinyl_log);
+		OreDictionary.registerOre(KEY_LOG, pvc_log);
+
+		OreDictionary.registerOre(KEY_PLANKS, vinyl_planks);
+		OreDictionary.registerOre(KEY_PLANKS, pvc_planks);
+
 		OreDictionary.registerOre(KEY_STICK, stick_vinyl);
+		OreDictionary.registerOre(KEY_STICK, stick_pvc);
 
 		for(NTMMaterial mat : Mats.orderedList) {
 			if(mat.autogen.contains(MaterialShapes.FRAGMENT)) {
