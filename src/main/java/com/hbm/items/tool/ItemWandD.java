@@ -2,6 +2,7 @@ package com.hbm.items.tool;
 
 import java.util.List;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.CelestialTeleporter;
@@ -9,19 +10,16 @@ import com.hbm.dim.SolarSystem;
 import com.hbm.dim.orbit.WorldProviderOrbit;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Atmosphere.FluidEntry;
-import com.hbm.dim.trait.CBT_War;
-import com.hbm.dim.trait.CBT_War.Projectile;
-import com.hbm.dim.trait.CBT_War.ProjectileType;
 import com.hbm.dim.trait.CBT_Destroyed;
 import com.hbm.lib.Library;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -71,7 +69,7 @@ public class ItemWandD extends Item {
 					player.addChatMessage(new ChatComponentText("Set teleport target to: " + target.getBody().getUnlocalizedName()));
 				}
 			}
-		} else {
+		} else if(!(world.provider instanceof WorldProviderOrbit)) {
 			if(!player.isSneaking()) {
 				// TESTING: View atmospheric data
 				CBT_Atmosphere atmosphere = CelestialBody.getTrait(world, CBT_Atmosphere.class);
@@ -89,39 +87,32 @@ public class ItemWandD extends Item {
 				if(isVacuum)
 					player.addChatMessage(new ChatComponentText("Atmosphere: NEAR VACUUM"));
 			} else {
+				CelestialBody star = CelestialBody.getStar(world);
 
-				//something broke here....
-				//i might split the war trait and the projectiles trait and have it be its own.
-				//when all projectiles return zero and finish damaging the planet the trait deletes itself
-				//problem right now is that if both planets have war data the projectile list conflates the two
+				if(!star.hasTrait(CBT_Destroyed.class)) {
 
-				/*
-				// TESTING: END OF LIFE
-				//World targetdBody = DimensionManager.getWorld(SpaceConfig.dunaDimension);
-				CelestialBody target = CelestialBody.getBody(SpaceConfig.moonDimension);
-				int dimid = target.dimensionId;
-				if(target.hasTrait(CBT_Destroyed.class)){
-					target.clearTraits();
-				}
-				if(!target.hasTrait(CBT_War.class)) {
 					// TESTING: END OF TIME
-					target.modifyTraits(new CBT_War(100, 0));
-				} else {
-					CBT_War war = target.getTrait(CBT_War.class);
-					if(war != null) {
-						float rand = Minecraft.getMinecraft().theWorld.rand.nextFloat();
-						System.out.println(rand);
-						//war.launchProjectile(100, 20, 1, 28 * rand * 5, 33, 20, ProjectileType.SPLITSHOT);
-						Projectile projectile = new Projectile(100, 20, 50, 28 * rand * 5, 55, 20, ProjectileType.SMALL, dimid);
-						projectile.GUIangle = (int) (rand * 360);
-						war.launchProjectile(projectile);
-						System.out.println(war.health);
+					star.modifyTraits(new CBT_Destroyed());
 
-						player.addChatMessage(new ChatComponentText("projectile launched"));
-					}
+					// TESTING: END OF LIFE
+					CelestialBody.degas(world);
+
+					// GOD
+					// DAMN
+					player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "GOD"));
+					player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "DAMN"));
+					player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "THE"));
+					player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "" + EnumChatFormatting.OBFUSCATED + "SUN"));
+				} else {
+
+					star.clearTraits();
+					CelestialBody.clearTraits(world);
+
+					player.addChatMessage(new ChatComponentText("kidding"));
 				}
-				*/
 			}
+		} else {
+			world.setBlock(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY) - 1, MathHelper.floor_double(player.posZ), ModBlocks.concrete);
 		}
 
 		return stack;
