@@ -1957,7 +1957,7 @@ public class ModBlocks {
 		laythe_coral_block = new BlockEnumMulti(Material.coral, BlockCoral.EnumCoral.class, false, true).setHardness(0.5F).setBlockName("laythe_coral_block").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setBlockTextureName(RefStrings.MODID + ":laythe_coral_block");
 		vine_phosphor = new BlockHangingVine(thick_foliage).setBlockName("vine_phosphor").setCreativeTab(MainRegistry.blockTab).setStepSound(Block.soundTypeGrass).setHardness(0.5F);
 		crop_paraffin = new BlockCrop(ModBlocks.rubber_farmland, (atmosphere) -> atmosphere.hasFluid(Fluids.TEKTOAIR, 0.1) || atmosphere.hasFluid(Fluids.CHLORINE, 0.1), false).setBlockName("crop_paraffin").setStepSound(Block.soundTypeGrass).setHardness(0.0F).setBlockTextureName(RefStrings.MODID + ":paraffin");
-		sapling_pvc = new BlockNTSapling().setBlockName("sapling").setCreativeTab(MainRegistry.partsTab);
+		sapling_pvc = new BlockNTSapling().setBlockName("sapling").setCreativeTab(MainRegistry.blockTab);
 
 		waste_earth = new WasteEarth(Material.ground, true).setBlockName("waste_earth").setStepSound(Block.soundTypeGrass).setCreativeTab(MainRegistry.blockTab).setHardness(0.6F).setBlockTextureName(RefStrings.MODID + ":waste_earth");
 		waste_mycelium = new WasteEarth(Material.ground, true).setBlockName("waste_mycelium").setStepSound(Block.soundTypeGrass).setLightLevel(1F).setCreativeTab(MainRegistry.blockTab).setHardness(0.6F).setBlockTextureName(RefStrings.MODID + ":waste_mycelium_side");
