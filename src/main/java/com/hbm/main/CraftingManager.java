@@ -213,7 +213,7 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModItems.turbine_tungsten, 1), new Object[] { "BBB", "BSB", "BBB", 'B', ModItems.blade_tungsten, 'S', DURA.ingot() });
 		addRecipeAuto(new ItemStack(ModItems.ring_starmetal, 1), new Object[] { " S ", "S S", " S ", 'S', STAR.ingot() });
 		addRecipeAuto(new ItemStack(ModItems.flywheel_beryllium, 1), new Object[] { "IBI", "BTB", "IBI", 'B', BE.block(), 'I', IRON.plateCast(), 'T', DURA.pipe() });
-
+		
 		addShapelessAuto(new ItemStack(ModItems.cmug_empty, 1), new Object[] {Items.clay_ball });
 		addRecipeAuto(new ItemStack(ModItems.glass_empty, 1), new Object[] { "G G", "GGG", " G ", 'G', Blocks.glass });
 		addShapelessAuto(new ItemStack(ModItems.teacup_empty, 1), new Object[] {Items.clay_ball, ModItems.powder_calcium});
@@ -227,6 +227,8 @@ public class CraftingManager {
 		addRecipeAuto(DictFrame.fromOne(ModItems.plant_item, EnumPlantType.ROPE, 4), new Object[] { "W", "W", "W", 'W', DictFrame.fromOne(ModBlocks.plant_flower, EnumFlowerType.WEED) });
 		addShapelessAuto(new ItemStack(Items.string, 3), new Object[] { DictFrame.fromOne(ModBlocks.plant_flower, EnumFlowerType.WEED) });
 		addRecipeAuto(new ItemStack(Items.paper, 3), new Object[] { "SSS", 'S', ModItems.powder_sawdust });
+		addRecipeAuto(new ItemStack(Items.paper, 3), new Object[] { "LL", 'L', ModBlocks.vinyl_planks });
+		addRecipeAuto(new ItemStack(ModItems.stick_pvc, 3), new Object[] { "LL", 'L', ModBlocks.pvc_planks });
 
 		addRecipeAuto(new ItemStack(ModItems.wrench, 1), new Object[] { " S ", " IS", "I  ", 'S', STEEL.ingot(), 'I', IRON.ingot() });
 		addRecipeAuto(new ItemStack(ModItems.wrench_flipped, 1), new Object[] { "S", "D", "W", 'S', Items.iron_sword, 'D', ModItems.ducttape, 'W', ModItems.wrench });

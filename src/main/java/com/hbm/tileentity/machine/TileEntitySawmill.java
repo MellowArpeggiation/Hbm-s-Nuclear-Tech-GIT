@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.projectile.EntitySawblade;
 import com.hbm.handler.threading.PacketThreading;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
@@ -238,6 +239,8 @@ public class TileEntitySawmill extends TileEntityMachineBase {
 
 		if(input == null)
 			return null;
+		
+		Block block = Block.getBlockFromItem(input.getItem());
 
 		craftingInventory.setInventorySlotContents(0, input);
 
@@ -246,7 +249,22 @@ public class TileEntitySawmill extends TileEntityMachineBase {
 		if(input.getItem() == ModItems.stick_pvc) {
 			return new ItemStack(ModItems.dust);
 		}
-
+		if(input.getItem() == ModItems.stick_vinyl) {
+			return new ItemStack(ModItems.dust);
+		}
+		if(block == ModBlocks.vinyl_planks) {
+			return new ItemStack(ModItems.stick_vinyl, 6);
+		}
+		if(block == ModBlocks.pvc_planks) {
+			return new ItemStack(ModItems.stick_vinyl, 6);
+		}
+		
+		if (block == ModBlocks.pvc_log) {
+			    return new ItemStack(ModBlocks.vinyl_planks, 4 * 6 / 4);
+			}
+		if (block == ModBlocks.pvc_log ) {
+			    return new ItemStack(ModBlocks.pvc_planks, 4 * 6 / 4);
+			}
 		if(names.contains("stickWood")) {
 			return new ItemStack(ModItems.powder_sawdust);
 		}
@@ -281,7 +299,12 @@ public class TileEntitySawmill extends TileEntityMachineBase {
 		HashMap<Object, Object[]> recipes = new HashMap<Object, Object[]>();
 
 		recipes.put(new ComparableStack(ModItems.stick_pvc), new ItemStack[] { new ItemStack(ModItems.dust)});
+		recipes.put(new ComparableStack(ModItems.stick_vinyl), new ItemStack[] { new ItemStack(ModItems.dust)});
 
+		recipes.put(new ComparableStack(ModBlocks.pvc_planks), new ItemStack[] { new ItemStack(ModItems.stick_pvc, 6)});
+		recipes.put(new ComparableStack(ModBlocks.vinyl_planks), new ItemStack[] { new ItemStack(ModItems.stick_vinyl, 6)});
+
+		
 		recipes.put(new OreDictStack("logWood"), new ItemStack[] { new ItemStack(Blocks.planks, 6), ItemStackUtil.addTooltipToStack(new ItemStack(ModItems.powder_sawdust), EnumChatFormatting.RED + "50%") });
 		recipes.put(new OreDictStack("plankWood"), new ItemStack[] { new ItemStack(Items.stick, 6), ItemStackUtil.addTooltipToStack(new ItemStack(ModItems.powder_sawdust), EnumChatFormatting.RED + "10%") });
 		recipes.put(new OreDictStack("stickWood"), new ItemStack[] { new ItemStack(ModItems.powder_sawdust) });
