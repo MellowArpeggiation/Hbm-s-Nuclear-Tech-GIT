@@ -45,6 +45,9 @@ import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 
 public abstract class WorldProviderCelestial extends WorldProvider {
 
+	public List<AstroMetric> metrics;
+
+	private double eclipseAmount;
 	private long localTime = -1;
 
 	@Override
@@ -184,9 +187,8 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		return colors;
 	}
 
-	public double eclipseAmount;
-	public List<AstroMetric> metrics;
-
+	// This is called once, at the beginning of every frame
+	// so we use this to memoise expensive calcs
 	@SideOnly(Side.CLIENT)
 	protected void updateSky(float partialTicks) {
 		CelestialBody body = CelestialBody.getBody(worldObj);
@@ -202,7 +204,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		eclipseAmount = getEclipseFactor(metrics, sunSize);
 	}
 
-	private double getEclipseFactor(List<AstroMetric> metrics, double sunSize) {
+	public static double getEclipseFactor(List<AstroMetric> metrics, double sunSize) {
 		double factor = 0;
 
 		// Calculate eclipse
@@ -303,7 +305,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 
 			float[] sunsetFog = calcSunriseSunsetColors(0.25F, 0);
 			if(sunsetFog != null) {
-				double sunsetAmount = eclipseAmount * 0.5F;
+				double sunsetAmount = MathHelper.clamp_double(eclipseAmount * 0.5 - (1 - sun), 0.0, 1.0);
 				color.xCoord = color.xCoord * (1.0F - sunsetAmount) + sunsetFog[0] * sunsetAmount;
 				color.yCoord = color.yCoord * (1.0F - sunsetAmount) + sunsetFog[1] * sunsetAmount;
 				color.zCoord = color.zCoord * (1.0F - sunsetAmount) + sunsetFog[2] * sunsetAmount;
@@ -552,20 +554,25 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 			return 0;
 
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
-		float skyflash = 0;
 
 		float sunBrightness = super.getSunBrightness(par1);
+
+		sunBrightness *= 1 - eclipseAmount * 0.6;
+
+		float dust = ImpactWorldHandler.getDustForClient(worldObj);
+		sunBrightness *= (1 - dust);
+
+
+		// brightness _inside_ of the atmosphere, from effects like lightning or war weapons
+		float insideBrightness = 0;
+
 		for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
 			if (entry instanceof SatelliteWar) {
 				SatelliteWar war = (SatelliteWar) entry.getValue();
 				float flame = war.getInterp();
 				float alpd = 1.0F - Math.min(1.0F, flame / 100);
-				skyflash = alpd;
+				insideBrightness += alpd;
 			}
-		}
-
-		if(atmosphere == null) {
-			return sunBrightness + skyflash;
 		}
 
 		if(CelestialBody.getBody(worldObj).hasTrait(CBT_War.class)) {
@@ -574,17 +581,17 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 				CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
 				float flash = projectile.getFlashtime();
 				if(projectile.getAnimtime() > 0) {
-					skyflash = 100 - flash;
-
-					sunBrightness *= 1 - eclipseAmount * 0.6;
-
-					float dust = ImpactWorldHandler.getDustForClient(worldObj);
-					sunBrightness *= (1 - dust);
+					insideBrightness += 100 - flash;
 				}
 			}
 		}
 
-		return sunBrightness * MathHelper.clamp_float(1.0F - ((float) atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F) + skyflash + skyflash;
+
+		if(atmosphere == null) {
+			return sunBrightness + insideBrightness;
+		}
+
+		return sunBrightness * MathHelper.clamp_float(1.0F - ((float) atmosphere.getPressure() - 1.5F) * 0.2F, 0.25F, 1.0F) + insideBrightness;
 	}
 
 	public float[] getSunColor() {
@@ -756,7 +763,7 @@ public abstract class WorldProviderCelestial extends WorldProvider {
 		if(body.satellites.size() == 0) return 2;
 
 		// Determine difficulty phase from closest moon
-		int phase = Math.round(8 - ((float)SolarSystem.calculateSingleAngle(worldObj, 0, body, body.satellites.get(0)) / 45 + 4));
+		int phase = Math.round(8 - ((float)SolarSystem.calculateSingleAngle(worldObj, body, body.satellites.get(0)) / 45 + 4));
 		if(phase >= 8) return 0;
 		return phase;
 	}
