@@ -67,6 +67,13 @@ public class WorldProviderOrbit extends WorldProvider {
 	@Override
 	public void updateWeather() {
 		isHellWorld = !worldObj.isRemote && !Loader.isModLoaded(Compat.MOD_COFH);
+
+		worldObj.getWorldInfo().setRainTime(0);
+		worldObj.getWorldInfo().setRaining(false);
+		worldObj.getWorldInfo().setThunderTime(0);
+		worldObj.getWorldInfo().setThundering(false);
+		worldObj.rainingStrength = 0.0F;
+		worldObj.thunderingStrength = 0.0F;
 	}
 
 	@Override
