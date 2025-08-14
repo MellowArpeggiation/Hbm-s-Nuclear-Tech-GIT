@@ -1,27 +1,20 @@
 ## Added
-* More processing recipes for PVC and vinyl logs
-    * PVC sticks now craftable
-    * New powders for rubber and PVC
-* Config for Thatmo biome (unreleased but registered, so we need it to fix conflicts)
+* Vinyl and PVC planks
+* Vinyl sticks
+* A bunch more crafting recipes for vinyl and PVC logs
 
 ## Changed
-* Sawmill will turn PVC sticks into regular dust instead of sawdust
-* Update CN translation
+* Heavy boots can now be worn on their own
+    * Has a player model when not attached to armor
+* Updated Russian translation
+* Tekto logs now oredicted as regular logs
 
 ## Fixed
-* Missing sapling localization
-* DCM geysers zap you like the Eve lightning volcanoes
-* DCM geyser particles fly off in the wrong direction
-* Saplings breaking when planted on valid soil
-* Tekto crops growing in CO2 hydrobays
-* Missing Tekto silt/sand oredict
-* Pumps not working on Tekto silt/sand
-* Artillery spewing shells every tick
-* Scutterblood can now be coked (actually fits into the 16,000mB limit now)
-* Rubber leaves not decaying
-* Rubber leaves not shearable
-* Rubber leaves not vein minable
-* Crash with processed drives in VAB
-* Non-crop plants able to be grown in vacuums and invalid atmospheres
-* Tekto plants won't grow on non-grass silt or silt farmland
-* Zinc disappears when placed into crucible
+* Poor skybox rendering performance, particularly in orbit
+    * Improved: down from 17,728ms over 60s to 76ms!
+* Rain in orbit
+* Rubber farmland turning into regular dirt when trampled
+* A bunch of broken localisations
+* Crash on servers
+* Crash with invalid ores in bedrock ore processor
+* Debug wand behaviour restored
