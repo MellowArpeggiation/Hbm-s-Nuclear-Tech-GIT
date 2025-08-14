@@ -260,11 +260,11 @@ public class TileEntitySawmill extends TileEntityMachineBase {
 		}
 		
 		if (block == ModBlocks.pvc_log) {
-			    return new ItemStack(ModBlocks.vinyl_planks, 4 * 6 / 4);
-			}
-		if (block == ModBlocks.pvc_log ) {
-			    return new ItemStack(ModBlocks.pvc_planks, 4 * 6 / 4);
-			}
+			return new ItemStack(ModBlocks.vinyl_planks, 4 * 6 / 4);
+		}
+		if (block == ModBlocks.pvc_log) {
+			return new ItemStack(ModBlocks.pvc_planks, 4 * 6 / 4);
+		}
 		if(names.contains("stickWood")) {
 			return new ItemStack(ModItems.powder_sawdust);
 		}
