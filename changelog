@@ -1,11 +1,17 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5425 - we got QMAW to work (i think)](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5425)
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5426 - ha ha ha, oh fuck](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5426)
 
 ## Added
-* QMAW articles for:
+* Updated ru_RU localisation
+* RU translation for QMAW articles:
     * Stainless Steel
     * Nickel
     * Brine
 
+## Changed
+* Custom rocket parts no longer have hardcoded English descriptions
+    * CN translation added for these parts
+
 ## Fixed
-* #315 - Hodgepodge simulation distance option breaking rocket dimension switches (fixed for reals this time)
-* #317 - Unexpected dimension name for Overworld breaking GT ore generation
+* Upstream update includes fix for server crash!
+* Tekto DCM geyser particles flying in from 0, 0, 0
+* Client crash on DCM particles, maybe
