@@ -7069,7 +7069,7 @@ hbmfluid.nmass=N-Масс(II) Варп топливо
 hbmfluid.sarnusgas=Сжатый газ (Сарнус)
 
 // Тектоническое сырьё несёт другой смысл
-hbmfluid.tcrude=Сырая нефть Тексто
+hbmfluid.tcrude=Неочищенная нефть Текто
 
 
 hbmfluid.tektoair=Сжатый воздух (Текто)
