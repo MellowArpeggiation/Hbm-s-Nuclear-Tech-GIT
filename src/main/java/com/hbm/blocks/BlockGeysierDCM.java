@@ -53,7 +53,6 @@ public class BlockGeysierDCM extends BlockContainer {
 				data.setDouble("moZ", 0);
 				data.setInteger("maxAge", 100 + worldObj.rand.nextInt(20));
 				data.setInteger("color", 0xA4D7DD);
-				data.setBoolean("skipPressure", true);
 				MainRegistry.proxy.effectNT(data);
 
 				vapor();

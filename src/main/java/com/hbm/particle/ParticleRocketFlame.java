@@ -13,14 +13,14 @@ import net.minecraft.world.World;
 
 @SideOnly(Side.CLIENT)
 public class ParticleRocketFlame extends EntityFX {
-	
-	public int age;
-	public int maxAge;
-	
+
+	protected int age;
+	protected int maxAge;
+
 	private float customRed;
 	private float customGreen;
 	private float customBlue;
-	
+
 
 
 	protected double pressure = 1;
@@ -31,24 +31,23 @@ public class ParticleRocketFlame extends EntityFX {
 		maxAge = 300 + rand.nextInt(50);
 		this.particleScale = 1F;
 	}
-	
+
 	public ParticleRocketFlame setScale(float scale) {
 		this.particleScale = scale;
 		return this;
 	}
-	
+
 	public ParticleRocketFlame setMaxAge(int maxAge) {
 		this.maxAge = maxAge;
 		return this;
 	}
-	
+
 	public ParticleRocketFlame setCustomColor(float red, float green, float blue) {
 		this.customRed = red;
 		this.customGreen = green;
 		this.customBlue = blue;
 		return this;
 	}
-	
 
 	public ParticleRocketFlame setAtmosphericPressure(double pressure) {
 		this.pressure = pressure;
@@ -74,7 +73,7 @@ public class ParticleRocketFlame extends EntityFX {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
-		
+
 		this.age++;
 
 		if(this.age == this.maxAge) {
@@ -84,7 +83,7 @@ public class ParticleRocketFlame extends EntityFX {
 		this.motionX *= 0.91D;
 		this.motionY *= 0.91D;
 		this.motionZ *= 0.91D;
-		
+
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 	}
 
@@ -95,6 +94,7 @@ public class ParticleRocketFlame extends EntityFX {
 
 	@Override
 	public void renderParticle(Tessellator p_70539_1_, float interp, float sX, float sY, float sZ, float dX, float dZ) {
+		if(age == 0) return;
 
 		Random urandom = new Random(this.getEntityId());
 

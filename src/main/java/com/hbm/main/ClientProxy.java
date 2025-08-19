@@ -1063,7 +1063,7 @@ public class ClientProxy extends ServerProxy {
 				Color color = new Color(data.getInteger("color"));
 				fx.setCustomColor(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
 			}
-			if(!data.hasKey("skipPressure")) fx.setAtmosphericPressure(pressure);
+			fx.setAtmosphericPressure(pressure);
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 		}
 
