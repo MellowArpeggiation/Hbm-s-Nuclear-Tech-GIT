@@ -156,6 +156,8 @@ public class ClientProxy extends ServerProxy {
 	@Override
 	public void registerPreRenderInfo() {
 		AdvancedModelLoader.registerModelHandler(new HmfModelLoader());
+
+		QMAWLoader.registerModFileURL(FMLCommonHandler.instance().findContainerFor(RefStrings.MODID).getSource());
 	}
 
 	/** Runs right after item and block init */
