@@ -7067,7 +7067,11 @@ hbmfluid.joolgas=Сжатый газ (Джул)
 hbmfluid.ngas=Сжатый газ (Нейдон)
 hbmfluid.nmass=N-Масс(II) Варп топливо
 hbmfluid.sarnusgas=Сжатый газ (Сарнус)
-hbmfluid.tcrude=Тектоническое сырьё
+
+// Тектоническое сырьё несёт другой смысл
+hbmfluid.tcrude=Сырая нефть Тексто
+
+
 hbmfluid.tektoair=Сжатый воздух (Текто)
 hbmfluid.ugas=Сжатый газ (Урлум)
 hbmfluid.vinyl=Винилхлорид
