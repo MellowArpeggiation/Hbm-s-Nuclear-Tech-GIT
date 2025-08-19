@@ -4586,6 +4586,24 @@ item.sat_miner.name=Модуль для добычи астероидов
 item.sat_radar.name=Спутник с Радиолокационным Зондированием
 item.sat_resonator.name=Спутник с Зен-Резонатором
 item.sat_scanner.name=Спутник с модулем глубинно-ресурсного сканирования
+
+item.sat.desc.frequency=Частота спутника
+item.sat.desc.foeq=Даёт тебе достижение. Это всё.
+item.sat.desc.gerald.single_use=Одноразовое.
+item.sat.desc.gerald.orbital_module=Требует арбитальный модуль.
+item.sat.desc.gerald.melter=Расплавитель процессоров, проклятие каждого владельца сервера.
+item.sat.desc.laser=Позволяет вызывать лазеры с перезарядкой 15 секунд.
+item.sat.desc.mapper=Отображает загруженные в данный момент чанки.
+item.sat.desc.miner=Доставит рудные порошки на грузовую посадочную площадку.
+item.sat.desc.lunar_miner=Добывает лунный грунт, чтобы доставить его на грузовую посадочную площадку.
+item.sat.desc.radar=Показывает карту активных объектов.
+item.sat.desc.resonator=Позволяет телепортироваться без перезарядки.
+item.sat.desc.scanner=Создает карту подземных руд сверху вниз.
+item.sat.desc.war=Однозарядный рельсотрон, предназначенный для использования на других планетах
+item.sat.desc.dyson_relay=Позволяет приемнику Дайсона работать ночью
+item.sat.desc.launch_by_hand=Возможен ручной запуск с орбитальной станции
+item.sat.desc.deploy_orbit=ПКМ для вывода на орбиту
+
 item.sawblade.name=Лезвие пилорамы
 item.schnitzel_vegan.name=Вегетарианский шницель
 item.schrabidium_axe.name=Шрабидиевый топор
@@ -4997,6 +5015,54 @@ item.wrench_flipped.name=Лезвие на гаечном ключе
 item.xanax.name=Препарат "НАКСА" против дигаммы
 item.xanax.desc=Снимает 500mDRX
 item.zirconium_legs.name=Циркониевые штаны
+
+item.custom_missile_part.he.type=HE
+item.custom_missile_part.inc.type=Зажигательная
+item.custom_missile_part.buster.type=Разрушитель бункеров
+item.custom_missile_part.cluster.type=Кластерная
+item.custom_missile_part.nuclear.type=Ядерная
+item.custom_missile_part.tx.type=Термоядерная (TX)
+item.custom_missile_part.n2.type=N²
+item.custom_missile_part.balefire.type=Жар
+item.custom_missile_part.schrab.type=Шрабидиевая
+item.custom_missile_part.taint.type=Порча
+item.custom_missile_part.cloud.type=Облако
+item.custom_missile_part.turbine.type=Турбина
+item.custom_missile_part.apollo.type=Капсула
+item.custom_missile_part.satellite.type=Спутник
+item.custom_missile_part.custom0.type=Custom0
+item.custom_missile_part.custom1.type=Custom1
+item.custom_missile_part.custom2.type=Custom2
+item.custom_missile_part.custom3.type=Custom3
+item.custom_missile_part.custom4.type=Custom4
+item.custom_missile_part.custom5.type=Custom5
+item.custom_missile_part.custom6.type=Custom6
+item.custom_missile_part.custom7.type=Custom7
+item.custom_missile_part.custom8.type=Custom8
+item.custom_missile_part.custom9.type=Custom9
+
+item.custom_missile_part.fuel.any=Любое жидкое топливо
+item.custom_missile_part.fuel.kerosene=Керосин / Пероксид
+item.custom_missile_part.fuel.solid=Твёрдое топливо
+item.custom_missile_part.fuel.hydrogen=Водород / Кислород
+item.custom_missile_part.fuel.xenon=Ксеноновый газ
+item.custom_missile_part.fuel.balefire=Жар ракетное топливо / Пероксид
+item.custom_missile_part.fuel.hydrazine=Гидразин
+item.custom_missile_part.fuel.methalox=Природный газ / Кислород
+item.custom_missile_part.fuel.kerolox=Керосин / Кислород
+
+item.custom_missile_part.rarity.common=§7Обычный
+item.custom_missile_part.rarity.uncommon=§eНеобычный
+item.custom_missile_part.rarity.rare=§bРедкий
+item.custom_missile_part.rarity.epic=§dЭпический
+item.custom_missile_part.rarity.legendary=§2Легендарный
+item.custom_missile_part.rarity.strange=§3Странный
+
+item.missile.fuel.solid=Твердое топливо (предварительно заправленное)
+item.missile.fuel.ethanol_peroxide=Этанол / Пероксид водорода
+item.missile.fuel.kerosene_peroxide=Керосин / Пероксид водорода
+item.missile.fuel.kerosene_loxy=Керосин / Жидкий кислород
+item.missile.fuel.jetfuel_loxy=Авиационное топливо / Жидкий кислород
 
 itemGroup.tabBlocks=Руды и блоки NTM
 itemGroup.tabConsumable=Расходные материалы и снаряжение NTM
@@ -6600,7 +6666,13 @@ tile.minmus_stone.name=Камень Минмуса
 tile.duna_sands.name=Песок Дюны
 tile.duna_rock.name=Камень Дюны
 tile.duna_cobble.name=Булыжник Дюны
-tile.ferric_clay.name=Блок железоносной глины
+
+// Comment to MrKimkimora below:
+// "Железоносная глина" не совсем неправильна, но "железистая глина" точнее передаёт значение термина ferric clay, 
+// особенно в геологическом или почвоведческом контексте, так как подчёркивает химическую природу железа в глине.
+// Если говорить колхозно - Железоносная глина - это глина, которая работает на заводе и носит железо
+tile.ferric_clay.name=Блок железистой глины
+
 tile.stone_resource.calcium.name=Кальцит
 tile.dry_ice.name=Сухой лёд
 
@@ -6718,7 +6790,10 @@ tile.machine_stardar.name=Радиотелескоп "StarDar"
 
 // Items
 item.atmosphere_scanner.name=Анализатор атмосферы
-item.ball_ferric_clay.name=Железоносная глина
+
+// Чекни строку 6670
+item.ball_ferric_clay.name=Железистая глина
+
 item.bucket_ccl.name=Ведро тетрахлорметана
 item.chunk_ore.moonstone.name=Кусок лунного камня
 item.chunk_ore.pentlandite.name=Кусок пентландита
@@ -6993,7 +7068,7 @@ hbmfluid.ngas=Сжатый газ (Нейдон)
 hbmfluid.nmass=N-Масс(II) Варп топливо
 hbmfluid.sarnusgas=Сжатый газ (Сарнус)
 hbmfluid.tcrude=Тектоническое сырьё
-hbmfluid.tektoair=Воздух (Текто)
+hbmfluid.tektoair=Сжатый воздух (Текто)
 hbmfluid.ugas=Сжатый газ (Урлум)
 hbmfluid.vinyl=Винилхлорид
 
@@ -7170,5 +7245,23 @@ potion.hbm_run=БОГ НАБЛЮДАЕТ ЗА ВАМИ
 potion.hbm_slippery=Скольжение
 potion.hbm_nitan=Aмброзия
 
+desc.util.type=Тип
+desc.util.size=Размер
+desc.util.mass=Масса
+desc.util.inaccuracy=Неточность
+desc.util.strength=Сила
+desc.util.top_size=Верхний размер
+desc.util.bottom_size=Нижний размер
+desc.util.fuel_type=Тип топлива
+desc.util.fuel_amount=Количество топлива
+desc.util.thrust=Сила подъёма
+desc.util.isp=Специфичный импульс
+desc.util.health=Здоровье
+desc.util.rarity=Редкость
+desc.util.not_launchable=Не запускается!
+desc.util.fuel_capacity=Емкость топливного бака
+desc.util.warhead=Боеголовка
+desc.util.chip_inaccuracy=Неточность чипа
+desc.util.fin_inaccuracy=Неточность стабилизатора
 
-// last updated 18.08.2025 by MrKimkimora and 17.08.2025 by Vitya (aka Osmo aka KosmoKitty) //
+// last updated 19.08.2025 by Bufka2011 //
