@@ -49,7 +49,10 @@ public class BlockCrop extends BlockBush implements IGrowable, IPlantableBreathi
 
 	@Override
 	public boolean canBreathe(CBT_Atmosphere atmosphere) {
-		return this.atmospherePredicate.test(atmosphere);
+	    if(atmosphere == null) {
+	        return false; 
+	    }
+	    return this.atmospherePredicate.test(atmosphere);
 	}
 
 	/**
