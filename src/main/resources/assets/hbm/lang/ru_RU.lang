@@ -6697,8 +6697,11 @@ tile.laythe_coral_block.name=Блок кораллов Лейта
 tile.tumor.name=Мясистая масса
 
 // Tekto
-tile.ore_tekto.name=Карман тектонического сырья
-tile.ore_tekto_empty.name=Пустой карман тектонического сырья
+
+// Тектоническое сырьё несёт другой смысл
+tile.ore_tekto.name=Нефтяной карман Текто
+tile.ore_tekto_empty.name=Пустой нефтяной карман Текто
+
 tile.orrery.name=Планетарий
 tile.pet_leaves.name=Пластиковые листья
 tile.pvc_log.name=ПВХ-бревно
@@ -7068,7 +7071,7 @@ hbmfluid.ngas=Сжатый газ (Нейдон)
 hbmfluid.nmass=N-Масс(II) Варп топливо
 hbmfluid.sarnusgas=Сжатый газ (Сарнус)
 
-// Тектоническое сырьё несёт другой смысл
+// Чекни строку 6701
 hbmfluid.tcrude=Неочищенная нефть Текто
 
 
