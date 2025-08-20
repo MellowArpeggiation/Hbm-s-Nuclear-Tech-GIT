@@ -112,14 +112,14 @@ public class MachineCapacitor extends BlockContainer implements ILookOverlay, IP
 
 	@Override
 	public void addInformation(ItemStack stack, NBTTagCompound persistentTag, EntityPlayer player, List list, boolean ext) {
-		list.add(EnumChatFormatting.GOLD + "Stores up to "+ BobMathUtil.getShortNumber(this.power) + "HE");
-		list.add(EnumChatFormatting.GOLD + "Charge speed: "+ BobMathUtil.getShortNumber(this.power / 200) + "HE");
-		list.add(EnumChatFormatting.GOLD + "Discharge speed: "+ BobMathUtil.getShortNumber(this.power / 600) + "HE");
 		list.add(EnumChatFormatting.YELLOW + "" + BobMathUtil.getShortNumber(persistentTag.getLong("power")) + "/" + BobMathUtil.getShortNumber(persistentTag.getLong("maxPower")) + "HE");
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean ext) {
+		list.add(EnumChatFormatting.GOLD + "Stores up to "+ BobMathUtil.getShortNumber(this.power) + "HE");
+		list.add(EnumChatFormatting.GOLD + "Charge speed: "+ BobMathUtil.getShortNumber(this.power / 200) + "HE");
+		list.add(EnumChatFormatting.GOLD + "Discharge speed: "+ BobMathUtil.getShortNumber(this.power / 600) + "HE");
 
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			for(String s : I18nUtil.resolveKeyArray("tile.capacitor.desc")) list.add(EnumChatFormatting.YELLOW + s);
@@ -134,7 +134,7 @@ public class MachineCapacitor extends BlockContainer implements ILookOverlay, IP
 			list.add("subjected to the Ferric Osmiridium-Lutece");
 			list.add("ψ(x,t)=Aeiℏ(px−Et) Wavefunction.");
 		}
-	
+
 	}
 
 	@Override
