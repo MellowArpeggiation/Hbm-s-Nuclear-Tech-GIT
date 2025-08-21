@@ -312,7 +312,7 @@ public class ChunkAtmosphereHandler {
 	}
 
 	public void receiveWorldTick(TickEvent.WorldTickEvent tick) {
-		if(tick.world.isRemote || tick.world.getTotalWorldTime() % 20 != 0) return;
+		if(tick.world.isRemote || tick.phase != Phase.END || tick.world.getTotalWorldTime() % 20 != 0) return;
 		HashMap<IAtmosphereProvider, AtmosphereBlob> blobs = worldBlobs.get(tick.world.provider.dimensionId);
 		for(AtmosphereBlob blob : blobs.values()) {
 			blob.checkGrowth();
