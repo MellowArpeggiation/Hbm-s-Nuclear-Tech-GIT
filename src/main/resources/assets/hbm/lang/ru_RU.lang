@@ -630,7 +630,7 @@ chem.FC_DIESEL_KEROSENE=Крекинг дизеля
 chem.FC_GAS_PETROLEUM=Крекинг попутного газа
 chem.FC_I_NAPHTHA=Крекинг промышленного масла
 chem.FC_KEROSENE_PETROLEUM=Крекинг керосина
-chem.FP_HEAVYOIL=Переработка тяжелой нефти
+chem.FP_HEAVYOIL=Переработка тяжёлой нефти
 chem.FP_LIGHTOIL=Переработка лёгкой нефти
 chem.FP_NAPHTHA=Переработка нафты
 chem.FP_SMEAR=Переработка промышленного масла
@@ -682,7 +682,7 @@ chem.SF_SMEAR=Затвердевание промышленного масла
 chem.SHELL_CHLORINE=Производство артиллерийского хлора
 chem.SHELL_MUSTARD=Производство артиллерийского иприта
 chem.SHELL_PHOSGENE=Производство артиллерийского фосгена
-chem.SOLID_FUEL=Производство твердого ракетного топлива
+chem.SOLID_FUEL=Производство твёрдого ракетного топлива
 chem.SOLVENT=Смешивание органического растворителя
 chem.STEAM=Кипячение воды
 chem.SULFURIC_ACID=Производство серной кислоты
@@ -1424,7 +1424,7 @@ hazard.light=Ярких вспышек
 hazard.nerveAgent=Нервно-паралитических средств
 hazard.neverProtects=Не защищает от:
 hazard.particleCoarse=Частиц, находящихся в воздухе
-hazard.particleFine=Твердых частиц
+hazard.particleFine=Твёрдых частиц
 hazard.sand=Раздражителей глаз
 
 hbm.key.ability=Переключение способностей инструмента
@@ -1497,7 +1497,7 @@ hbmfluid.gasoline=Газолин
 hbmfluid.gasoline_leaded=Этилированный газолин
 hbmfluid.heatingoil=Мазут
 hbmfluid.heatingoil_vacuum=Тяжёлый мазут
-hbmfluid.heavyoil=Тяжелая нефть
+hbmfluid.heavyoil=Тяжёлая нефть
 hbmfluid.heavyoil_vacuum=Вакуумная тяжёлая нефть
 hbmfluid.heavywater=Тяжёлая вода
 hbmfluid.heavywater_hot=Горячая тяжёлая вода
@@ -2243,7 +2243,7 @@ item.bedrock_ore.trait.sulfuric=§6Обработанный серной кис�
 item.bedrock_ore.trait.washed=§bПромытый в окислителе водой
 item.bedrock_ore.type.actinide.name=Актинидная
 item.bedrock_ore.type.crystal.name=Кристаллическая
-item.bedrock_ore.type.heavy.name=Тяжелая металлическая
+item.bedrock_ore.type.heavy.name=Тяжёлая металлическая
 item.bedrock_ore.type.light.name=Лёгкая металлическая
 item.bedrock_ore.type.nonmetal.name=Неметаллическая
 item.bedrock_ore.type.rare.name=Редкоземельная
@@ -2407,7 +2407,7 @@ item.canister_full.name=Канистра:
 item.canister_gasoline.name=Канистра с этилированным бензином (LEGACY)
 item.canister_gasoline.desc=свинец - это друг$впусти друга в свой кровоток$*достаёт пистолет* живо.
 item.canister_heatingoil.name=Канистра с мазутом (LEGACY)
-item.canister_heavyoil.name=Канистра с тяжелой нефтью (LEGACY)
+item.canister_heavyoil.name=Канистра с тяжёлой нефтью (LEGACY)
 item.canister_kerosene.name=Канистра с керосином (LEGACY)
 item.canister_lightoil.name=Канистра с лёгкой нефтью (LEGACY)
 item.canister_napalm.name=Напалм Б
@@ -3382,7 +3382,7 @@ item.ingot_neptunium_fuel.name=Слиток нептуниевого топли�
 item.ingot_niobium.name=Ниобиевый слиток
 item.ingot_osmiridium.name=Осмиридиевый слиток
 item.ingot_pb209.name=Слиток свинца-209
-item.ingot_pc.name=Твердый пластиковый брусок
+item.ingot_pc.name=Твёрдый пластиковый брусок
 item.ingot_pet.name=Металлизированный алюминием брусок ПЭТ
 item.ingot_phosphorus.name=Брусок белого фосфора
 item.ingot_plutonium.name=Плутониевый слиток
@@ -3452,7 +3452,7 @@ item.item_expensive.bronze_tubes.name=Бронзовые конструкцио�
 item.item_expensive.circuit.name=Обширная печатная плата
 item.item_expensive.computer.name=Мейнфрейм
 item.item_expensive.ferro_plating.name=Армированные ферроураниевые панели
-item.item_expensive.heavy_frame.name=Тяжелый каркас
+item.item_expensive.heavy_frame.name=Тяжёлый каркас
 item.item_expensive.lead_plating.name=Радиационно-стойкое покрытие
 item.item_expensive.steel_plating.name=Стальная обшивка с болтовым соединением
 item.item_secret.aberrator.name=Часть Аберратора
@@ -4373,7 +4373,7 @@ item.robes_boots.name=Полевые ботинки
 item.robes_helmet.name=Повседневная толстовка с капюшоном
 item.robes_legs.name=Повседневные брюки
 item.robes_plate.name=Повседневная кофта
-item.rocket_fuel.name=Твердое топливо (Ракетное)
+item.rocket_fuel.name=Твёрдое топливо (Ракетное)
 item.rod_empty.name=Пустой стержень
 item.rod.lithium.name=Литиевый стержень
 item.rod.tritium.name=Тритиевый стержень
@@ -4586,6 +4586,24 @@ item.sat_miner.name=Модуль для добычи астероидов
 item.sat_radar.name=Спутник с Радиолокационным Зондированием
 item.sat_resonator.name=Спутник с Зен-Резонатором
 item.sat_scanner.name=Спутник с модулем глубинно-ресурсного сканирования
+
+item.sat.desc.frequency=Частота спутника
+item.sat.desc.foeq=Даёт тебе достижение. Это всё.
+item.sat.desc.gerald.single_use=Одноразовое.
+item.sat.desc.gerald.orbital_module=Требует орбитальный модуль.
+item.sat.desc.gerald.melter=Расплавитель процессоров, проклятие каждого владельца сервера.
+item.sat.desc.laser=Позволяет вызывать лазеры с перезарядкой 15 секунд.
+item.sat.desc.mapper=Отображает загруженные в данный момент чанки.
+item.sat.desc.miner=Доставит рудные порошки на грузовую посадочную площадку.
+item.sat.desc.lunar_miner=Добывает лунный грунт, чтобы доставить его на грузовую посадочную площадку.
+item.sat.desc.radar=Показывает карту активных объектов.
+item.sat.desc.resonator=Позволяет телепортироваться без перезарядки.
+item.sat.desc.scanner=Создает карту подземных руд сверху вниз.
+item.sat.desc.war=Однозарядный рельсотрон, предназначенный для использования на других планетах
+item.sat.desc.dyson_relay=Позволяет приемнику Дайсона работать ночью
+item.sat.desc.launch_by_hand=Возможен ручной запуск с орбитальной станции
+item.sat.desc.deploy_orbit=ПКМ для вывода на орбиту
+
 item.sawblade.name=Лезвие пилорамы
 item.schnitzel_vegan.name=Вегетарианский шницель
 item.schrabidium_axe.name=Шрабидиевый топор
@@ -4621,9 +4639,9 @@ item.settings_tool.name=Устройство настройки
 item.shackles.name=Оковы
 item.shellntm.name=Оболочка (%s)
 item.shimmer_axe.name=Отлитый топор
-item.shimmer_axe_head.name=Тяжелое лезвие топора
+item.shimmer_axe_head.name=Тяжёлое лезвие топора
 item.shimmer_handle.name=Усиленная полимерная ручка
-item.shimmer_head.name=Тяжелая головка молота
+item.shimmer_head.name=Тяжёлая головка молота
 item.shimmer_sledge.name=Отлитая кувалда
 item.singularity.name=Сингулярность
 item.singularity_counter_resonant.name=Заключённая контр-резонансная сингулярность
@@ -4638,8 +4656,8 @@ item.sliding_blast_door_skin.0.name=Скин раздвижной двери: О
 item.sliding_blast_door_skin.1.name=Скин раздвижной двери: Вариант 1
 item.sliding_blast_door_skin.2.name=Скин раздвижной двери: Вариант 2
 item.smashing_hammer.name=Убойный молот
-item.solid_fuel.name=Твердое топливо
-item.solid_fuel_bf.name=Твердое топливо (Жар-пламя)
+item.solid_fuel.name=Твёрдое топливо
+item.solid_fuel_bf.name=Твёрдое топливо (Жар-пламя)
 item.solid_fuel_presto.name=Топливное полено
 item.solid_fuel_presto_bf.name=Топливное полено (Жар-пламя)
 item.solid_fuel_presto_triplet.name=Сжатые топливные поленья
@@ -4998,6 +5016,54 @@ item.xanax.name=Препарат "НАКСА" против дигаммы
 item.xanax.desc=Снимает 500mDRX
 item.zirconium_legs.name=Циркониевые штаны
 
+item.custom_missile_part.he.type=HE
+item.custom_missile_part.inc.type=Зажигательная
+item.custom_missile_part.buster.type=Разрушитель бункеров
+item.custom_missile_part.cluster.type=Кластерная
+item.custom_missile_part.nuclear.type=Ядерная
+item.custom_missile_part.tx.type=Термоядерная (TX)
+item.custom_missile_part.n2.type=N²
+item.custom_missile_part.balefire.type=Жар
+item.custom_missile_part.schrab.type=Шрабидиевая
+item.custom_missile_part.taint.type=Порча
+item.custom_missile_part.cloud.type=Облако
+item.custom_missile_part.turbine.type=Турбина
+item.custom_missile_part.apollo.type=Капсула
+item.custom_missile_part.satellite.type=Спутник
+item.custom_missile_part.custom0.type=Custom0
+item.custom_missile_part.custom1.type=Custom1
+item.custom_missile_part.custom2.type=Custom2
+item.custom_missile_part.custom3.type=Custom3
+item.custom_missile_part.custom4.type=Custom4
+item.custom_missile_part.custom5.type=Custom5
+item.custom_missile_part.custom6.type=Custom6
+item.custom_missile_part.custom7.type=Custom7
+item.custom_missile_part.custom8.type=Custom8
+item.custom_missile_part.custom9.type=Custom9
+
+item.custom_missile_part.fuel.any=Любое жидкое топливо
+item.custom_missile_part.fuel.kerosene=Керосин / Пероксид
+item.custom_missile_part.fuel.solid=Твёрдое топливо
+item.custom_missile_part.fuel.hydrogen=Водород / Кислород
+item.custom_missile_part.fuel.xenon=Ксеноновый газ
+item.custom_missile_part.fuel.balefire=Ракетное жар-топливо / Пероксид
+item.custom_missile_part.fuel.hydrazine=Гидразин
+item.custom_missile_part.fuel.methalox=Природный газ / Кислород
+item.custom_missile_part.fuel.kerolox=Керосин / Кислород
+
+item.custom_missile_part.rarity.common=§7Обычный
+item.custom_missile_part.rarity.uncommon=§eНеобычный
+item.custom_missile_part.rarity.rare=§bРедкий
+item.custom_missile_part.rarity.epic=§dЭпический
+item.custom_missile_part.rarity.legendary=§2Легендарный
+item.custom_missile_part.rarity.strange=§3Странный
+
+item.missile.fuel.solid=Твёрдое топливо (предварительно заправленное)
+item.missile.fuel.ethanol_peroxide=Этанол / Пероксид водорода
+item.missile.fuel.kerosene_peroxide=Керосин / Пероксид водорода
+item.missile.fuel.kerosene_loxy=Керосин / Жидкий кислород
+item.missile.fuel.jetfuel_loxy=Авиационное топливо / Жидкий кислород
+
 itemGroup.tabBlocks=Руды и блоки NTM
 itemGroup.tabConsumable=Расходные материалы и снаряжение NTM
 itemGroup.tabControl=Топливо и элементы механизмов NTM
@@ -5104,7 +5170,7 @@ rbmk.screen.rod=Управ: %s
 rbmk.screen.temp=Темп: %s
 rbmk.screen.xenon=Ксенон: %s
 
-shape.barrelHeavy=Тяжелый ствол
+shape.barrelHeavy=Тяжёлый ствол
 shape.barrelLight=Лёгкий ствол
 shape.billet=Заготовка
 shape.blade=Лопасть
@@ -5787,7 +5853,7 @@ tile.machine_assemfac.name=Сборочный завод
 tile.machine_assembly_machine.name=Сборочная машина
 tile.machine_autocrafter.name=Автоматический верстак
 tile.machine_autosaw.name=Автоматическая пила
-tile.machine_autosaw.desc=Срубает ближайшие растения, пересаживает деревья$Принимает:$-Древесное масло$-Этанол$-Рыбное масло$-Тяжелую нефть
+tile.machine_autosaw.desc=Срубает ближайшие растения, пересаживает деревья$Принимает:$-Древесное масло$-Этанол$-Рыбное масло$-Тяжёлую нефть
 tile.machine_autosaw.suspended=Приостановлена
 tile.machine_bat9000.name=Охереть-большая цистерна 9000
 tile.machine_battery.name=Энергохранилище
@@ -6135,7 +6201,7 @@ tile.pwr_fuel.desc=Увеличивает вместимость топлива$
 tile.pwr_heatex.name=Теплообменник ВВЭР
 tile.pwr_heatex.desc=Перемещает тепло из активной зоны на корпус$Размещение: Любое
 tile.pwr_heatsink.name=Радиатор ВВЭР
-tile.pwr_heatsink.desc=Увеличивает теплоемкость активной зоны на 5%%$Делает каналы охлаждающей жидкости и теплообменники чуть менее эффективными$Размещение: Любое
+tile.pwr_heatsink.desc=Увеличивает теплоёмкость активной зоны на 5%%$Делает каналы охлаждающей жидкости и теплообменники чуть менее эффективными$Размещение: Любое
 tile.pwr_neutron_source.name=Источник нейтронов ВВЭР
 tile.pwr_neutron_source.desc=Добавляет 20 единиц потока в активную зону$Размещение: Любое$Поток достигает топливных стержней если между ними ничего нет
 tile.pwr_port.name=Люк доступа ВВЭР
@@ -6342,7 +6408,7 @@ tile.turret_chekhov.name=Крупнокалиберная пулеметная �
 tile.turret_cwis.name=”Фэленкс” Mk-15 CIWS
 tile.turret_flamer.name=Турель с огнемётом
 tile.turret_friendly.name=Турель Гатлинга "Мистер Дружелюбный"
-tile.turret_fritz.name=Тяжелая огнеметная турель "Фриц"
+tile.turret_fritz.name=Тяжёлая огнеметная турель "Фриц"
 tile.turret_heavy.name=Турель с тяжёлым пулемётом
 tile.turret_himars.name=Ракетная артиллерийская турель "Генри"
 tile.turret_howard.name=Двойная турель Гатлинга CIWS "Говард"
@@ -6600,7 +6666,13 @@ tile.minmus_stone.name=Камень Минмуса
 tile.duna_sands.name=Песок Дюны
 tile.duna_rock.name=Камень Дюны
 tile.duna_cobble.name=Булыжник Дюны
-tile.ferric_clay.name=Блок железоносной глины
+
+// Comment to MrKimkimora below:
+// "Железоносная глина" не совсем неправильна, но "железистая глина" точнее передаёт значение термина ferric clay, 
+// особенно в геологическом или почвоведческом контексте, так как подчёркивает химическую природу железа в глине.
+// Если говорить колхозно - Железоносная глина - это глина, которая работает на заводе и носит железо
+tile.ferric_clay.name=Блок железистой глины
+
 tile.stone_resource.calcium.name=Кальцит
 tile.dry_ice.name=Сухой лёд
 
@@ -6625,8 +6697,11 @@ tile.laythe_coral_block.name=Блок кораллов Лейта
 tile.tumor.name=Мясистая масса
 
 // Tekto
-tile.ore_tekto.name=Карман тектонического сырья
-tile.ore_tekto_empty.name=Пустой карман тектонического сырья
+
+// Тектоническое сырьё несёт другой смысл
+tile.ore_tekto.name=Нефтяной карман Текто
+tile.ore_tekto_empty.name=Пустой нефтяной карман Текто
+
 tile.orrery.name=Планетарий
 tile.pet_leaves.name=Пластиковые листья
 tile.pvc_log.name=ПВХ-бревно
@@ -6718,7 +6793,10 @@ tile.machine_stardar.name=Радиотелескоп "StarDar"
 
 // Items
 item.atmosphere_scanner.name=Анализатор атмосферы
-item.ball_ferric_clay.name=Железоносная глина
+
+// Чекни строку 6670
+item.ball_ferric_clay.name=Железистая глина
+
 item.bucket_ccl.name=Ведро тетрахлорметана
 item.chunk_ore.moonstone.name=Кусок лунного камня
 item.chunk_ore.pentlandite.name=Кусок пентландита
@@ -6992,8 +7070,12 @@ hbmfluid.joolgas=Сжатый газ (Джул)
 hbmfluid.ngas=Сжатый газ (Нейдон)
 hbmfluid.nmass=N-Масс(II) Варп топливо
 hbmfluid.sarnusgas=Сжатый газ (Сарнус)
-hbmfluid.tcrude=Тектоническое сырьё
-hbmfluid.tektoair=Воздух (Текто)
+
+// Чекни строку 6701
+hbmfluid.tcrude=Неочищенная нефть Текто
+
+
+hbmfluid.tektoair=Сжатый воздух (Текто)
 hbmfluid.ugas=Сжатый газ (Урлум)
 hbmfluid.vinyl=Винилхлорид
 
@@ -7170,5 +7252,23 @@ potion.hbm_run=БОГ НАБЛЮДАЕТ ЗА ВАМИ
 potion.hbm_slippery=Скольжение
 potion.hbm_nitan=Aмброзия
 
+desc.util.type=Тип
+desc.util.size=Размер
+desc.util.mass=Масса
+desc.util.inaccuracy=Неточность
+desc.util.strength=Сила
+desc.util.top_size=Верхний размер
+desc.util.bottom_size=Нижний размер
+desc.util.fuel_type=Тип топлива
+desc.util.fuel_amount=Количество топлива
+desc.util.thrust=Сила подъёма
+desc.util.isp=Специфичный импульс
+desc.util.health=Здоровье
+desc.util.rarity=Редкость
+desc.util.not_launchable=Не запускается!
+desc.util.fuel_capacity=Ёмкость топливного бака
+desc.util.warhead=Боеголовка
+desc.util.chip_inaccuracy=Неточность чипа
+desc.util.fin_inaccuracy=Неточность стабилизатора
 
-// last updated 18.08.2025 by MrKimkimora and 17.08.2025 by Vitya (aka Osmo aka KosmoKitty) //
+// last updated 19.08.2025 by Bufka2011 //
