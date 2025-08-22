@@ -174,18 +174,18 @@ public class SkyProviderCelestial extends IRenderHandler {
 		GL11.glEnable(GL11.GL_FOG);
 		GL11.glColor3f(skyR, skyG, skyB);
 
-		GL11.glPushMatrix();
+		// Set maximum sky fog distance to 12 chunks, works nicely with Celeritas/Distant Horizons
+		// and makes for a more consistent sky in vanilla too
+		GL11.glPushAttrib(GL11.GL_FOG_BIT);
 		{
-			if(mc.gameSettings.renderDistanceChunks > 16) {
-				GL11.glScalef(1.25F, 1, 1.25F);
-			}
 
-			GL11.glTranslatef(0.0F, mc.gameSettings.renderDistanceChunks - 8.0F, 0.0F);
+			GL11.glFogf(GL11.GL_FOG_START, 0.0F);
+			GL11.glFogf(GL11.GL_FOG_END, Math.min(12.0F, mc.gameSettings.renderDistanceChunks) * 16.0F);
 
 			GL11.glCallList(glSkyList);
 
 		}
-		GL11.glPopMatrix();
+		GL11.glPopAttrib();
 
 		GL11.glDisable(GL11.GL_FOG);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
