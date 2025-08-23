@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public class BlockRubberPlant extends BlockEnumMulti {
 
 	public BlockRubberPlant() {
-		super(Material.plants, EnumRubberPlantType.class, false, true);
+		super(Material.vine, EnumRubberPlantType.class, false, true);
 	}
 
 	public static enum EnumRubberPlantType {
