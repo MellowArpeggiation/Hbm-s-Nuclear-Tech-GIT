@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.dim.CelestialBody;
-import com.hbm.dim.SolarSystem;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.fluid.tank.FluidTank;
@@ -24,10 +23,10 @@ import net.minecraft.util.MathHelper;
 public class TileEntityMachineGasDock extends TileEntityMachineBase implements IFluidStandardTransceiver {
 
 	public FluidTank[] tanks;
-	
+
 	public boolean hasRocket = true;
 	public int launchTicks = 0;
-	
+
 	private AxisAlignedBB renderBoundingBox;
 
 	public TileEntityMachineGasDock() {
@@ -46,7 +45,7 @@ public class TileEntityMachineGasDock extends TileEntityMachineBase implements I
 		tanks[1].readFromNBT(nbt, "f1");
 		tanks[2].readFromNBT(nbt, "f2");
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
@@ -72,27 +71,27 @@ public class TileEntityMachineGasDock extends TileEntityMachineBase implements I
 			CelestialBody planet = CelestialBody.getPlanet(worldObj);
 
 			launchTicks = MathHelper.clamp_int(launchTicks + (hasRocket ? -1 : 1), hasRocket ? -20 : 0, 100);
-			if(planet.name == "jool" && hasFuel()) {
+
+			if(planet.gas != null && hasFuel()) {
+				tanks[0].setTankType(planet.gas);
+
 				if(launchTicks <= -20) {
 					hasRocket = false;
 				} else if(launchTicks >= 100) {
 					hasRocket = true;
 				}
-				
+
 				if(launchTicks <= -20) {
 					collectGas();
 				}
 			}
-			if(planet == CelestialBody.getBody("sarnus"))
-			{
-				this.tanks[0].setTankType(Fluids.SARNUSGAS);
-			}
+
 			this.networkPackNT(150);
 		} else {
 			launchTicks = MathHelper.clamp_int(launchTicks + (hasRocket ? -1 : 1), hasRocket ? -20 : 0, 100);
 			if(launchTicks > 0 && launchTicks < 100) {
 				ParticleUtil.spawnGasFlame(worldObj, xCoord + 0.5, yCoord + 0.5 + launchTicks, zCoord + 0.5, 0.0, -1.0, 0.0);
-	
+
 				if(launchTicks < 10) {
 					ExplosionLarge.spawnShock(worldObj, xCoord + 0.5, yCoord, zCoord + 0.5, 1 + worldObj.rand.nextInt(3), 1 + worldObj.rand.nextGaussian());
 				}
@@ -113,7 +112,7 @@ public class TileEntityMachineGasDock extends TileEntityMachineBase implements I
 		hasRocket = buf.readBoolean();
 		for(int i = 0; i < tanks.length; i++) tanks[i].deserialize(buf);
 	}
-	
+
 	private void updateConnections() {
 		for(DirPos pos : getConPos()) {
 			for(int i = 1; i < tanks.length; i++) {
@@ -123,17 +122,17 @@ public class TileEntityMachineGasDock extends TileEntityMachineBase implements I
 			}
 		}
 	}
-	
+
 	private void collectGas() {
 		if(tanks[1].getFill() < 500) return;
 		if(tanks[2].getFill() < 500) return;
 		if(tanks[0].getFill() + 8000 > tanks[0].getMaxFill()) return;
 
-		tanks[1].setFill(tanks[1].getFill() - 500);		
+		tanks[1].setFill(tanks[1].getFill() - 500);
 		tanks[2].setFill(tanks[2].getFill() - 500);
 		tanks[0].setFill(tanks[0].getFill() + 8000);
 	}
-	
+
 	private boolean hasFuel() {
 		return tanks[1].getFill() >= 500 && tanks[2].getFill() >= 500;
 	}
@@ -167,18 +166,18 @@ public class TileEntityMachineGasDock extends TileEntityMachineBase implements I
 
 	@Override
 	public FluidTank[] getSendingTanks() {
-		return new FluidTank[] {tanks[0]};	
-		}
+		return new FluidTank[] {tanks[0]};
+	}
 
 	@Override
 	public FluidTank[] getReceivingTanks() {
 		return new FluidTank[] {tanks[1], tanks[2]};
 	}
-	
-	
+
+
 	private DirPos[] conPos;
 
-	
+
 	protected DirPos[] getConPos() {
 		if(conPos == null) {
 			List<DirPos> list = new ArrayList<>();
@@ -200,7 +199,7 @@ public class TileEntityMachineGasDock extends TileEntityMachineBase implements I
 
 			conPos = list.toArray(new DirPos[0]);
 		}
-		
+
 		return conPos;
 	}
 

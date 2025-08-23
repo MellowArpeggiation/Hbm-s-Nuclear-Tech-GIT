@@ -75,6 +75,8 @@ public class CelestialBody {
 	public float[] ringColor = new float[] {0.5F, 0.5F, 0.5F};
 	public float ringSize = 2;
 
+	public FluidType gas;
+
 	public List<CelestialBody> satellites = new ArrayList<CelestialBody>(); // moon boyes
 	public CelestialBody parent = null;
 
@@ -173,6 +175,11 @@ public class CelestialBody {
 		this.ringTilt = tilt;
 		this.ringSize = size;
 		this.ringColor = color;
+		return this;
+	}
+
+	public CelestialBody withGas(FluidType gas) {
+		this.gas = gas;
 		return this;
 	}
 

@@ -131,6 +131,7 @@ public class SolarSystem {
 					.withOrbitalParameters(68_773_560, 0.05F, 0.0F, 1.304F, 52.0F)
 					.withRotationalPeriod(36_000)
 					.withColor(0.4588f, 0.6784f, 0.3059f)
+					.withGas(Fluids.JOOLGAS)
 					.withSatellites(
 
 						new CelestialBody("laythe", SpaceConfig.laytheDimension, Body.LAYTHE)
@@ -170,6 +171,7 @@ public class SolarSystem {
 					.withRotationalPeriod(28_500)
 					.withColor(1f, 0.6862f, 0.5882f)
 					.withRings(10.0F, 3, 0.6F, 0.4F, 0.3F)
+					.withGas(Fluids.SARNUSGAS)
 					.withSatellites(
 
 					new CelestialBody("hale") //no
