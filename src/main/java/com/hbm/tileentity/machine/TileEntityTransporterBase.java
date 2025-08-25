@@ -16,6 +16,7 @@ import com.hbm.util.BufferUtil;
 import com.hbm.util.InventoryUtil;
 import com.hbm.util.fauxpointtwelve.DirPos;
 
+import api.hbm.energymk2.IEnergyReceiverMK2.ConnectionPriority;
 import api.hbm.fluid.IFluidStandardTransceiver;
 import api.hbm.fluidmk2.IFluidStandardReceiverMK2;
 import io.netty.buffer.ByteBuf;
@@ -280,6 +281,11 @@ public abstract class TileEntityTransporterBase extends TileEntityMachineBase im
 		@Override
 		public FluidTank[] getReceivingTanks() {
 			return (FluidTank[]) Arrays.copyOfRange(tanks, outputTankMax, tanks.length);
+		}
+
+		@Override
+		public ConnectionPriority getFluidPriority() {
+			return ConnectionPriority.HIGH;
 		}
 
 	}
