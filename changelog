@@ -1,17 +1,15 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5426 - ha ha ha, oh fuck](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5426)
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5439 - WHAT. THE. [FIVE PERCENT OFF]](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5439)
 
 ## Added
-* Updated ru_RU localisation
-* RU translation for QMAW articles:
-    * Stainless Steel
-    * Nickel
-    * Brine
+* Support for Fisk's Superheroes armor for breathing in space
 
 ## Changed
-* Custom rocket parts no longer have hardcoded English descriptions
-    * CN translation added for these parts
+* Capacitors now show their storage capacity at all times
+* Sky renderer fog tweaks, should play nicely with ultra high render distances (like 256x with Distant Horizons/Celeritas)
+* Tekto rubber plants now act like overworld plants in that they are replaced automatically when blocks are placed on top of them (should make machines less painful to construct on Tekto plains)
+* Rocket transporter fuel tanks now fill before transport tanks, so sending hydrogen/oxygen should block less often
 
 ## Fixed
-* Upstream update includes fix for server crash!
-* Tekto DCM geyser particles flying in from 0, 0, 0
-* Client crash on DCM particles, maybe
+* Plants ticking twice in atmosphere bubbles
+* FBI units suffocate in space
+* Sarnus gas not collectable via gas giant harvester on Tekto
