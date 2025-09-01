@@ -11,8 +11,8 @@ import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.items.special.ItemLootCrate;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.i18n.I18nUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -71,6 +71,7 @@ public class ItemCustomMissilePart extends Item {
 	}
 
 	public enum PartSize {
+
 		//for chips
 		ANY,
 		//for missile tips and thrusters
@@ -95,32 +96,32 @@ public class ItemCustomMissilePart extends Item {
 	}
 
 	public enum WarheadType {
-		HE("item.custom_missile_part.he.type"),
-		INC("item.custom_missile_part.inc.type"),
-		BUSTER("item.custom_missile_part.buster.type"),
-		CLUSTER("item.custom_missile_part.cluster.type"),
-		NUCLEAR("item.custom_missile_part.nuclear.type"),
-		TX("item.custom_missile_part.tx.type"),
-		N2("item.custom_missile_part.n2.type"),
-		BALEFIRE("item.custom_missile_part.balefire.type"),
-		SCHRAB("item.custom_missile_part.schrab.type"),
-		TAINT("item.custom_missile_part.taint.type"),
-		CLOUD("item.custom_missile_part.cloud.type"),
-		TURBINE("item.custom_missile_part.turbine.type"),
-		APOLLO("item.custom_missile_part.apollo.type"),
-		SATELLITE("item.custom_missile_part.satellite.type"),
+		HE("item.warhead.desc.he"),
+		INC("item.warhead.desc.inc"),
+		BUSTER("item.warhead.desc.bunker_buster"),
+		CLUSTER("item.warhead.desc.cluster"),
+		NUCLEAR("item.warhead.desc.nuclear"),
+		TX("item.warhead.desc.tx"),
+		N2("item.warhead.desc.n2"),
+		BALEFIRE("item.warhead.desc.balefire"),
+		SCHRAB("item.warhead.desc.schrab"),
+		TAINT("item.warhead.desc.taint"),
+		CLOUD("item.warhead.desc.cloud"),
+		TURBINE("item.warhead.desc.turbine"),
+		APOLLO("item.warhead.desc.apollo"),
+		SATELLITE("item.warhead.desc.satellite"),
 
 		//shit solution but it works. this allows traits to be attached to these empty dummy types, allowing for custom warheads
-		CUSTOM0("item.custom_missile_part.custom0.type"),
-		CUSTOM1("item.custom_missile_part.custom1.type"),
-		CUSTOM2("item.custom_missile_part.custom2.type"),
-		CUSTOM3("item.custom_missile_part.custom3.type"),
-		CUSTOM4("item.custom_missile_part.custom4.type"),
-		CUSTOM5("item.custom_missile_part.custom5.type"),
-		CUSTOM6("item.custom_missile_part.custom6.type"),
-		CUSTOM7("item.custom_missile_part.custom7.type"),
-		CUSTOM8("item.custom_missile_part.custom8.type"),
-		CUSTOM9("item.custom_missile_part.custom9.type");
+		CUSTOM0("item.warhead.custom0"),
+		CUSTOM1("item.warhead.custom1"),
+		CUSTOM2("item.warhead.custom2"),
+		CUSTOM3("item.warhead.custom3"),
+		CUSTOM4("item.warhead.custom4"),
+		CUSTOM5("item.warhead.custom5"),
+		CUSTOM6("item.warhead.custom6"),
+		CUSTOM7("item.warhead.custom7"),
+		CUSTOM8("item.warhead.custom8"),
+		CUSTOM9("item.warhead.custom9");
 
 		public final String unlocalizedName;
 		WarheadType(String unlocalizedName){
@@ -154,17 +155,23 @@ public class ItemCustomMissilePart extends Item {
 
 	public enum Rarity {
 
-		COMMON("item.custom_missile_part.rarity.common"),
-		UNCOMMON("item.custom_missile_part.rarity.uncommon"),
-		RARE("item.custom_missile_part.rarity.rare"),
-		EPIC("item.custom_missile_part.rarity.epic"),
-		LEGENDARY("item.custom_missile_part.rarity.legendary"),
-		SEWS_CLOTHES_AND_SUCKS_HORSE_COCK("item.custom_missile_part.rarity.strange");
+		COMMON("item.missile.part.rarity.common", EnumChatFormatting.GRAY),
+		UNCOMMON("item.missile.part.rarity.uncommon", EnumChatFormatting.YELLOW),
+		RARE("item.missile.part.rarity.rare", EnumChatFormatting.AQUA),
+		EPIC("item.missile.part.rarity.epic", EnumChatFormatting.LIGHT_PURPLE),
+		LEGENDARY("item.missile.part.rarity.legendary", EnumChatFormatting.DARK_GREEN),
+		SEWS_CLOTHES_AND_SUCKS_HORSE_COCK("item.missile.part.rarity.strange", EnumChatFormatting.DARK_AQUA);
 
-		final String unlocalizedName;
+		private final String key;
+		private final EnumChatFormatting color;
 
-		Rarity(String unlocalizedName) {
-			this.unlocalizedName = unlocalizedName;
+		Rarity(String key, EnumChatFormatting color) {
+			this.key = key;
+			this.color = color;
+		}
+
+		public String getDisplay() {
+			return color + I18nUtil.resolveKey(key);
 		}
 	}
 
@@ -246,48 +253,48 @@ public class ItemCustomMissilePart extends Item {
 
 		try {
 			switch(type) {
-			case CHIP:
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.inaccuracy") + ": " + EnumChatFormatting.GRAY + (Float)attributes[0] * 100 + "%");
-				break;
-			case WARHEAD:
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.size") + ": " + EnumChatFormatting.GRAY + getSize(bottom));
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.type") + ": " + EnumChatFormatting.GRAY + getWarhead());
-				if(attributes[0] != WarheadType.APOLLO && attributes[0] != WarheadType.SATELLITE)
-					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.strength") + ": " + EnumChatFormatting.GRAY + (Float)attributes[1]);
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.mass") + ": " + EnumChatFormatting.GRAY + mass + "kg");
-				break;
-			case FUSELAGE:
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.top_size") + ": " + EnumChatFormatting.GRAY + getSize(top));
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.bottom_size") + ": " + EnumChatFormatting.GRAY + getSize(bottom));
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.fuel_type") + ": " + EnumChatFormatting.GRAY + getFuelName());
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.fuel_amount") + ": " + EnumChatFormatting.GRAY + getTankSize() + "mB");
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.mass") + ": " + EnumChatFormatting.GRAY + mass + "kg");
-				break;
-			case FINS:
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.size") + ": " + EnumChatFormatting.GRAY + getSize(top));
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.inaccuracy") + ": " + EnumChatFormatting.GRAY + (Float)attributes[0] * 100 + "%");
-				break;
-			case THRUSTER:
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.size") + ": " + EnumChatFormatting.GRAY + getSize(top));
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.fuel_type") + ": " + EnumChatFormatting.GRAY + getFuelName());
-				// list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.fuel_consumption") + ": " + EnumChatFormatting.GRAY + (Float)attributes[1] + "mB/tick");
-				// list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.payload") + ": " + EnumChatFormatting.GRAY + (Float)attributes[2] + "t");
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.thrust") + ": " + EnumChatFormatting.GRAY + (Integer)attributes[3] + "N");
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.isp") + ": " + EnumChatFormatting.GRAY + (Integer)attributes[4] + "s");
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.mass") + ": " + EnumChatFormatting.GRAY + mass + "kg");
-				break;
+				case CHIP:
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.inaccuracy") + ": " + EnumChatFormatting.GRAY + (Float)attributes[0] * 100 + "%");
+					break;
+				case WARHEAD:
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.size") + ": " + EnumChatFormatting.GRAY + getSize(bottom));
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.type") + ": " + EnumChatFormatting.GRAY + getWarhead());
+					if(attributes[0] != WarheadType.APOLLO && attributes[0] != WarheadType.SATELLITE)
+						list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.strength") + ": " + EnumChatFormatting.GRAY + (Float)attributes[1]);
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.mass") + ": " + EnumChatFormatting.GRAY + mass + "kg");
+					break;
+				case FUSELAGE:
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.topSize") + ": " + EnumChatFormatting.GRAY + getSize(top));
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.bottomSize") + ": " + EnumChatFormatting.GRAY + getSize(bottom));
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.fuelType") + ": " + EnumChatFormatting.GRAY + getFuelName());
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.fuelAmount") + ": " + EnumChatFormatting.GRAY + getTankSize() + "mB");
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.mass") + ": " + EnumChatFormatting.GRAY + mass + "kg");
+					break;
+				case FINS:
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.size") + ": " + EnumChatFormatting.GRAY + getSize(top));
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.inaccuracy") + ": " + EnumChatFormatting.GRAY + (Float)attributes[0] * 100 + "%");
+					break;
+				case THRUSTER:
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.size") + ": " + EnumChatFormatting.GRAY + getSize(top));
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.fuelType") + ": " + EnumChatFormatting.GRAY + getFuelName());
+					// list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.fuelConsumption") + ": " + EnumChatFormatting.GRAY + (Float)attributes[1] + "l/tick");
+					// list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.maxPayload") + ": " + EnumChatFormatting.GRAY + (Float)attributes[2] + "t");
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.thrust") + ": " + EnumChatFormatting.GRAY + (Integer)attributes[3] + "N");
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.isp") + ": " + EnumChatFormatting.GRAY + (Integer)attributes[4] + "s");
+					list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.mass") + ": " + EnumChatFormatting.GRAY + mass + "kg");
+					break;
 			}
 		} catch(Exception ex) {
-			list.add("### I AM ERROR ###");
+			list.add(I18nUtil.resolveKey("error.generic"));
 		}
 
-		if(type != PartType.CHIP)
-			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.health") + ": " + EnumChatFormatting.GRAY + health + "HP");
+		// if(type != PartType.CHIP)
+		// 	list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.health") + ": " + EnumChatFormatting.GRAY + health + "HP");
 
 		if(this.rarity != null)
-			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.rarity") + ": " + EnumChatFormatting.GRAY + I18nUtil.resolveKey(this.rarity.unlocalizedName));
+			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("item.missile.part.rarity") + ": " + EnumChatFormatting.GRAY + this.rarity.getDisplay());
 		if(author != null)
-			list.add(EnumChatFormatting.WHITE + "   by " + author);
+			list.add(EnumChatFormatting.WHITE + "   " + I18nUtil.resolveKey("item.missile.part.by") + " " + author);
 		if(witty != null)
 			list.add(EnumChatFormatting.GOLD + "   " + EnumChatFormatting.ITALIC + "\"" + witty + "\"");
 	}
@@ -295,25 +302,21 @@ public class ItemCustomMissilePart extends Item {
 	public String getSize(PartSize size) {
 
 		switch(size) {
-		case ANY:
-			return "Any";
-		case SIZE_10:
-			return "1.0m";
-		case SIZE_15:
-			return "1.5m";
-		case SIZE_20:
-			return "2.0m";
-		case SIZE_25:
-			return "2.5m";
-		case SIZE_30:
-			return "3.0m";
-		default:
-			return "None";
+			case ANY:
+				return I18nUtil.resolveKey("item.missile.part.size.any");
+			case SIZE_10:
+				return "1.0m";
+			case SIZE_15:
+				return "1.5m";
+			case SIZE_20:
+				return "2.0m";
+			default:
+				return I18nUtil.resolveKey("item.missile.part.size.none");
 		}
 	}
 
 	public String getWarhead() {
-		if(!(attributes[0] instanceof WarheadType)) return EnumChatFormatting.BOLD + "N/A";
+		if(!(attributes[0] instanceof WarheadType)) return EnumChatFormatting.BOLD + I18nUtil.resolveKey("general.na");
 
 		WarheadType type = (WarheadType) attributes[0];
 
@@ -349,12 +352,12 @@ public class ItemCustomMissilePart extends Item {
 		case SATELLITE:
 			return (System.currentTimeMillis() % 1000 < 500 ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + I18nUtil.resolveKey(WarheadType.SATELLITE.unlocalizedName);
 		default:
-			return EnumChatFormatting.BOLD + "N/A";
+			return EnumChatFormatting.BOLD + I18nUtil.resolveKey("general.na");
 		}
 	}
 
 	public String getFuelName() {
-		if(!(attributes[0] instanceof FuelType)) return EnumChatFormatting.BOLD + "N/A";
+		if(!(attributes[0] instanceof FuelType)) return EnumChatFormatting.BOLD + I18nUtil.resolveKey("general.na");
 
 		switch((FuelType)attributes[0]) {
 		case ANY:
@@ -376,7 +379,7 @@ public class ItemCustomMissilePart extends Item {
 		case HYDRAZINE:
 			return EnumChatFormatting.AQUA + I18nUtil.resolveKey(FuelType.HYDRAZINE.unlocalizedName);
 		default:
-			return EnumChatFormatting.BOLD + "N/A";
+			return EnumChatFormatting.BOLD + I18nUtil.resolveKey("general.na");
 		}
 	}
 

@@ -62,27 +62,27 @@ public class ItemCustomMissile extends Item {
 			ItemCustomMissilePart stability = (ItemCustomMissilePart) Item.getItemById(readFromNBT(stack, "stability"));
 			ItemCustomMissilePart thruster = (ItemCustomMissilePart) Item.getItemById(readFromNBT(stack, "thruster"));
 
-			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.warhead") + ": " + EnumChatFormatting.GRAY + warhead.getWarhead());
-			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.strength") + ": " + EnumChatFormatting.GRAY + warhead.attributes[1]);
-			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.fuel_type") + ": " + EnumChatFormatting.GRAY + fuselage.getFuelName());
-			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.fuel_amount") + ": " + EnumChatFormatting.GRAY + fuselage.getTankSize() + "l");
-			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.chip_inaccuracy") + ": " + EnumChatFormatting.GRAY + (Float)chip.attributes[0] * 100 + "%");
+			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.missile.warhead") + ": " + EnumChatFormatting.GRAY + warhead.getWarhead());
+			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.missile.strength") + ": " + EnumChatFormatting.GRAY + warhead.attributes[1]);
+			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.missile.fuelType") + ": " + EnumChatFormatting.GRAY + fuselage.getFuelName());
+			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.missile.fuelAmount") + ": " + EnumChatFormatting.GRAY + fuselage.getTankSize() + "l");
+			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.missile.chipInaccuracy") + ": " + EnumChatFormatting.GRAY + (Float)chip.attributes[0] * 100 + "%");
 
 			if(stability != null)
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.fin_inaccuracy") + ": " + EnumChatFormatting.GRAY + (Float)stability.attributes[0] * 100 + "%");
+				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.missile.finInaccuracy") + ": " + EnumChatFormatting.GRAY + (Float)stability.attributes[0] * 100 + "%");
 			else
-				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.fin_inaccuracy") + ": " + EnumChatFormatting.GRAY + "100%");
+				list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.missile.finInaccuracy") + ": " + EnumChatFormatting.GRAY + "100%");
 
-			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.size") + ": " + EnumChatFormatting.GRAY + fuselage.getSize(fuselage.top) + "/" + fuselage.getSize(fuselage.bottom));
+			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.missile.size") + ": " + EnumChatFormatting.GRAY + fuselage.getSize(fuselage.top) + "/" + fuselage.getSize(fuselage.bottom));
 
 			float health = warhead.health + fuselage.health + thruster.health;
 			if(stability != null)
 				health += stability.health;
 
-			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("desc.util.health") + ": " + EnumChatFormatting.GRAY + health + "HP");
+			list.add(EnumChatFormatting.BOLD + I18nUtil.resolveKey("gui.missile.health") + ": " + EnumChatFormatting.GRAY + health + "HP");
 
 		} catch(Exception ex) {
-			list.add(EnumChatFormatting.RED + "### I AM ERROR ###");
+			list.add(EnumChatFormatting.RED + I18nUtil.resolveKey("error.generic"));
 		}
 	}
 

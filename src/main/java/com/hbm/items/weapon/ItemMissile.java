@@ -3,8 +3,8 @@ package com.hbm.items.weapon;
 import java.util.List;
 
 import com.hbm.items.ItemCustomLore;
-
 import com.hbm.util.i18n.I18nUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
@@ -40,13 +40,16 @@ public class ItemMissile extends ItemCustomLore {
 
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean bool) {
-		list.add(EnumChatFormatting.ITALIC + this.tier.display);
+		// Tier localized: missile.tier.tier0, missile.tier.tier1, ...
+		String tierKey = "item.missile.tier." + this.tier.name().toLowerCase();
+		list.add(EnumChatFormatting.ITALIC + I18nUtil.resolveKey(tierKey));
 
 		if(!this.launchable) {
-			list.add(EnumChatFormatting.RED + I18nUtil.resolveKey("desc.util.not_launchable"));
+			list.add(EnumChatFormatting.RED + I18nUtil.resolveKey("item.missile.desc.notLaunchable"));
 		} else {
-			list.add(I18nUtil.resolveKey("desc.util.fuel_type") + ": " + I18nUtil.resolveKey(this.fuel.unlocalizedName));
-			if(this.fuelCap > 0) list.add(I18nUtil.resolveKey("desc.util.fuel_capacity") + ": " + this.fuelCap + "mB");
+			// Fuel localized & colored via enum helper
+			list.add(I18nUtil.resolveKey("item.missile.desc.fuel") + ": " + this.fuel.getDisplay());
+			if(this.fuelCap > 0) list.add(I18nUtil.resolveKey("item.missile.desc.fuelCapacity") + ": " + this.fuelCap + "mB");
 			super.addInformation(itemstack, player, list, bool);
 		}
 	}
@@ -82,18 +85,25 @@ public class ItemMissile extends ItemCustomLore {
 	}
 
 	public enum MissileFuel {
-		SOLID("item.missile.fuel.solid", 0),
-		ETHANOL_PEROXIDE("item.missile.fuel.ethanol_peroxide", 4_000),
-		KEROSENE_PEROXIDE("item.missile.fuel.kerosene_peroxide", 8_000),
-		KEROSENE_LOXY("item.missile.fuel.kerosene_loxy", 12_000),
-		JETFUEL_LOXY("item.missile.fuel.jetfuel_loxy", 16_000);
+		SOLID("item.missile.fuel.solid.prefueled", EnumChatFormatting.GOLD, 0),
+		ETHANOL_PEROXIDE("item.missile.fuel.ethanol_peroxide", EnumChatFormatting.AQUA, 4_000),
+		KEROSENE_PEROXIDE("item.missile.fuel.kerosene_peroxide", EnumChatFormatting.BLUE, 8_000),
+		KEROSENE_LOXY("item.missile.fuel.kerosene_loxy", EnumChatFormatting.LIGHT_PURPLE, 12_000),
+		JETFUEL_LOXY("item.missile.fuel.jetfuel_loxy", EnumChatFormatting.RED, 16_000);
 
-		public final String unlocalizedName;
+		private final String key;
+		public final EnumChatFormatting color;
 		public final int defaultCap;
 
-		private MissileFuel(String unlocalizedName, int defaultCap) {
-			this.unlocalizedName = unlocalizedName;
+		private MissileFuel(String key, EnumChatFormatting color, int defaultCap) {
+			this.key = key;
+			this.color = color;
 			this.defaultCap = defaultCap;
+		}
+
+		/** Returns a color localized string for display */
+		public String getDisplay() {
+			return color + I18nUtil.resolveKey(this.key);
 		}
 	}
 }
