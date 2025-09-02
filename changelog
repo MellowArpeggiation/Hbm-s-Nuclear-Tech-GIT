@@ -1,15 +1,8 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5439 - WHAT. THE. [FIVE PERCENT OFF]](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5439)
-
-## Added
-* Support for Fisk's Superheroes armor for breathing in space
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5441 - JORP!](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5441)
 
 ## Changed
-* Capacitors now show their storage capacity at all times
-* Sky renderer fog tweaks, should play nicely with ultra high render distances (like 256x with Distant Horizons/Celeritas)
-* Tekto rubber plants now act like overworld plants in that they are replaced automatically when blocks are placed on top of them (should make machines less painful to construct on Tekto plains)
-* Rocket transporter fuel tanks now fill before transport tanks, so sending hydrogen/oxygen should block less often
+* CCGT now consumes air from atmospheres, and will not function without sufficient O2
 
 ## Fixed
-* Plants ticking twice in atmosphere bubbles
-* FBI units suffocate in space
-* Sarnus gas not collectable via gas giant harvester on Tekto
+* Server crash on start (from previous hotfix)
+* Fusion reactors unable to send byproducts through conveyors/hoppers
