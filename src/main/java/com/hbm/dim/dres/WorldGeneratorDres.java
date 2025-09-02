@@ -34,7 +34,7 @@ public class WorldGeneratorDres implements IWorldGenerator {
         }};
 
 		NBTStructure.registerStructure(SpaceConfig.dresDimension, new SpawnCondition("dres_rbmk") {{
-			spawnWeight = 4;
+			spawnWeight = 8;
 			minHeight = 40;
 			maxHeight = 40;
 			sizeLimit = 128;
@@ -70,7 +70,7 @@ public class WorldGeneratorDres implements IWorldGenerator {
 			}};
 		}});
 
-		NBTStructure.registerNullWeight(SpaceConfig.dresDimension, 20);
+		NBTStructure.registerNullWeight(SpaceConfig.dresDimension, 16);
 
 		BlockOre.addValidBody(ModBlocks.ore_shale, SolarSystem.Body.DRES);
 		BlockOre.addValidBody(ModBlocks.ore_lanthanium, SolarSystem.Body.DRES);
