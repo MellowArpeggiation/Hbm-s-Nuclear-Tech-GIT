@@ -59,6 +59,7 @@ import com.hbm.render.util.RenderAccessoryUtility;
 import com.hbm.render.util.RenderOverhead;
 import com.hbm.render.util.RenderScreenOverlay;
 import com.hbm.render.util.SoyuzPronter;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.sound.MovingSoundChopper;
 import com.hbm.sound.MovingSoundChopperMine;
 import com.hbm.sound.MovingSoundCrashing;
@@ -1194,6 +1195,8 @@ public class ModEventHandlerClient {
 	public static long lastLoadScreenReplacement = 0L;
 	public static int loadingScreenReplacementRetry = 0;
 
+	private static AudioWrapper shipHum;
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onClientTickLast(ClientTickEvent event) {
@@ -1228,6 +1231,19 @@ public class ModEventHandlerClient {
 						renderLodeStar = true;
 					}
 				}
+			}
+
+			if(player != null && world.provider instanceof WorldProviderOrbit && HbmLivingProps.hasGravity(player)) {
+				if(shipHum == null || !shipHum.isPlaying()) {
+					shipHum = MainRegistry.proxy.getLoopedSound("hbm:misc.stationhum", player, ClientConfig.AUDIO_SHIP_HUM_VOLUME.get(), 5.0F, 1.0F, 10);
+					shipHum.startSound();
+				}
+
+				shipHum.updateVolume(ClientConfig.AUDIO_SHIP_HUM_VOLUME.get());
+				shipHum.keepAlive();
+			} else if(shipHum != null) {
+				shipHum.stopSound();
+				shipHum = null;
 			}
 		}
 

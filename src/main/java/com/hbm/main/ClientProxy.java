@@ -2300,6 +2300,15 @@ public class ClientProxy extends ServerProxy {
 	}
 
 	@Override
+	public AudioWrapper getLoopedSound(String sound, Entity entity, float volume, float range, float pitch, int keepAlive) {
+		AudioWrapperClient audio = new AudioWrapperClient(new ResourceLocation(sound), entity);
+		audio.updateVolume(volume);
+		audio.updateRange(range);
+		audio.setKeepAlive(keepAlive);
+		return audio;
+	}
+
+	@Override
 	public void playSound(String sound, Object data) { }
 
 	@Override
