@@ -35,7 +35,7 @@ public class ClientConfig extends RunningConfig {
 	public static ConfigWrapper<Boolean> RENDER_REBAR_SIMPLE =				new ConfigWrapper(false);
 	public static ConfigWrapper<Integer> RENDER_HELIOSTAT_BEAM_LIMIT =		new ConfigWrapper(250);
 	public static ConfigWrapper<Integer> RENDER_REBAR_LIMIT =				new ConfigWrapper(250);
-	public static ConfigWrapper<Float> AUDIO_SHIP_HUM_VOLUME =				new ConfigWrapper(0.05F);
+	public static ConfigWrapper<Float> AUDIO_SHIP_HUM_VOLUME =				new ConfigWrapper(0.1F);
 
 	private static void initDefaults() {
 		configMap.put("GEIGER_OFFSET_HORIZONTAL", GEIGER_OFFSET_HORIZONTAL);
