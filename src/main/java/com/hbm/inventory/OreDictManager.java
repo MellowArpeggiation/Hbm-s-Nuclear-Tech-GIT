@@ -748,6 +748,8 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_COBBLESTONE, minmus_regolith);
 		OreDictionary.registerOre(KEY_STONE, minmus_smooth);
 		OreDictionary.registerOre(KEY_STONE, minmus_stone);
+		OreDictionary.registerOre(KEY_COBBLESTONE, basalt);
+		OreDictionary.registerOre(KEY_STONE, basalt_smooth);
 
 		OreDictionary.registerOre(KEY_LOG, vinyl_log);
 		OreDictionary.registerOre(KEY_LOG, pvc_log);

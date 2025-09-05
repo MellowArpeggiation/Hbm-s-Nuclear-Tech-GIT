@@ -232,6 +232,16 @@ public class WorldGeneratorCelestial implements IWorldGenerator {
 
 		//DungeonToolbox.generateOre(world, rand, x, z, WorldConfig.malachiteSpawn, 16, 6, 40, ModBlocks.stone_resource, EnumStoneType.MALACHITE.ordinal(), planetStone);
 		DungeonToolbox.generateOre(world, rand, x, z, WorldConfig.limestoneSpawn, 12, 25, 30, ModBlocks.stone_resource, EnumStoneType.CALCIUM.ordinal(), planetStone);
+
+		if(rand.nextInt(4) == 0) {
+			int rx = x + rand.nextInt(16) + 8;
+			int ry = 6 + rand.nextInt(13);
+			int rz = z + rand.nextInt(16) + 8;
+
+			if(world.getBlock(rx, ry, rz).isReplaceableOreGen(world, rx, ry, rz, planetStone)) {
+				world.setBlock(rx, ry, rz, ModBlocks.stone_keyhole);
+			}
+		}
 	}
 
 	public void generateBedrockOres(World world, Random rand, int x, int z, Block planetStone, boolean hasIce, FluidStack drillAcid) {

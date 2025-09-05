@@ -11,6 +11,8 @@ public class WorldConfig {
 	public static boolean netherOre = true;
 	public static boolean endOre = true;
 
+	public static int ironSpawn = 9;
+
 	public static int uraniumSpawn = 6;
 	public static int thoriumSpawn = 7;
 	public static int titaniumSpawn = 8;
@@ -70,7 +72,7 @@ public class WorldConfig {
 	public static int tektoGasPerDepositMin = 100;
 	public static int tektoGasPerDepositMax = 500;
 	public static double tektoOilDrainChance = 0.05D;
-	
+
 	public static int eveGasPerDeposit = 500;
 	public static int evePetPerDepositMin = 20;
 	public static int evePetPerDepositMax = 100;
