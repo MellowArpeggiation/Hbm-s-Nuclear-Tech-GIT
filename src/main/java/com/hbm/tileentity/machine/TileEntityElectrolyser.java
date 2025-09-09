@@ -66,7 +66,7 @@ public class TileEntityElectrolyser extends TileEntityMachineBase implements IEn
 	public MaterialStack leftStack;
 	public MaterialStack rightStack;
 	public int maxMaterial = MaterialShapes.BLOCK.q(16);
-	
+
 	private int lastSelectedGUI = 0;
 
 	public FluidTank[] tanks;
@@ -225,7 +225,8 @@ public class TileEntityElectrolyser extends TileEntityMachineBase implements IEn
 				new DirPos(xCoord - dir.offsetX * 6 - rot.offsetX, yCoord, zCoord - dir.offsetZ * 6 - rot.offsetZ, dir.getOpposite()),
 				new DirPos(xCoord + dir.offsetX * 6, yCoord, zCoord + dir.offsetZ * 6, dir),
 				new DirPos(xCoord + dir.offsetX * 6 + rot.offsetX, yCoord, zCoord + dir.offsetZ * 6 + rot.offsetZ, dir),
-				new DirPos(xCoord + dir.offsetX * 6 - rot.offsetX, yCoord, zCoord + dir.offsetZ * 6 - rot.offsetZ, dir)
+				new DirPos(xCoord + dir.offsetX * 6 - rot.offsetX, yCoord, zCoord + dir.offsetZ * 6 - rot.offsetZ, dir),
+				new DirPos(xCoord - rot.offsetX * 4, yCoord, zCoord - rot.offsetZ * 4, rot.getOpposite()),
 		};
 	}
 
