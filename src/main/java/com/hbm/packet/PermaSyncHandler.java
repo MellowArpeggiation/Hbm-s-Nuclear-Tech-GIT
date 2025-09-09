@@ -99,7 +99,7 @@ public class PermaSyncHandler {
 
 		/// SATELLITES ///
 		// Only syncs data required for rendering satellites on the client
-		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world).sats;
+		HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(world, (int)player.posX, (int)player.posZ).sats;
 		buf.writeInt(sats.size());
 		for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
 			buf.writeInt(entry.getKey());

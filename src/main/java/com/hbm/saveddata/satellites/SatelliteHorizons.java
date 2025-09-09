@@ -40,7 +40,7 @@ public class SatelliteHorizons extends Satellite {
 			return;
 
 		used = true;
-		SatelliteSavedData.getData(world).markDirty();
+		SatelliteSavedData.getData(world, x, z).markDirty();
 
 
 		EntityTom tom = new EntityTom(world);

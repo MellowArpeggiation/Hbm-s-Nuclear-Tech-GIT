@@ -1,7 +1,5 @@
 package com.hbm.packet.toserver;
 
-import com.hbm.items.ISatChip;
-import com.hbm.items.tool.ItemSatInterface;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
 
@@ -21,7 +19,7 @@ public class SatActivatePacket implements IMessage {
 
 	public SatActivatePacket()
 	{
-		
+
 	}
 
 	public SatActivatePacket(int freq)
@@ -41,18 +39,17 @@ public class SatActivatePacket implements IMessage {
 	}
 
 	public static class Handler implements IMessageHandler<SatActivatePacket, IMessage> {
-		
+
 		@Override
 		public IMessage onMessage(SatActivatePacket m, MessageContext ctx) {
 			EntityPlayer p = ctx.getServerHandler().playerEntity;
-		       SatelliteSavedData data = SatelliteSavedData.getData(p.worldObj);
-		      //how gross is this...
-		      Satellite sat = SatelliteSavedData.getData(p.worldObj).getSatFromFreq(m.freq);
-		      if(sat != null) {
-			      sat.onClick(p.worldObj, 0, 0);
-      
-		      }				
-			
+			//how gross is this...
+			Satellite sat = SatelliteSavedData.getData(p.worldObj, (int)p.posX, (int)p.posZ).getSatFromFreq(m.freq);
+			if(sat != null) {
+				sat.onClick(p.worldObj, 0, 0);
+
+			}
+
 			System.out.println("facket");
 			return null;
 		}

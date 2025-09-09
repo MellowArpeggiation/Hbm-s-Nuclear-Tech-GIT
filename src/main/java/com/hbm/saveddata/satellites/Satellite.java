@@ -83,7 +83,7 @@ public abstract class Satellite {
 		Satellite sat = create(id);
 
 		if(sat != null) {
-			SatelliteSavedData data = SatelliteSavedData.getData(world);
+			SatelliteSavedData data = SatelliteSavedData.getData(world, (int)x, (int)z);
 			data.sats.put(freq, sat);
 			sat.onOrbit(world, x, y, z);
 			data.markDirty();
