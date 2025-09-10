@@ -72,17 +72,14 @@ public class TileEntityMachineGasDock extends TileEntityMachineBase implements I
 
 			launchTicks = MathHelper.clamp_int(launchTicks + (hasRocket ? -1 : 1), hasRocket ? -20 : 0, 100);
 
-			if(planet.gas != null && hasFuel()) {
+			if(planet.gas != null) {
 				tanks[0].setTankType(planet.gas);
 
-				if(launchTicks <= -20) {
+				if(hasFuel() && launchTicks <= -20) {
 					hasRocket = false;
+					collectGas();
 				} else if(launchTicks >= 100) {
 					hasRocket = true;
-				}
-
-				if(launchTicks <= -20) {
-					collectGas();
 				}
 			}
 

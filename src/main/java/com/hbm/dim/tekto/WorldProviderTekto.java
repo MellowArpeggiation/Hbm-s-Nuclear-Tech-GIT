@@ -47,6 +47,11 @@ public class WorldProviderTekto extends WorldProviderCelestial {
 		return ModBlocks.basalt;
 	}
 
+	@Override
+	public boolean hasIce() {
+		return true;
+	}
+
 	private static BiomeGenLayers createBiomeGenerators(long seed) {
 		GenLayer genlayerBiomes = new GenlayerTektoBiomes(seed); // Your custom biome layer
 
