@@ -1,8 +1,26 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5441 - JORP!](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5441)
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5453 - tragic yuri in a can](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5453)
+
+## Added
+* Space stations now emit a gentle, soothing hum inside pressurized rooms (a la ST:TNG), this can be muted/modified with `/ntmclient set AUDIO_SHIP_HUM_VOLUME [0.0 - 1.0]`
 
 ## Changed
-* CCGT now consumes air from atmospheres, and will not function without sufficient O2
+* Basalt now has cobblestone oredict
+* Earth crystalline bedrock is now: Redstone - Asbestos - Diamond - Emerald
+    * This means an Earth bedrock plant can produce all basic alloys! (Steel, Red Copper, Advanced Alloy)
+* Duna now spawns repairable lanterns (at double the rate of Earth!)
+* Schrabidium ore generates naturally on Eve
+* Ike now has rad hotspots
+* Red keyholes now spawn on all planets
+* Space stations now see the satellites of the currently orbited body, allowing asteroid miners to function (but only when orbiting the correct planet!)
+* Extra port added to the Electrolyser
+* Platinum was kill (it was unused)
+* Bigger, Better, And More Uncut Biome Crash Message (I will cut your bals off if you don't read it)
+* PLSS now consumes oxygen when underwater, you'll drown as normal if you run out of O2
 
 ## Fixed
-* Server crash on start (from previous hotfix)
-* Fusion reactors unable to send byproducts through conveyors/hoppers
+* PLSS audio sometimes doesn't play when multiple players with PLSSes are present in a given dimension
+* "Unnamed" bedrock ore that causes crashes when inserted into a Bedrock Ore Processor
+* A whole chunk of `Block` is allocated unnecessarily during structure generation
+* Gas dock visually shows Jool Gas even on Tekto
+* Crash with certain mods trying to spawn entities with a FakeWorld (why)
+* Small custom missiles don't work (restored the UI elements that indicate what thrusters work with what warheads)
