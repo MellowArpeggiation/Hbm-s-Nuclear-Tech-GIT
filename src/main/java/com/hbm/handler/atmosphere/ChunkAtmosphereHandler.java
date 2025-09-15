@@ -67,6 +67,7 @@ public class ChunkAtmosphereHandler {
 	public CBT_Atmosphere getAtmosphere(World world, int x, int y, int z, AtmosphereBlob excludeBlob) {
 		ThreeInts pos = new ThreeInts(x, y, z);
 		HashMap<IAtmosphereProvider, AtmosphereBlob> blobs = worldBlobs.get(world.provider.dimensionId);
+		if(blobs == null) return null;
 
 		CBT_Atmosphere atmosphere = getCelestialAtmosphere(world);
 
