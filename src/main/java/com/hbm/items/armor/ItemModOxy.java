@@ -78,8 +78,8 @@ public class ItemModOxy extends ItemArmorMod implements IFillableItem {
 
 	// returns true if the entity can breathe, either via the contained air, or via the atmosphere itself
 	// if contained air is used, it'll be decremented here, this saves on multiple atmosphere checks
-	public boolean attemptBreathing(EntityLivingBase entity, ItemStack stack, CBT_Atmosphere atmosphere) {
-		if(ChunkAtmosphereManager.proxy.canBreathe(atmosphere)) {
+	public boolean attemptBreathing(EntityLivingBase entity, ItemStack stack, CBT_Atmosphere atmosphere, boolean forceConsume) {
+		if(!forceConsume && ChunkAtmosphereManager.proxy.canBreathe(atmosphere)) {
 			setInUse(stack, false);
 			return true;
 		}

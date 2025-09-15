@@ -183,9 +183,14 @@ public class ArmorUtil {
 		if(tank == null) return ChunkAtmosphereManager.proxy.canBreathe(atmosphere);
 
 		// If we have an oxygen tank, block drowning
-		entity.setAir(300);
+		boolean isInWater = entity.getAir() < 300;
+		boolean canBreatheTank = ((ItemModOxy)tank.getItem()).attemptBreathing(entity, tank, atmosphere, isInWater);
 
-		return ((ItemModOxy)tank.getItem()).attemptBreathing(entity, tank, atmosphere);
+		if(isInWater && canBreatheTank) {
+			entity.setAir(300);
+		}
+
+		return canBreatheTank;
 	}
 
 	public static ItemStack getOxygenTank(EntityPlayer player) {
