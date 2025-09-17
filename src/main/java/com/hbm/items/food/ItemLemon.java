@@ -92,7 +92,7 @@ public class ItemLemon extends ItemFood {
 		}
 
 		if(this == ModItems.flesh_burger) {
-			list.add("item.flesh_burger.desc");
+			list.add(I18nUtil.resolveKey("item.flesh_burger.desc"));
 		}
 	}
 
