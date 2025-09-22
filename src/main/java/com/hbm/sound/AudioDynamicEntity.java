@@ -10,6 +10,9 @@ public class AudioDynamicEntity extends AudioDynamic {
 	protected AudioDynamicEntity(ResourceLocation loc, Entity entity) {
 		super(loc);
 		this.entity = entity;
+		this.xPosF = (float)entity.posX;
+		this.yPosF = (float)entity.posY;
+		this.zPosF = (float)entity.posZ;
 	}
 
 	@Override
@@ -25,16 +28,19 @@ public class AudioDynamicEntity extends AudioDynamic {
 
 	@Override
 	public float getXPosF() {
+		if(entity == null) return super.getXPosF();
 		return (float)entity.posX;
 	}
 
 	@Override
 	public float getYPosF() {
+		if(entity == null) return super.getYPosF();
 		return (float)entity.posY;
 	}
 
 	@Override
 	public float getZPosF() {
+		if(entity == null) return super.getZPosF();
 		return (float)entity.posZ;
 	}
 
