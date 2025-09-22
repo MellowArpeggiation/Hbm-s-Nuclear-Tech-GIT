@@ -1099,27 +1099,26 @@ public class ModEventHandlerClient {
 			}
 		}
 
-		if (!mc.isGamePaused() && event.phase == Phase.END) {
+		if(!mc.isGamePaused() && event.phase == Phase.END) {
 			for(CelestialBody body : CelestialBody.getAllBodies()) {
 				if(SolarSystemWorldSavedData.getClientTraits(body.name) != null) {
-				for(CelestialBodyTrait trait : SolarSystemWorldSavedData.getClientTraits(body.name).values()) {
+					for(CelestialBodyTrait trait : SolarSystemWorldSavedData.getClientTraits(body.name).values()) {
 						trait.update(true);
 					}
 				}
 			}
 
-		    CBT_War war = CelestialBody.getTrait(mc.theWorld, CBT_War.class);
+			CBT_War war = CelestialBody.getTrait(mc.theWorld, CBT_War.class);
 
-		    if (war != null) {
-		        for (int i = 0; i < war.getProjectiles().size(); i++) {
-		            CBT_War.Projectile projectile = war.getProjectiles().get(i);
-		            if (projectile != null && projectile.getTravel() >= 18 && projectile.getTravel() <= 18) {
-		            	  Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
-
-	                    }
-		            }
-		        }
-		    }
+			if(war != null) {
+				for(int i = 0; i < war.getProjectiles().size(); i++) {
+					CBT_War.Projectile projectile = war.getProjectiles().get(i);
+					if(projectile != null && projectile.getTravel() >= 18 && projectile.getTravel() <= 18) {
+						Minecraft.getMinecraft().thePlayer.playSound("hbm:misc.impact", 10F, 1F);
+					}
+				}
+			}
+		}
 
 		if(event.phase == Phase.END) {
 
