@@ -67,6 +67,7 @@ public class MachineElectrolyser extends BlockDummyable {
 		this.makeExtra(world, x + dir.offsetX * 5 + rot.offsetX, y, z + dir.offsetZ * 5 + rot.offsetZ);
 		this.makeExtra(world, x + dir.offsetX * 5 - rot.offsetX, y, z + dir.offsetZ * 5 - rot.offsetZ);
 		this.makeExtra(world, x - rot.offsetX * 3, y, z - rot.offsetZ * 3);
+		this.makeExtra(world, x + rot.offsetX, y, z + rot.offsetZ);
 	}
 
 	@Override
