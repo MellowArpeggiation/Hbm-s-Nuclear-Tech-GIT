@@ -1190,42 +1190,6 @@ public class NBTStructure {
 			return null;
 		}
 
-		// Thermos was written by fucking monkeys
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		@Override
-		public void func_143027_a(World p_143027_1_) {
-			if(this.field_143029_e == null) {
-				this.field_143029_e = (MapGenStructureData)p_143027_1_.perWorldStorage.loadData(MapGenStructureData.class, this.func_143025_a());
-
-				if(this.field_143029_e == null) {
-					this.field_143029_e = new MapGenStructureData(this.func_143025_a());
-					p_143027_1_.perWorldStorage.setData(this.func_143025_a(), this.field_143029_e);
-				} else {
-					NBTTagCompound nbttagcompound = this.field_143029_e.func_143041_a();
-					Iterator iterator = nbttagcompound.func_150296_c().iterator();
-
-					while(iterator.hasNext()) {
-						String s = (String)iterator.next();
-						NBTBase nbtbase = nbttagcompound.getTag(s);
-
-						if(nbtbase.getId() == 10) {
-							NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbtbase;
-
-							if(nbttagcompound1.hasKey("ChunkX") && nbttagcompound1.hasKey("ChunkZ")) {
-								int i = nbttagcompound1.getInteger("ChunkX");
-								int j = nbttagcompound1.getInteger("ChunkZ");
-								StructureStart structurestart = MapGenStructureIO.func_143035_a(nbttagcompound1, p_143027_1_);
-
-								if(structurestart != null) {
-									this.structureMap.put(Long.valueOf(ChunkCoordIntPair.chunkXZ2Int(i, j)), structurestart);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
 	}
 
 }
