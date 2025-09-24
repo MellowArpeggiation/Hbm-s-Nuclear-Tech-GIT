@@ -139,7 +139,7 @@ public class RenderHTR3 extends TileEntitySpecialRenderer implements IItemRender
 				GL11.glScaled(0.5, 0.5, 0.5);
 				GL11.glShadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.lpw2_tex);
-				ResourceManager.htr3.renderAll();
+				ResourceManager.htr3.renderAllExcept("ExhaustVacuum");
 				GL11.glShadeModel(GL11.GL_FLAT);
 			}
 		};
