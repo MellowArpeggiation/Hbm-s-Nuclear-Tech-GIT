@@ -836,6 +836,8 @@ public class ClientProxy extends ServerProxy {
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, new RenderDummy());
 		RenderingRegistry.registerEntityRenderingHandler(EntityUndeadSoldier.class, new RenderUndeadSoldier());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDepress.class, new RenderEmpty());
+
 		//"particles" (abysmal dogshit)
 		RenderingRegistry.registerEntityRenderingHandler(EntityChlorineFX.class, new MultiCloudRenderer(new Item[] { ModItems.chlorine1, ModItems.chlorine2, ModItems.chlorine3, ModItems.chlorine4, ModItems.chlorine5, ModItems.chlorine6, ModItems.chlorine7, ModItems.chlorine8 }));
 		RenderingRegistry.registerEntityRenderingHandler(EntityPinkCloudFX.class, new MultiCloudRenderer(new Item[] { ModItems.pc1, ModItems.pc2, ModItems.pc3, ModItems.pc4, ModItems.pc5, ModItems.pc6, ModItems.pc7, ModItems.pc8 }));
@@ -1047,7 +1049,7 @@ public class ClientProxy extends ServerProxy {
 			}
 		}
 
-		if("missileContrail".equals(type)) {
+		if("missileContrail".equals(type) || "depress".equals(type)) {
 
 			if(player == null || Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350) return;
 
@@ -1065,7 +1067,7 @@ public class ClientProxy extends ServerProxy {
 				Color color = new Color(data.getInteger("color"));
 				fx.setCustomColor(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
 			}
-			fx.setAtmosphericPressure(pressure);
+			if(!"depress".equals(type)) fx.setAtmosphericPressure(pressure);
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 		}
 

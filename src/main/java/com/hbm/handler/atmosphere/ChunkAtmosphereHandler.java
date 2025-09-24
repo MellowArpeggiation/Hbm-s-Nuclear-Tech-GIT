@@ -264,6 +264,7 @@ public class ChunkAtmosphereHandler {
 				if(blob.contains(pos)) {
 					blob.removeBlock(pos);
 				} else if(!blob.contains(blob.getRootPosition())) {
+					blob.runDepress = false;
 					blob.addBlock(blob.getRootPosition());
 				}
 			}
@@ -280,6 +281,7 @@ public class ChunkAtmosphereHandler {
 			if(blob.contains(pos)) {
 				blob.removeBlock(pos);
 			} else if(!blob.contains(blob.getRootPosition())) {
+				blob.runDepress = false;
 				blob.addBlock(blob.getRootPosition());
 			}
 		}
@@ -291,6 +293,8 @@ public class ChunkAtmosphereHandler {
 			// Make sure that a block can actually be attached to the blob
 			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 				if(blob.contains(pos.getPositionAtOffset(dir))) {
+					blob.runDepress = true;
+					blob.depressDir = dir;
 					blob.addBlock(pos);
 					break;
 				}
@@ -365,6 +369,8 @@ public class ChunkAtmosphereHandler {
 					AtmosphereBlob blob = iterator.next();
 					for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 						if(blob.contains(pos.getPositionAtOffset(dir))) {
+							blob.runDepress = true;
+							blob.depressDir = dir;
 							blob.addBlock(pos);
 							iterator.remove();
 							break;

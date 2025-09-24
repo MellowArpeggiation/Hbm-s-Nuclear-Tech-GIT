@@ -222,6 +222,9 @@ public class EntityMappings {
 
 		addEntity(EntityDisperserCanister.class, "entity_disperser", 250);
 		addEntity(EntityWaypoint.class, "entity_waypoint", 250, false);
+
+		addEntity(EntityDepress.class, "entity_depress", 250, false);
+
 		addMob(EntityWarBehemoth.class, "entity_war_behemoth", 0x204131, 0x75CE00);
 		addMob(EntityTankbot.class, "entity_tankbot", 0x204131, 0x75CE00);
 
