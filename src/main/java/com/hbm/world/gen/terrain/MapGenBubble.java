@@ -2,14 +2,15 @@ package com.hbm.world.gen.terrain;
 
 import java.util.function.Predicate;
 
+import com.hbm.world.gen.MapGenBaseMeta;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.gen.MapGenBase;
 
-public class MapGenBubble extends MapGenBase {
+public class MapGenBubble extends MapGenBaseMeta {
 
 	/**
 	 * Generates oil bubbles, which are generally wider than a chunk, in a safe + cascadeless manner
@@ -26,6 +27,7 @@ public class MapGenBubble extends MapGenBase {
 	public boolean fuzzy;
 
 	public Block block;
+	public byte meta = 0;
 	public Block replace = Blocks.stone;
 
 	public Predicate<BiomeGenBase> canSpawn;
@@ -70,6 +72,7 @@ public class MapGenBubble extends MapGenBase {
 					if(fuzzy) rSqr -= rand.nextDouble() * radiusSqr / 3;
 					if(rSqr < radiusSqr) {
 						blocks[index] = block;
+						metas[index] = meta;
 					}
 				}
 			}
