@@ -1,17 +1,13 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5467 - release name](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5467)
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5490 - total terradrill death](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5490)
 
-## Added
-* Depressurization effects!
-    * Breaking any sealed room will cause depress event, which will suck entities through the hole, if they fit
+Worldgen performance should be _considerably_ improved with this update!
 
 ## Changed
-* Added animations to the LPW-3N
-* MORE MORE MORE electrolyser ports
-* PLSS will now consume O2 when underwater
-* QMAW pages for zinc
+* T-51 armor can now equip a PLSS to be used as a spacesuit
+* Ike now has more common sellafield craters, and they are more radioactive than on Earth
 
 ## Fixed
-* Crash on mismatched stored dimension IDs for transporter linker
-* Crash with OptimiazationsAndTweaks
-* Crash when using a linked stardar console after removing the stardar
-* Crash when dying in orbit
+* Players in different pressurized rooms are affected by depressurization
+* Light dummies for multiblocks are placeable and crash the game
+* A few more recursion crashes on light dummies
+* A whole lot of worldgen cascading on Moho, Tekto, and others
