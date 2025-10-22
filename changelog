@@ -1,13 +1,4 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5490 - total terradrill death](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5490)
-
-Worldgen performance should be _considerably_ improved with this update!
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5491 - you know how we do it](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5491)
 
 ## Changed
-* T-51 armor can now equip a PLSS to be used as a spacesuit
-* Ike now has more common sellafield craters, and they are more radioactive than on Earth
-
-## Fixed
-* Players in different pressurized rooms are affected by depressurization
-* Light dummies for multiblocks are placeable and crash the game
-* A few more recursion crashes on light dummies
-* A whole lot of worldgen cascading on Moho, Tekto, and others
+* Updated zh_CN localization
