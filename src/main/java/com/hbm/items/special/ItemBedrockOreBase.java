@@ -51,7 +51,7 @@ public class ItemBedrockOreBase extends Item {
 		stack.setItemDamage(body.ordinal());
 
 		for(CelestialBedrockOreType type : CelestialBedrockOre.get(body).types) {
-			data.setDouble(type.suffix, getOreLevel(world, x, z, type));
+			data.setDouble(type.suffix, getOreLevel(world, x, z, type) * mult);
 		}
 	}
 
