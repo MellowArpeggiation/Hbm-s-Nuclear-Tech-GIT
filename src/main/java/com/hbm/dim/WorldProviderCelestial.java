@@ -38,12 +38,12 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.WeightedRandomFishable;
-import net.minecraft.world.WorldProvider;
+import net.minecraft.world.WorldProviderSurface;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 
-public abstract class WorldProviderCelestial extends WorldProvider {
+public abstract class WorldProviderCelestial extends WorldProviderSurface {
 
 	public List<AstroMetric> metrics;
 
