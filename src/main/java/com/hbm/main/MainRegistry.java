@@ -13,6 +13,13 @@ import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.entity.mob.siege.SiegeTier;
 import com.hbm.handler.*;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
+import com.hbm.handler.fluid.ForgeFluidCapabilityHook;
+import com.hbm.handler.fluid.ForgeFluidCompatManager;
+import com.hbm.handler.fluid.registry.FluidMappingRegistry;
+import com.hbm.handler.fluid.registry.ForgeFluidAdapterRegistry;
+import com.hbm.handler.fluid.render.NTMFluidColorApplier;
+import com.hbm.handler.fluid.render.NTMFluidTextureMapper;
+import com.hbm.handler.fluid.render.NTMForgeFluidRenderer;
 import com.hbm.handler.ae2.AE2CompatHandler;
 import com.hbm.handler.imc.*;
 import com.hbm.handler.microblocks.MicroBlocksCompatHandler;
@@ -90,9 +97,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import com.hbm.dim.SolarSystem;
-import com.hbm.dim.WorldProviderCelestial;
 import com.hbm.dim.WorldTypeTeleport;
-import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.world.ModBiomes;
 import com.hbm.world.PlanetGen;
 
@@ -283,6 +288,21 @@ public class MainRegistry {
 		 * This "fix" just makes sure that the material system is loaded first no matter what. */
 		Mats.MAT_STONE.getUnlocalizedName();
 		Fluids.init();
+
+		// Initialize the fluid mapping registry and texture/color systems
+		FluidMappingRegistry.initialize();
+		NTMFluidTextureMapper.initialize();
+		NTMFluidColorApplier.initialize();
+		// Set the brightness factor for fluid colors (>1 = brighter, <1 = darker)
+		NTMFluidColorApplier.setBrightnessFactor(1.2f);
+		NTMForgeFluidRenderer.initialize();
+		// Initialize the Forge fluid compatibility system
+		ForgeFluidCompatManager.initialize();
+		// Initialize the adapter registry and capability hook
+		ForgeFluidAdapterRegistry.initialize();
+		ForgeFluidCapabilityHook.initialize();
+		// Note: Flow rate setting is no longer used as the system now respects the tank capacities and transfer rates
+
 		proxy.registerPreRenderInfo();
 		ModBlocks.mainRegistry();
 		ModItems.mainRegistry();
