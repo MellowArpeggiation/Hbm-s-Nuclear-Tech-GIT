@@ -3304,7 +3304,7 @@ public class ModBlocks {
 
 		GameRegistry.registerBlock(minmus_regolith, minmus_regolith.getUnlocalizedName());
 		GameRegistry.registerBlock(minmus_stone, minmus_stone.getUnlocalizedName());
-		GameRegistry.registerBlock(minmus_smooth, minmus_smooth.getUnlocalizedName());
+		register(minmus_smooth, ItemBlockLore.class);
 
 
 		//Waste

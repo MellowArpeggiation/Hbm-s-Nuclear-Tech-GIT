@@ -6892,6 +6892,7 @@ tile.substation.name=Substation
 tile.sulfuric_acid_block.name=Sulfuric Acid
 tile.mercury_block.name=Mercury
 tile.minmus_smooth.name=Smooth Minmus Rock
+tile.minmus_smooth.desc=It smells... refreshing?
 tile.minmus_regolith.name=Minmus Regolith
 tile.minmus_stone.name=Minmus Stone
 tile.bromine_block.name=Alkyl Bromide
