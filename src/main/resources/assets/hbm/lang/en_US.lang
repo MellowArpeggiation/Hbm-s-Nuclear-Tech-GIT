@@ -5028,6 +5028,7 @@ item.telepad.name=Telepad
 item.tem_flakes.name=Tem Flakes
 item.butter.name=Butter
 item.s_cream.name=Strawberry Ice Cream
+item.min_cream.name=Minmus Mint Ice Cream
 item.tem_flakes.desc=Heals 2HP DISCOUNT FOOD OF TEM!!!$Heals 2HP food of tem$Heals food of tem (expensiv)
 item.template_folder.name=Machine Template Folder
 item.template_folder.desc=Machine Templates: Paper + Dye$Press Stamps: Flat Stamp$Siren Tracks: Insulator + Steel Plate
