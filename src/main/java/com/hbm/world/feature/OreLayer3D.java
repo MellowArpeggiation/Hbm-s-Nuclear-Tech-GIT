@@ -23,9 +23,12 @@ public class OreLayer3D {
 	public static int counter = 0;
 	public int id;
 
+	long lastSeed;
 	NoiseGeneratorPerlin noiseX;
 	NoiseGeneratorPerlin noiseY;
 	NoiseGeneratorPerlin noiseZ;
+	double[][] cacheX;
+	double[][] cacheZ;
 
 	double scaleH;
 	double scaleV;
@@ -75,8 +78,13 @@ public class OreLayer3D {
 	@SubscribeEvent
 	public void onDecorate(DecorateBiomeEvent.Pre event) {
 		World world = event.world;
-		int cX = event.chunkX;
-		int cZ = event.chunkZ;
+		int cx = event.chunkX;
+		int cz = event.chunkZ;
+
+		// cx = chunk x
+		// ox = offset x
+		// nx = noise x
+		// x = world x
 
 		if(world.provider == null) return;
 
@@ -91,25 +99,43 @@ public class OreLayer3D {
 			if(world.provider.dimensionId != this.dim) return;
 		}
 
-		ChunkCoordIntPair chunkPos = new ChunkCoordIntPair(cX, cZ);
+		ChunkCoordIntPair chunkPos = new ChunkCoordIntPair(cx, cz);
 		Set<ChunkCoordIntPair> decoratedChunks = alreadyDecorated.computeIfAbsent(world.provider.dimensionId, n -> new HashSet<>());
 
 		// Stop early if we've already generated this chunk in this dimension
 		if(decoratedChunks.contains(chunkPos)) return;
 		decoratedChunks.add(chunkPos);
 
-		if(this.noiseX == null) this.noiseX = new NoiseGeneratorPerlin(new Random(event.world.getSeed() + 101 + id), 4);
-		if(this.noiseY == null) this.noiseY = new NoiseGeneratorPerlin(new Random(event.world.getSeed() + 102 + id), 4);
-		if(this.noiseZ == null) this.noiseZ = new NoiseGeneratorPerlin(new Random(event.world.getSeed() + 103 + id), 4);
+		// refresh caches on first run and if the world seed changes
+		if(this.noiseX == null || world.getSeed() != lastSeed) {
+			this.noiseX = new NoiseGeneratorPerlin(new Random(world.getSeed() + 101 + id), 4);
+			this.noiseY = new NoiseGeneratorPerlin(new Random(world.getSeed() + 102 + id), 4);
+			this.noiseZ = new NoiseGeneratorPerlin(new Random(world.getSeed() + 103 + id), 4);
+			cacheX = new double[16][65];
+			cacheZ = new double[16][65];
+			lastSeed = world.getSeed();
+		}
 
-		for(int x = cX + 8; x < cX + 24; x++) {
-			for(int z = cZ + 8; z < cZ + 24; z++) {
-				double nY = this.noiseY.func_151601_a(x * scaleH, z * scaleH);
+		for(int o = 0; o < 16; o++) {
+			for(int y = 64; y > 5; y--) {
+				cacheX[o][y] = this.noiseX.func_151601_a(y * scaleV, (cz + 8 + o) * scaleH);
+				cacheZ[o][y] = this.noiseZ.func_151601_a((cx + 8 + o) * scaleH, y * scaleV);
+			}
+		}
+
+		for(int ox = 0; ox < 16; ox++) {
+			int x = cx + 8 + ox;
+
+			for(int oz = 0; oz < 16; oz++) {
+				int z = cz + 8 + oz;
+
+				double ny = this.noiseY.func_151601_a(x * scaleH, z * scaleH);
+
 				for(int y = 64; y > 5; y--) {
-					double nX = this.noiseX.func_151601_a(y * scaleV, z * scaleH);
-					double nZ = this.noiseZ.func_151601_a(x * scaleH, y * scaleV);
+					double nx = cacheX[oz][y];
+					double nz = cacheX[ox][y];
 
-					if(nX * nY * nZ > threshold) {
+					if(nx * ny * nz > threshold) {
 						Block target = world.getBlock(x, y, z);
 
 						if(target.isNormalCube() && target.isReplaceableOreGen(world, x, y, z, replace)) {
