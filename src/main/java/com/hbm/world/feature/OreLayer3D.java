@@ -104,9 +104,9 @@ public class OreLayer3D {
 
 		for(int x = cX + 8; x < cX + 24; x++) {
 			for(int z = cZ + 8; z < cZ + 24; z++) {
+				double nY = this.noiseY.func_151601_a(x * scaleH, z * scaleH);
 				for(int y = 64; y > 5; y--) {
 					double nX = this.noiseX.func_151601_a(y * scaleV, z * scaleH);
-					double nY = this.noiseY.func_151601_a(x * scaleH, z * scaleH);
 					double nZ = this.noiseZ.func_151601_a(x * scaleH, y * scaleV);
 
 					if(nX * nY * nZ > threshold) {
