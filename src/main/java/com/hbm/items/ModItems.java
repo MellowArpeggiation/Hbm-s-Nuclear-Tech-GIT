@@ -1099,6 +1099,7 @@ public class ModItems {
 	public static Item glass_empty;
 	public static Item glass_smilk;
 	public static Item strawberry;
+	public static Item mint_leaves;
 	public static Item teaseeds;
 	public static Item tea_leaf;
 	public static Item bean_raw;
@@ -3446,6 +3447,7 @@ public class ModItems {
 		glass_smilk = new ItemEnergy().makeGlass().setUnlocalizedName("glass_smilk").setTextureName(RefStrings.MODID + ":glass_smilk");
 		glass_empty = new Item().setUnlocalizedName("glass_empty").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":glass_empty");
 		strawberry = new ItemSeedFood(3, 0.4F, ModBlocks.crop_strawberry, Blocks.farmland).setUnlocalizedName("strawberry").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":strawberry");
+		mint_leaves = new ItemSeedFood(3, 0.4F, ModBlocks.crop_mint, Blocks.farmland).setUnlocalizedName("mint_leaves").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":mint_leaves");
 		bean_raw = new ItemSeedFood(1, 0.2F, ModBlocks.crop_coffee, Blocks.farmland).setUnlocalizedName("bean_raw").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":coffeebeanraw");
 		powder_coffee = new ItemCustomLore().setUnlocalizedName("powder_coffee").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":powder_coffee");
 		bean_roast = new Item().setUnlocalizedName("bean_roast").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":coffeebeanroast");
@@ -7369,6 +7371,7 @@ public class ModItems {
 		GameRegistry.registerItem(glass_smilk, glass_smilk.getUnlocalizedName());
 		GameRegistry.registerItem(glass_empty, glass_empty.getUnlocalizedName());
 		GameRegistry.registerItem(strawberry, strawberry.getUnlocalizedName());
+		GameRegistry.registerItem(mint_leaves, mint_leaves.getUnlocalizedName());
 		GameRegistry.registerItem(teaseeds, teaseeds.getUnlocalizedName());
 		GameRegistry.registerItem(tea_leaf, tea_leaf.getUnlocalizedName());
 		GameRegistry.registerItem(powder_coffee, powder_coffee.getUnlocalizedName());

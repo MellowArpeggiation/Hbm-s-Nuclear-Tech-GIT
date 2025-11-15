@@ -420,7 +420,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 
 		this.register(new GenericRecipe("chem.minmussmoothstone").setup(200, 1_000) 
 				.inputFluids(new FluidStack(Fluids.MILK, 350), new FluidStack(Fluids.EMILK, 250))
-				.inputItems(new ComparableStack(Blocks.ice, 4))
+				.inputItems(new ComparableStack(Blocks.ice, 4), new ComparableStack(ModItems.mint_leaves, 2))
 				.outputItems(new ItemStack(ModBlocks.minmus_smooth, 2)));
 
 		this.register(new GenericRecipe("chem.minmusstone").setup(300, 500) 
