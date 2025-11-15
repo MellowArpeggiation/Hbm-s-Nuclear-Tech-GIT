@@ -407,14 +407,26 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 		this.register(new GenericRecipe("chem.butter").setup(100, 100)
 				.inputFluids(new FluidStack(Fluids.EMILK, 1000))
 				.outputItems(new ItemStack(ModItems.butter)));
+
 		this.register(new GenericRecipe("chem.strawberryicecream").setup(150, 100)
 				.inputFluids(new FluidStack(Fluids.CREAM, 1000))
 				.inputItems(new ComparableStack(ModItems.butter, 2), new ComparableStack(Blocks.packed_ice, 1), new ComparableStack(ModItems.strawberry, 4))
 				.outputItems(new ItemStack(ModItems.s_cream, 4)));
+
 		this.register(new GenericRecipe("chem.minmusicecream").setup(150, 100) 
 				.inputFluids(new FluidStack(Fluids.CREAM, 1000))
 				.inputItems(new ComparableStack(ModItems.butter, 4), new ComparableStack(ModBlocks.minmus_smooth, 2), new ComparableStack(ModBlocks.minmus_stone, 2))
 				.outputItems(new ItemStack(ModItems.min_cream, 4)));
+
+		this.register(new GenericRecipe("chem.minmussmoothstone").setup(200, 1_000) 
+				.inputFluids(new FluidStack(Fluids.MILK, 350), new FluidStack(Fluids.EMILK, 250))
+				.inputItems(new ComparableStack(Blocks.ice, 4))
+				.outputItems(new ItemStack(ModBlocks.minmus_smooth, 2)));
+
+		this.register(new GenericRecipe("chem.minmusstone").setup(300, 500) 
+				.inputFluids(new FluidStack(Fluids.SULFURIC_ACID, 500))
+				.inputItems(new ComparableStack(ModBlocks.minmus_smooth, 2))
+				.outputItems(new ItemStack(ModBlocks.minmus_stone, 2)));
 
 		this.register(new GenericRecipe("chem.soil").setup(100, 1_000)
 				.inputFluids(new FluidStack(Fluids.WATER, 4000))
