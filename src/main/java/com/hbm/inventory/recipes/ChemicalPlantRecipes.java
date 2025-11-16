@@ -420,8 +420,18 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 
 		this.register(new GenericRecipe("chem.minmussmoothstone").setup(200, 1_000) 
 				.inputFluids(new FluidStack(Fluids.MILK, 350), new FluidStack(Fluids.EMILK, 250))
-				.inputItems(new ComparableStack(Blocks.ice, 4), new ComparableStack(ModItems.mint_leaves, 2))
-				.outputItems(new ItemStack(ModBlocks.minmus_smooth, 2)));
+				.inputItems(new ComparableStack(Blocks.ice, 4), new ComparableStack(ModItems.mint_leaves, 2), new ComparableStack(ModBlocks.minmus_smooth, 2))
+				.outputItems(new ItemStack(ModBlocks.minmus_smooth, 4)));
+			//something about a steam distilation?
+		this.register(new GenericRecipe("chem.menthol").setup(50, 100) 
+				.inputFluids(new FluidStack(Fluids.STEAM, 350))
+				.inputItems(new ComparableStack(ModItems.mint_leaves, 4))
+				.outputItems(new ItemStack(ModItems.ingot_menthol, 2)));
+			//this makes no sense but we're making stone with milk and mint so it doesn't matter
+		this.register(new GenericRecipe("chem.mentholfromminmus").setup(50, 300) 
+				.inputFluids(new FluidStack(Fluids.STEAM, 350), new FluidStack(Fluids.SULFURIC_ACID, 500))
+				.inputItems(new ComparableStack(ModBlocks.minmus_smooth, 40))
+				.outputItems(new ItemStack(ModItems.ingot_menthol, 15)));
 
 		this.register(new GenericRecipe("chem.minmusstone").setup(300, 500) 
 				.inputFluids(new FluidStack(Fluids.SULFURIC_ACID, 500))
