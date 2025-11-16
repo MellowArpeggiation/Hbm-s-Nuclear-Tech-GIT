@@ -1,6 +1,7 @@
 package com.hbm.inventory.container;
 
 import com.hbm.handler.RocketStruct;
+import com.hbm.inventory.SlotNonRetarded;
 import com.hbm.inventory.SlotRocket.SlotCapsule;
 import com.hbm.inventory.SlotRocket.SlotDrive;
 import com.hbm.inventory.SlotRocket.SlotRocketPart;
@@ -17,7 +18,16 @@ public class ContainerOrbitalStationLauncher extends ContainerBase {
 	public ContainerOrbitalStationLauncher(InventoryPlayer invPlayer, TileEntityOrbitalStationLauncher machine) {
 		super(invPlayer, machine);
 
-		int slotId = 3;
+		int slotId = 0;
+
+		// Target drive
+		addSlotToContainer(new SlotNonRetarded(machine, slotId++, 42, 55));
+
+		// Fuel in
+		addSlotToContainer(new Slot(machine, slotId++, 42, 73));
+
+		// Fuel out
+		addSlotToContainer(new Slot(machine, slotId++, 42, 91));
 
 		// Capsule slot
 		addSlotToContainer(new SlotCapsule(machine, slotId++, 18, 13));

@@ -127,6 +127,13 @@ public class TileEntityOrbitalStationLauncher extends TileEntityMachineBase impl
 	}
 
 	@Override
+	public boolean isItemValidForSlot(int index, ItemStack stack) {
+		if(stack == null) return true;
+		if(index == 0 && !(stack.getItem() instanceof ItemVOTVdrive)) return false;
+		return true;
+	}
+
+	@Override
 	public void serialize(ByteBuf buf) {
 		rocket.writeToByteBuffer(buf);
 	}

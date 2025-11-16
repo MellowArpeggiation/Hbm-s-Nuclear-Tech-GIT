@@ -79,7 +79,7 @@ public class RenderOrbitalStation extends TileEntitySpecialRenderer implements I
 					GL11.glPushMatrix();
 					{
 
-						GL11.glTranslated(0, -launcher.rocket.getHeight(), 0);
+						GL11.glTranslated(0, -launcher.rocket.getHeight() - 0.5, 0);
 
 						MissilePronter.prontRocket(launcher.rocket, Minecraft.getMinecraft().getTextureManager(), false);
 

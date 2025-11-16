@@ -24,7 +24,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GUIOrbitalStationLauncher extends GuiInfoContainerLayered {
 
-	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/machine/gui_rocket_assembly.png");
+	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/machine/gui_orbital_launcher.png");
 
 	private TileEntityOrbitalStationLauncher machine;
 
@@ -124,10 +124,6 @@ public class GUIOrbitalStationLauncher extends GuiInfoContainerLayered {
 		if(checkClick(mouseX, mouseY, 17, 98, 18, 8)) {
 			drawTexturedModalRect(17, 98, xSize, 44, 18, 8);
 		}
-
-		if(machine.rocket.validate()) {
-			drawTexturedModalRect(41, 62, xSize + 18, 8, 18, 18);
-		}
 	}
 
 	@Override
@@ -152,14 +148,12 @@ public class GUIOrbitalStationLauncher extends GuiInfoContainerLayered {
 			}
 		}
 
-		// Construct rocket
-		if(checkClick(x, y, 41, 62, 18, 18)) {
-			if(machine.rocket.validate()) {
-				mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
-				NBTTagCompound data = new NBTTagCompound();
-				data.setBoolean("construct", true);
-				PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(data, machine.xCoord, machine.yCoord, machine.zCoord));
-			}
+		// COMMIT TO LAUNCH
+		if(machine.rocket.validate() && checkClick(x, y, 41, 12, 18, 17)) {
+			mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
+			NBTTagCompound data = new NBTTagCompound();
+			data.setBoolean("launch", true);
+			PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(data, machine.xCoord, machine.yCoord, machine.zCoord));
 		}
 	}
 
