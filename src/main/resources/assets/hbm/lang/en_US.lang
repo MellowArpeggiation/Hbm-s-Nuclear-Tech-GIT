@@ -198,6 +198,7 @@ atmosphere.noAir=REQUIRES VACUUM
 atmosphere.noVacuum=REQUIRES ATMOSPHERE
 atmosphere.noGravity=REQUIRES ZERO-G
 atmosphere.noOrbit=MUST BE IN ORBIT
+atmosphere.yesOrbit=UNUSABLE IN ORBIT
 atmosphere.engineFacing=WRONG DIRECTION
 atmosphere.recycling=Running on recycled air
 
