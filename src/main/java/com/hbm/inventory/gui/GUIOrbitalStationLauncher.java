@@ -110,6 +110,21 @@ public class GUIOrbitalStationLauncher extends GuiInfoContainerLayered {
 
 		}
 		GL11.glPopMatrix();
+
+		GL11.glPushMatrix();
+		{
+
+			GL11.glTranslatef(0, 0, 150);
+			GL11.glScalef(0.5F, 0.5F, 0.5F);
+
+			List<String> issues = machine.findIssues();
+			for(int i = 0; i < issues.size(); i++) {
+				String issue = issues.get(i);
+				fontRendererObj.drawString(issue, (guiLeft + 65) * 2, (guiTop + 111) * 2 + i * 8 - issues.size() * 8, 0xFFFFFF);
+			}
+
+		}
+		GL11.glPopMatrix();
 	}
 
 	@Override
