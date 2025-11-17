@@ -329,6 +329,7 @@ public class ModItems {
 	public static Item billet_nuclear_waste;
 	public static Item billet_red_copper;
 	public static Item billet_menthol;
+	public static Item chocolate_mint_billet;
 
 	public static Item nugget_th232;
 	public static Item nugget_uranium;
@@ -4263,6 +4264,7 @@ public class ModItems {
 		mucho_mango = new ItemMuchoMango(10).setUnlocalizedName("mucho_mango").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":mucho_mango");
 		glyphid_meat = new ItemLemon(3, 0.5F, true).setUnlocalizedName("glyphid_meat").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":glyphid_meat");
 		glyphid_meat_grilled = new ItemLemon(8, 0.75F, true).setPotionEffect(Potion.damageBoost.id, 180, 1, 1F).setUnlocalizedName("glyphid_meat_grilled").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":glyphid_meat_grilled");
+		chocolate_mint_billet = new ItemLemon(5, 5F, true).setUnlocalizedName("chocolate_mint_billet").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":chocolate_mint_billet");
 		egg_glyphid = new Item().setUnlocalizedName("egg_glyphid").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":egg_glyphid");
 		flour = new Item().setUnlocalizedName("flour").setCreativeTab(MainRegistry.consumableTab).setTextureName(RefStrings.MODID + ":flour");
 
@@ -5674,6 +5676,7 @@ public class ModItems {
 		GameRegistry.registerItem(billet_flashlead, billet_flashlead.getUnlocalizedName());
 		GameRegistry.registerItem(billet_nuclear_waste, billet_nuclear_waste.getUnlocalizedName());
 		GameRegistry.registerItem(billet_menthol, billet_menthol.getUnlocalizedName());
+		GameRegistry.registerItem(chocolate_mint_billet, chocolate_mint_billet.getUnlocalizedName());
 
 		//Dusts & Other
 		GameRegistry.registerItem(cinnebar, cinnebar.getUnlocalizedName());

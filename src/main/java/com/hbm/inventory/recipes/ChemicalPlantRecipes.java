@@ -433,6 +433,11 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(new ComparableStack(ModBlocks.minmus_smooth, 40))
 				.outputItems(new ItemStack(ModItems.ingot_menthol, 15)));
 
+		this.register(new GenericRecipe("chem.mintslice").setup(50, 100) 
+				.inputFluids(new FluidStack(Fluids.MILK, 350))
+				.inputItems(new ComparableStack(ModItems.billet_menthol, 3), new ComparableStack(ModBlocks.minmus_stone, 1), new ComparableStack(Items.sugar, 6))
+				.outputItems(new ItemStack(ModItems.chocolate_mint_billet, 3)));
+
 		this.register(new GenericRecipe("chem.minmusstone").setup(300, 500) 
 				.inputFluids(new FluidStack(Fluids.SULFURIC_ACID, 500))
 				.inputItems(new ComparableStack(ModBlocks.minmus_smooth, 2))
