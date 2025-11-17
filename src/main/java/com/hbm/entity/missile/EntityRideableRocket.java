@@ -395,10 +395,13 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 			}
 
 			if(state == RocketState.TRANSFER) {
+				rotationPitch = 90;
+				rotationYaw = -90;
+
 				OrbitalStation station = OrbitalStation.getStationFromPosition((int)posX, (int)posZ);
 				station.update(worldObj);
 
-				if(station.getUnscaledProgress(0) > 0.9) {
+				if(station.getUnscaledProgress(0) > 0.99) {
 					Target from = CelestialBody.getTarget(worldObj, (int)posX, (int)posZ);
 					Target to = getTarget();
 
