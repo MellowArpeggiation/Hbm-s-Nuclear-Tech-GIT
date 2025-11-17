@@ -4,6 +4,7 @@ import com.hbm.blocks.ICustomBlockHighlight;
 import com.hbm.config.ClientConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.dim.WorldProviderCelestial;
+import com.hbm.entity.missile.EntityRideableRocket;
 import com.hbm.extprop.HbmLivingProps;
 import com.hbm.handler.pollution.PollutionHandler.PollutionType;
 import com.hbm.items.IAnimatedItem;
@@ -212,6 +213,25 @@ public class ModEventHandlerRenderer {
 				getBoxFromType(renderer, type).isHidden = false;
 			}
 		}
+	}
+
+	private boolean wasRiding;
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onRenderRidingPlayerPre(RenderPlayerEvent.Pre event) {
+		wasRiding = event.entityPlayer.ridingEntity instanceof EntityRideableRocket;
+		if(!wasRiding) return;
+
+		GL11.glPushMatrix();
+
+		GL11.glRotated(-event.entityPlayer.ridingEntity.rotationPitch, 0, 0, 1);
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void onRenderRidingPlayerPost(RenderPlayerEvent.Post event) {
+		if(!wasRiding) return;
+
+		GL11.glPopMatrix();
 	}
 
 	@SubscribeEvent
