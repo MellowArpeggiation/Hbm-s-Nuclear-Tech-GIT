@@ -23,6 +23,7 @@ import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.machine.TileEntityOrbitalStation;
+import com.hbm.tileentity.machine.TileEntityOrbitalStationLauncher;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.CompatExternal;
 import com.hbm.util.i18n.I18nUtil;
@@ -153,6 +154,8 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 
 				if(te instanceof TileEntityOrbitalStation) {
 					((TileEntityOrbitalStation)te).dockRocket(this);
+				} else if(te instanceof TileEntityOrbitalStationLauncher) {
+					((TileEntityOrbitalStationLauncher)te).dockRocket(this);
 				}
 			}
 		}
@@ -351,7 +354,7 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 				setState(RocketState.TIPPING);
 			}
 
-			if(height > 8) {
+			if(height > 8 && !CelestialBody.inOrbit(worldObj)) {
 				double offset = height - 4;
 				if(capDummy == null || capDummy.isDead) {
 					capDummy = new EntityRideableRocketDummy(worldObj, this);
