@@ -8,7 +8,9 @@ import com.hbm.config.SpaceConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.CelestialTeleporter;
 import com.hbm.dim.SolarSystem;
+import com.hbm.dim.SolarSystemWorldSavedData;
 import com.hbm.dim.orbit.OrbitalStation;
+import com.hbm.dim.orbit.OrbitalStation.StationState;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.handler.RocketStruct;
 import com.hbm.handler.RocketStruct.RocketStage;
@@ -20,8 +22,11 @@ import com.hbm.items.ItemVOTVdrive.Target;
 import com.hbm.items.weapon.ItemCustomRocket;
 import com.hbm.items.weapon.ItemCustomMissilePart.WarheadType;
 import com.hbm.main.MainRegistry;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.toclient.EntityBufPacket;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.sound.AudioWrapper;
+import com.hbm.tileentity.IBufPacketReceiver;
 import com.hbm.tileentity.machine.TileEntityOrbitalStation;
 import com.hbm.tileentity.machine.TileEntityOrbitalStationLauncher;
 import com.hbm.util.BobMathUtil;
@@ -33,11 +38,13 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -54,7 +61,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
-public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOverlay {
+public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOverlay, IBufPacketReceiver {
 
 	public ItemStack navDrive;
 
@@ -91,6 +98,7 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 		DOCKING,		// Arriving at an orbital station
 		UNDOCKING,		// Leaving an orbital station
 		NEEDSFUEL,		// Needs fuel, once fueled it will transition to AWAITING
+		TRANSFER,		// Flying in space!
 	}
 
 	public EntityRideableRocket(World world) {
@@ -120,13 +128,10 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 		return this;
 	}
 
-	public void beginLandingSequence() {
+	public void beginLandingSequence(Target from, Target to) {
 		motionX = 0;
 		motionY = 0;
 		motionZ = 0;
-
-		Target from = CelestialBody.getTarget(worldObj, (int)posX, (int)posZ);
-		Target to = getTarget();
 
 		RocketStruct rocket = getRocket();
 		boolean expendStage = rocket.stages.size() > 0;
@@ -140,6 +145,96 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 		}
 
 		setState(RocketState.LANDING);
+
+		if(navDrive != null && navDrive.getItem() instanceof ItemVOTVdrive) {
+			Destination destination = ItemVOTVdrive.getDestination(navDrive);
+
+			int x = destination.x;
+			int y = 800;
+			int z = destination.z;
+
+			int targetDimensionId = destination.body.getDimensionId();
+
+			EntityPlayer rider = (EntityPlayer) this.riddenByEntity;
+
+			if(rider != null) {
+				if(destination.body == SolarSystem.Body.ORBIT) {
+					setState(RocketState.DOCKING);
+
+					// Place the station in the middle of the zone, where the docking ring will always be
+					x = x * OrbitalStation.STATION_SIZE + (OrbitalStation.STATION_SIZE / 2);
+					y = 0;
+					z = z * OrbitalStation.STATION_SIZE + (OrbitalStation.STATION_SIZE / 2);
+				}
+
+				if(worldObj.provider.dimensionId != targetDimensionId) {
+					CelestialTeleporter.teleport(rider, targetDimensionId, x + 0.5D, y, z + 0.5D, false);
+				} else {
+					posX = x + 0.5D;
+					posZ = z + 0.5D;
+				}
+
+				// After a successful warp, spawn in a station core if one doesn't yet exist
+				if(destination.body == SolarSystem.Body.ORBIT) {
+					WorldServer targetWorld = DimensionManager.getWorld(targetDimensionId);
+					OrbitalStation.spawn(targetWorld, x, z);
+				}
+			} else if(!canRide()) {
+				if(rocket.capsule.part instanceof ISatChip && destination.body != SolarSystem.Body.ORBIT) {
+					WorldServer targetWorld = DimensionManager.getWorld(targetDimensionId);
+					if(targetWorld == null) {
+						DimensionManager.initDimension(targetDimensionId);
+						targetWorld = DimensionManager.getWorld(targetDimensionId);
+					}
+					if(targetWorld != null) {
+						Satellite.orbit(targetWorld, Satellite.getIDFromItem(rocket.capsule.part), satFreq, posX, posY, posZ);
+					}
+				} else if(rocket.capsule.part == ModItems.rp_station_core_20) {
+					// We mark the station as travellable, but we don't actually add the station until the player travels to it
+					OrbitalStation.addStation(x, z, CelestialBody.getBody(worldObj));
+
+					if(thrower != null && thrower instanceof EntityPlayer) {
+						EntityPlayer player = (EntityPlayer) thrower;
+						if(!player.capabilities.isCreativeMode && !ItemVOTVdrive.wasCopied(navDrive)) {
+							player.triggerAchievement(MainRegistry.achDriveFail);
+						}
+					}
+				}
+
+				setDead();
+			}
+		}
+	}
+
+	public void beginCelestialTransfer(Target from, Target to) {
+		motionX = 0;
+		motionY = 0;
+		motionZ = 0;
+
+		setState(RocketState.TRANSFER);
+
+		SolarSystemWorldSavedData data = SolarSystemWorldSavedData.get();
+		OrbitalStation station = data.addStation(from.body);
+
+		station.setState(StationState.TRANSFER, 400);
+		station.orbiting = from.body;
+		station.target = to.body;
+
+		EntityPlayer rider = (EntityPlayer) this.riddenByEntity;
+
+		int x = station.dX * OrbitalStation.STATION_SIZE + (OrbitalStation.STATION_SIZE / 2);
+		int y = 128;
+		int z = station.dZ * OrbitalStation.STATION_SIZE + (OrbitalStation.STATION_SIZE / 2);
+
+		if(rider != null) {
+			if(worldObj.provider.dimensionId != SpaceConfig.orbitDimension) {
+				CelestialTeleporter.teleport(rider, SpaceConfig.orbitDimension, x + 0.5D, y, z + 0.5D, false);
+			} else {
+				posX = x + 0.5D;
+				posY = y;
+				posZ = z + 0.5D;
+			}
+		}
 	}
 
 	@Override
@@ -289,65 +384,28 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 			}
 
 			if((state == RocketState.LAUNCHING && posY > 900) || (state == RocketState.UNDOCKING && posY < 32)) {
-				beginLandingSequence();
-				RocketStruct rocket = getRocket();
+				Target from = CelestialBody.getTarget(worldObj, (int)posX, (int)posZ);
+				Target to = getTarget();
 
-				if(navDrive != null && navDrive.getItem() instanceof ItemVOTVdrive) {
-					Destination destination = ItemVOTVdrive.getDestination(navDrive);
-
-					int x = destination.x;
-					int y = 800;
-					int z = destination.z;
-
-					int targetDimensionId = destination.body.getDimensionId();
-
-					if(rider != null) {
-						if(destination.body == SolarSystem.Body.ORBIT) {
-							setState(RocketState.DOCKING);
-
-							// Place the station in the middle of the zone, where the docking ring will always be
-							x = x * OrbitalStation.STATION_SIZE + (OrbitalStation.STATION_SIZE / 2);
-							y = 0;
-							z = z * OrbitalStation.STATION_SIZE + (OrbitalStation.STATION_SIZE / 2);
-						}
-
-						if(worldObj.provider.dimensionId != targetDimensionId) {
-							CelestialTeleporter.teleport(rider, targetDimensionId, x + 0.5D, y, z + 0.5D, false);
-						} else {
-							posX = x + 0.5D;
-							posZ = z + 0.5D;
-						}
-
-						// After a successful warp, spawn in a station core if one doesn't yet exist
-						if(destination.body == SolarSystem.Body.ORBIT) {
-							WorldServer targetWorld = DimensionManager.getWorld(targetDimensionId);
-							OrbitalStation.spawn(targetWorld, x, z);
-						}
-					} else if(!canRide()) {
-						if(rocket.capsule.part instanceof ISatChip && destination.body != SolarSystem.Body.ORBIT) {
-							WorldServer targetWorld = DimensionManager.getWorld(targetDimensionId);
-							if(targetWorld == null) {
-								DimensionManager.initDimension(targetDimensionId);
-								targetWorld = DimensionManager.getWorld(targetDimensionId);
-							}
-							if(targetWorld != null) {
-								Satellite.orbit(targetWorld, Satellite.getIDFromItem(rocket.capsule.part), satFreq, posX, posY, posZ);
-							}
-						} else if(rocket.capsule.part == ModItems.rp_station_core_20) {
-							// We mark the station as travellable, but we don't actually add the station until the player travels to it
-							OrbitalStation.addStation(x, z, CelestialBody.getBody(worldObj));
-
-							if(thrower != null && thrower instanceof EntityPlayer) {
-								EntityPlayer player = (EntityPlayer) thrower;
-								if(!player.capabilities.isCreativeMode && !ItemVOTVdrive.wasCopied(navDrive)) {
-									player.triggerAchievement(MainRegistry.achDriveFail);
-								}
-							}
-						}
-
-						setDead();
-					}
+				if(!canRide() || from.body == to.body) {
+					beginLandingSequence(from, to);
+				} else {
+					beginCelestialTransfer(from, to);
 				}
+			}
+
+			if(state == RocketState.TRANSFER) {
+				OrbitalStation station = OrbitalStation.getStationFromPosition((int)posX, (int)posZ);
+				station.update(worldObj);
+
+				if(station.getUnscaledProgress(0) > 0.9) {
+					Target from = CelestialBody.getTarget(worldObj, (int)posX, (int)posZ);
+					Target to = getTarget();
+
+					beginLandingSequence(from, to);
+				}
+
+				PacketDispatcher.wrapper.sendTo(new EntityBufPacket(getEntityId(), this), (EntityPlayerMP) rider);
 			}
 
 			if(state == RocketState.LANDING && worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)).getMaterial() == Material.water) {
@@ -396,6 +454,10 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 						audio = null;
 					}
 				}
+			}
+
+			if(state == RocketState.TRANSFER) {
+				OrbitalStation.clientStation.update(worldObj);
 			}
 		}
 
@@ -865,6 +927,17 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 			return parent.attackEntityFrom(source, amount);
 		}
 
+	}
+
+	// Only used for station syncing
+	@Override
+	public void serialize(ByteBuf buf) {
+		OrbitalStation.getStationFromPosition((int)posX, (int)posZ).serialize(buf);
+	}
+
+	@Override
+	public void deserialize(ByteBuf buf) {
+		OrbitalStation.clientStation = OrbitalStation.deserialize(buf);
 	}
 
 }

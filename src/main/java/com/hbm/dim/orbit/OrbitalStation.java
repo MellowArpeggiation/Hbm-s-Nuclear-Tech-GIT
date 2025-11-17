@@ -188,7 +188,7 @@ public class OrbitalStation {
 		return (int)(Math.log(1 + (distance * size / thrust * 100)) * 150);
 	}
 
-	private void setState(StationState state, int timeUntilNext) {
+	public void setState(StationState state, int timeUntilNext) {
 		this.state = state;
 		stateTimer = 0;
 		maxStateTimer = timeUntilNext;
