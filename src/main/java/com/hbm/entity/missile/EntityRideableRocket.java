@@ -354,7 +354,7 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 				setState(RocketState.TIPPING);
 			}
 
-			if(height > 8) {
+			if(height > 8 && !CelestialBody.inOrbit(worldObj)) {
 				double offset = height - 4;
 				if(capDummy == null || capDummy.isDead) {
 					capDummy = new EntityRideableRocketDummy(worldObj, this);

@@ -61,6 +61,11 @@ public class GUIOrbitalStationLauncher extends GuiInfoContainerLayered {
 		double dt = (double)(System.nanoTime() - lastTime) / 1000000000;
 		lastTime = System.nanoTime();
 
+		if(machine.hasDocked) {
+			fontRendererObj.drawString("Ready for launch!", (guiLeft + 74), (guiTop + 11), 0x00FF00);
+			return;
+		}
+
 		GL11.glPushMatrix();
 		{
 

@@ -13,6 +13,8 @@ import com.hbm.tileentity.machine.TileEntityOrbitalStationLauncher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.IItemRenderer;
 
@@ -24,9 +26,11 @@ public class RenderOrbitalStation extends TileEntitySpecialRenderer implements I
 		if(te instanceof TileEntityOrbitalStation) {
 			TileEntityOrbitalStation station = (TileEntityOrbitalStation) te;
 			armRotation = station.prevRot + (station.rot - station.prevRot) * interp;
+			bindTexture(ResourceManager.docking_port_tex);
 		} else if(te instanceof TileEntityOrbitalStationLauncher) {
 			TileEntityOrbitalStationLauncher station = (TileEntityOrbitalStationLauncher) te;
 			armRotation = station.prevRot + (station.rot - station.prevRot) * interp;
+			bindTexture(ResourceManager.docking_port_launcher_tex);
 		} else {
 			return;
 		}
@@ -46,7 +50,6 @@ public class RenderOrbitalStation extends TileEntitySpecialRenderer implements I
 
 			GL11.glShadeModel(GL11.GL_SMOOTH);
 
-			bindTexture(ResourceManager.docking_port_tex);
 			ResourceManager.docking_port.renderPart("Port");
 
 			for(int i = 0; i < 4; i++) {
@@ -101,10 +104,15 @@ public class RenderOrbitalStation extends TileEntitySpecialRenderer implements I
 				GL11.glTranslated(0, 2, 0);
 				GL11.glScaled(2, 2, 2);
 			}
-			public void renderCommon() {
+			public void renderCommonWithStack(ItemStack stack) {
 				GL11.glDisable(GL11.GL_CULL_FACE);
 				GL11.glShadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.docking_port_tex);
+				ItemBlock itemBlock = (ItemBlock) stack.getItem();
+				if(itemBlock.field_150939_a == ModBlocks.orbital_station_launcher) {
+					bindTexture(ResourceManager.docking_port_launcher_tex);
+				} else {
+					bindTexture(ResourceManager.docking_port_tex);
+				}
 				ResourceManager.docking_port.renderAll();
 				GL11.glShadeModel(GL11.GL_FLAT);
 				GL11.glEnable(GL11.GL_CULL_FACE);

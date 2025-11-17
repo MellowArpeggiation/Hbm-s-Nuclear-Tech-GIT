@@ -7,6 +7,7 @@ import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.entity.missile.EntityRideableRocket;
+import com.hbm.entity.missile.EntityRideableRocket.RocketState;
 import com.hbm.handler.RocketStruct;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.inventory.SlotRocket.IStage;
@@ -54,6 +55,10 @@ public class TileEntityOrbitalStationLauncher extends TileEntityMachineBase impl
 	public int currentStage;
 
 	public boolean isBreaking;
+
+	// Client synced state information
+	public boolean hasDocked = false;
+	public boolean hasRider = false;
 
 	public TileEntityOrbitalStationLauncher() {
 		// launch:			drive + fuel in + fuel out
@@ -140,7 +145,23 @@ public class TileEntityOrbitalStationLauncher extends TileEntityMachineBase impl
 				if(solidFuel.level > solidFuel.max) solidFuel.level = solidFuel.max;
 			}
 
+			if(docked != null && (docked.isDead || docked.getState() == RocketState.UNDOCKING)) {
+				undockRocket();
+			}
+
+			hasDocked = docked != null;
+			hasRider = hasDocked && docked.riddenByEntity != null;
+
 			networkPackNT(250);
+		} else {
+			prevRot = rot;
+			if(hasDocked) {
+				rot += 2.25F;
+				if(rot > 90) rot = 90;
+			} else {
+				rot -= 2.25F;
+				if(rot < 0) rot = 0;
+			}
 		}
 	}
 
@@ -192,6 +213,11 @@ public class TileEntityOrbitalStationLauncher extends TileEntityMachineBase impl
 	}
 
 	public void launch(EntityPlayer player) {
+		// if(docked != null) {
+		// 	enterCapsule(player);
+		// 	return;
+		// }
+
 		if(!canLaunch()) return;
 
 		ItemStack stack = ItemCustomRocket.build(rocket);
@@ -210,6 +236,8 @@ public class TileEntityOrbitalStationLauncher extends TileEntityMachineBase impl
 		for(int i = 3; i < slots.length; i++) slots[i] = null;
 
 		dockRocket(rocket);
+
+		// if(rocket.canRide()) enterCapsule(player);
 	}
 
 	@Override
@@ -269,6 +297,9 @@ public class TileEntityOrbitalStationLauncher extends TileEntityMachineBase impl
 	public void serialize(ByteBuf buf) {
 		rocket.writeToByteBuffer(buf);
 
+		buf.writeBoolean(hasDocked);
+		buf.writeBoolean(hasRider);
+
 		// buf.writeLong(power);
 		buf.writeInt(solidFuel.level);
 		buf.writeInt(solidFuel.max);
@@ -279,6 +310,9 @@ public class TileEntityOrbitalStationLauncher extends TileEntityMachineBase impl
 	@Override
 	public void deserialize(ByteBuf buf) {
 		rocket = RocketStruct.readFromByteBuffer(buf);
+
+		hasDocked = buf.readBoolean();
+		hasRider = buf.readBoolean();
 
 		// power = buf.readLong();
 		solidFuel.level = buf.readInt();
