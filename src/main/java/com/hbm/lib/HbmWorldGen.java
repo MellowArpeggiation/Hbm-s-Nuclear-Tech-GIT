@@ -111,8 +111,11 @@ public class HbmWorldGen implements IWorldGenerator {
 			if(rand.nextInt(64) == 0) {
 				DungeonToolbox.generateFlowers(world, rand, i, j, ModBlocks.plant_flower, EnumFlowerType.WEED.ordinal());
 			}
-			if(biome instanceof BiomeGenPlains && rand.nextInt(16) == 0) {
+			if(biome instanceof BiomeGenPlains && rand.nextInt(32) == 0) {
 				DungeonToolbox.generateFlowers(world, rand, i, j, ModBlocks.plant_flower, EnumFlowerType.STRAWBERRY.ordinal());
+			}
+			if(biome instanceof BiomeGenPlains && rand.nextInt(32) == 0) {
+				DungeonToolbox.generateFlowers(world, rand, i, j, ModBlocks.plant_flower, EnumFlowerType.MINT.ordinal());
 			}
 			if(biome instanceof BiomeGenRiver && rand.nextInt(4) == 0) {
 				DungeonToolbox.generateFlowers(world, rand, i, j, ModBlocks.reeds, 0);
