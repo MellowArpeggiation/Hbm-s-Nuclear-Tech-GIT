@@ -220,6 +220,10 @@ public class RocketStruct {
 		return SolarSystem.getCostBetween(from, to, rocketMass, thrust, isp, fromOrbit, toOrbit);
 	}
 
+	public int getThrust() {
+		return getThrust(stages.get(0));
+	}
+
 	private int getThrust(RocketStage stage) {
 		return stage.thruster.part.getThrust() * stage.thrusterCount;
 	}

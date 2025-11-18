@@ -210,6 +210,20 @@ public class SolarSystemWorldSavedData extends WorldSavedData {
 		return station;
 	}
 
+	public void removeStation(OrbitalStation station) {
+		removeStation(station.dX, station.dZ);
+	}
+
+	public void removeStation(int x, int z) {
+		ChunkCoordIntPair pos = new ChunkCoordIntPair(x, z);
+
+		// Don't remove stations with launched cores, only temporary stations!
+		OrbitalStation station = stations.get(pos);
+		if(station == null || station.hasStation) return;
+
+		stations.remove(pos);
+	}
+
 
 	// Client sync
 	public static HashMap<String, HashMap<Class<? extends CelestialBodyTrait>, CelestialBodyTrait>> clientTraits = new HashMap<>();

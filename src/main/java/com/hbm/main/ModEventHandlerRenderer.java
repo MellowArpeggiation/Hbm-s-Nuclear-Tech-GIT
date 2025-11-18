@@ -23,6 +23,7 @@ import com.hbm.world.biome.BiomeGenCraterBase;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -69,7 +70,19 @@ public class ModEventHandlerRenderer {
 	private static boolean[] partsHidden = new boolean[7];
 
 	@SubscribeEvent
-	public void onRenderTickPre(TickEvent.RenderTickEvent event) { }
+	public void onRenderTickPre(TickEvent.RenderTickEvent event) {
+		Minecraft mc = Minecraft.getMinecraft();
+		EntityPlayer player = mc.thePlayer;
+
+		if(event.phase == Phase.START) {
+			// Zoom out third person view when inside a rocket
+			if(player != null && player.ridingEntity != null && player.ridingEntity instanceof EntityRideableRocket) {
+				mc.entityRenderer.thirdPersonDistance = 12.0F;
+			} else {
+				mc.entityRenderer.thirdPersonDistance = 4.0F;
+			}
+		}
+	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
 	public void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
