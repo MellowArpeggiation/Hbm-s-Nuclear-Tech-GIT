@@ -31,6 +31,9 @@ public class SolarSystem {
 	public static final double RENDER_SCALE = 180;
 	public static final double SUN_RENDER_SCALE = 4;
 
+	public static final float MAX_APPARENT_SIZE_SURFACE = 24;
+	public static final float MAX_APPARENT_SIZE_ORBIT = 160;
+
 	public static final double ORRERY_MAX_RADIUS = 20_000;
 	public static final double ORRERY_MIN_RADIUS = 2_000;
 

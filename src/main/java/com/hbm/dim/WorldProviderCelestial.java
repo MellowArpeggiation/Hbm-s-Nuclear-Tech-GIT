@@ -1,7 +1,6 @@
 package com.hbm.dim;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
@@ -15,10 +14,8 @@ import com.hbm.handler.ImpactWorldHandler;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.FluidStack;
 import com.hbm.inventory.fluid.Fluids;
-import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
-import com.hbm.saveddata.satellites.SatelliteRailgun;
 import com.hbm.saveddata.satellites.SatelliteWar;
 import com.hbm.util.Compat;
 
@@ -79,30 +76,6 @@ public abstract class WorldProviderCelestial extends WorldProviderSurface {
 	@Override
 	public void updateWeather() {
 		CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
-
-		// funi get world from world (don't do this pls)
-		// World world = DimensionManager.getWorld(worldObj.provider.dimensionId);
-
-		if(!worldObj.isRemote) {
-			HashMap<Integer, Satellite> sats = SatelliteSavedData.getData(worldObj).sats;
-			for(Map.Entry<Integer, Satellite> entry : sats.entrySet()) {
-				if(entry.getValue() instanceof SatelliteWar) {
-					SatelliteWar war = (SatelliteWar) entry.getValue();
-					war.fire();
-				}
-			}
-		} else {
-			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
-				if(entry.getValue() instanceof SatelliteWar) {
-
-					SatelliteRailgun war = (SatelliteRailgun) entry.getValue();
-
-					if(war.getInterp() >= 1 && war.interp <= 9) {
-						MainRegistry.proxy.me().playSound("hbm:misc.fireflash", 10F, 1F);
-					}
-				}
-			}
-		}
 
 		double pressure = atmosphere != null ? atmosphere.getPressure() : 0;
 
@@ -199,21 +172,18 @@ public abstract class WorldProviderCelestial extends WorldProviderSurface {
 		metrics = SolarSystem.calculateMetricsFromBody(worldObj, partialTicks, body, solarAngle);
 
 		// Get our eclipse amount
-		eclipseAmount = getEclipseFactor(metrics, sunSize);
+		eclipseAmount = getEclipseFactor(metrics, sunSize, SolarSystem.MAX_APPARENT_SIZE_SURFACE);
 	}
 
-	public static double getEclipseFactor(List<AstroMetric> metrics, double sunSize) {
+	public static double getEclipseFactor(List<AstroMetric> metrics, double sunSize, double maxSize) {
 		double factor = 0;
+		double sunArc = getArc(sunSize);
 
 		// Calculate eclipse
 		for(AstroMetric metric : metrics) {
 			if(metric.apparentSize < 1) continue;
 
-			double sizeToArc = 0.0028; // due to rendering, the arc is not exactly 1deg = 1deg, this converts from apparentSize to 0-1
-			double planetSize = MathHelper.clamp_double(metric.apparentSize, 0, 24);
-
-			double planetArc = planetSize * sizeToArc;
-			double sunArc = sunSize * sizeToArc;
+			double planetArc = getArc(MathHelper.clamp_double(metric.apparentSize, 0, maxSize));
 			double minPhase = 1 - (planetArc + sunArc);
 			double maxPhase = 1 - (planetArc - sunArc);
 			if(metric.phaseObscure < minPhase) continue;
@@ -224,6 +194,12 @@ public abstract class WorldProviderCelestial extends WorldProviderSurface {
 		}
 
 		return factor;
+	}
+
+	// due to rendering, the arc is not exactly 1deg = 1deg, this converts from apparentSize to 0-1
+	// note that we are rendering flat quads, so the arc size is warped more the larger you get!
+	private static double getArc(double apparentSize) {
+		return apparentSize * 0.0017D + Math.sqrt(apparentSize * 0.00003D);
 	}
 
 	@Override
@@ -769,7 +745,7 @@ public abstract class WorldProviderCelestial extends WorldProviderSurface {
 		metrics = SolarSystem.calculateMetricsFromBody(worldObj, 0, body, solarAngle);
 
 		// Get our eclipse amount
-		return getEclipseFactor(metrics, sunSize) > 0.0;
+		return getEclipseFactor(metrics, sunSize, SolarSystem.MAX_APPARENT_SIZE_SURFACE) > 0.0;
 	}
 
 	@Override
