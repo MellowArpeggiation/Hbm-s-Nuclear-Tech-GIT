@@ -372,7 +372,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputFluids(new FluidStack(Fluids.HYDROGEN, 4_000))
 				.outputFluids(new FluidStack(Fluids.THORIUM_BROMIDE, 4_000)));
 
-		this.register(new GenericRecipe("chem.hydrazine").setup(250, 1_000).setIcon(ModItems.gas_full, Fluids.HYDRAZINE.getID())
+		this.register(new GenericRecipe("chem.hydrazine").setup(250, 1_000).setIcon(ModItems.canister_full, Fluids.HYDRAZINE.getID())
 				.inputFluids(new FluidStack(Fluids.NITRIC_ACID, 2_000), new FluidStack(Fluids.AMMONIA, 1_000))
 				.outputFluids(new FluidStack(Fluids.HYDRAZINE, 800)));
 
@@ -380,7 +380,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputFluids(new FluidStack(Fluids.NITROGEN, 600), new FluidStack(Fluids.WATER, 1_000))
 				.outputFluids(new FluidStack(Fluids.AMMONIA, 800)));
 
-		this.register(new GenericRecipe("chem.bloodfuel").setup(250, 1_000).setIcon(ModItems.gas_full, Fluids.BLOODGAS.getID())
+		this.register(new GenericRecipe("chem.bloodfuel").setup(250, 1_000).setIcon(ModItems.canister_full, Fluids.BLOODGAS.getID())
 				.inputFluids(new FluidStack(Fluids.AMMONIA, 350), new FluidStack(Fluids.BLOOD, 800))
 				.outputFluids(new FluidStack(Fluids.BLOODGAS, 1000)));
 
@@ -457,7 +457,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.outputFluids(new FluidStack(Fluids.NITRIC_ACID, 1_000)));
 
 		// WARNING: NILERED CHEMISTRY ZONE //
-		this.register(new GenericRecipe("chem.hydrapiss")..setupNamed(250, 1_000).setIcon(ModItems.gas_full, Fluids.HYDRAZINE.getID())
+		this.register(new GenericRecipe("chem.hydrapiss")..setupNamed(250, 1_000).setIcon(ModItems.canister_full, Fluids.HYDRAZINE.getID())
 				.inputFluids(new FluidStack(Fluids.NITRIC_ACID, 2000))
 				.inputItems(new ComparableStack(ModItems.rag_piss)) // urea...
 				.outputFluids(new FluidStack(Fluids.HYDRAZINE, 800)).setPools(GenericRecipes.POOL_PREFIX_ALT + ".hydrapiss"));
