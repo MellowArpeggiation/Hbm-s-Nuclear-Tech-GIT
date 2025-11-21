@@ -135,7 +135,7 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(new OreDictStack(DURA.plateCast(), 1), new OreDictStack(TI.plate(), 8)));
 		this.register(new GenericRecipe("ass.entanglementkit").setup(200, 100).outputItems(new ItemStack(ModItems.entanglement_kit, 1))
 				.inputItems(new OreDictStack(DURA.plateCast(), 4), new OreDictStack(CU.plate(), 24), new OreDictStack(GOLD.wireDense(), 16))
-				.inputFluids(new FluidStack(Fluids.XENON, 8_000)));
+				.inputFluids(new FluidStack(Fluids.KRYPTON, 8_000)));
 		this.register(new GenericRecipe("ass.protoreactor").setup(200, 100).outputItems(new ItemStack(ModItems.dysfunctional_reactor, 1))
 				.inputItems(new OreDictStack(STEEL.shell(), 4), new OreDictStack(PB.plateCast(), 4), new ComparableStack(ModItems.rod_quad_empty, 10), new OreDictStack(KEY_BROWN, 3)));
 
