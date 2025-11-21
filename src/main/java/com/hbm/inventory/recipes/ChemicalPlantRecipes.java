@@ -452,12 +452,12 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputFluids(new FluidStack(Fluids.GAS, 750), new FluidStack(Fluids.CHLORINE, 250))
 				.outputFluids(new FluidStack(Fluids.CHLOROMETHANE, 1000)));
 
-		this.register(new GenericRecipe("chem.nitricacidalt")..setupNamed(50, 1_000)
+		this.register(new GenericRecipe("chem.nitricacidalt").setupNamed(50, 1_000)
 				.inputFluids(new FluidStack(Fluids.WATER, 500), new FluidStack(Fluids.AMMONIA, 1000))
 				.outputFluids(new FluidStack(Fluids.NITRIC_ACID, 1_000)));
 
 		// WARNING: NILERED CHEMISTRY ZONE //
-		this.register(new GenericRecipe("chem.hydrapiss")..setupNamed(250, 1_000).setIcon(ModItems.canister_full, Fluids.HYDRAZINE.getID())
+		this.register(new GenericRecipe("chem.hydrapiss").setupNamed(250, 1_000).setIcon(ModItems.canister_full, Fluids.HYDRAZINE.getID())
 				.inputFluids(new FluidStack(Fluids.NITRIC_ACID, 2000))
 				.inputItems(new ComparableStack(ModItems.rag_piss)) // urea...
 				.outputFluids(new FluidStack(Fluids.HYDRAZINE, 800)).setPools(GenericRecipes.POOL_PREFIX_ALT + ".hydrapiss"));
