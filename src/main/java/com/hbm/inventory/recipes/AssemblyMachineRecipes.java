@@ -1206,14 +1206,14 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
 						new OreDictStack(ANY_RUBBER.ingot(), 4),
 						new ComparableStack(ModItems.thruster_small, 1),
 						new ComparableStack(ModItems.circuit, 1, EnumCircuitType.AVIONICS)));
-		this.register(new GenericRecipe("ass.stardar").setup(400, 100).outputItems(new ItemStack(ModBlocks.machine_stardar, 1))
+		this.register(new GenericRecipe("ass.stardar").setup(400, 100).outputItems(new ItemStack(ModBlocks.machine_stardar, 1)).setPools(GenericRecipes.POOL_PREFIX_DISCOVER + "stardar")
 				.inputItems(
 						new ComparableStack(ModItems.motor, 4),
 						new ComparableStack(ModItems.sat_head_radar),
 						new OreDictStack(ANY_CONCRETE.any(), 16),
 						new ComparableStack(ModBlocks.steel_scaffold, 8),
 						new ComparableStack(ModItems.circuit, 4, EnumCircuitType.BASIC)));
-		this.register(new GenericRecipe("ass.driveprocessor").setup(400, 100).outputItems(new ItemStack(ModBlocks.machine_drive_processor, 1))
+		this.register(new GenericRecipe("ass.driveprocessor").setup(400, 100).outputItems(new ItemStack(ModBlocks.machine_drive_processor, 1)).setPools(GenericRecipes.POOL_PREFIX_DISCOVER + "stardar")
 				.inputItems(
 						new OreDictStack(ANY_RUBBER.ingot(), 2),
 						new OreDictStack(CU.wireFine(), 4),
