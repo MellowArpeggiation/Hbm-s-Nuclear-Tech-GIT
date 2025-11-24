@@ -626,6 +626,9 @@ chem.heavylube=Lubricant from Heavy Oil
 chem.oilelectrodes=Instant Electrodes (Heating Oil)
 chem.lubeelectrodes=Instant Electrodes (Lubricant)
 
+chem.nitricacidalt=Nitric Acid from Ammonia
+chem.hydrapiss=Hydrazine via Urea
+
 chem.ARSENIC=Arsenic Extraction
 chem.ASPHALT=Asphalt Production
 chem.AMONGUS=Ammonia Production
