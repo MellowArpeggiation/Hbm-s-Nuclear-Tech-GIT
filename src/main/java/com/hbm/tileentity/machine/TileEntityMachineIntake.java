@@ -1,8 +1,9 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.dim.CelestialBody;
-import com.hbm.dim.orbit.WorldProviderOrbit;
+import java.util.List;
+
 import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.handler.atmosphere.AtmosphereBlob;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
@@ -39,13 +40,32 @@ public class TileEntityMachineIntake extends TileEntityLoadedBase implements IEn
 
 		if(!worldObj.isRemote) {
 
-			CBT_Atmosphere atmosphere = !(worldObj.provider instanceof WorldProviderOrbit) && !ChunkAtmosphereManager.proxy.hasAtmosphere(worldObj, xCoord, yCoord, zCoord)
-				? CelestialBody.getTrait(worldObj, CBT_Atmosphere.class)
-				: null;
+			boolean isInPressurizedRoom = ChunkAtmosphereManager.proxy.hasAtmosphere(worldObj, xCoord, yCoord, zCoord);
+			CBT_Atmosphere atmosphere = ChunkAtmosphereManager.proxy.getAtmosphere(worldObj, xCoord, yCoord, zCoord);
 
 			if(this.power >= this.getMaxPower() / 20) {
 				if(atmosphere != null && atmosphere.getPressure() > 0.01D) {
-					FT_Gaseous.capture(worldObj, atmosphere.getMainFluid(), this.compair.getMaxFill() - this.compair.getFill());
+
+					// 1mB of any given air -> 100mB of compressed air
+					// reasoning being: this is the same conversion ratio of water -> steam
+					// bob intends for this to absolutely shit out air, but that is just not feasible with air prod in space
+					// with a single klystron this is still 25mB/t, which is still more oxygen consumption than the old fusion reactor
+					int consumption = (this.compair.getMaxFill() - this.compair.getFill()) / 100;
+
+					if(consumption > 0) {
+						if(!isInPressurizedRoom) {
+							FT_Gaseous.capture(worldObj, atmosphere.getMainFluid(), consumption);
+						} else {
+							List<AtmosphereBlob> blobs = ChunkAtmosphereManager.proxy.getBlobs(worldObj, xCoord, yCoord, zCoord);
+							for(AtmosphereBlob blob : blobs) {
+								if(blob.hasPressure(0.1)) {
+									blob.consume(consumption);
+									break;
+								}
+							}
+						}
+					}
+
 					this.compair.setFill(this.compair.getMaxFill());
 				}
 

@@ -37,7 +37,7 @@ public class TileEntityFusionKlystron extends TileEntityMachineBase implements I
 
 	protected GenNode klystronNode;
 	public static final long MAX_OUTPUT = 1_000_000;
-	public static final int AIR_CONSUMPTION = 250; // reduced for station balance (will probs revisit)
+	public static final int AIR_CONSUMPTION = 2_500;
 	public long outputTarget;
 	public long output;
 	public long power;
