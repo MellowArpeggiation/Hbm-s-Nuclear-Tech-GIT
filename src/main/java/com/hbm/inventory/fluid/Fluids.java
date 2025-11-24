@@ -576,6 +576,7 @@ public class Fluids {
 		metaOrder.add(BLOOD);
 		metaOrder.add(BLOODGAS);
 		metaOrder.add(BLOOD_HOT);
+		metaOrder.add(SCUTTERBLOOD);
 		metaOrder.add(SODIUM);
 		metaOrder.add(SODIUM_HOT);
 		metaOrder.add(LEAD);
@@ -590,12 +591,10 @@ public class Fluids {
 		metaOrder.add(HELIUM3);
 		metaOrder.add(HELIUM4);
 		metaOrder.add(OXYGEN);
-		metaOrder.add(XENON);
 		metaOrder.add(CHLORINE);
 		metaOrder.add(FLUORINE);
 		metaOrder.add(MERCURY);
 		metaOrder.add(NITROGEN);
-		metaOrder.add(SCUTTERBLOOD);
 		//oils, fuels
 		metaOrder.add(OIL);
 		metaOrder.add(OIL_DS);
@@ -680,24 +679,23 @@ public class Fluids {
 		metaOrder.add(SULFURIC_ACID);
 		metaOrder.add(BROMINE);
 		metaOrder.add(URANIUM_BROMIDE);
+		metaOrder.add(THORIUM_BROMIDE);
 		metaOrder.add(AQUEOUS_COPPER);
 		metaOrder.add(COPPERSULFATE);
-		metaOrder.add(THORIUM_BROMIDE);
 		//meths
 		metaOrder.add(CHLOROMETHANE);
 		metaOrder.add(METHANOL);
 		metaOrder.add(POLYTHYLENE);
 		metaOrder.add(CHLOROETHANE); //oh yeah this is meant to be that inbetween step for making the cast fluid
 		//airs
+		metaOrder.add(EARTHAIR); //do it for love, do it for life, for mankiiiiiind!!
 		metaOrder.add(DUNAAIR);
 		metaOrder.add(EVEAIR); //iodine, mercury, potassium permenganate
 		metaOrder.add(JOOLGAS);
-		metaOrder.add(KMnO4);
 		metaOrder.add(SARNUSGAS);
 		metaOrder.add(UGAS);
 		metaOrder.add(NGAS);
 		metaOrder.add(TEKTOAIR);
-		metaOrder.add(EARTHAIR); //do it for love, do it for life, for mankiiiiiind!!
 		//NITRIC_ACID
 		metaOrder.add(NITRIC_ACID);
 		metaOrder.add(HCL);
@@ -705,6 +703,7 @@ public class Fluids {
 		metaOrder.add(SOLVENT);
 		metaOrder.add(RADIOSOLVENT);
 		metaOrder.add(HTCO4);
+		metaOrder.add(KMnO4);
 		metaOrder.add(SCHRABIDIC);
 		metaOrder.add(UF6);
 		metaOrder.add(PUF6);
@@ -746,8 +745,8 @@ public class Fluids {
 		metaOrder.add(ENDERJUICE);
 		//slurry
 		metaOrder.add(MINSOL);
-		metaOrder.add(NMASS);
 		//plasma-esque
+		metaOrder.add(NMASS);
 		metaOrder.add(STELLAR_FLUX);
 		//plasma
 		metaOrder.add(PLASMA_DT);
@@ -758,6 +757,7 @@ public class Fluids {
 		metaOrder.add(PLASMA_BF);
 		//noble gasses
 		metaOrder.add(KRYPTON);
+		metaOrder.add(XENON);
 		metaOrder.add(ARGON);
 		metaOrder.add(NEON);
 		//misc for cute dates
@@ -767,11 +767,10 @@ public class Fluids {
 		metaOrder.add(MILK);
 		metaOrder.add(SMILK);
 		metaOrder.add(CCL);
-		metaOrder.add(ELBOWGREASE);
+		metaOrder.add(ELBOWGREASE); // cute date with a mechanic
 		metaOrder.add(EMILK);
 		metaOrder.add(CMILK);
 		metaOrder.add(CREAM);
-
 		//smoke
 		metaOrder.add(SMOKE);
 		metaOrder.add(SMOKE_LEADED);
