@@ -464,7 +464,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 		this.register(new GenericRecipe("chem.hydrapiss").setupNamed(250, 1_000).setIcon(ModItems.canister_full, Fluids.HYDRAZINE.getID())
 				.inputFluids(new FluidStack(Fluids.NITRIC_ACID, 2000))
 				.inputItems(new ComparableStack(ModItems.rag_piss)) // urea...
-				.outputFluids(new FluidStack(Fluids.HYDRAZINE, 800)).setPools(GenericRecipes.POOL_PREFIX_ALT + ".hydrapiss"));
+				.outputFluids(new FluidStack(Fluids.HYDRAZINE, 800))); // this is an emergency recipe, so it should NOT have a required blueprint
 
 		this.register(new GenericRecipe("chem.synleather").setup(200, 500)
 				.inputFluids(new FluidStack(Fluids.PEROXIDE, 250))
