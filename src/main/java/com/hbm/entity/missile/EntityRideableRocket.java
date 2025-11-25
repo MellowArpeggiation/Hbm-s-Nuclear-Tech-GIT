@@ -484,7 +484,7 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 						decouple.startSound();
 					}
 
-					if(decoupleTimer == 100 && getRocket().stages.size() > 0) {
+					if(decoupleTimer == 100 && getRocket().stages.size() > 1) {
 						AudioWrapper decouple = MainRegistry.proxy.getLoopedSound("hbm:entity.rocketStage", (float)posX, (float)posY, (float)posZ, 0.5F, 250.0F, 1.2F + worldObj.rand.nextFloat() * 0.2F, 40);
 						decouple.setDoesRepeat(false);
 						decouple.startSound();
