@@ -55,6 +55,7 @@ public class ChunkAtmosphereHandler {
 	//  * 200 crops (300s per stage)
 	public static final int TREE_GROWTH_CONVERSION = 400; // per sapling -> tree
 	public static final int CROP_GROWTH_CONVERSION = 15; // per stage
+	public static final int GRASS_GROWTH_CONVERSION = 100; // per block
 
 	/*
 	 * Methods to get information about the current atmosphere
@@ -420,7 +421,7 @@ public class ChunkAtmosphereHandler {
 	private void tickTerraforming(World world) {
 		Queue<Growth> growths = growthMap.get(world.provider.dimensionId);
 
-		for(int g = 0; g < 8; g++) {
+		for(int g = 0; g < 64; g++) {
 			Growth growth = growths.poll();
 
 			if(growth == null) return;
@@ -440,6 +441,8 @@ public class ChunkAtmosphereHandler {
 
 					if(shouldReplace) {
 						world.setBlock(x, y, z, growth.into);
+
+						if(growth.into == Blocks.grass) world.playAuxSFX(2005, x, y + 1, z, 0);
 
 						if(growth.time > 0) addGrowth(world, growth.from, growth.into, x, y, z, growth.time - 1);
 

@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.dim.CelestialBody;
+import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.entity.mob.glyphid.EntityGlyphid;
 import com.hbm.extprop.HbmLivingProps;
+import com.hbm.handler.atmosphere.ChunkAtmosphereHandler;
 import com.hbm.handler.atmosphere.ChunkAtmosphereManager;
 import com.hbm.handler.radiation.ChunkRadiationManager;
 import com.hbm.inventory.fluid.FluidType;
@@ -460,8 +463,19 @@ public class EntityChemical extends EntityThrowableNT {
 					if(block == Blocks.dirt || block == ModBlocks.waste_earth || block == ModBlocks.dirt_dead || block == ModBlocks.dirt_oily) {
 
 						if(worldObj.getBlockLightValue(x, y + 1, z) >= 9 && worldObj.getBlockLightOpacity(x, y + 1, z) <= 2) {
-							worldObj.setBlock(x, y, z, Blocks.grass);
-							ChunkAtmosphereManager.proxy.addGrowth(worldObj, Blocks.grass, x, y, z, 4, 6);
+							CBT_Atmosphere atmosphere = CelestialBody.getTrait(worldObj, CBT_Atmosphere.class);
+
+							if(atmosphere != null && (atmosphere.hasFluid(Fluids.EARTHAIR) || atmosphere.hasFluid(Fluids.DUNAAIR) || atmosphere.hasFluid(Fluids.CARBONDIOXIDE) || atmosphere.hasFluid(Fluids.OXYGEN))) {
+								worldObj.setBlock(x, y, z, Blocks.grass);
+								ChunkAtmosphereManager.proxy.addGrowth(worldObj, Blocks.grass, x, y, z, 4, 6);
+								int totalConversion = ChunkAtmosphereHandler.GRASS_GROWTH_CONVERSION * 4 * 6;
+
+								if(CelestialBody.consumeGas(worldObj, Fluids.CARBONDIOXIDE, totalConversion) || CelestialBody.consumeGas(worldObj, Fluids.DUNAAIR, totalConversion)) {
+									CelestialBody.emitGas(worldObj, Fluids.EARTHAIR, totalConversion);
+								}
+
+								worldObj.playAuxSFX(2005, x, y + 1, z, 0);
+							}
 						}
 					}
 					int meta = worldObj.getBlockMetadata(x, y, z);
