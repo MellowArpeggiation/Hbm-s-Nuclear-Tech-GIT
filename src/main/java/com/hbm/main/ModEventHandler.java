@@ -842,19 +842,25 @@ public class ModEventHandler {
 					if(player.ridingEntity != null && player.ridingEntity instanceof EntityRideableRocket && player.isSneaking()) {
 						EntityRideableRocket rocket = (EntityRideableRocket) player.ridingEntity;
 
-						// Prevent leaving a rocket in motion, for safety
-						if(rocket.canExitCapsule()) {
-							boolean inOrbit = event.world.provider instanceof WorldProviderOrbit;
-							Entity ridingEntity = player.ridingEntity;
-							float prevHeight = ridingEntity.height;
+						if(player.isSneaking()) {
+							// Prevent leaving a rocket in motion, for safety
+							if(rocket.canExitCapsule() || rocket.forceExitTimer >= 60) {
+								boolean inOrbit = event.world.provider instanceof WorldProviderOrbit;
+								Entity ridingEntity = player.ridingEntity;
+								float prevHeight = ridingEntity.height;
 
-							ridingEntity.height = inOrbit ? ridingEntity.height + 1.0F : 1.0F;
-							player.mountEntity(null);
-							if(!inOrbit) player.setPositionAndUpdate(player.posX + 2, player.posY, player.posZ);
-							ridingEntity.height = prevHeight;
+								ridingEntity.height = inOrbit ? ridingEntity.height + 1.0F : 1.0F;
+								player.mountEntity(null);
+								if(!inOrbit) player.setPositionAndUpdate(player.posX + 2, player.posY, player.posZ);
+								ridingEntity.height = prevHeight;
+							} else {
+								rocket.forceExitTimer++;
+							}
+
+							player.setSneaking(false);
+						} else {
+							rocket.forceExitTimer = 0;
 						}
-
-						player.setSneaking(false);
 					}
 				}
 

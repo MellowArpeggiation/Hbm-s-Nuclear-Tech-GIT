@@ -71,6 +71,8 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 	public int decoupleTimer = 0;
 	public int shroudTimer = 0;
 
+	public int forceExitTimer = 0;
+
 	private static final int WATCHABLE_STATE = 8;
 	private static final int WATCHABLE_DRIVE = 9;
 	private static final int WATCHABLE_TIMER = 10;
@@ -305,15 +307,19 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 				thrower = rider;
 			}
 
-			if(thrower != null && rider == null && !canExitCapsule()) {
+			if(thrower != null && rider == null && !canExitCapsule() && forceExitTimer < 60) {
 				thrower.mountEntity(this);
 			}
 
 			if(state == RocketState.LAUNCHING) {
-				if(rocketVelocity < 4)
-					rocketVelocity += MathHelper.clamp_double(stateTimer / 120D * 0.05D, 0, 0.05);
-
-				rotationPitch = MathHelper.clamp_float((stateTimer - 60) * 0.3F, 0.0F, 45.0F);
+				if(isReusable()) {
+					rotationPitch = MathHelper.clamp_float((stateTimer - 60) * 0.3F, 0.0F, 45.0F);
+					if(rocketVelocity < 4) rocketVelocity += MathHelper.clamp_double(stateTimer / 120D * 0.05D, 0, 0.05);
+				} else {
+					double acceleration = stateTimer / 120D;
+					rotationPitch = MathHelper.clamp_float((stateTimer - 80) * 0.3F, 0.0F, 45.0F);
+					if(rocketVelocity < 4) rocketVelocity += MathHelper.clamp_double(acceleration * acceleration * 0.05D, 0, 0.05);
+				}
 
 				// FUCK OPTIFINE
 				if(FMLCommonHandler.instance().getSide() == Side.CLIENT && FMLClientHandler.instance().hasOptifine()) {
@@ -321,8 +327,13 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 				}
 			} else if(state == RocketState.LANDING) {
 				double targetHeight = (double)worldObj.getHeightValue((int)posX, (int)posZ);
-				rocketVelocity = MathHelper.clamp_double((targetHeight - posY) * 0.005, -0.5, -0.005);
 				rotationPitch = 0;
+
+				if(isReusable()) {
+					rocketVelocity = MathHelper.clamp_double((targetHeight - posY) * 0.01, -1.0, -0.005);
+				} else {
+					rocketVelocity = MathHelper.clamp_double((targetHeight - posY) * 0.005, -0.5, -0.005);
+				}
 
 				if(navDrive != null && navDrive.getItem() instanceof ItemVOTVdrive) {
 					Destination destination = ItemVOTVdrive.getDestination(navDrive);
@@ -395,6 +406,25 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 			} else if(state == RocketState.UNDOCKING) {
 				rocketVelocity = -0.1;
 				rotationPitch = 0;
+			} else if(state == RocketState.TRANSFER) {
+				rocketVelocity = 0;
+				rotationPitch = 90;
+				forceExitTimer = 0; // never allow exits in transfers under any circumstances!
+
+				OrbitalStation station = OrbitalStation.getStationFromPosition((int)posX, (int)posZ);
+				station.update(worldObj);
+
+				if(station.getUnscaledProgress(0) > 0.99 || station.state == StationState.ARRIVING) {
+					Target from = CelestialBody.getTarget(worldObj, (int)posX, (int)posZ);
+					Target to = getTarget();
+
+					beginLandingSequence(from, to);
+
+					SolarSystemWorldSavedData data = SolarSystemWorldSavedData.get(worldObj);
+					data.removeStation(station);
+				}
+
+				PacketDispatcher.wrapper.sendTo(new EntityBufPacket(getEntityId(), this), (EntityPlayerMP) rider);
 			} else {
 				rocketVelocity = 0;
 				rotationPitch = 0;
@@ -411,6 +441,10 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 				motionZ = 0;
 			}
 
+			if(state == RocketState.LANDING && worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)).getMaterial() == Material.water) {
+				setState(RocketState.TIPPING);
+			}
+
 			if((state == RocketState.LAUNCHING && posY > 900) || (state == RocketState.UNDOCKING && posY < 32)) {
 				Target from = CelestialBody.getTarget(worldObj, (int)posX, (int)posZ);
 				Target to = getTarget();
@@ -420,30 +454,6 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 				} else {
 					beginCelestialTransfer(from, to);
 				}
-			}
-
-			if(state == RocketState.TRANSFER) {
-				rotationPitch = 90;
-				rotationYaw = -90;
-
-				OrbitalStation station = OrbitalStation.getStationFromPosition((int)posX, (int)posZ);
-				station.update(worldObj);
-
-				if(station.getUnscaledProgress(0) > 0.99 || station.state == StationState.ARRIVING) {
-					Target from = CelestialBody.getTarget(worldObj, (int)posX, (int)posZ);
-					Target to = getTarget();
-
-					beginLandingSequence(from, to);
-
-					SolarSystemWorldSavedData data = SolarSystemWorldSavedData.get(worldObj);
-					data.removeStation(station);
-				}
-
-				PacketDispatcher.wrapper.sendTo(new EntityBufPacket(getEntityId(), this), (EntityPlayerMP) rider);
-			}
-
-			if(state == RocketState.LANDING && worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)).getMaterial() == Material.water) {
-				setState(RocketState.TIPPING);
 			}
 
 			if(height > 8) {
