@@ -841,10 +841,9 @@ public class ModEventHandler {
 					// handle dismount events, or our players will splat upon leaving tall rockets
 					if(player.ridingEntity != null && player.ridingEntity instanceof EntityRideableRocket && player.isSneaking()) {
 						EntityRideableRocket rocket = (EntityRideableRocket) player.ridingEntity;
-						RocketState state = rocket.getState();
 
 						// Prevent leaving a rocket in motion, for safety
-						if(state != RocketState.LANDING && state != RocketState.LAUNCHING && state != RocketState.DOCKING && state != RocketState.UNDOCKING) {
+						if(rocket.canExitCapsule()) {
 							boolean inOrbit = event.world.provider instanceof WorldProviderOrbit;
 							Entity ridingEntity = player.ridingEntity;
 							float prevHeight = ridingEntity.height;

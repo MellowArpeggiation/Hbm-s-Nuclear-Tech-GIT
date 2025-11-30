@@ -246,6 +246,15 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 		}
 	}
 
+	public boolean canExitCapsule() {
+		RocketState state = getState();
+		return state != RocketState.LANDING
+			&& state != RocketState.LAUNCHING
+			&& state != RocketState.DOCKING
+			&& state != RocketState.UNDOCKING
+			&& state != RocketState.TRANSFER;
+	}
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -274,6 +283,10 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 				setDrive(navDrive);
 			}
 
+			if(thrower == null && rider != null) {
+				thrower = rider;
+			}
+
 			// If it's a satellite launcher, launch immediately
 			if(state == RocketState.AWAITING && ((rider != null && rider.isJumping) || !canRide())) {
 				Target from = CelestialBody.getTarget(worldObj, (int)posX, (int)posZ);
@@ -288,6 +301,12 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 				if(getRocket().hasSufficientFuel(from.body, to.body, from.inOrbit, to.inOrbit)) {
 					setState(transitionTo);
 				}
+
+				thrower = rider;
+			}
+
+			if(thrower != null && rider == null && !canExitCapsule()) {
+				thrower.mountEntity(this);
 			}
 
 			if(state == RocketState.LAUNCHING) {
