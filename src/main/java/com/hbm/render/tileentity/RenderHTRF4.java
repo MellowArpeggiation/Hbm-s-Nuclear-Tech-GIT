@@ -19,7 +19,7 @@ public class RenderHTRF4 extends TileEntitySpecialRenderer implements IItemRende
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5D, y - 2.0D, z + 0.5D);
 		GL11.glEnable(GL11.GL_LIGHTING);
-		
+
 		switch(tile.getBlockMetadata() - BlockDummyable.offset) {
 		case 3: GL11.glRotatef(270, 0F, 1F, 0F); break;
 		case 5: GL11.glRotatef(0, 0F, 1F, 0F); break;
@@ -28,10 +28,10 @@ public class RenderHTRF4 extends TileEntitySpecialRenderer implements IItemRende
 		}
 
 		GL11.glShadeModel(GL11.GL_SMOOTH);
-		bindTexture(ResourceManager.htrtex);
+		bindTexture(ResourceManager.lpw2_tex);
 		ResourceManager.htrf4.renderAll();
 		GL11.glShadeModel(GL11.GL_FLAT);
-		
+
 		GL11.glPopMatrix();
 	}
 
