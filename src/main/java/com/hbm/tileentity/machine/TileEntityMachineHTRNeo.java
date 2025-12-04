@@ -234,14 +234,14 @@ implements IPropulsion, IFluidStandardTransceiverMK2, IFluidStandardReceiver, IE
 
 
 		fuelCost = com.hbm.dim.SolarSystem.getFuelCost(deltaV, shipMass, 100); //static temporary lolegaloge 
-		System.out.println(fuelCost);
 
 		if(plasmaEnergySync < fuelCost) {
 			System.out.println("false");
 			System.out.println(plasmaEnergySync);
+			System.out.println(fuelCost);
+
 			return false;	
 		} 
-		//if(!isCool()) return false;
 
 		return true;
 	}
@@ -249,7 +249,7 @@ implements IPropulsion, IFluidStandardTransceiverMK2, IFluidStandardReceiver, IE
 	@Override
 	public void addErrors(List<String> errors) {
 
-		if(plasmaEnergy < fuelCost) {
+		if(plasmaEnergySync < fuelCost) {
 			errors.add(EnumChatFormatting.RED + "Insufficient power: needs " + BobMathUtil.getShortNumber(fuelCost) + " HE");
 		}
 
@@ -300,8 +300,10 @@ implements IPropulsion, IFluidStandardTransceiverMK2, IFluidStandardReceiver, IE
 		super.serialize(buf);
 		buf.writeLong(plasmaEnergySync);
 		buf.writeBoolean(isOn);
+		buf.writeInt(fuelCost);
 		tanks[0].serialize(buf);
 		tanks[1].serialize(buf);
+		
 	}
 
 	@Override
@@ -309,6 +311,7 @@ implements IPropulsion, IFluidStandardTransceiverMK2, IFluidStandardReceiver, IE
 		super.deserialize(buf);
 		plasmaEnergy = buf.readLong();
 		isOn = buf.readBoolean();
+		fuelCost = buf.readInt();
 		tanks[0].deserialize(buf);
 		tanks[1].deserialize(buf);
 	}
