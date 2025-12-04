@@ -30,7 +30,9 @@ public class RenderHTRNeo extends TileEntitySpecialRenderer implements IItemRend
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.htrtex);
 		ResourceManager.htrf4_neo.renderAll();
+		
 		GL11.glShadeModel(GL11.GL_FLAT);
+
 
 		GL11.glPopMatrix();
 	}
