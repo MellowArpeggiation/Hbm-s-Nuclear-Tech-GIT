@@ -5,11 +5,13 @@ import java.util.List;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.dim.CelestialBody;
 import com.hbm.inventory.fluid.tank.FluidTank;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityMachineHTRNeo;
 import com.hbm.util.BobMathUtil;
+import com.hbm.util.fauxpointtwelve.DirPos;
 import com.hbm.util.i18n.I18nUtil;
 
 import net.minecraft.block.material.Material;
@@ -62,8 +64,13 @@ public class MachineHTRFNeo extends BlockDummyable implements ILookOverlay {
 		z += dir.offsetZ * o;
 
 		this.makeExtra(world, x - rot.offsetX * 9, y, z - rot.offsetZ * 9);
-		this.makeExtra(world, x - rot.offsetX * 9 + dir.offsetX, y, z - rot.offsetZ * 9 + dir.offsetZ);
-		this.makeExtra(world, x - rot.offsetX * 9 - dir.offsetX, y, z - rot.offsetZ * 9 - dir.offsetZ);
+		//this.makeExtra(world, x - rot.offsetX * 9 + dir.offsetX, y, z - rot.offsetZ * 9 + dir.offsetZ);
+		//this.makeExtra(world, x - rot.offsetX * 9 - dir.offsetX, y, z - rot.offsetZ * 9 - dir.offsetZ);
+		this.makeExtra(world, x - rot.offsetX * 5 - dir.offsetX * 3, y - 2, z - rot.offsetZ * 5 - dir.offsetZ * 2);
+		this.makeExtra(world, x + rot.offsetX * 1 - dir.offsetX * 3, y - 2, z + rot.offsetZ * 1 - dir.offsetZ * 2);
+		this.makeExtra(world, x - rot.offsetX * 5 - dir.offsetX * 3, y - 2, z - rot.offsetZ * 5 + dir.offsetZ * 2);
+		this.makeExtra(world, x + rot.offsetX * 1 - dir.offsetX * 3, y - 2, z + rot.offsetZ * 1 + dir.offsetZ * 2);
+
 	}
 
 	@Override
