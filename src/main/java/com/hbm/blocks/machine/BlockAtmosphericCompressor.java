@@ -8,7 +8,7 @@ import com.hbm.blocks.ILookOverlay;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.tileentity.TileEntityProxyCombo;
-import com.hbm.tileentity.machine.TileEntityAtmoExtractor;
+import com.hbm.tileentity.machine.TileEntityAtmosphericCompressor;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.i18n.I18nUtil;
 
@@ -21,15 +21,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class AtmoVent extends BlockDummyable implements ILookOverlay, IToolable {
+public class BlockAtmosphericCompressor extends BlockDummyable implements ILookOverlay, IToolable {
 
-	public AtmoVent(Material mat) {
+	public BlockAtmosphericCompressor(Material mat) {
 		super(mat);
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int meta) {
-		if(meta >= 12) return new TileEntityAtmoExtractor();
+		if(meta >= 12) return new TileEntityAtmosphericCompressor();
 		if(meta >= 8) return new TileEntityProxyCombo(false, true, true);
 		return null;
 	}
@@ -68,10 +68,10 @@ public class AtmoVent extends BlockDummyable implements ILookOverlay, IToolable 
 
 		TileEntity te = world.getTileEntity(pos[0], pos[1], pos[2]);
 
-		if(!(te instanceof TileEntityAtmoExtractor))
+		if(!(te instanceof TileEntityAtmosphericCompressor))
 			return;
 
-		TileEntityAtmoExtractor tower = (TileEntityAtmoExtractor) te;
+		TileEntityAtmosphericCompressor tower = (TileEntityAtmosphericCompressor) te;
 
 		List<String> text = new ArrayList<String>();
 		if(!CelestialBody.hasTrait(world, CBT_Atmosphere.class)) {
@@ -98,9 +98,9 @@ public class AtmoVent extends BlockDummyable implements ILookOverlay, IToolable 
 
 		TileEntity te = world.getTileEntity(pos[0], pos[1], pos[2]);
 
-		if(!(te instanceof TileEntityAtmoExtractor)) return false;
+		if(!(te instanceof TileEntityAtmosphericCompressor)) return false;
 
-		TileEntityAtmoExtractor tile = (TileEntityAtmoExtractor) te;
+		TileEntityAtmosphericCompressor tile = (TileEntityAtmosphericCompressor) te;
 		tile.cycleGas();
 		tile.markDirty();
 

@@ -25,7 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardSender {
+public class TileEntityAtmosphericCompressor extends TileEntityMachineBase implements IEnergyReceiverMK2, IFluidStandardSender {
 
 	int consumption = 200;
 	public float rot;
@@ -35,7 +35,7 @@ public class TileEntityAtmoExtractor extends TileEntityMachineBase implements IE
 	public FluidTank tank;
 	public List<IFluidStandardReceiver> list = new ArrayList<>();
 
-	public TileEntityAtmoExtractor() {
+	public TileEntityAtmosphericCompressor() {
 		super(0);
 		tank = new FluidTank(Fluids.EARTHAIR, 50000);
 	}

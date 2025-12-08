@@ -50,6 +50,7 @@ public class NEIRegistry {
 		handlers.add(new ConstructionHandler());
 		handlers.add(new SatelliteHandler());
 		handlers.add(new DairyHandler());
+		handlers.add(new AtmosphericCompressorHandler());
 
 		//universal boyes
 		handlers.add(new ZirnoxRecipeHandler());
