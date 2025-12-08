@@ -28,7 +28,7 @@ public abstract class NEICelestialHandler extends NEIUniversalHandler {
 
 
 
-	private HashMap<Integer, CelestialBody> recipeInputCache = new HashMap<>();
+	protected HashMap<Integer, CelestialBody> recipeInputCache = new HashMap<>();
 
 	@Override
 	public void drawBackground(int recipe) {
