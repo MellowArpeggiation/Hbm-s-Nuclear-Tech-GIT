@@ -89,7 +89,8 @@ public class SolarSystem {
 							.withOrbitalParameters(12_000, 0.054F, 0.0F, 5.15F, 17.0F)
 							.withRotationalPeriod(138_984)
 							.withTidalLockingTo("kerbin")
-							.withBlockTextures(RefStrings.MODID + ":moon_rock", "", "", ""),
+							.withBlockTextures(RefStrings.MODID + ":moon_rock", "", "", "")
+							.withIce(true),
 
 						new CelestialBody("minmus", SpaceConfig.minmusDimension, Body.MINMUS)
 							.withMassRadius(2.646e19F, 60)
@@ -97,6 +98,7 @@ public class SolarSystem {
 							.withRotationalPeriod(40_400)
 							.withBlockTextures(RefStrings.MODID + ":minmus_stone", "", "", "")
 							.withTraits(new CBT_Water(Fluids.MILK))
+							.withIce(true)
 
 					),
 
@@ -109,6 +111,7 @@ public class SolarSystem {
 					.withBlockTextures(RefStrings.MODID + ":duna_rock", "", "", "")
 					.withTraits(new CBT_Atmosphere(Fluids.DUNAAIR, 0.1D))
 					.withCityMask(new ResourceLocation(RefStrings.MODID, "textures/misc/space/duna_mask.png"))
+					.withIce(true)
 					.withSatellites(
 
 						new CelestialBody("ike", SpaceConfig.ikeDimension, Body.IKE)
@@ -118,6 +121,7 @@ public class SolarSystem {
 							.withRotationalPeriod(65_518)
 							.withTidalLockingTo("duna")
 							.withTraits(new CBT_Water(Fluids.BROMINE))
+							.withIce(true)
 
 					),
 
@@ -126,7 +130,8 @@ public class SolarSystem {
 					.withOrbitalParameters(40_839_348, 0.145F, 90.0F, 5.0F, 280.0F)
 					.withRotationalPeriod(34_800)
 					.withBlockTextures(RefStrings.MODID + ":dresbase", "", "", "")
-					.withMinProcessingLevel(2),
+					.withMinProcessingLevel(2)
+					.withIce(true),
 
 
 				new CelestialBody("jool")
@@ -219,7 +224,8 @@ public class SolarSystem {
 						.withMassRadius(2.788e21F, 286)
 						.withOrbitalParameters(32_301, 0.0534F, 0.0F, 4.02F, 284.0F)
 						.withRotationalPeriod(306_443)
-						.withTraits(new CBT_Atmosphere(Fluids.NITROGEN, 0.005F), new CBT_BATTLEFIELD()),
+						.withTraits(new CBT_Atmosphere(Fluids.NITROGEN, 0.005F), new CBT_BATTLEFIELD())
+						.withIce(true),
 
 					new CelestialBody("nissee") // words cannot express how much i actually fear this moon whenever im passing by it when playing opm. theres more that meets the eye and no one is brave enough to admit that
 						.withMassRadius(5.951e18F, 30)

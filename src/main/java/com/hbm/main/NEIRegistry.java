@@ -51,6 +51,8 @@ public class NEIRegistry {
 		handlers.add(new SatelliteHandler());
 		handlers.add(new DairyHandler());
 		handlers.add(new AtmosphericCompressorHandler());
+		handlers.add(new BedrockDrillHandler());
+		handlers.add(new WaterTableHandler());
 
 		//universal boyes
 		handlers.add(new ZirnoxRecipeHandler());

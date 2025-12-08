@@ -75,6 +75,8 @@ public class CelestialBody {
 	public float[] ringColor = new float[] {0.5F, 0.5F, 0.5F};
 	public float ringSize = 2;
 
+	public boolean hasIce = false; // has bedrock ice?
+
 	public FluidType gas;
 
 	public List<CelestialBody> satellites = new ArrayList<CelestialBody>(); // moon boyes
@@ -205,6 +207,11 @@ public class CelestialBody {
 
 		shader = new Shader(fragmentShader);
 		shaderScale = scale;
+		return this;
+	}
+
+	public CelestialBody withIce(boolean hasIce) {
+		this.hasIce = hasIce;
 		return this;
 	}
 
