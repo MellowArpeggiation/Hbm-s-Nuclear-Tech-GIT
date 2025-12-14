@@ -628,6 +628,10 @@ chem.lubeelectrodes=Instant Electrodes (Lubricant)
 
 chem.nitricacidalt=Nitric Acid from Ammonia
 chem.hydrapiss=Hydrazine via Urea
+chem.hydrazine=Hydrazine
+chem.bloodfuel=Blood Fuel
+chem.mentholfromminmus=Menthol Crystals from Minmus
+chem.synleather=Synthetic Leather
 
 chem.ARSENIC=Arsenic Extraction
 chem.ASPHALT=Asphalt Production

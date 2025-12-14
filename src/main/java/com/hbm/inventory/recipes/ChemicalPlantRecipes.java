@@ -376,7 +376,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputFluids(new FluidStack(Fluids.HYDROGEN, 4_000))
 				.outputFluids(new FluidStack(Fluids.THORIUM_BROMIDE, 4_000)));
 
-		this.register(new GenericRecipe("chem.hydrazine").setup(250, 1_000).setIcon(ModItems.canister_full, Fluids.HYDRAZINE.getID())
+		this.register(new GenericRecipe("chem.hydrazine").setupNamed(250, 1_000).setIcon(ModItems.canister_full, Fluids.HYDRAZINE.getID())
 				.inputFluids(new FluidStack(Fluids.NITRIC_ACID, 2_000), new FluidStack(Fluids.AMMONIA, 1_000))
 				.outputFluids(new FluidStack(Fluids.HYDRAZINE, 800)));
 
@@ -384,7 +384,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputFluids(new FluidStack(Fluids.NITROGEN, 600), new FluidStack(Fluids.WATER, 1_000))
 				.outputFluids(new FluidStack(Fluids.AMMONIA, 800)));
 
-		this.register(new GenericRecipe("chem.bloodfuel").setup(250, 1_000).setIcon(ModItems.canister_full, Fluids.BLOODGAS.getID())
+		this.register(new GenericRecipe("chem.bloodfuel").setupNamed(250, 1_000).setIcon(ModItems.canister_full, Fluids.BLOODGAS.getID())
 				.inputFluids(new FluidStack(Fluids.AMMONIA, 350), new FluidStack(Fluids.BLOOD, 800))
 				.outputFluids(new FluidStack(Fluids.BLOODGAS, 1000)));
 
@@ -432,7 +432,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(new ComparableStack(ModItems.mint_leaves, 4))
 				.outputItems(new ItemStack(ModItems.ingot_menthol, 2)));
 			//this makes no sense but we're making stone with milk and mint so it doesn't matter
-		this.register(new GenericRecipe("chem.mentholfromminmus").setup(50, 300)
+		this.register(new GenericRecipe("chem.mentholfromminmus").setupNamed(50, 300)
 				.inputFluids(new FluidStack(Fluids.STEAM, 350), new FluidStack(Fluids.SULFURIC_ACID, 500))
 				.inputItems(new ComparableStack(ModBlocks.minmus_smooth, 40))
 				.outputItems(new ItemStack(ModItems.ingot_menthol, 15)));
@@ -466,7 +466,7 @@ public class ChemicalPlantRecipes extends GenericRecipes<GenericRecipe> {
 				.inputItems(new ComparableStack(ModItems.rag_piss)) // urea...
 				.outputFluids(new FluidStack(Fluids.HYDRAZINE, 800))); // this is an emergency recipe, so it should NOT have a required blueprint
 
-		this.register(new GenericRecipe("chem.synleather").setup(200, 500)
+		this.register(new GenericRecipe("chem.synleather").setupNamed(200, 500)
 				.inputFluids(new FluidStack(Fluids.PEROXIDE, 250))
 				.inputItems(new OreDictStack(ANY_PLASTIC.ingot()), new ComparableStack(Items.string, 4))
 				.outputItems(new ItemStack(Items.leather)));
