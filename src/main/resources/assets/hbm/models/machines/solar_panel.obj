@@ -1,6 +1,4 @@
-# Blender 5.0.0
-# www.blender.org
-mtllib solar_panel.mtl
+# Made By Osmo
 o solar_panel
 v -2.500000 0.613546 -0.500208
 v -2.312500 0.500000 -0.250000
