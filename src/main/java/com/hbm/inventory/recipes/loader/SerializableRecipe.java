@@ -88,12 +88,14 @@ public abstract class SerializableRecipe {
 		recipeHandlers.add(new AlkylationRecipes());
 		recipeHandlers.add(new VacuumCircuitRecipes());
 		recipeHandlers.add(new PedestalRecipes());
+		recipeHandlers.add(new AnnihilatorRecipes());
 
 		//GENERIC
 		recipeHandlers.add(AssemblyMachineRecipes.INSTANCE);
 		recipeHandlers.add(ChemicalPlantRecipes.INSTANCE);
 		recipeHandlers.add(PUREXRecipes.INSTANCE);
 		recipeHandlers.add(FusionRecipes.INSTANCE);
+		recipeHandlers.add(PrecAssRecipes.INSTANCE);
 
 		recipeHandlers.add(new MatDistribution());
 		recipeHandlers.add(new CryoRecipes());
@@ -118,7 +120,7 @@ public abstract class SerializableRecipe {
 		MainRegistry.logger.info("Starting recipe init!");
 
 		GenericRecipes.clearPools();
-		
+
 		for(SerializableRecipe recipe : recipeHandlers) {
 
 			recipe.deleteRecipes();
