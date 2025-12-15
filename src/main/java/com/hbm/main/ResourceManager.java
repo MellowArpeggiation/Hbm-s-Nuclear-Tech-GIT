@@ -574,7 +574,7 @@ public class ResourceManager {
 	public static final ResourceLocation cryodistill_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/cryo_distiller.png");
 
 	//Space
-	public static final ResourceLocation solarp_tex = new ResourceLocation(RefStrings.MODID, "textures/models/solar_panel.png"); //haha... "larp"
+	public static final ResourceLocation solarp_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/solar_panel.png"); //haha... "larp"
 	public static final ResourceLocation stardar_tex = new ResourceLocation(RefStrings.MODID, "textures/models/antenna.png");
 	public static final ResourceLocation drive_processor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/drive_processor.png");
 	public static final ResourceLocation dish_controller_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/dish_controller.png");
