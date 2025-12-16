@@ -7325,7 +7325,7 @@ hbmfluid.uranium_bromide=Бромид урана
 hbmfluid.vinyl=Винилхлорид
 hbmpseudofluid.minsol=Тяжёлый минеральный шлам
 hbmpseudofluid.minsolsep=Отделённый минеральный шлам
-hbmfluid.earthair=Обогащённый кислородом воздух
+hbmfluid.earthair=Насыщенный кислородом сжатый воздух
 
 // Ores //
 tile.ore_iron.name=Железная руда
