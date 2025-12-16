@@ -118,6 +118,7 @@ public class TileMappings {
 		put(TileEntityMachineExcavator.class, "tileentity_ntm_excavator");
 		put(TileEntityMachineMagma.class, "tileentity_magma");
 		put(TileEntityMachineOreSlopper.class, "tileentity_ore_slopper");
+		put(TileEntityMachineAnnihilator.class, "tileentity_annihilator");
 		put(TileEntityMachineDrain.class, "tileentity_fluid_drain");
 		put(TileEntityMachineFluidTank.class, "tileentity_fluid_tank");
 		put(TileEntityMachineTurbofan.class, "tileentity_machine_turbofan");
@@ -169,7 +170,6 @@ public class TileMappings {
 		put(TileEntityCoreInjector.class, "tileentity_v0_injector");
 		put(TileEntityCoreStabilizer.class, "tileentity_v0_stabilizer");
 		put(TileEntityCore.class, "tileentity_v0");
-		put(TileEntityMachineAmgen.class, "tileentity_amgen");
 		put(TileEntityGeysir.class, "tileentity_geysir");
 		put(TileEntityMachineMissileAssembly.class, "tileentity_missile_assembly");
 		put(TileEntityMachineRocketAssembly.class, "tileentity_rocket_assembly");
@@ -187,7 +187,6 @@ public class TileMappings {
 		put(TileEntityMachineRotaryFurnace.class, "tileentity_rotary_furnace");
 		put(TileEntityMachineCrystallizer.class, "tileentity_acidomatic");
 		put(TileEntitySoyuzStruct.class, "tileentity_soyuz_struct");
-		put(TileEntityITERStruct.class, "tileentity_iter_struct");
 		put(TileEntityMachineMiningLaser.class, "tileentity_mining_laser");
 		put(TileEntityNukeBalefire.class, "tileentity_nuke_fstbmb");
 		put(TileEntityAntimatter.class, "tileentity_nuke_Antimatter");
@@ -201,7 +200,6 @@ public class TileMappings {
 		put(TileEntityMachinePlasmaHeater.class, "tileentity_plasma_heater");
 		put(TileEntityMachineFENSU.class, "tileentity_fensu");
 		put(TileEntityTrappedBrick.class, "tileentity_trapped_brick");
-		put(TileEntityPlasmaStruct.class, "tileentity_plasma_struct");
 		put(TileEntityWatzStruct.class, "tileentity_watz_struct");
 		put(TileEntityICFStruct.class, "tileentity_icf_struct");
 		put(TileEntityHadronDiode.class, "tileentity_hadron_diode");
