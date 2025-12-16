@@ -1,12 +1,1 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5544 - what](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5544)
-
-## Added
-* NEI handlers for
-    * Atmospheric Extraction via Compression
-    * Celestial Bedrock Ore Processing
-    * Celestial Fluid Table Extraction
-    * Celestial Oil Extraction
-
-## Fixed
-* Station distance config can be set below 1024, causing crashes (although you shouldn't set it any lower to begin with!)
-* Energy storage blocks don't show charge/discharge information until used for the first time
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5545 - tummy hort :(](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5545)
