@@ -28,6 +28,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
@@ -103,7 +104,7 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 
 		data.setRadiation(entity, radiation);
 	}
-	
+
 	/// NEUTRON ACTIVATION ///
 	public static float getNeutronActivation(EntityLivingBase entity) {
 		if(RadiationConfig.disableNeutron)
@@ -111,22 +112,22 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 
 		return getData(entity).activation;
 	}
-	
+
 	public static void setNeutronActivation(EntityLivingBase entity, float rad) {
 		if(!RadiationConfig.disableNeutron)
 			getData(entity).activation = rad;
 	}
-	
+
 	public static void incrementNeutronActivation(EntityLivingBase entity, float rad) {
 		if(RadiationConfig.disableNeutron)
 			return;
-		
+
 		HbmLivingProps data = getData(entity);
 		float neutrons = getData(entity).activation + rad;
-		
+
 		if(neutrons < 0)
 			neutrons = 0;
-		
+
 		data.setNeutronActivation(entity, neutrons);
 	}
 
@@ -259,14 +260,18 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 	public static int getOxy(EntityLivingBase entity) {
 		return getData(entity).oxygen;
 	}
-	
+
 	public static void setOxy(EntityLivingBase entity, int oxygen) {
 		if(oxygen <= 0) {
-			oxygen = 0;
+			if(entity.ticksExisted < 20) oxygen = 0; // limit overdamage effects when relogging
+
+			int damageInterval = MathHelper.clamp_int(oxygen / 60 + 8, 1, 8);
+			int damageAmount = MathHelper.clamp_int(-oxygen / 40 - 10, 1, Integer.MAX_VALUE);
 
 			// Only damage every 4 ticks, giving the player more time to react
-			if(entity.ticksExisted % 4 == 0) {
-				entity.attackEntityFrom(ModDamageSource.oxyprime, 1);
+			if(entity.ticksExisted % damageInterval == 0) {
+				System.out.println("interval: " + damageInterval + " - amount: " + damageAmount);
+				entity.attackEntityFrom(ModDamageSource.oxyprime, damageAmount);
 			}
 		}
 

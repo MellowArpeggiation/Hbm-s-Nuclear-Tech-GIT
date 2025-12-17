@@ -171,6 +171,7 @@ armor.threshold=Damage threshold of %s
 armor.vats=Enemy HUD
 armor.yield=Protection applies to damage <%s
 armor.canSeal=Can be used as a spacesuit (requires PLSS)
+armor.canBreathe=Can be used as a spacesuit
 armor.mustSeal=Must be used with a fully sealed armor set!
 
 armorMod.all=All
