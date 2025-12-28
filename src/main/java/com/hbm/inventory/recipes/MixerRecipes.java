@@ -115,7 +115,7 @@ public class MixerRecipes extends SerializableRecipe {
 		register(Fluids.LYE, new MixerRecipe(50, 100).setStack1(new FluidStack(Fluids.WATER, 500)).setSolid(new ComparableStack(ModItems.powder_ash, 2, EnumAshType.WOOD)));
 		register(Fluids.ALUMINA, new MixerRecipe(200, 40).setStack1(new FluidStack(Fluids.SODIUM_ALUMINATE, 150)).setSolid(new OreDictStack(F.dust(), 3)),
 								 new MixerRecipe(300, 40).setStack1(new FluidStack(Fluids.SODIUM_ALUMINATE, 150)).setSolid(new ComparableStack(DictFrame.fromOne(ModItems.chunk_ore, ItemEnums.EnumChunkType.CRYOLITE))));
-		register(Fluids.CONGLOMERA, new MixerRecipe(1000, 70).setStack1(new FluidStack(Fluids.SULFURIC_ACID, 350)).setSolid(new ComparableStack(ModBlocks.stone_resource, 1, BlockEnums.EnumStoneType.CONGLOMERATE.ordinal())));
+		register(Fluids.CONGLOMERA, new MixerRecipe(1000, 70).setStack1(new FluidStack(Fluids.AQUEOUS_NICKEL, 350)).setSolid(new ComparableStack(ModBlocks.stone_resource, 1, BlockEnums.EnumStoneType.CONGLOMERATE.ordinal())));
 		register(Fluids.AQUEOUS_NICKEL, new MixerRecipe(1000, 80).setStack1(new FluidStack(Fluids.BRINE, 250)).setSolid(new OreDictStack(NIM.dust())));
 		register(Fluids.AQUEOUS_COPPER, new MixerRecipe(1000, 80).setStack1(new FluidStack(Fluids.BRINE, 250)).setSolid(new ComparableStack(ModItems.chunk_ore, 1, ItemEnums.EnumChunkType.MALACHITE)));
 
