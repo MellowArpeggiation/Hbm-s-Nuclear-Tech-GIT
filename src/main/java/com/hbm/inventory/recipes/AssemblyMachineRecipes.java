@@ -1391,7 +1391,7 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
 		this.register(new GenericRecipe("ass.mp_thruster_10_solid").setup(400, 100).outputItems(new ItemStack(ModItems.mp_thruster_10_solid, 1))
 			.inputItems(new ComparableStack(ModItems.seg_10, 1), new ComparableStack(ModItems.coil_tungsten, 1), new OreDictStack(DURA.ingot(), 4), new OreDictStack(STEEL.plate(), 4)));
 		this.register(new GenericRecipe("ass.mp_thruster_10_xenon").setup(400, 100).outputItems(new ItemStack(ModItems.mp_thruster_10_xenon, 1))
-			.inputItems(new ComparableStack(ModItems.seg_10, 1), new OreDictStack(STEEL.plate(), 4), new OreDictStack(STEEL.pipe(), 12), new ComparableStack(ModItems.arc_electrode, 4, EnumElectrodeType.LANTHANIUM)));
+			.inputItems(new ComparableStack(ModItems.seg_10, 1), new OreDictStack(STEEL.plate(), 4), new OreDictStack(STEEL.pipe(), 12), new ComparableStack(ModItems.arc_electrode, 1, EnumElectrodeType.LANTHANIUM)));
 		this.register(new GenericRecipe("ass.mp_thruster_15_kerosene").setup(400, 100).outputItems(new ItemStack(ModItems.mp_thruster_15_kerosene, 1))
 			.inputItems(new ComparableStack(ModItems.seg_15, 1), new OreDictStack(STEEL.pipe(), 1), new OreDictStack(W.ingot(), 8), new OreDictStack(STEEL.plate(), 6), new OreDictStack(DESH.ingot(), 4)));
 		this.register(new GenericRecipe("ass.mp_thruster_15_kerosene_dual").setup(400, 100).outputItems(new ItemStack(ModItems.mp_thruster_15_kerosene_dual, 1))
