@@ -7325,6 +7325,7 @@ hbmfluid.uranium_bromide=Бромид урана
 hbmfluid.vinyl=Винилхлорид
 hbmpseudofluid.minsol=Тяжёлый минеральный шлам
 hbmpseudofluid.minsolsep=Отделённый минеральный шлам
+hbmfluid.earthair=Насыщенный кислородом сжатый воздух
 
 // Ores //
 tile.ore_iron.name=Железная руда
@@ -7431,6 +7432,10 @@ chem.HYDRAPISS=Производство гидрозина с использов
 // Chem And Assembly
 chem.nitricacidalt=Азотная кислота из аммиака
 chem.hydrapiss=Гидразин из мочи
+chem.hydrazine=Гидразин
+chem.bloodfuel=Кровавое топливо
+chem.mentholfromminmus=Ментоловые кристаллы из Минмуса
+chem.synleather=Синтетическая кожа
 
 crucible.arse=Производство арсенида галлия
 crucible.conglomerate=Переплавка конгломерата в железо и никель
