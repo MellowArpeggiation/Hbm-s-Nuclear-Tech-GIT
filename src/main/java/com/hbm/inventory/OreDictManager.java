@@ -299,11 +299,6 @@ public class OreDictManager {
 	public static final DictFrame TASMANITE = new DictFrame("Tasmanite");
 	public static final DictFrame AYERITE = new DictFrame("Ayerite");
 
-	public static final DictFrame REIIUM = new DictFrame("Reiium");
-	public static final DictFrame WEIDANIUM = new DictFrame("Weidanium");
-	public static final DictFrame UNOBTAINIUM = new DictFrame("Unobtainium");
-	public static final DictFrame VERTICIUM = new DictFrame("Verticium");
-	public static final DictFrame DAFFERGON = new DictFrame("Daffergon");
 	/*
 	 * RARE EARTHS
 	 */
@@ -542,11 +537,6 @@ public class OreDictManager {
 		TASMANITE	.nugget(nugget_australium_lesser)	.billet(billet_australium_lesser);
 		AYERITE		.nugget(nugget_australium_greater)	.billet(billet_australium_greater);
 
-		REIIUM		.block(block_reiium);
-		WEIDANIUM	.block(block_weidanium);
-		UNOBTAINIUM	.block(block_unobtainium);
-		VERTICIUM	.block(block_verticium);
-		DAFFERGON	.block(block_daffergon);
 
 		/*
 		 * RARE EARTHS
