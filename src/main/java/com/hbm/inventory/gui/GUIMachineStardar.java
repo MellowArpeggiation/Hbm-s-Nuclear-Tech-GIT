@@ -22,6 +22,7 @@ import com.hbm.packet.toserver.NBTControlPacket;
 import com.hbm.saveddata.SatelliteSavedData;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.tileentity.machine.TileEntityMachineStardar;
+import com.hbm.util.Clock;
 import com.hbm.util.i18n.I18nUtil;
 
 import net.minecraft.client.Minecraft;
@@ -99,6 +100,7 @@ public class GUIMachineStardar extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 129, guiTop + 124, 18, 18, mouseX, mouseY, new String[] {"Toggle radar mode"} );
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 129, guiTop + 143, 18, 18, mouseX, mouseY, new String[] {"Program new orbital station into drive"} );
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 149, guiTop + 143, 18, 18, mouseX, mouseY, new String[] {"Program current body into drive"} );
 	}
@@ -110,15 +112,16 @@ public class GUIMachineStardar extends GuiInfoContainer {
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		pushScissor(9, 9, 158, 108);
 
+		if(!Mouse.isButtonDown(0)) {
+			velocityX *= 0.85;
+			velocityY *= 0.85;
+			starX += velocityX;
+			starY += velocityY;
+			starX = MathHelper.clamp_float(starX, -256 + 158, 256);
+			starY = MathHelper.clamp_float(starY, -256 + 108, 256);
+		}
+
 		if(!star.radarMode) {
-			if(!Mouse.isButtonDown(0)) {
-				velocityX *= 0.85;
-				velocityY *= 0.85;
-				starX += velocityX;
-				starY += velocityY;
-				starX = MathHelper.clamp_float(starX, -256 + 158, 256);
-				starY = MathHelper.clamp_float(starY, -256 + 108, 256);
-			}
 
 			if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 				starY++;
@@ -169,51 +172,41 @@ public class GUIMachineStardar extends GuiInfoContainer {
 				mc.getTextureManager().bindTexture(groundMap);
 				func_146110_a(guiLeft, guiTop, (int) starX * -1 - 256 - 9, (int) starY * -1 - 256 - 9, 256, 256, 512, 512);
 			}
-		}
-		else {
-			if(!Mouse.isButtonDown(0)) {
-				velocityX *= 0.85;
-				velocityY *= 0.85;
-				starX += velocityX;
-				starY += velocityY;
-				starX = MathHelper.clamp_float(starX, -256 + 158, 256);
-				starY = MathHelper.clamp_float(starY, -256 + 108, 256);
-			}
+		} else {
+
 			Minecraft.getMinecraft().getTextureManager().bindTexture(nightTexture);
 			drawTexturedModalRect(guiLeft, guiTop, (int) starX * -1, (int) starY * -1, 256, 256);
 
 			if(CelestialBody.getBody(star.getWorldObj()).hasTrait(CBT_War.class)) {
 				CBT_War wardat = CelestialBody.getTrait(star.getWorldObj(), CBT_War.class);
-					for (int i = 0; i < wardat.getProjectiles().size(); i++) {
-						CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
-						int projvel = (int) projectile.getTravel();
-						Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+				for(int i = 0; i < wardat.getProjectiles().size(); i++) {
+					CBT_War.Projectile projectile = wardat.getProjectiles().get(i);
+					int projvel = (int) projectile.getTravel();
+					Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 
-						float randomAngle = projectile.GUIangle;
-						float offsetX = (float) Math.cos(Math.toRadians(randomAngle)) * projvel;
-						float offsetY = (float) Math.sin(Math.toRadians(randomAngle)) * projvel;
+					float randomAngle = projectile.GUIangle;
+					float offsetX = (float) Math.cos(Math.toRadians(randomAngle)) * projvel;
+					float offsetY = (float) Math.sin(Math.toRadians(randomAngle)) * projvel;
 
-						Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+					Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 
-						long currentTime = System.currentTimeMillis();
-
-						if (currentTime % 300 < 120) {
-							drawTexturedModalRect(
-								(int) (guiLeft + starX + offsetX + 85),
-								(int) (guiTop + starY + offsetY + 60),
-								xSize + 1 * 44, 0, 8, 8
-							);
-						}
+					if(Clock.get_ms() % 300 < 120) {
+						drawTexturedModalRect(
+							(int) (guiLeft + starX + offsetX + 85),
+							(int) (guiTop + starY + offsetY + 60),
+							xSize + 1 * 44, 0, 8, 8
+						);
 					}
 				}
+			}
 
 			for(Map.Entry<Integer, Satellite> entry : SatelliteSavedData.getClientSats().entrySet()) {
 				float radius = 20 + (entry.getKey() / 1000);
 				float initialAngle = (entry.getKey() / 1000) * 10f;
 
-				long currentTime = System.currentTimeMillis();
+				double currentTime = Clock.get_ms();
 
-				float angle = ((currentTime / 80) % 360 + initialAngle) % 360;
+				double angle = ((currentTime / radius) % 360 + initialAngle) % 360;
 
 				float offsetX = (float) Math.cos(Math.toRadians(angle)) * radius;
 				float offsetY = (float) Math.sin(Math.toRadians(angle)) * radius;
