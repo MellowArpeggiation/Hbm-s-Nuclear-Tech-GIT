@@ -1,18 +1,3 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5567 - the staterans bought 50,000 nukes from temu, what do we do](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5567)
-
-## Changed
-* New models for:
-    * Stardar
-    * Orbital Station Computer
-    * Solar Panel
-* New GUIs for:
-    * Cryogenic Distillation Machine
-    * Vacuum Solderer
-* Station hum now uses the ambient sound category
-    * A few other sounds moved into more appropriate sound categories
-* Conglomerate processing now requires an initial brine washing step
-* DNT suit now functions as a full spacesuit, without the need for a PLSS
-* Suffocation damage now scales over time
-
 ## Fixed
-* Xenon thruster uncraftable in new assembly machine
+* Ore clusters rendering partially transparent
+* Custom rockets churning chunks with unused vanilla lava/water checks
