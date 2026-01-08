@@ -5,11 +5,10 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 
-public class BlockCluster extends Block {
+public class BlockCluster extends BlockOre {
 
 	public BlockCluster(Material mat) {
 		super(mat);
