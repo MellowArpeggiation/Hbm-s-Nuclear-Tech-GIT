@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
+import com.hbm.config.ServerConfig;
 import com.hbm.config.WorldConfig;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.WorldProviderCelestial;
@@ -449,6 +450,7 @@ public class EntityEffectHandler {
 	}
 
 	private static void handleContagion(EntityLivingBase entity) {
+		if(!ServerConfig.ENABLE_MKU.get()) return;
 
 		World world = entity.worldObj;
 

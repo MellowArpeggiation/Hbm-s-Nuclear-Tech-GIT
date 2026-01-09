@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.hbm.config.RadiationConfig;
 import com.hbm.dim.trait.CBT_Atmosphere;
+import com.hbm.config.ServerConfig;
 import com.hbm.entity.mob.EntityDuck;
 import com.hbm.handler.threading.PacketThreading;
 import com.hbm.lib.ModDamageSource;
@@ -314,6 +315,7 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 
 	/// CONTAGION ///
 	public static int getContagion(EntityLivingBase entity) {
+		if(!ServerConfig.ENABLE_MKU.get()) return 0;
 		return getData(entity).contagion;
 	}
 
@@ -396,7 +398,7 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 		props.setFloat("hfr_digamma", digamma);
 		props.setInteger("hfr_asbestos", asbestos);
 		props.setInteger("hfr_bomb", bombTimer);
-		props.setInteger("hfr_contagion", contagion);
+		if(ServerConfig.ENABLE_MKU.get()) props.setInteger("hfr_contagion", contagion);
 		props.setInteger("hfr_blacklung", blacklung);
 		props.setInteger("hfr_oil", oil);
 		props.setInteger("hfr_oxygen", oxygen);
@@ -427,7 +429,7 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 			digamma = props.getFloat("hfr_digamma");
 			asbestos = props.getInteger("hfr_asbestos");
 			bombTimer = props.getInteger("hfr_bomb");
-			contagion = props.getInteger("hfr_contagion");
+			if(ServerConfig.ENABLE_MKU.get()) contagion = props.getInteger("hfr_contagion");
 			blacklung = props.getInteger("hfr_blacklung");
 			oil = props.getInteger("hfr_oil");
 			activation = props.getFloat("hfr_activation");
