@@ -271,7 +271,6 @@ public class HbmLivingProps implements IExtendedEntityProperties {
 
 			// Only damage every 4 ticks, giving the player more time to react
 			if(entity.ticksExisted % damageInterval == 0) {
-				System.out.println("interval: " + damageInterval + " - amount: " + damageAmount);
 				entity.attackEntityFrom(ModDamageSource.oxyprime, damageAmount);
 			}
 		}
