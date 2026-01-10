@@ -251,6 +251,8 @@ public class Fluids {
 	public static FluidType CBENZ; //chlorobenzene
 	public static FluidType HALOLIGHT;
 	public static FluidType DHC;
+	public static FluidType LITHYDRO;
+	public static FluidType LITHCARBONATE;
 
 	/* Lagacy names for compatibility purposes */
 	@Deprecated public static FluidType ACID;	//JAOPCA uses this, apparently
@@ -530,6 +532,8 @@ public class Fluids {
 		HALOLIGHT =				new FluidType("HALOLIGHT",			0xB6F9CF, 0, 0, 0, EnumSymbol.NONE).addTraits(LIQUID);
 		DHC =					new FluidType("DHC",				0xD2AFFF, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
 		AIR =					new FluidType("AIR",				0xE7EAEB, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
+		LITHYDRO =				new FluidType("LITHYDRO",			0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
+		LITHCARBONATE =		       new FluidType("LITHCARBONATE",	       0xD1CEBE, 0, 0, 0, EnumSymbol.NONE).addTraits(GASEOUS);
 
 		// ^ ^ ^ ^ ^ ^ ^ ^
 		//ADD NEW FLUIDS HERE
@@ -682,6 +686,9 @@ public class Fluids {
 		metaOrder.add(THORIUM_BROMIDE);
 		metaOrder.add(AQUEOUS_COPPER);
 		metaOrder.add(COPPERSULFATE);
+		metaOrder.add(LITHYDRO);
+		metaOrder.add(LITHCARBONATE);
+
 		//meths
 		metaOrder.add(CHLOROMETHANE);
 		metaOrder.add(METHANOL);
