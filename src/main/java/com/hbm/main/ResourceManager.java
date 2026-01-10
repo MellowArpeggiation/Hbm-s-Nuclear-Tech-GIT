@@ -89,7 +89,7 @@ public class ResourceManager {
 
 	//Space
 	public static final IModelCustom solarp = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/solar_panel.obj")).asVBO();
-	public static final IModelCustom stardar = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/antenna.obj")).asVBO();
+	public static final IModelCustom stardar = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/stardar.obj")).asVBO();
 	public static final IModelCustom drive_processor = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/drive_processor.obj")).asVBO();
 	public static final IModelCustom dish_controller = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/dish_controller.obj")).asVBO();
 	public static final IModelCustom air_scrubber = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/air_scrubber.obj"));
@@ -299,6 +299,8 @@ public class ResourceManager {
 	public static final IModelCustom watz_pump = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/watz_pump.obj")).asVBO();
 
 	//FENSU
+	public static final IModelCustom battery_socket = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/battery.obj")).asVBO();
+	public static final IModelCustom battery_redd = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/fensu2.obj")).asVBO();
 	public static final IModelCustom fensu = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/fensu.obj")).asVBO();
 
 	//Radar
@@ -574,8 +576,8 @@ public class ResourceManager {
 	public static final ResourceLocation cryodistill_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/cryo_distiller.png");
 
 	//Space
-	public static final ResourceLocation solarp_tex = new ResourceLocation(RefStrings.MODID, "textures/models/solar_panel.png"); //haha... "larp"
-	public static final ResourceLocation stardar_tex = new ResourceLocation(RefStrings.MODID, "textures/models/antenna.png");
+	public static final ResourceLocation solarp_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/solar_panel.png"); //haha... "larp"
+	public static final ResourceLocation stardar_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/stardar.png");
 	public static final ResourceLocation drive_processor_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/drive_processor.png");
 	public static final ResourceLocation dish_controller_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/dish_controller.png");
 	public static final ResourceLocation air_scrubber_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/air_scrubber.png");
@@ -790,6 +792,7 @@ public class ResourceManager {
 	public static final ResourceLocation fusion_plasma_glow_tex = new ResourceLocation(RefStrings.MODID, "textures/models/fusion/plasma_glow.png");
 	public static final ResourceLocation fusion_plasma_sparkle_tex = new ResourceLocation(RefStrings.MODID, "textures/models/fusion/plasma_sparkle.png");
 	public static final ResourceLocation fusion_klystron_tex = new ResourceLocation(RefStrings.MODID, "textures/models/fusion/klystron.png");
+	public static final ResourceLocation fusion_klystron_creative_tex = new ResourceLocation(RefStrings.MODID, "textures/models/fusion/klystron_creative.png");
 	public static final ResourceLocation fusion_breeder_tex = new ResourceLocation(RefStrings.MODID, "textures/models/fusion/breeder.png");
 	public static final ResourceLocation fusion_collector_tex = new ResourceLocation(RefStrings.MODID, "textures/models/fusion/collector.png");
 	public static final ResourceLocation fusion_boiler_tex = new ResourceLocation(RefStrings.MODID, "textures/models/fusion/boiler.png");
@@ -814,6 +817,8 @@ public class ResourceManager {
 	public static final ResourceLocation watz_pump_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/watz_pump.png");
 
 	//FENSU
+	public static final ResourceLocation battery_socket_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/battery_socket.png");
+	public static final ResourceLocation battery_redd_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensu2.png");
 	public static final ResourceLocation fensu_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/fensu.png");
 
 	//Radar

@@ -441,8 +441,14 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 				motionZ = 0;
 			}
 
-			if(state == RocketState.LANDING && worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)).getMaterial() == Material.water) {
-				setState(RocketState.TIPPING);
+			if(state == RocketState.LANDING) {
+				Material material = worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)).getMaterial();
+
+				if(material.isLiquid()) setState(RocketState.TIPPING);
+				if(material == Material.lava) {
+					setOnFireFromLava();
+					willExplode = true;
+				}
 			}
 
 			if((state == RocketState.LAUNCHING && posY > 900) || (state == RocketState.UNDOCKING && posY < 32)) {
@@ -533,10 +539,10 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 	}
 
 	@Override
-    public AxisAlignedBB getBoundingBox() {
+	public AxisAlignedBB getBoundingBox() {
 		if(motionMult() > 0) return null;
-        return this.boundingBox;
-    }
+		return this.boundingBox;
+	}
 
 	@Override
 	protected double motionMult() {
@@ -557,6 +563,16 @@ public class EntityRideableRocket extends EntityMissileBaseNT implements ILookOv
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public boolean handleWaterMovement() {
+		return false;
+	}
+
+	@Override
+	public boolean handleLavaMovement() {
+		return false;
 	}
 
 	// Does this rocket accept passengers (is a capsule)
