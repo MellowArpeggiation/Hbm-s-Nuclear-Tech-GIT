@@ -1265,7 +1265,7 @@ public class AssemblyMachineRecipes extends GenericRecipes<GenericRecipe> {
 						new OreDictStack(ANY_CONCRETE.any(), 4),
 						new OreDictStack(STAINLESS.plate(), 12),
 						new OreDictStack(ANY_PLASTIC.ingot(), 4),
-						new ComparableStack(ModBlocks.machine_battery, 1),
+						new ComparableStack(ModItems.battery_pack, 1, EnumBatteryPack.BATTERY_REDSTONE),
 						new ComparableStack(ModItems.coil_copper, 4)));
 		this.register(new GenericRecipe("ass.transporterrocket").setup(400, 100).outputItems(new ItemStack(ModBlocks.transporter_rocket, 2))
 				.inputItems(
