@@ -63,6 +63,7 @@ public class OrbitalStation {
 	private HashSet<IPropulsion> engines = new HashSet<>();
 
 	public static OrbitalStation clientStation = new OrbitalStation(CelestialBody.getBody(0));
+	public static List<OrbitalStation> orbitingStations = new ArrayList<OrbitalStation>();
 
 	public static final int STATION_SIZE = 1024; // total area for each station
 	public static final int BUFFER_SIZE = 256; // size of the buffer region that drops you out of orbit (preventing seeing other stations)

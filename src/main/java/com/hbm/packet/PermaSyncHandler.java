@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystemWorldSavedData;
 import com.hbm.dim.WorldProviderCelestial;
+import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.dim.trait.CBT_War;
 import com.hbm.dim.trait.CBT_War.Projectile;
 import com.hbm.dim.trait.CelestialBodyTrait;
@@ -92,6 +94,17 @@ public class PermaSyncHandler {
 					buf.writeBoolean(false);
 				}
 			}
+
+			// long ass line award
+			List<OrbitalStation> stations = solarSystemData.getStations().values().stream()
+				.filter(station -> station.hasStation && station.orbiting.dimensionId == player.dimension)
+				.collect(Collectors.toList());
+
+			buf.writeInt(stations.size());
+			for(OrbitalStation station : stations) {
+				buf.writeInt(station.dX);
+				buf.writeInt(station.dZ);
+			}
 		} else {
 			buf.writeBoolean(false);
 		}
@@ -105,7 +118,6 @@ public class PermaSyncHandler {
 			buf.writeInt(entry.getKey());
 			buf.writeInt(entry.getValue().getID());
 			entry.getValue().serialize(buf);
-
 		}
 		/// SATELLITES ///
 
@@ -197,6 +209,12 @@ public class PermaSyncHandler {
 						traitMap.remove(body.name);
 					}
 				}
+
+				OrbitalStation.orbitingStations.clear();
+				int count = buf.readInt();
+				for(int i = 0; i < count; i++) {
+					OrbitalStation.orbitingStations.add(new OrbitalStation(null, buf.readInt(), buf.readInt()));
+				}
 			} catch (Exception ex) {
 				// If any exception occurs, stop parsing any more bytes, they'll be unaligned
 				// We'll unset the client trait set to prevent any issues
@@ -224,7 +242,6 @@ public class PermaSyncHandler {
 		}
 
 		SatelliteSavedData.setClientSats(sats);
-
 		/// SATELLITES ///
 
 		/// TIME OF DAY ///

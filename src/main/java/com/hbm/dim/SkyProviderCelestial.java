@@ -7,6 +7,7 @@ import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.dim.SolarSystem.AstroMetric;
+import com.hbm.dim.orbit.OrbitalStation;
 import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.dim.trait.CBT_Dyson;
 import com.hbm.dim.trait.CelestialBodyTrait.CBT_COMPROMISED;
@@ -50,6 +51,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 	private static final ResourceLocation nightTexture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/night.png");
 	private static final ResourceLocation digammaStar = new ResourceLocation(RefStrings.MODID, "textures/misc/space/star_digamma.png");
 	private static final ResourceLocation lodeStar = new ResourceLocation(RefStrings.MODID, "textures/misc/star_lode.png");
+	private static final ResourceLocation stationTexture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/station.png");
 
 	private static final ResourceLocation impactTexture = new ResourceLocation(RefStrings.MODID, "textures/misc/space/impact.png");
 	private static final ResourceLocation shockwaveTexture = new ResourceLocation(RefStrings.MODID, "textures/particle/shockwave.png");
@@ -240,6 +242,11 @@ public class SkyProviderCelestial extends IRenderHandler {
 				// Light up the sky
 				for(Map.Entry<Integer, Satellite> satelliteEntry : SatelliteSavedData.getClientSats().entrySet()) {
 					satelliteEntry.getValue().render(partialTicks, world, mc, solarAngle, satelliteEntry.getKey());
+				}
+
+				// Stations, too
+				for(OrbitalStation station : OrbitalStation.orbitingStations) {
+					renderStation(partialTicks, world, mc, station, solarAngle);
 				}
 			}
 
@@ -1162,6 +1169,39 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 	protected void render3DModel(float partialTicks, WorldClient world, Minecraft mc) {
 
+	}
+
+	protected void renderStation(float partialTicks, WorldClient world, Minecraft mc, OrbitalStation station, float solarAngle) {
+		Tessellator tessellator = Tessellator.instance;
+
+		long seed = station.dX * 1024 + station.dZ;
+
+		double ticks = (double)(System.currentTimeMillis() % (1600 * 50)) / 50;
+
+		GL11.glPushMatrix();
+		{
+
+			GL11.glRotatef(solarAngle * -360.0F, 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef(-40.0F + (float)(seed % 800) * 0.1F - 5.0F, 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef((float)(seed % 50) * 0.1F - 20.0F, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef((float)(seed % 80) * 0.1F - 2.5F, 0.0F, 0.0F, 1.0F);
+			GL11.glRotated((ticks / 1600.0D) * -360.0D, 1.0F, 0.0F, 0.0F);
+
+			GL11.glColor4f(0.8F, 1, 1, 1);
+
+			mc.renderEngine.bindTexture(stationTexture);
+
+			float size = 0.8F;
+
+			tessellator.startDrawingQuads();
+			tessellator.addVertexWithUV(-size, 100.0, -size, 0.0D, 0.0D);
+			tessellator.addVertexWithUV(size, 100.0, -size, 0.0D, 1.0D);
+			tessellator.addVertexWithUV(size, 100.0, size, 1.0D, 1.0D);
+			tessellator.addVertexWithUV(-size, 100.0, size, 1.0D, 0.0D);
+			tessellator.draw();
+
+		}
+		GL11.glPopMatrix();
 	}
 
 }
