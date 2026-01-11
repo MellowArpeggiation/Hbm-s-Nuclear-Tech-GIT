@@ -49,6 +49,13 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 
 			list.add("Destination: ORBITAL STATION");
 			list.add("Station: " + identifier);
+
+			if(player.worldObj.provider.dimensionId != destination.body.getDimensionId()) {
+				for(String s : I18nUtil.resolveKey("item.hard_drive_full.orbit.desc").split("\\$")) {
+					list.add(EnumChatFormatting.GOLD + s);
+				}
+			}
+
 			return;
 		}
 
@@ -67,6 +74,12 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 			// Display destination info if processed
 			list.add(EnumChatFormatting.GREEN + "Processed!");
 			list.add("Target coordinates: " + destination.x + ", " + destination.z);
+		}
+
+		if(player.worldObj.provider.dimensionId == destination.body.getDimensionId()) {
+			for(String s : I18nUtil.resolveKey("item.hard_drive_full.surface.desc").split("\\$")) {
+				list.add(EnumChatFormatting.GOLD + s);
+			}
 		}
 	}
 
