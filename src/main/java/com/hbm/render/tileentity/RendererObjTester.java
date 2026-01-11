@@ -6,38 +6,16 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import com.hbm.dim.SolarSystem;
-import com.hbm.items.ModItems;
-import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.shader.Shader;
-import com.hbm.render.util.HorsePronter;
-import com.hbm.wiaj.WorldInAJar;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 
 public class RendererObjTester extends TileEntitySpecialRenderer {
 
-	private static RenderBlocks renderer;
-	private static WorldInAJar world;
-	private static ResourceLocation extra = new ResourceLocation(RefStrings.MODID, "textures/models/horse/dyx.png");
-	private static final ResourceLocation noise = new ResourceLocation(RefStrings.MODID, "shaders/iChannel1.png");
-	private static final Shader shaeder =  new Shader(new ResourceLocation(RefStrings.MODID, "shaders/fle.frag"));
 	@Override
-	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {		
+	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y + 0.2, z + 0.5);
 		GL11.glDisable(GL11.GL_CULL_FACE);
@@ -127,8 +105,8 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 
-	
-		
+
+
 		/*
 		bindTexture(ResourceManager.b2x_tex_mex_sex);
 
@@ -139,7 +117,7 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 
-		
+
 		if(trailStretch > 0) {
 			GL11.glColor4d(0.25, 0.88, 0.82, 1);
 
@@ -150,7 +128,7 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 			GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 			GL11.glDepthMask(false);
-			
+
 			GL11.glPushMatrix();
 			GL11.glTranslatef(-0.56F, -0.56F, 1F);
 			GL11.glRotatef(180, 0, 1, 0);
@@ -159,9 +137,9 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 
 			bindTexture(ResourceManager.xenon_exhaust_tex);
 			ResourceManager.xenon_thruster.renderPart("Exhaust");
-			
-			
-			
+
+
+
 			GL11.glPopMatrix();
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0.56F, -0.56F, 1F);
@@ -171,10 +149,10 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 
 			bindTexture(ResourceManager.xenon_exhaust_tex);
 			ResourceManager.xenon_thruster.renderPart("Exhaust");
-			
-			
+
+
 			GL11.glPopMatrix();
-			
+
 			GL11.glDepthMask(true);
 			GL11.glPopAttrib();
 			GL11.glEnable(GL11.GL_LIGHTING);
@@ -187,15 +165,15 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		GL11.glShadeModel(GL11.GL_FLAT);
 		GL11.glPopMatrix();
 
-		
-		
+
+
 		/*
-		GL11.glRotated(sin2, 0, 1, 0); 
+		GL11.glRotated(sin2, 0, 1, 0);
 
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0, 8.6F, 0.5F);
-		
-		GL11.glRotated(sin2, 0, 1, 0); 
+
+		GL11.glRotated(sin2, 0, 1, 0);
 
 		GL11.glTranslatef(0, -8.7F, -0.5F);
 		bindTexture(ResourceManager.behemoth_body_tex);
@@ -206,7 +184,7 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 
 		bindTexture(ResourceManager.behemoth_helmet_tex);
 		ResourceManager.behemoth.renderPart("helmet");
-		
+
 		GL11.glPushMatrix();
 
 		bindTexture(ResourceManager.behemoth_eye_tex);
@@ -332,7 +310,7 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 		*/
 	}
-	
+
 
 	public void renderTileEntityAt2(TileEntity tileEntity, double x, double y, double z, float f)
     {
@@ -353,18 +331,18 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 
         /*bindTexture(objTesterTexture);
         objTesterModel.renderAll();*/
-        
+
 		//GL11.glScaled(5, 5, 5);
-		
+
         /*GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_CULL_FACE);
 		bindTexture(ResourceManager.sat_foeq_burning_tex);
 		ResourceManager.sat_foeq_burning.renderAll();
-		
+
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_BLEND);
-		
+
 		Random rand = new Random(System.currentTimeMillis() / 50);
 
         GL11.glScaled(1.15, 0.75, 1.15);
@@ -387,12 +365,12 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 			GL11.glColor3d(1, 0.0, 0);
 	        GL11.glRotatef(rand.nextInt(360), 0F, 1F, 0F);
 			ResourceManager.sat_foeq_fire.renderAll();
-			
+
 	        GL11.glTranslated(0, -3.8, 0);
-	        
+
 	        GL11.glScaled(0.95, 1.2, 0.95);
 		}
-		
+
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);*/
 
@@ -402,16 +380,16 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 
         bindTexture(new ResourceLocation(RefStrings.MODID, "textures/models/ModelCalDualStock.png"));
         saddle.renderAll(1F/16F);
-        
+
         bindTexture(new ResourceLocation(RefStrings.MODID, "textures/models/ModelCalBarrel.png"));
         GL11.glTranslated(0, 0, -0.25);
         barrel.renderAll(1F/16F);
         GL11.glTranslated(0, 0, 0.5);
         barrel.renderAll(1F/16F);
-        
+
         bindTexture(new ResourceLocation(RefStrings.MODID, "textures/models/ModelCalStock.png"));*/
         //stock.renderAll(1F/16F);
-        
+
         //SoyuzPronter.prontSoyuz(2);
         //TomPronter.prontTom();
         //BeamPronter.prontBeam(Vec3.createVectorHelper(5, 5, 5), EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0xff8000, 0xff8000, (int)tileEntity.getWorldObj().getTotalWorldTime() % 360 * 25, 25, 0.1F, 4, 0.05F);
@@ -423,7 +401,7 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
         //GL11.glTranslatef(0.0F, -0.25F, 0.0F);
         //GL11.glRotatef(-25, 0, 1, 0);
         //GL11.glRotatef(15, 0, 0, 1);
-        
+
         /*long time = tileEntity.getWorldObj().getTotalWorldTime();
         double sine = Math.sin(time * 0.05) * 5;
         double sin3 = Math.sin(time * 0.05 + Math.PI * 0.5) * 5;
@@ -433,7 +411,7 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
         GL11.glRotated(sine, 0, 0, 1);
         GL11.glRotated(sin3, 1, 0, 0);
         GL11.glTranslated(0.0F, -height, 0.0F);
-        
+
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glShadeModel(GL11.GL_SMOOTH);
         bindTexture(ResourceManager.soyuz_lander_tex);
@@ -453,10 +431,10 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
         bindTexture(ResourceManager.fstbmb_tex);
         ResourceManager.fstbmb.renderPart("Body");
         ResourceManager.fstbmb.renderPart("Balefire");
-        
+
         bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/misc/glintBF.png"));
         RenderMiscEffects.renderClassicGlint(tileEntity.getWorldObj(), f, ResourceManager.fstbmb, "Balefire", 0.0F, 0.8F, 0.15F, 5, 2F);
-        
+
         FontRenderer font = Minecraft.getMinecraft().fontRenderer;
         float f3 = 0.04F;
         GL11.glTranslatef(0.815F, 0.9275F, 0.5F);
@@ -467,9 +445,9 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
         GL11.glTranslatef(0, 1, 0);
         font.drawString("00:15", 0, 0, 0xff0000);
         GL11.glDepthMask(true);
-        
+
         GL11.glShadeModel(GL11.GL_FLAT);*/
-        
+
         GL11.glTranslated(0D, 4D, 0D);
         GL11.glRotated(System.currentTimeMillis() % 3600 / 10D, 0, 0, 1);
         GL11.glTranslated(0D, -4D, 0D);
@@ -478,7 +456,7 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_LIGHTING);
-		
+
 		//GL11.glDisable(GL11.GL_TEXTURE_2D);
 		RenderHelper.disableStandardItemLighting();
 		RenderHelper.enableStandardItemLighting();
@@ -497,7 +475,7 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		FloatBuffer mspe = (FloatBuffer) BufferUtils.createFloatBuffer(8).put(new float[] { spe, spe, spe, 1F }).flip();
 		float msh = 128F * shi;
 		FloatBuffer mem = (FloatBuffer) BufferUtils.createFloatBuffer(8).put(new float[] { 1F, 1F, 1F, 1F }).flip();
-		
+
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		GL11.glLight(GL11.GL_LIGHT0, GL11.GL_AMBIENT, iamb);
@@ -510,10 +488,10 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_DIFFUSE, mdif);
 		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_SPECULAR, mspe);
 		GL11.glMaterialf(GL11.GL_FRONT, GL11.GL_SHININESS, msh);
-		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_EMISSION, mem); 
+		GL11.glMaterial(GL11.GL_FRONT, GL11.GL_EMISSION, mem);
 		GL11.glLightModeli(GL12.GL_LIGHT_MODEL_COLOR_CONTROL, GL12.GL_SEPARATE_SPECULAR_COLOR);
-		
-		
+
+
 		bindTexture(ResourceManager.soyuz_module_dome_tex);
 		ResourceManager.soyuz_module.renderPart("Dome");
 		bindTexture(ResourceManager.soyuz_module_lander_tex);
@@ -529,76 +507,76 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 
         /*GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glShadeModel(GL11.GL_SMOOTH);
-        
+
         bindTexture(ResourceManager.igen_tex);
         ResourceManager.igen.renderPart("Base");
-        
+
         float angle = System.currentTimeMillis() * 1 % 360;
         float px = 0.0625F;
         float sine = (float) Math.sin(Math.toRadians(angle));
         float cosine = (float) Math.cos(Math.toRadians(angle));
         float armAng = 22.5F;
-        
+
         GL11.glPushMatrix();
         GL11.glTranslated(0, 3.5, 0);
         GL11.glRotatef(angle, 0, 0, 1);
         GL11.glTranslated(0, -3.5, 0);
-        
+
         bindTexture(ResourceManager.igen_rotor);
         ResourceManager.igen.renderPart("Rotor");
         GL11.glPopMatrix();
-        
-        
-        
+
+
+
         GL11.glPushMatrix();
         GL11.glTranslated(0, 3.5, px * 5);
         GL11.glRotatef(angle, -1, 0, 0);
         GL11.glTranslated(0, -3.5, px * -5);
-        
+
         bindTexture(ResourceManager.igen_cog);
         ResourceManager.igen.renderPart("CogLeft");
         GL11.glPopMatrix();
-        
-        
-        
+
+
+
         GL11.glPushMatrix();
         GL11.glTranslated(0, 3.5, px * 5);
         GL11.glRotatef(angle, 1, 0, 0);
         GL11.glTranslated(0, -3.5, px * -5);
-        
+
         bindTexture(ResourceManager.igen_cog);
         ResourceManager.igen.renderPart("CogRight");
         GL11.glPopMatrix();
-        
-        
-        
+
+
+
         GL11.glPushMatrix();
         GL11.glTranslated(0, 0, cosine * 0.8725 - 1);
-        
+
         bindTexture(ResourceManager.igen_pistons);
         ResourceManager.igen.renderPart("Pistons");
         GL11.glPopMatrix();
-        
+
         GL11.glPushMatrix();
-        
+
         GL11.glTranslated(0, sine * 0.55, cosine * 0.8725 - 1.125);
-        
+
         GL11.glTranslated(0, 3.5, px * 6.5);
         GL11.glRotatef(sine * -armAng, 1, 0, 0);
         GL11.glTranslated(0, -3.5, px * -5);
-        
+
         bindTexture(ResourceManager.igen_arm);
         ResourceManager.igen.renderPart("ArmLeft");
         GL11.glPopMatrix();
-        
+
         GL11.glPushMatrix();
-        
+
         GL11.glTranslated(0, -sine * 0.55, cosine * 0.8725 - 1.125);
-        
+
         GL11.glTranslated(0, 3.5, px * 6.5);
         GL11.glRotatef(sine * armAng, 1, 0, 0);
         GL11.glTranslated(0, -3.5, px * -5);
-        
+
         bindTexture(ResourceManager.igen_arm);
         ResourceManager.igen.renderPart("ArmRight");
         GL11.glPopMatrix();
@@ -608,13 +586,13 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
 	        BeamPronter.prontBeam(Vec3.createVectorHelper(1.5, 0, 0), EnumWaveType.RANDOM, EnumBeamType.LINE, 0x8080ff, 0x0000ff, (int)tileEntity.getWorldObj().getTotalWorldTime() % 1000 + i, 5, px * 4, 0, 0);
 	        BeamPronter.prontBeam(Vec3.createVectorHelper(1.5, 0, 0), EnumWaveType.RANDOM, EnumBeamType.LINE, 0xffffff, 0x0000ff, (int)tileEntity.getWorldObj().getTotalWorldTime() % 1000 + 2 + i, 5, px * 4, 0, 0);
         }
-        
+
         GL11.glShadeModel(GL11.GL_FLAT);
         GL11.glEnable(GL11.GL_CULL_FACE);
 
         tileEntity.getWorldObj().spawnParticle("splash", tileEntity.xCoord + 2.1, tileEntity.yCoord + 5.875, tileEntity.zCoord + 0.5, 0, 0, -0.25);
         tileEntity.getWorldObj().spawnParticle("smoke", tileEntity.xCoord + 2.8, tileEntity.yCoord + 5.05, tileEntity.zCoord + 2, 0, 0, -0.1);
-        
+
         if(tileEntity.getWorldObj().rand.nextInt(100) == 0) {
 
     		tileEntity.getWorldObj().spawnParticle("flame", tileEntity.xCoord + 2.8, tileEntity.yCoord + 5.05, tileEntity.zCoord + 2, 0, 0, -0.3);
@@ -622,7 +600,7 @@ public class RendererObjTester extends TileEntitySpecialRenderer {
                 tileEntity.getWorldObj().spawnParticle("smoke", tileEntity.xCoord + 2.8, tileEntity.yCoord + 5.05, tileEntity.zCoord + 2, 0, 0, -0.3);
         	}
         }*/
-        
+
         GL11.glPopMatrix();
         RenderHelper.enableStandardItemLighting();
     }
