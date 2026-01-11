@@ -12,7 +12,10 @@ import com.hbm.blocks.machine.BlockOrbitalStation;
 import com.hbm.dim.CelestialBody;
 import com.hbm.dim.SolarSystem;
 import com.hbm.dim.SolarSystemWorldSavedData;
+import com.hbm.entity.missile.EntityRideableRocket;
+import com.hbm.entity.missile.EntityRideableRocket.RocketState;
 import com.hbm.handler.ThreeInts;
+import com.hbm.items.ItemVOTVdrive.Destination;
 import com.hbm.tileentity.machine.TileEntityOrbitalStation;
 import com.hbm.util.BufferUtil;
 
@@ -196,6 +199,29 @@ public class OrbitalStation {
 		this.state = state;
 		stateTimer = 0;
 		maxStateTimer = timeUntilNext;
+	}
+
+	public boolean recallPod(Destination destination) {
+		if(!hasStation) return false;
+		if(destination.body.getBody() != orbiting) return false;
+
+		for(TileEntityOrbitalStation port : ports.values()) {
+			EntityRideableRocket rocket = port.getDocked();
+
+			if(rocket == null || !rocket.isReusable()) continue;
+
+			// ensure the rocket has fuel before sending it off
+			RocketState state = rocket.getState();
+			if(state != RocketState.AWAITING && state != RocketState.LANDED) continue;
+
+			// and make sure it doesn't have a rider!!
+			if(rocket.riddenByEntity != null) continue;
+
+			rocket.recallPod(destination);
+			return true;
+		}
+
+		return false;
 	}
 
 	public static void addPropulsion(IPropulsion propulsion) {

@@ -121,6 +121,8 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 	}
 
 	public static Destination getDestination(ItemStack stack) {
+		if(stack == null) return null;
+
 		if(!stack.hasTagCompound())
 			stack.stackTagCompound = new NBTTagCompound();
 
@@ -260,8 +262,23 @@ public class ItemVOTVdrive extends ItemEnumMulti {
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float fx, float fy, float fz) {
 		Destination destination = getDestination(stack);
-		if(destination.body == SolarSystem.Body.ORBIT)
-			return false;
+		if(destination.body == SolarSystem.Body.ORBIT) {
+			if(world.provider.dimensionId == SpaceConfig.orbitDimension) return false;
+
+			if(!world.isRemote) {
+				OrbitalStation station = OrbitalStation.getStation(destination.x, destination.z);
+
+				Destination target = new Destination(CelestialBody.getEnum(world), x, z);
+
+				if(station.recallPod(target)) {
+					player.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.ITALIC + "Recalling drop pod to coordinates: " + x + ", " + z));
+				} else {
+					player.addChatMessage(new ChatComponentText(EnumChatFormatting.YELLOW + "" + EnumChatFormatting.ITALIC + "Could not recall drop pod from station!"));
+				}
+			}
+
+			return true;
+		}
 
 		boolean onDestination = world.provider.dimensionId == destination.body.getDimensionId();
 		if(!onDestination)
