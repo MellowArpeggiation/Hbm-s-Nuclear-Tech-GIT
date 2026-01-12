@@ -1,1 +1,5 @@
-Includes all changes and bugfixes from the latest upstream NTMain update - [X5570 - i;m thinking about those beans](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5570)
+Includes all changes and bugfixes from the latest upstream NTMain update - [X5572 - i have contracted rabies](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT/releases/tag/1.0.27_X5572)
+
+## Changed
+* Station drives can now be used to recall docked & fueled drop pods to your current location
+* Stations now show up in the sky of the orbited planet
