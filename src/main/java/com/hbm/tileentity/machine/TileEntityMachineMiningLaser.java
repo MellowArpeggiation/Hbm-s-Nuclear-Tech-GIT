@@ -619,7 +619,6 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		this.power = nbt.getLong("power");
 		tank.readFromNBT(nbt, "oil");
 		power = nbt.getLong("power");
 		isOn = nbt.getBoolean("isOn");
@@ -629,7 +628,6 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setLong("power", power);
 		tank.writeToNBT(nbt, "oil");
 		nbt.setLong("power", power);
 		nbt.setBoolean("isOn", isOn);
