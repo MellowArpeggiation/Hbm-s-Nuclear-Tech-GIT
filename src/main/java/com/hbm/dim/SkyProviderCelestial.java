@@ -203,7 +203,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 		float siderealAngle = (float)SolarSystem.calculateSiderealAngle(world, partialTicks, body);
 
 		// Handle any special per-body sunset rendering
-		renderSunset(partialTicks, world, mc);
+		renderSunset(partialTicks, world, mc, solarAngle, pressure, body.surfaceTexture);
 
 		renderStars(partialTicks, world, mc, starBrightness, solarAngle + siderealAngle, body.axialTilt);
 
@@ -452,13 +452,14 @@ public class SkyProviderCelestial extends IRenderHandler {
 
 	}
 
-	protected void renderSunset(float partialTicks, WorldClient world, Minecraft mc) {
+	protected void renderSunset(float partialTicks, WorldClient world, Minecraft mc, float solarAngle, float pressure, ResourceLocation surfaceTexture) {
 		Tessellator tessellator = Tessellator.instance;
 
-		float[] sunsetColor = world.provider.calcSunriseSunsetColors(world.getCelestialAngle(partialTicks), partialTicks);
+		float[] sunsetColor = calcSunriseSunsetColors(partialTicks, world, mc, solarAngle, pressure);
 
 		if(sunsetColor != null) {
 			float[] anaglyphColor = mc.gameSettings.anaglyph ? applyAnaglyph(sunsetColor) : sunsetColor;
+			float sunsetDirection = MathHelper.sin(world.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F : 0.0F;
 
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glShadeModel(GL11.GL_SMOOTH);
@@ -467,7 +468,7 @@ public class SkyProviderCelestial extends IRenderHandler {
 			{
 
 				GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-				GL11.glRotatef(MathHelper.sin(world.getCelestialAngleRadians(partialTicks)) < 0.0F ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
+				GL11.glRotatef(sunsetDirection, 0.0F, 0.0F, 1.0F);
 				GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
 
 				tessellator.startDrawing(6);
@@ -489,7 +490,52 @@ public class SkyProviderCelestial extends IRenderHandler {
 			GL11.glPopMatrix();
 			GL11.glShadeModel(GL11.GL_FLAT);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+			// charged dust
+			if(pressure < 0.05F) {
+				Random rand = new Random(0);
+
+				GL11.glPushMatrix();
+				{
+
+					double time = ((double)world.provider.getWorldTime() + partialTicks) * 0.002;
+
+					GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
+					GL11.glRotatef(sunsetDirection, 0.0F, 0.0F, 1.0F);
+					GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
+
+					mc.renderEngine.bindTexture(surfaceTexture);
+					GL11.glColor4f(0.5F + rand.nextFloat() * 0.5F, 0.5F + rand.nextFloat() * 0.5F, 0.5F + rand.nextFloat() * 0.5F, rand.nextFloat() * sunsetColor[3] * 4.0F);
+
+					OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+
+					tessellator.startDrawing(GL11.GL_POINTS);
+					for(int i = 0; i < 1024; i++) {
+						tessellator.addVertex(rand.nextGaussian() * 50, 100, -((Math.abs(rand.nextGaussian() * 20) + time) % Math.abs(rand.nextGaussian()) * 20));
+					}
+					tessellator.draw();
+
+				}
+				GL11.glPopMatrix();
+			}
 		}
+	}
+
+	// We don't want certain sunrise/sunset effects to change the fog colour, so we do them here
+	protected float[] calcSunriseSunsetColors(float partialTicks, WorldClient world, Minecraft mc, float solarAngle, float pressure) {
+		if(pressure < 0.05F) {
+			float cutoff = 0.4F;
+			float angle = MathHelper.cos(solarAngle * (float)Math.PI * 2.0F) - 0.0F;
+
+			if(angle < -cutoff || angle > cutoff) return null;
+
+			float colorIntensity = angle / cutoff * 0.5F + 0.5F;
+			float alpha = 1.0F - (1.0F - MathHelper.sin(colorIntensity * (float)Math.PI)) * 0.99F;
+			alpha *= alpha;
+			return new float[] { 0.9F, 1.0F, 1.0F, alpha * 0.2F };
+		}
+
+		return world.provider.calcSunriseSunsetColors(world.getCelestialAngle(partialTicks), partialTicks);
 	}
 
 	protected void renderStars(float partialTicks, WorldClient world, Minecraft mc, float starBrightness, float siderealAngle, float axialTilt) {

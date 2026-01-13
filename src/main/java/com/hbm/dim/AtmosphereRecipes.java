@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
-import com.hbm.inventory.FluidStack;
 import com.hbm.inventory.fluid.FluidType;
 import com.hbm.inventory.fluid.Fluids;
 import com.hbm.inventory.recipes.loader.SerializableRecipe;
@@ -17,34 +15,32 @@ import com.hbm.util.Tuple.Triplet;
 import net.minecraft.item.ItemStack;
 
 public class AtmosphereRecipes extends SerializableRecipe {
-	
+
 	private static HashMap<FluidType, Triplet<AtmoStack, AtmoStack, AtmoStack>> recipes = new HashMap<>();
 
 	@Override
 	public void registerDefaults() {
-		
-		
-		recipes.put(Fluids.LITHCARBONATE, new Triplet<>( 
-				new AtmoStack(Fluids.NONE, 0),
-				new AtmoStack(Fluids.LITHYDRO, 128000),
-				new AtmoStack(Fluids.DUNAAIR, 320000)
-			));
+		recipes.put(Fluids.LITHCARBONATE, new Triplet<>(
+			new AtmoStack(Fluids.NONE, 0),
+			new AtmoStack(Fluids.LITHYDRO, 128000),
+			new AtmoStack(Fluids.DUNAAIR, 320000)
+		));
 	}
-	
-	
-	
+
+
+
 	public static Triplet<AtmoStack, AtmoStack, AtmoStack> getOutput(FluidType type) {
 		return recipes.get(type);
 	}
-	
+
 	public static HashMap<FluidType, Triplet<AtmoStack, AtmoStack, AtmoStack>> getRecipesMap() {
-		    return recipes;
-		}
-	
+		return recipes;
+	}
+
 	public static HashMap<Object, Object[]> getRecipes() {
 
 		HashMap<Object, Object[]> map = new HashMap<Object, Object[]>();
-		
+
 		for(Entry<FluidType, Triplet<AtmoStack, AtmoStack, AtmoStack>> recipe : recipes.entrySet()) {
 			ItemStack[] inputs = recipe.getValue().getX().type == Fluids.NONE
 				? new ItemStack[] { ItemFluidIcon.make(recipe.getKey(), 1000) }
@@ -57,7 +53,7 @@ public class AtmosphereRecipes extends SerializableRecipe {
 					ItemFluidIcon.make(recipe.getValue().getY().type,	recipe.getValue().getY().pressure * 10),
 					ItemFluidIcon.make(recipe.getValue().getZ().type,	recipe.getValue().getZ().pressure * 10) });
 		}
-		
+
 		return map;
 	}
 
