@@ -27,6 +27,8 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
 	public boolean destroyer = true;
 	public static final int[] access = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
 
+	public boolean isIndirectlyPowered;
+
 	public TileEntityCraneInserter() {
 		super(21);
 	}
@@ -41,7 +43,8 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
 		super.updateEntity();
 		if(!worldObj.isRemote) {
 
-			if(!this.worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {ForgeDirection outputSide = getOutputSide();
+			if(!isIndirectlyPowered) {
+				ForgeDirection outputSide = getOutputSide();
 				TileEntity te = Compat.getTileStandard(worldObj, xCoord + outputSide.offsetX, yCoord + outputSide.offsetY, zCoord + outputSide.offsetZ);
 				
 				int[] access = null;
@@ -139,12 +142,14 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.destroyer = nbt.getBoolean("destroyer");
+		this.isIndirectlyPowered = nbt.getBoolean("redstone");
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setBoolean("destroyer", this.destroyer);
+		nbt.setBoolean("redstone", this.isIndirectlyPowered);
 	}
 
 	@Override
