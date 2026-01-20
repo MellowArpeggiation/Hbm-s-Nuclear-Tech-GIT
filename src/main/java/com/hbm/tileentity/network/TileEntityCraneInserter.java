@@ -10,7 +10,6 @@ import com.hbm.util.InventoryUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -95,21 +94,7 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
 					}
 				}
 			}
-
-			this.networkPackNT(15);
 		}
-	}
-
-	@Override
-	public void serialize(ByteBuf buf) {
-		super.serialize(buf);
-		buf.writeBoolean(destroyer);
-	}
-	
-	@Override
-	public void deserialize(ByteBuf buf) {
-		super.deserialize(buf);
-		destroyer = buf.readBoolean();
 	}
 
 	@Override
