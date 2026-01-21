@@ -718,6 +718,10 @@ public class MainRegistry {
 			HbmKeybinds.register();
 			HbmKeybinds keyHandler = new HbmKeybinds();
 			FMLCommonHandler.instance().bus().register(keyHandler);
+
+			OrthoHandler orthoHandler = new OrthoHandler();
+			FMLCommonHandler.instance().bus().register(orthoHandler);
+			MinecraftForge.EVENT_BUS.register(orthoHandler);
 		}
 	}
 
