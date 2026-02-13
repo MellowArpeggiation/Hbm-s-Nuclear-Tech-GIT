@@ -3119,7 +3119,7 @@ item.gun_cryolator_ammo.name=Cryo Cell
 item.gun_detonator.name=Лазерный детонатор
 item.gun_double_barrel.name=Дробовик "Old Classic"
 item.gun_double_barrel_sacred_dragon.name=Дробовик "Sacred Dragon"
-item.gun_fatman.name=М42 Атомная катапульта "Fat man"
+item.gun_fatman.name=Атомная катапульта M42 "Fat man"
 item.gun_fireext.name=Огнетушитель
 item.gun_flamer.name=Огнемёт
 item.gun_flamer_daybreaker.name=Огнемёт "Daybreaker"
@@ -6638,6 +6638,7 @@ desc.gui.upgrade.power= * §1Энергосбережение§r: Стакает
 desc.gui.upgrade.speed= * §4Скорость§r: Стакается до 3-х уровней
 
 // Last updated 12.01.2026 by RayzerHan //
+
 
 
 
