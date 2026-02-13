@@ -3098,8 +3098,8 @@ item.glyphid_gland.name= Железа глифида:
 item.glyphid_gland_empty.name= Железа глифида
 item.gun_aberrator.name=Пистолет "Aberrator"
 item.gun_aberrator_eott.name=Пистолет "Eyes Of The Tempest"
-item.gun_am180.name=Пистолет-пулемёт ".22 LR"
-item.gun_am180_silenced.name=Пистолет-пулемёт ".22 LR с глушителем"
+item.gun_am180.name=Пистолет-пулемёт .22 LR
+item.gun_am180_silenced.name=Пистолет-пулемёт .22 LR с глушителем
 item.gun_amat.name=Крупнокалиберная снайперская винтовка
 item.gun_amat_penance.name=Крупнокалиберная снайперская винтовка "Penance"
 item.gun_amat_subtlety.name=Крупнокалиберная снайперская винтовка "Subtlety"
@@ -3136,7 +3136,7 @@ item.gun_hangman.name=Винтовка "Hangman"
 item.gun_heavy_revolver.name=Тяжёлый револьвер
 item.gun_heavy_revolver_lilmac.name=Револьвер "Little Macintosh"
 item.gun_heavy_revolver_protege.name=Револьвер "Protège"
-item.gun_heavy_revolver_scoped.name=Револьвер с прицелом ".44 Magnum"
+item.gun_heavy_revolver_scoped.name=Револьвер .44 Magnum с прицелом
 item.gun_henry.name=Винтовка рычажного действия
 item.gun_henry_lincoln.name=Винтовка "Lincoln's Repeater"
 item.gun_kit_1.name=Ружейное масло
@@ -6638,6 +6638,7 @@ desc.gui.upgrade.power= * §1Энергосбережение§r: Стакает
 desc.gui.upgrade.speed= * §4Скорость§r: Стакается до 3-х уровней
 
 // Last updated 12.01.2026 by RayzerHan //
+
 
 
 
