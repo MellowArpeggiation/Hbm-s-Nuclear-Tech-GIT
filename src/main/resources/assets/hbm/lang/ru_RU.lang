@@ -3129,7 +3129,7 @@ item.gun_folly.name=Пушка "Folly"
 item.gun_g3.name=Штурмовая винтовка
 item.gun_g3_a3.name=Штурмовая винтовка "G3A3"
 item.gun_g3_infiltrator.name=Штурмовая винтовка "Infiltrator"
-item.gun_g3_zebra.name=Штурмовая винтовка "Zebra"
+item.gun_g3_zebra.name=Зебринская штурмовая винтовка
 item.gun_greasegun.name=Пистолет-пулемёт "Маслёнка"
 item.gun_greasegun_m3.name=Улучшенный пистолет-пулемёт М3
 item.gun_hangman.name=Винтовка "Hangman"
@@ -6638,6 +6638,7 @@ desc.gui.upgrade.power= * §1Энергосбережение§r: Стакает
 desc.gui.upgrade.speed= * §4Скорость§r: Стакается до 3-х уровней
 
 // Last updated 12.01.2026 by RayzerHan //
+
 
 
 
