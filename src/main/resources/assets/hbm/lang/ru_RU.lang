@@ -3145,9 +3145,9 @@ item.gun_lag.name=Комически длинный пистолет
 item.gun_laser_pistol.name=Лазерный пистолет
 item.gun_laser_pistol_morning_glory.name=Лазерный пистолет "Morning Glory"
 item.gun_laser_pistol_pew_pew.name=Лазерный пистолет "Pew Pew"
-item.gun_liberator.name=Дробовик "Либератор"
+item.gun_liberator.name=Дробовик "Liberator"
 item.gun_light_revolver.name=Револьвер переломного действия
-item.gun_light_revolver_atlas.name=Револьвер "Атлас"
+item.gun_light_revolver_atlas.name=Револьвер "Atlas"
 item.gun_light_revolver_dani.name=Ревельверы "Day and Night"
 item.gun_m2.name=Пулемёт "Ma Deuce"
 item.gun_maresleg.name=Дробовик рычажного действия
@@ -6638,6 +6638,7 @@ desc.gui.upgrade.power= * §1Энергосбережение§r: Стакает
 desc.gui.upgrade.speed= * §4Скорость§r: Стакается до 3-х уровней
 
 // Last updated 12.01.2026 by RayzerHan //
+
 
 
 
