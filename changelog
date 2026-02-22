@@ -10,11 +10,24 @@
   * No longer has a volatile power buffer, power isn't buffered at all anymore, similar to steam engines and MHD turbines
   * Steam capacity changes based on compression level, the ratio for turbine cascades is now 1:1:1:1
   * Comes with a flywheel, energy output slowly ramps up as steam is supplied and slowly goes down as steam cuts out
+  * Recipe is similar to the old inudstrial turbine, but slightly simplified and cheaper
 * Leviathan turbines no longer have a power buffer
 * Updated russian and chinese localization
 * The PWR can now be controlled via RoR
   * The RoR value reader can read core and hull heat as well as fuel depletion in percent
   * The RoR controller can set the control rod level in percent as well as jetison all loaded fuel
+* Having 528, expensive or rampant mode enabled now displays a badge in the top left corner, showing that it is enabled
+  * Badges can be disabled with the `BADGES_HUD` value of `/ntmclient`
+  * The badge only shows up if the "true" configuration is used, 528 requires default settings, expensive requires the precision assembler config to not be modified and rampant needs most of the default settings enabled
+  * If all three modes are enabled, the "328 mode" badge also appears
+* Removed toothpicks, as they haven't been used in recipes for well over a year
+* Cleaned up a ton of unused assets
+* The old crucible smelting rules when not using a template can be restores with the `/ntmserver` value `LEGACY_CRUCIBLE_RULES`
+* Due to repeated complaints, power armor sounds are now generally more quiet, with 25% volume for steps and 50% volume for jumping and landing
 
 # Fixed
 * Fixed proxy tiles that do not use electricity at all visually connecting to cables
+* Fixed missing texture for canned horse slime
+* Fixed incorrect ore dictionary key used by enriched naquadah watz pellet recipe
+* Fixed out of bounds light level for the RTG blast furnace
+* Fixed the recipe configs now allowing NBT data for output items, rendering the precision assembler and annihilator configs useless

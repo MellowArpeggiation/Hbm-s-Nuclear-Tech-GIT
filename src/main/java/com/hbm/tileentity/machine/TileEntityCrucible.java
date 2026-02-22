@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.config.ServerConfig;
 import com.hbm.handler.pollution.PollutionHandler;
 import com.hbm.handler.pollution.PollutionHandler.PollutionType;
 import com.hbm.handler.threading.PacketThreading;
@@ -381,7 +382,7 @@ public class TileEntityCrucible extends TileEntityMachineBase implements IGUIPro
 			for(MaterialStack material : materials) {
 				boolean recipeMaterial = recipe != null && (getQuantaFromType(recipe.input, material.material) > 0 || getQuantaFromType(recipe.output, material.material) > 0);
 
-				if(recipe == null || recipeMaterial) {
+				if((recipe == null && !ServerConfig.LEGACY_CRUCIBLE_RULES.get()) || recipeMaterial) {
 					this.addToStack(this.recipeStack, material);
 				} else {
 					this.addToStack(this.wasteStack, material);
