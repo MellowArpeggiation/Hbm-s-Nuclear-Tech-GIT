@@ -105,6 +105,7 @@ public class GunFactoryClient {
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_charge_thrower,				new ItemRenderChargeThrower());
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_drill,						new ItemRenderDrill());
 		MinecraftForgeClient.registerItemRenderer(ModItems.gun_n_i_4_n_i,					new ItemRenderNI4NI());
+		MinecraftForgeClient.registerItemRenderer(ModItems.gun_pa_melee,					new ItemRenderPAMelee());
 		
 		//PROJECTILES
 		ammo_debug.setRenderer(LegoClient.RENDER_STANDARD_BULLET);

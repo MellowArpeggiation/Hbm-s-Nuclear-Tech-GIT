@@ -10,6 +10,7 @@
   * No longer has a volatile power buffer, power isn't buffered at all anymore, similar to steam engines and MHD turbines
   * Steam capacity changes based on compression level, the ratio for turbine cascades is now 1:1:1:1
   * Comes with a flywheel, energy output slowly ramps up as steam is supplied and slowly goes down as steam cuts out
+  * Recipe is similar to the old inudstrial turbine, but slightly simplified and cheaper
 * Leviathan turbines no longer have a power buffer
 * Updated russian and chinese localization
 * The PWR can now be controlled via RoR
@@ -21,6 +22,8 @@
   * If all three modes are enabled, the "328 mode" badge also appears
 * Removed toothpicks, as they haven't been used in recipes for well over a year
 * Cleaned up a ton of unused assets
+* The old crucible smelting rules when not using a template can be restores with the `/ntmserver` value `LEGACY_CRUCIBLE_RULES`
+* Due to repeated complaints, power armor sounds are now generally more quiet, with 25% volume for steps and 50% volume for jumping and landing
 
 # Fixed
 * Fixed proxy tiles that do not use electricity at all visually connecting to cables
