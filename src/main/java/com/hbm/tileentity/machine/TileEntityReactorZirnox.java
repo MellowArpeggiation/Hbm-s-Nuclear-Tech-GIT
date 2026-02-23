@@ -239,6 +239,7 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 		buf.writeInt(this.heat);
 		buf.writeInt(this.pressure);
 		buf.writeBoolean(this.isOn);
+		buf.writeBoolean(this.redstonePowered);
 		steam.serialize(buf);
 		carbonDioxide.serialize(buf);
 		water.serialize(buf);
@@ -250,6 +251,7 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 		this.heat = buf.readInt();
 		this.pressure = buf.readInt();
 		this.isOn = buf.readBoolean();
+		this.redstonePowered = buf.readBoolean();
 		steam.deserialize(buf);
 		carbonDioxide.deserialize(buf);
 		water.deserialize(buf);
