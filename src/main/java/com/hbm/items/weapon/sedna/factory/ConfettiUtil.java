@@ -14,6 +14,7 @@ import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -54,6 +55,7 @@ public class ConfettiUtil {
 		if(entity instanceof EntitySlime) type = 1;
 		if(entity instanceof EntityMagmaCube) type = 1;
 		if(entity instanceof EntityCreeper) type = 1;
+		if(entity instanceof EntityGolem) type = 2;
 		if(entity instanceof EntityIronGolem) type = 2;
 		if(entity instanceof EntityCyberCrab) type = 2;
 		if(entity instanceof EntityTeslaCrab) type = 2;
