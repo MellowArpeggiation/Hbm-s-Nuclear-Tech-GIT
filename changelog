@@ -2,6 +2,14 @@
 * Target pistol
   * Weapon steel tier pistol that holds 15 rounds and shoots .22 LR
   * Accepts silencers
+* NCR Ranger Power Armor
+  * Legendary set, like the remnants power armor
+  * Stats are largely similar, but has a speed boost when sprinting
+  * Comes with the power armor - melee controller item
+    * If the full set is equipped, the melee controller allows for powerful melee attacks
+    * Left click does two rapid swings, right click causes both arms to swing at once
+    * The NCRPA's blades are armor-piercing and gib enemies on death
+    * The blades do 250% damage on large enemies, i.e. ones with 100 or more max health
 
 ## Changed
 * Reworked the industrial turbine
@@ -24,6 +32,8 @@
 * Cleaned up a ton of unused assets
 * The old crucible smelting rules when not using a template can be restores with the `/ntmserver` value `LEGACY_CRUCIBLE_RULES`
 * Due to repeated complaints, power armor sounds are now generally more quiet, with 25% volume for steps and 50% volume for jumping and landing
+* Reduced mask man's projectile resistance from 75% to 50%
+* Reduced maskman's resistance to damage above 50 from 75% to 50%
 
 # Fixed
 * Fixed proxy tiles that do not use electricity at all visually connecting to cables

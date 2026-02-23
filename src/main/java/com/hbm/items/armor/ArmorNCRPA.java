@@ -1,7 +1,12 @@
 package com.hbm.items.armor;
 
+import java.util.UUID;
+
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.collect.Multimap;
+import com.hbm.extprop.HbmPlayerProps;
+import com.hbm.items.ModItems;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.ItemRenderBase;
 import com.hbm.render.model.ModelArmorNCRPA;
@@ -11,9 +16,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 
 public class ArmorNCRPA extends ArmorFSBPowered implements IItemRendererProvider, IPAWeaponsProvider {
@@ -29,11 +37,32 @@ public class ArmorNCRPA extends ArmorFSBPowered implements IItemRendererProvider
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
 		
-		if(models == null) { models = new ModelArmorNCRPA[4];
+		if(models == null) {
+			models = new ModelArmorNCRPA[4];
 			for(int i = 0; i < 4; i++) models[i] = new ModelArmorNCRPA(i);
 		}
 		
 		return models[armorSlot];
+	}
+
+	private static final UUID speed = UUID.fromString("6ab858ba-d712-485c-bae9-e5e765fc555a");
+
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
+		super.onArmorTick(world, player, stack);
+
+		if(this != ModItems.ncrpa_plate) return;
+
+		HbmPlayerProps props = HbmPlayerProps.getData(player);
+
+		/// SPEED ///
+		Multimap multimap = super.getAttributeModifiers(stack);
+		multimap.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(speed, "NCRPA SPEED", 0.1, 0));
+		player.getAttributeMap().removeAttributeModifiers(multimap);
+
+		if(player.isSprinting()) {
+			player.getAttributeMap().applyAttributeModifiers(multimap);
+		}
 	}
 
 	@Override public Item getItemForRenderer() { return this; }

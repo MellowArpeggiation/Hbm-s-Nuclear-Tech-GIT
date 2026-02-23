@@ -23,8 +23,8 @@ import net.minecraft.util.MovingObjectPosition;
 
 public class ArmorNCRPAMelee implements IPAMelee {
 
-	@Override public void clickPrimary(ItemStack stack, LambdaContext ctx) { XFactoryPA.doSwing(stack, ctx, GunAnimation.CYCLE, 30); }
-	@Override public void clickSecondary(ItemStack stack, LambdaContext ctx) { XFactoryPA.doSwing(stack, ctx, GunAnimation.ALT_CYCLE, 40); }
+	@Override public void clickPrimary(ItemStack stack, LambdaContext ctx) { XFactoryPA.doSwing(stack, ctx, GunAnimation.CYCLE, 25); }
+	@Override public void clickSecondary(ItemStack stack, LambdaContext ctx) { XFactoryPA.doSwing(stack, ctx, GunAnimation.ALT_CYCLE, 30); }
 	
 	@Override
 	public void orchestra(ItemStack stack, LambdaContext ctx) {
@@ -48,6 +48,7 @@ public class ArmorNCRPAMelee implements IPAMelee {
 					
 					if(mop.entityHit instanceof EntityLivingBase) {
 						EntityLivingBase living = (EntityLivingBase) mop.entityHit;
+						if(living.getMaxHealth() >= 100) damage *= 2.5;
 						EntityDamageUtil.attackEntityFromNT((EntityLivingBase) mop.entityHit, DamageSource.causePlayerDamage(ctx.getPlayer()), damage, true, false, knockback, dt, pierce);
 						if(!living.isEntityAlive()) ConfettiUtil.gib(living);
 					} else {
