@@ -3,3 +3,4 @@
 
 ## Fixed
 * Fixed chemical factory internal tank sharing ignoring tank pressure
+* Fixed the NCR ranger power armor missing most protection stats
