@@ -90,6 +90,7 @@ public class ReactorZirnox extends BlockDummyable {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbor) {
+		super.onNeighborBlockChange(world, x, y, z, neighbor);
 		if (world.isRemote) return;
 		int[] core = this.findCore(world, x, y, z);
 		if (core == null) return;

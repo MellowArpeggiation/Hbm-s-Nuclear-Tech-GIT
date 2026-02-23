@@ -87,10 +87,10 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 		water = new FluidTank(Fluids.WATER, 32000);
 	}
 	public void setRedstonePowered(boolean powered) {
-		this.redstonePowered = powered;
-		if (!powered) {
+		if (!powered && this.redstonePowered) {
 			isOn = false;
 		}
+		this.redstonePowered = powered;
 	}
 
 	@Override
