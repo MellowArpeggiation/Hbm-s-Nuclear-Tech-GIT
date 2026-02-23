@@ -3161,6 +3161,7 @@ item.gun_minigun_lacunae.name=Миниган "Lacunae"
 item.gun_missile_launcher.name=Ракетная пусковая установка
 item.gun_n_i_4_n_i.name=Энергетический револьвер "N I 4 N I"
 item.gun_pepperbox.name=Револьвер "Перечница"
+item.gun_pa_melee.name=Силовая броня - Контроллер ближнего боя
 item.gun_panzerschreck.name=Гранатомёт "Panzerschreck"
 item.gun_quadro.name=Четырехствольная ракетная пусковая установка
 item.gun_spas12.name=Дробовик "SPAS-12"
@@ -6642,4 +6643,5 @@ desc.gui.upgrade.power= * §1Энергосбережение§r: Стакает
 desc.gui.upgrade.speed= * §4Скорость§r: Стакается до 3-х уровней
 
 // Last updated 15.02.2026 by RayzerHan //
+
 
