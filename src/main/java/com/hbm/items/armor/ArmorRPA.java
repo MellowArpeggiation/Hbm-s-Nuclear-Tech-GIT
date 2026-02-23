@@ -11,11 +11,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
-public class ArmorRPA extends ArmorFSBPowered implements IItemRendererProvider {
+public class ArmorRPA extends ArmorFSBPowered implements IItemRendererProvider, IPAWeaponsProvider {
 
 	public ArmorRPA(ArmorMaterial material, int slot, String texture, long maxPower, long chargeRate, long consumption, long drain) {
 		super(material, slot, texture, maxPower, chargeRate, consumption, drain);
@@ -51,5 +52,13 @@ public class ArmorRPA extends ArmorFSBPowered implements IItemRendererProvider {
 						ResourceManager.rpa_helmet, ResourceManager.rpa_chest, ResourceManager.rpa_arm, ResourceManager.rpa_leg,
 						"Head", "Body,Fan,Glow", "LeftArm", "RightArm", "LeftLeg", "RightLeg", "LeftBoot", "RightBoot");
 			}};
+	}
+	
+	public static final ArmorRPAMelee meleeComponent = new ArmorRPAMelee();
+	
+	@Override
+	public IPAMelee getMeleeComponent(EntityPlayer entity) {
+		if(this.hasFSBArmorIgnoreCharge(entity)) return meleeComponent;
+		return null;
 	}
 }

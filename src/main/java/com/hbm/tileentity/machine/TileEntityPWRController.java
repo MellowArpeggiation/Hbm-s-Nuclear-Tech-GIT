@@ -191,7 +191,7 @@ public class TileEntityPWRController extends TileEntityMachineBase implements IG
 						BlockPos portPos = pos.offset(dir);
 
 						if(tanks[1].getFill() > 0) this.tryProvide(tanks[1], worldObj, portPos.getX(), portPos.getY(), portPos.getZ(), dir);
-						if(worldObj.getTotalWorldTime() % 20 == 0) this.trySubscribe(tanks[0].getTankType(), worldObj, portPos.getX(), portPos.getY(), portPos.getZ(), dir);
+						this.trySubscribe(tanks[0].getTankType(), worldObj, portPos.getX(), portPos.getY(), portPos.getZ(), dir);
 					}
 				}
 

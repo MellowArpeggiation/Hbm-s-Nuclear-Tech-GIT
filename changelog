@@ -34,6 +34,7 @@
 * Due to repeated complaints, power armor sounds are now generally more quiet, with 25% volume for steps and 50% volume for jumping and landing
 * Reduced mask man's projectile resistance from 75% to 50%
 * Reduced maskman's resistance to damage above 50 from 75% to 50%
+* Remnants power armor can now use the melee controller, allowing Sergeant Arch Dornan to beat the snot out of people
 
 # Fixed
 * Fixed proxy tiles that do not use electricity at all visually connecting to cables
