@@ -45,6 +45,7 @@
   * Iron golems now also turn into metal instead of fleshy chunks
   * Slimes can now be gibbed, turning into slime globs
   * Creepers now also gib into slime instead of blood
+* The ZIRNOX can now be toggled by supplying redstone to one of its ports
 
 # Fixed
 * Fixed proxy tiles that do not use electricity at all visually connecting to cables
