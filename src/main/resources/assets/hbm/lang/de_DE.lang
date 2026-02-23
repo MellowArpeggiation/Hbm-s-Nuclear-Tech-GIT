@@ -2221,6 +2221,7 @@ item.gun_minigun_lacunae.name=Lacunae
 item.gun_missile_launcher.name=Raketenwerfer
 item.gun_n_i_4_n_i.name=N I 4 N I
 item.gun_pa_melee.name=Powerrüstung - Nahkampfcontroller
+item.gun_pa_ranged.name=Powerrüstung - Fernkampfcontroller
 item.gun_panzerschreck.name=Panzerschreck
 item.gun_pepperbox.name=Bündelrevolver
 item.gun_quadro.name=Vierfachraketenwerfer

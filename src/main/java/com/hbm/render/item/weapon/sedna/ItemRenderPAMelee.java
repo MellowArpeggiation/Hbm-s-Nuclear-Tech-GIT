@@ -73,4 +73,27 @@ public class ItemRenderPAMelee extends ItemRenderWeaponBase {
 		
 		GL11.glShadeModel(GL11.GL_FLAT);
 	}
+	
+	public void renderOther(ItemStack stack, ItemRenderType type, Object... data) {
+		if(type == type.EQUIPPED) return;
+		
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+		
+		Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.ncrpa_arm);
+
+		GL11.glPushMatrix();
+		double scale = 0.3125D;
+		GL11.glScaled(scale, scale, scale);
+		
+		GL11.glRotated(90, 1, 0, 0);
+		GL11.glTranslated(0, -5.5, 0);
+		GL11.glTranslated(-2, 0, 0);
+		ResourceManager.armor_ncr.renderPart("Leftarm");
+		GL11.glTranslated(4, 0, 0);
+		ResourceManager.armor_ncr.renderPart("RightArm");
+		GL11.glPopMatrix();
+		
+		GL11.glShadeModel(GL11.GL_FLAT);
+	}
 }

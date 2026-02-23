@@ -19,4 +19,18 @@ public interface IPAWeaponsProvider {
 		}
 		return null;
 	}
+	
+	public IPARanged getRangedComponent(EntityPlayer entity);
+	
+	public static IPARanged getRangedComponentClient() {
+		return getRangedComponentCommon(MainRegistry.proxy.me());
+	}
+	
+	public static IPARanged getRangedComponentCommon(EntityPlayer player) {
+		if(player.inventory.armorInventory[2] != null && player.inventory.armorInventory[2].getItem() instanceof IPAWeaponsProvider) {
+			IPAWeaponsProvider prov = (IPAWeaponsProvider) player.inventory.armorInventory[2].getItem();
+			return prov.getRangedComponent(player);
+		}
+		return null;
+	}
 }

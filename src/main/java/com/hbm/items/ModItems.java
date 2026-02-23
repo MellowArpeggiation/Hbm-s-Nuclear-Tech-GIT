@@ -1440,6 +1440,7 @@ public class ModItems {
 	public static Item gun_charge_thrower;
 	public static Item gun_drill;
 	public static Item gun_pa_melee;
+	public static Item gun_pa_ranged;
 
 	public static Item ammo_standard;
 	public static Item ammo_secret;
@@ -6330,6 +6331,7 @@ public class ModItems {
 		GameRegistry.registerItem(gun_charge_thrower, gun_charge_thrower.getUnlocalizedName());
 		GameRegistry.registerItem(gun_drill, gun_drill.getUnlocalizedName());
 		GameRegistry.registerItem(gun_pa_melee, gun_pa_melee.getUnlocalizedName());
+		GameRegistry.registerItem(gun_pa_ranged, gun_pa_ranged.getUnlocalizedName());
 
 		GameRegistry.registerItem(ammo_standard, ammo_standard.getUnlocalizedName());
 		GameRegistry.registerItem(ammo_secret, ammo_secret.getUnlocalizedName());

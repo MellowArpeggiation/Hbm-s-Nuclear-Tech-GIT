@@ -5,11 +5,16 @@
 * NCR Ranger Power Armor
   * Legendary set, like the remnants power armor
   * Stats are largely similar, but has a speed boost when sprinting
+  * Red room exclusive
   * Comes with the power armor - melee controller item
     * If the full set is equipped, the melee controller allows for powerful melee attacks
     * Left click does two rapid swings, right click causes both arms to swing at once
     * The NCRPA's blades are armor-piercing and gib enemies on death
     * The blades do 250% damage on large enemies, i.e. ones with 100 or more max health
+  * And also the power armor - ranged controller
+    * Allows the NCRPA to fire rockets straight from the intentory
+    * Left click fires guided rockets and right click unguided ones
+    * Only does 25 damage max, but has no reload and a fire rate of 120 per minute
 
 ## Changed
 * Reworked the industrial turbine

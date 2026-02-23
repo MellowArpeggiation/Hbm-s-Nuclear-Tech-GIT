@@ -61,4 +61,6 @@ public class ArmorRPA extends ArmorFSBPowered implements IItemRendererProvider, 
 		if(this.hasFSBArmorIgnoreCharge(entity)) return meleeComponent;
 		return null;
 	}
+
+	@Override public IPARanged getRangedComponent(EntityPlayer entity) { return null; }
 }

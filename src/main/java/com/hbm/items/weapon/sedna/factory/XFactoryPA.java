@@ -6,10 +6,12 @@ import java.util.function.BiFunction;
 
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.IPAMelee;
+import com.hbm.items.armor.IPARanged;
 import com.hbm.items.armor.IPAWeaponsProvider;
 import com.hbm.items.weapon.sedna.Crosshair;
 import com.hbm.items.weapon.sedna.GunConfig;
 import com.hbm.items.weapon.sedna.Receiver;
+import com.hbm.lib.RefStrings;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT.GunState;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT.LambdaContext;
@@ -26,14 +28,18 @@ public class XFactoryPA {
 
 	public static void init() {
 
-		ModItems.gun_pa_melee = new ItemGunMelee(WeaponQuality.UTILITY, new GunConfig()
-				.draw(10).inspect(55).crosshair(Crosshair.NONE)
-				.rec(new Receiver(0)
-						.dmg(10F).delay(20).jam(0)
-						.offset(1, -0.0625 * 2.5, -0.25D))
-				.pp(LAMBDA_CLICK_PRIMARY).ps(LAMBDA_CLICK_SENONDARY).decider(GunStateDecider.LAMBDA_STANDARD_DECIDER)
+		ModItems.gun_pa_melee = new ItemGunPA(WeaponQuality.UTILITY, new GunConfig()
+				.draw(10).crosshair(Crosshair.NONE)
+				.rec(new Receiver(0))
+				.pp(LAMBDA_CLICK_MELEE_PRIMARY).ps(LAMBDA_CLICK_MELEE_SENONDARY).decider(GunStateDecider.LAMBDA_STANDARD_DECIDER)
 				.anim(LAMBDA_MELEE_ANIMS).orchestra(ORCHESTRA)
 				).setUnlocalizedName("gun_pa_melee");
+
+		ModItems.gun_pa_ranged = new ItemGunPA(WeaponQuality.UTILITY, new GunConfig()
+				.draw(0).crosshair(Crosshair.CROSS)
+				.rec(new Receiver(0))
+				.pp(LAMBDA_CLICK_RANGED_PRIMARY).ps(LAMBDA_CLICK_RANGED_SENONDARY).decider(GunStateDecider.LAMBDA_STANDARD_DECIDER)
+				).setUnlocalizedName("gun_pa_ranged").setFull3D().setTextureName(RefStrings.MODID + ":gun_pa_ranged");
 	}
 
 	public static BiConsumer<ItemStack, LambdaContext> ORCHESTRA = (stack, ctx) -> {
@@ -47,11 +53,11 @@ public class XFactoryPA {
 		return null;
 	};
 	
-	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_CLICK_PRIMARY = (stack, ctx) -> {
+	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_CLICK_MELEE_PRIMARY = (stack, ctx) -> {
 		IPAMelee component = IPAWeaponsProvider.getMeleeComponentClient();
 		if(component != null) component.clickPrimary(stack, ctx);
 	};
-	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_CLICK_SENONDARY = (stack, ctx) -> {
+	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_CLICK_MELEE_SENONDARY = (stack, ctx) -> {
 		IPAMelee component = IPAWeaponsProvider.getMeleeComponentClient();
 		if(component != null) component.clickSecondary(stack, ctx);
 	};
@@ -69,9 +75,18 @@ public class XFactoryPA {
 		}
 	}
 	
-	public static class ItemGunMelee extends ItemGunBaseNT {
+	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_CLICK_RANGED_PRIMARY = (stack, ctx) -> {
+		IPARanged component = IPAWeaponsProvider.getRangedComponentClient();
+		if(component != null) component.clickPrimary(stack, ctx);
+	};
+	public static BiConsumer<ItemStack, LambdaContext> LAMBDA_CLICK_RANGED_SENONDARY = (stack, ctx) -> {
+		IPARanged component = IPAWeaponsProvider.getRangedComponentClient();
+		if(component != null) component.clickSecondary(stack, ctx);
+	};
+	
+	public static class ItemGunPA extends ItemGunBaseNT {
 
-		public ItemGunMelee(WeaponQuality quality, GunConfig... cfg) {
+		public ItemGunPA(WeaponQuality quality, GunConfig... cfg) {
 			super(quality, cfg);
 		}
 

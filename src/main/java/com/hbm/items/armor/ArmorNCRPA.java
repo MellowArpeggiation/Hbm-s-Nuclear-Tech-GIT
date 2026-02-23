@@ -21,6 +21,8 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 
@@ -53,8 +55,6 @@ public class ArmorNCRPA extends ArmorFSBPowered implements IItemRendererProvider
 
 		if(this != ModItems.ncrpa_plate) return;
 
-		HbmPlayerProps props = HbmPlayerProps.getData(player);
-
 		/// SPEED ///
 		Multimap multimap = super.getAttributeModifiers(stack);
 		multimap.put(SharedMonsterAttributes.movementSpeed.getAttributeUnlocalizedName(), new AttributeModifier(speed, "NCRPA SPEED", 0.1, 0));
@@ -63,6 +63,9 @@ public class ArmorNCRPA extends ArmorFSBPowered implements IItemRendererProvider
 		if(player.isSprinting()) {
 			player.getAttributeMap().applyAttributeModifiers(multimap);
 		}
+		
+		if(world.getTotalWorldTime() % 20 != 0) return;
+		if(HbmPlayerProps.getData(player).enableHUD) player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 300, 0, true));
 	}
 
 	@Override public Item getItemForRenderer() { return this; }
@@ -79,12 +82,19 @@ public class ArmorNCRPA extends ArmorFSBPowered implements IItemRendererProvider
 						"Helmet,Eyes", "Chest", "LeftArm", "RightArm", "LeftLeg", "RightLeg", "LeftBoot", "RightBoot");
 			}};
 	}
-	
+
 	public static final ArmorNCRPAMelee meleeComponent = new ArmorNCRPAMelee();
+	public static final ArmorNCRPARanged rangedComponent = new ArmorNCRPARanged();
 	
 	@Override
 	public IPAMelee getMeleeComponent(EntityPlayer entity) {
 		if(this.hasFSBArmorIgnoreCharge(entity)) return meleeComponent;
+		return null;
+	}
+
+	@Override
+	public IPARanged getRangedComponent(EntityPlayer entity) {
+		if(this.hasFSBArmorIgnoreCharge(entity)) return rangedComponent;
 		return null;
 	}
 }
