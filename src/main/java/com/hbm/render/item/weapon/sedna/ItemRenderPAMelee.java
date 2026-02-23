@@ -13,6 +13,9 @@ import net.minecraft.item.ItemStack;
 public class ItemRenderPAMelee extends ItemRenderWeaponBase {
 	
 	@Override public boolean isAkimbo(EntityLivingBase entity) { return true; }
+	
+	@Override protected float getSwayMagnitude(ItemStack stack) { return 2F; }
+	@Override protected float getSwayPeriod(ItemStack stack) { return 0.5F; }
 
 	@Override
 	public void setupFirstPerson(ItemStack stack) {
@@ -53,28 +56,19 @@ public class ItemRenderPAMelee extends ItemRenderWeaponBase {
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		
-		Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.maresleg_tex);
+		Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.ncrpa_arm);
 
 		GL11.glPushMatrix();
-		GL11.glRotated(225, 0, 0, 1);
-		GL11.glRotated(90, 0, 1, 0);
-		GL11.glRotated(25, 1, 0, 0);
-		GL11.glRotated(45, 0, 1, 0);
-		GL11.glTranslated(-1, 0, 0);
-		ResourceManager.maresleg.renderPart("Gun");
-		ResourceManager.maresleg.renderPart("Lever");
-		GL11.glPopMatrix();
-
-		GL11.glTranslated(0, 0, 5);
-		GL11.glPushMatrix();
-		GL11.glRotated(225, 0, 0, 1);
-		GL11.glRotated(-90, 0, 1, 0);
-		GL11.glRotated(-90, 1, 0, 0);
-		GL11.glRotated(25, 1, 0, 0);
-		GL11.glRotated(-45, 0, 1, 0);
-		GL11.glTranslated(1, 0, 0);
-		ResourceManager.maresleg.renderPart("Gun");
-		ResourceManager.maresleg.renderPart("Lever");
+		double scale = 0.3125D;
+		GL11.glScaled(scale, scale, scale);
+		
+		GL11.glRotated(135, 0, 0, 1);
+		GL11.glRotated(135, 0, 1, 0);
+		GL11.glTranslated(0, -5.5, 0);
+		GL11.glTranslated(-3.5, 0, 0);
+		ResourceManager.armor_ncr.renderPart("Leftarm");
+		GL11.glTranslated(7, 1, -1);
+		ResourceManager.armor_ncr.renderPart("RightArm");
 		GL11.glPopMatrix();
 		
 		GL11.glShadeModel(GL11.GL_FLAT);
