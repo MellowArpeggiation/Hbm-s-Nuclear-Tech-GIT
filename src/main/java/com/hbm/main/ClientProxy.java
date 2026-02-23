@@ -1817,6 +1817,7 @@ public class ClientProxy extends ServerProxy {
 
 		if("giblets".equals(type)) {
 			int ent = data.getInteger("ent");
+			int gibType = data.getInteger("gibType");
 			this.vanish(ent);
 			Entity e = world.getEntityByID(ent);
 
@@ -1840,7 +1841,7 @@ public class ClientProxy extends ServerProxy {
 				mult *= 10;
 
 			for(int i = 0; i < count; i++) {
-				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleGiblet(man, world, x, y, z, rand.nextGaussian() * 0.25 * mult, rand.nextDouble() * mult, rand.nextGaussian() * 0.25 * mult));
+				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleGiblet(man, world, x, y, z, rand.nextGaussian() * 0.25 * mult, rand.nextDouble() * mult, rand.nextGaussian() * 0.25 * mult, gibType));
 			}
 		}
 

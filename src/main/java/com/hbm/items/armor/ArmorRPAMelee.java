@@ -34,7 +34,7 @@ public class ArmorRPAMelee implements IPAMelee {
 		int timer = ItemGunBaseNT.getAnimTimer(stack, ctx.configIndex);
 		
 		boolean swings = type == GunAnimation.CYCLE && (timer == 3 || timer == 9);
-		boolean slap = type == GunAnimation.ALT_CYCLE && timer == 3;
+		boolean slap = type == GunAnimation.ALT_CYCLE && timer == 8;
 		
 		if((swings || slap) && ctx.getPlayer() != null) {
 			MovingObjectPosition mop = EntityDamageUtil.getMouseOver(ctx.getPlayer(), 3.0D);

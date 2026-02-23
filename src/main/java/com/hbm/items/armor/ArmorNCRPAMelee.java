@@ -40,7 +40,7 @@ public class ArmorNCRPAMelee implements IPAMelee {
 			MovingObjectPosition mop = EntityDamageUtil.getMouseOver(ctx.getPlayer(), 3.0D);
 			
 			if(mop != null) {
-				if(mop.typeOfHit == mop.typeOfHit.ENTITY) {
+				if(mop.typeOfHit == mop.typeOfHit.ENTITY && mop.entityHit.isEntityAlive()) {
 					float damage = swings ? 15F : 35F;
 					float knockback = swings ? 0F : 1.5F;
 					float dt = swings ? 5F : 15F;
