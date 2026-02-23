@@ -122,6 +122,7 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 		steam.readFromNBT(nbt, "steam");
 		carbonDioxide.readFromNBT(nbt, "carbondioxide");
 		water.readFromNBT(nbt, "water");
+		redstonePowered = nbt.getBoolean("redstonePowered");
 	}
 
 	@Override
@@ -133,6 +134,7 @@ public class TileEntityReactorZirnox extends TileEntityMachineBase implements IC
 		steam.writeToNBT(nbt, "steam");
 		carbonDioxide.writeToNBT(nbt, "carbondioxide");
 		water.writeToNBT(nbt, "water");
+		nbt.setBoolean("redstonePowered", redstonePowered);
 
 	}
 
