@@ -454,7 +454,7 @@ public class EntityDamageUtil {
 		for(int i = 0; i < list.size(); ++i) {
 			Entity entity = (Entity) list.get(i);
 
-			if(entity.canBeCollidedWith()) {
+			if(entity.canBeCollidedWith() && entity.isEntityAlive()) {
 
 				double borderSize = entity.getCollisionBorderSize() + threshold;
 				AxisAlignedBB axisalignedbb = entity.boundingBox.expand(borderSize, borderSize, borderSize);
