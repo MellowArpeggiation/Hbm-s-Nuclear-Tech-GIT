@@ -2,6 +2,7 @@ package com.hbm.items.armor;
 
 import org.lwjgl.opengl.GL11;
 
+import com.hbm.interfaces.NotableComments;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT;
 import com.hbm.items.weapon.sedna.ItemGunBaseNT.LambdaContext;
 import com.hbm.items.weapon.sedna.factory.ConfettiUtil;
@@ -21,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 
+@NotableComments
 public class ArmorRPAMelee implements IPAMelee {
 
 	@Override public void clickPrimary(ItemStack stack, LambdaContext ctx) { XFactoryPA.doSwing(stack, ctx, GunAnimation.CYCLE, 14); }
@@ -33,11 +35,16 @@ public class ArmorRPAMelee implements IPAMelee {
 		GunAnimation type = ItemGunBaseNT.getLastAnim(stack, ctx.configIndex);
 		int timer = ItemGunBaseNT.getAnimTimer(stack, ctx.configIndex);
 		
+		// refire check so you can just continuously beat the shit out of someone
+		if(type == GunAnimation.CYCLE && timer == 14 && ItemGunBaseNT.getPrimary(stack, 0)) {
+			XFactoryPA.doSwing(stack, ctx, GunAnimation.CYCLE, 14);
+		}
+		
 		boolean swings = type == GunAnimation.CYCLE && (timer == 3 || timer == 9);
 		boolean slap = type == GunAnimation.ALT_CYCLE && timer == 8;
 		
 		if((swings || slap) && ctx.getPlayer() != null) {
-			MovingObjectPosition mop = EntityDamageUtil.getMouseOver(ctx.getPlayer(), 3.0D);
+			MovingObjectPosition mop = EntityDamageUtil.getMouseOver(ctx.getPlayer(), 3.0D, 0.5D);
 			
 			if(mop != null) {
 				if(mop.typeOfHit == mop.typeOfHit.ENTITY) {

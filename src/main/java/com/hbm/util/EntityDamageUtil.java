@@ -431,6 +431,10 @@ public class EntityDamageUtil {
 	}
 
 	public static MovingObjectPosition getMouseOver(EntityPlayer attacker, double reach) {
+		return getMouseOver(attacker, reach, 0D);
+	}
+
+	public static MovingObjectPosition getMouseOver(EntityPlayer attacker, double reach, double threshold) {
 
 		World world = attacker.worldObj;
 		MovingObjectPosition objectMouseOver = null;
@@ -452,7 +456,7 @@ public class EntityDamageUtil {
 
 			if(entity.canBeCollidedWith()) {
 
-				float borderSize = entity.getCollisionBorderSize();
+				double borderSize = entity.getCollisionBorderSize() + threshold;
 				AxisAlignedBB axisalignedbb = entity.boundingBox.expand(borderSize, borderSize, borderSize);
 				MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(pos, end);
 

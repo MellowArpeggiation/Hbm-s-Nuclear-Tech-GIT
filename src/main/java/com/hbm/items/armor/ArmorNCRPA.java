@@ -64,8 +64,10 @@ public class ArmorNCRPA extends ArmorFSBPowered implements IItemRendererProvider
 			player.getAttributeMap().applyAttributeModifiers(multimap);
 		}
 		
-		if(world.getTotalWorldTime() % 20 != 0) return;
-		if(HbmPlayerProps.getData(player).enableHUD) player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 300, 0, true));
+		if(this.hasFSBArmor(player)) {
+			if(world.getTotalWorldTime() % 20 != 0) return;
+			if(HbmPlayerProps.getData(player).enableHUD) player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 300, 0, true));
+		}
 	}
 
 	@Override public Item getItemForRenderer() { return this; }

@@ -37,7 +37,7 @@ public class ArmorNCRPAMelee implements IPAMelee {
 		boolean sweep = type == GunAnimation.ALT_CYCLE && timer == 5;
 		
 		if((swings || sweep) && ctx.getPlayer() != null) {
-			MovingObjectPosition mop = EntityDamageUtil.getMouseOver(ctx.getPlayer(), 3.0D);
+			MovingObjectPosition mop = EntityDamageUtil.getMouseOver(ctx.getPlayer(), 3.0D, 0.5D);
 			
 			if(mop != null) {
 				if(mop.typeOfHit == mop.typeOfHit.ENTITY && mop.entityHit.isEntityAlive()) {

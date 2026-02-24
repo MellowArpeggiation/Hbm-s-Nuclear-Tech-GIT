@@ -23,8 +23,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityMachineIndustrialTurbine extends TileEntityTurbineBase implements IConfigurableMachine {
 
-	public static int inputTankSize = 512_000;
-	public static int outputTankSize = 2_048_000;
+	public static int inputTankSize = 750_000;
+	public static int outputTankSize = 3_000_000;
 	public static double efficiency = 1D;
 
 	public float rotor;
@@ -39,7 +39,7 @@ public class TileEntityMachineIndustrialTurbine extends TileEntityTurbineBase im
 
 	@Override
 	public String getConfigName() {
-		return "steamturbineIndustrial";
+		return "steamturbineIndustrialMk2";
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class TileEntityMachineIndustrialTurbine extends TileEntityTurbineBase im
 	
 	@Override
 	public boolean canConnect(FluidType type, ForgeDirection dir) {
-		if(!type.hasTrait(FT_Coolable.class)) return false;
+		if(!type.hasTrait(FT_Coolable.class) && type != Fluids.SPENTSTEAM) return false;
 		ForgeDirection myDir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 		return dir != myDir && dir != myDir.getOpposite();
 	}
