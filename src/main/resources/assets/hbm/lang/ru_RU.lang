@@ -3097,7 +3097,7 @@ item.grenade_zomg.name=Граната аннигиляции пар отрица
 item.glyphid_gland.name= Железа глифида:
 item.glyphid_gland_empty.name= Железа глифида
 item.gun_aberrator.name=Пистолет "Aberrator"
-item.gun_aberrator_eott.name=Пистолет "Eyes Of The Tempest"
+item.gun_aberrator_eott.name=Пистолеты "Eyes Of The Tempest"
 item.gun_am180.name=Пистолет-пулемёт .22 LR
 item.gun_am180_silenced.name=Пистолет-пулемёт .22 LR с глушителем
 item.gun_amat.name=Крупнокалиберная снайперская винтовка
@@ -3130,7 +3130,7 @@ item.gun_g3.name=Штурмовая винтовка
 item.gun_g3_a3.name=Штурмовая винтовка "G3A3"
 item.gun_g3_infiltrator.name=Штурмовая винтовка "Infiltrator"
 item.gun_g3_zebra.name=Зебринская штурмовая винтовка
-item.gun_greasegun.name=Пистолет-пулемёт "Маслёнка"
+item.gun_greasegun.name=Пистолет-пулемёт "Grease Gun"
 item.gun_greasegun_m3.name=Улучшенный пистолет-пулемёт М3
 item.gun_hangman.name=Винтовка "Hangman"
 item.gun_heavy_revolver.name=Тяжёлый револьвер
@@ -3160,7 +3160,7 @@ item.gun_minigun_dual.name=Двойные миниганы
 item.gun_minigun_lacunae.name=Миниган "Lacunae"
 item.gun_missile_launcher.name=Ракетная пусковая установка
 item.gun_n_i_4_n_i.name=Энергетический револьвер "N I 4 N I"
-item.gun_pepperbox.name=Револьвер "Перечница"
+item.gun_pepperbox.name=Револьвер "Pepperbox"
 item.gun_pa_melee.name=Силовая броня - Контроллер ближнего боя
 item.gun_pa_ranged.name=Силовая броня - Контроллер дальнего боя
 item.gun_panzerschreck.name=Гранатомёт "Panzerschreck"
@@ -3372,7 +3372,9 @@ item.insert_yharonite.name=Яронитовая пластина
 item.item_expensive.bronze_tubes.name=Бронзовые конструкционные элементы
 item.item_expensive.circuit.name=Обширная печатная плата
 item.item_expensive.computer.name=Мейнфрейм
+item.item_expensive.degenerate_matter.name=Вырожденная материя
 item.item_expensive.ferro_plating.name=Армированные ферроурановые панели
+item.item_expensive.gold_dust.name=Сверхтонкая золотая пыль
 item.item_expensive.heavy_frame.name=Тяжёлый каркас
 item.item_expensive.lead_plating.name=Радиационно-стойкое покрытие
 item.item_expensive.plastic.name=Пластиковые панели
@@ -6318,6 +6320,7 @@ tile.red_cable_gauge.name=Датчик мощности
 tile.red_cable_gauge.desc=Кабель, который показывает, сколько энергии$ перемещается по сети за тик.$Разделенные сети, соединенные блоками хранения энергии$рассматриваются как одна общая сеть.
 tile.red_cable_paintable.name=Окрашиваемый провод из красной меди
 tile.red_connector.name=Электрический коннектор
+tile.red_connector_super.name=Мощный электрический коннектор
 tile.red_pylon.name=Малый электрический столб
 tile.red_pylon_large.name=ЛЭП
 tile.red_pylon_medium_steel.name=Средний стальной электрический столб
@@ -6644,6 +6647,9 @@ desc.gui.upgrade.power= * §1Энергосбережение§r: Стакает
 desc.gui.upgrade.speed= * §4Скорость§r: Стакается до 3-х уровней
 
 // Last updated 15.02.2026 by RayzerHan //
+
+
+
 
 
 
