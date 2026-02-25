@@ -9,12 +9,16 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.extprop.HbmLivingProps;
+import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.radiation.ChunkRadiationManager;
 import com.hbm.interfaces.NotableComments;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
+import com.hbm.util.ArmorRegistry.HazardClass;
+import com.hbm.util.ArmorUtil;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ShadyUtil;
+import com.hbm.util.Tuple.Pair;
 import com.hbm.util.i18n.I18nUtil;
 
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -63,6 +67,7 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 	public String step;
 	public String jump;
 	public String fall;
+	public double radResist = 0;
 
 	public ArmorFSB(ArmorMaterial material, int slot, String texture) {
 		super(material, 0, slot);
@@ -135,6 +140,22 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 		return this;
 	}
 
+	public ArmorFSB setHazardClass(HazardClass... classes) {
+		ArmorUtil.external.add(new Pair(this, classes));
+		return this;
+	}
+
+	public ArmorFSB setRadResist(double fullSet) {
+		this.radResist = fullSet;
+		if(fullSet > 0) {
+			double mult = armorType == 0 ? HazmatRegistry.helmet :
+				armorType == 1 ? HazmatRegistry.chest : 
+				armorType == 2 ? HazmatRegistry.legs : HazmatRegistry.boots;
+			HazmatRegistry.external.add(new Pair(this, fullSet * mult));
+		}
+		return this;
+	}
+
 	public ArmorFSB cloneStats(ArmorFSB original) {
 
 		//lists aren't being modified after instantiation, so there's no need to dereference
@@ -150,6 +171,7 @@ public class ArmorFSB extends ItemArmor implements IArmorDisableModel {
 		this.step = original.step;
 		this.jump = original.jump;
 		this.fall = original.fall;
+		this.setRadResist(original.radResist);
 		//overlay doesn't need to be copied because it's helmet exclusive
 		return this;
 	}

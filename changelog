@@ -1,32 +1,10 @@
-## Added
-* Heavy duty electricity connector
-  * Upgraded version of the standard model
-  * Two times as chunky, ten times as powerful
-  * Ideal for custom pylon designs
-* Two new expensive mode items
-  * Ultra fine gold dust, which can be combined with ferric schrabidate in the particle accelerator to create degenerate matter
-  * Degenerate matter, which is used instead of regular ferric schrabidate in the exposure chamber to create DNT
-
 ## Changed
-* Snow golems now use the grey metallic gib particles instead of blood
-* The heavy magnetic storage tank now uses BSCCO instead of AA
-* Increased the industrial steam turbine's throughput to 150mB/t of UDS exactly
-  * In addition to being an almost 50% buff, this also fixes the slight issue where turbine chains couldn't reach 100% throughput
-* The remants power armor melee ability now has a refire check, meaning the attack will be repeated automatically if the attack button is held down
-  * ATATATATATATATATATATATATATATA
-* Power armor melee attacks now detect entities with a hitbox that's 0.5 blocks larger in all directions, making it substantially easier to hit small targets
-* As a side effect, this also increases the maximum range by 0.5 blocks
+* Updated russian localization
+* Removed T45 protections entirely
+* The ICF laser controller max output can now be adjusted in the config, both stats for the capacitors and turbochargers can be changed separately
 
 ## Fixed
-* Fixed chemical factory internal tank sharing ignoring tank pressure
-* Fixed the NCR ranger power armor missing most protection stats
-* Fixed LPS pipes not properly connecting to the new industrial turbines
-* Fixed NCRPA missing radiation resistance stats (it's 97% for the full set)
-* Fixed NCRPA chestplate giving night vision even without a full set
-* Probably fixed the fused meteorite sword recipe being missing (untested)
-* Decreased the fusing difficulty of chlorine and calcium in the ICF which should hopefully make ClCa fuel pellets usable (untested)
-* Fixed loot piles only having a single block render AABB, causing armor rewards from red rooms to blink out of existence at certain angles
-* Fixed filled crate blocks not dropping crate items with a stack lock in place
-* Fixed stack lock not being applied when an item crate is opened, allowing them to be stacked while the item is open
-* Fixed clientonly melee component call on the power armor melee controller
-* Fixed SEDNA melee (bayonets, power armor melee) being able to punch dead or dying entities, which would swallow hits intended for entities behind them
+* Fixed NCRPA and taurun armor not having working gas masks
+* Refactored the armor system, stats like radiation and particle protection are no longer scattered over various registries, making future sets less likely to miss them
+* Fixed crucible smeling one too many items with no template installed, causing the gauge to exceed the boundaries
+* Potentially fixed another issue with artillery rocket targeting
