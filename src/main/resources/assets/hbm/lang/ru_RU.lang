@@ -3097,7 +3097,7 @@ item.grenade_zomg.name=Граната аннигиляции пар отрица
 item.glyphid_gland.name= Железа глифида:
 item.glyphid_gland_empty.name= Железа глифида
 item.gun_aberrator.name=Пистолет "Aberrator"
-item.gun_aberrator_eott.name=Пистолет "Eyes Of The Tempest"
+item.gun_aberrator_eott.name=Пистолеты "Eyes Of The Tempest"
 item.gun_am180.name=Пистолет-пулемёт .22 LR
 item.gun_am180_silenced.name=Пистолет-пулемёт .22 LR с глушителем
 item.gun_amat.name=Крупнокалиберная снайперская винтовка
@@ -6647,6 +6647,7 @@ desc.gui.upgrade.power= * §1Энергосбережение§r: Стакает
 desc.gui.upgrade.speed= * §4Скорость§r: Стакается до 3-х уровней
 
 // Last updated 15.02.2026 by RayzerHan //
+
 
 
 
