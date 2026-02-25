@@ -28,3 +28,5 @@
 * Fixed loot piles only having a single block render AABB, causing armor rewards from red rooms to blink out of existence at certain angles
 * Fixed filled crate blocks not dropping crate items with a stack lock in place
 * Fixed stack lock not being applied when an item crate is opened, allowing them to be stacked while the item is open
+* Fixed clientonly melee component call on the power armor melee controller
+* Fixed SEDNA melee (bayonets, power armor melee) being able to punch dead or dying entities, which would swallow hits intended for entities behind them
