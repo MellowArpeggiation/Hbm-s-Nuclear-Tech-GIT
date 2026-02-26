@@ -1,31 +1,7 @@
 package com.hbm.items;
 
 import com.hbm.inventory.fluid.Fluids;
-import com.hbm.items.armor.ArmorAJR;
-import com.hbm.items.armor.ArmorAJRO;
-import com.hbm.items.armor.ArmorAshGlasses;
-import com.hbm.items.armor.ArmorBJ;
-import com.hbm.items.armor.ArmorBJJetpack;
-import com.hbm.items.armor.ArmorBismuth;
-import com.hbm.items.armor.ArmorDNT;
-import com.hbm.items.armor.ArmorDesh;
-import com.hbm.items.armor.ArmorDiesel;
-import com.hbm.items.armor.ArmorDigamma;
-import com.hbm.items.armor.ArmorEnvsuit;
-import com.hbm.items.armor.ArmorEuphemium;
-import com.hbm.items.armor.ArmorFSB;
-import com.hbm.items.armor.ArmorGasMask;
-import com.hbm.items.armor.ArmorHEV;
-import com.hbm.items.armor.ArmorHat;
-import com.hbm.items.armor.ArmorModel;
-import com.hbm.items.armor.ArmorNCRPA;
-import com.hbm.items.armor.ArmorNo9;
-import com.hbm.items.armor.ArmorRPA;
-import com.hbm.items.armor.ArmorT45;
-import com.hbm.items.armor.ArmorT51;
-import com.hbm.items.armor.ArmorTaurun;
-import com.hbm.items.armor.ArmorTrenchmaster;
-import com.hbm.items.armor.ModArmor;
+import com.hbm.items.armor.*;
 import com.hbm.items.armor.IArmorDisableModel.EnumPlayerPart;
 import com.hbm.items.special.ItemDrop;
 import com.hbm.lib.RefStrings;
@@ -142,19 +118,6 @@ public class ModItemsArmor {
 		dnt_plate = new ArmorFSB(aMatDNT, 1, RefStrings.MODID + ":textures/armor/dnt_1.png").cloneStats((ArmorFSB) dnt_helmet).setUnlocalizedName("dnt_plate").setTextureName(RefStrings.MODID + ":dnt_plate");
 		dnt_legs = new ArmorFSB(aMatDNT, 2, RefStrings.MODID + ":textures/armor/dnt_2.png").cloneStats((ArmorFSB) dnt_helmet).setUnlocalizedName("dnt_legs").setTextureName(RefStrings.MODID + ":dnt_legs");
 		dnt_boots = new ArmorFSB(aMatDNT, 3, RefStrings.MODID + ":textures/armor/dnt_1.png").cloneStats((ArmorFSB) dnt_helmet).setUnlocalizedName("dnt_boots").setTextureName(RefStrings.MODID + ":dnt_boots");
-
-		ArmorMaterial aMatT45 = EnumHelper.addArmorMaterial("HBM_T45", 150, new int[] { 3, 8, 6, 3 }, 0);
-		aMatT45.customCraftingMaterial = ModItems.plate_armor_titanium;
-		t45_helmet = new ArmorT45(aMatT45, 0, 1000000, 10000, 1000, 5)
-				.enableVATS(true)
-				.setHasGeigerSound(true)
-				.setHasHardLanding(true)
-				.addEffect(new PotionEffect(Potion.damageBoost.id, 20, 0))
-				.hides(EnumPlayerPart.HAT)
-				.setUnlocalizedName("t45_helmet").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":t45_helmet");
-		t45_plate = new ArmorT45(aMatT45, 1, 1000000, 10000, 1000, 5).cloneStats((ArmorFSB) t45_helmet).setUnlocalizedName("t45_plate").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":t45_plate");
-		t45_legs = new ArmorT45(aMatT45, 2, 1000000, 10000, 1000, 5).cloneStats((ArmorFSB) t45_helmet).setUnlocalizedName("t45_legs").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":t45_legs");
-		t45_boots = new ArmorT45(aMatT45, 3, 1000000, 10000, 1000, 5).cloneStats((ArmorFSB) t45_helmet).setUnlocalizedName("t45_boots").setMaxStackSize(1).setTextureName(RefStrings.MODID + ":t45_boots");
 
 		ArmorMaterial aMatT51 = EnumHelper.addArmorMaterial("HBM_T51", 150, new int[] { 3, 8, 6, 3 }, 0);
 		aMatT51.customCraftingMaterial = ModItems.plate_armor_titanium;

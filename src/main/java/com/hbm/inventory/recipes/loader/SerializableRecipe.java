@@ -55,7 +55,6 @@ public abstract class SerializableRecipe {
 		recipeHandlers.add(new BlastFurnaceRecipes());
 		recipeHandlers.add(new ShredderRecipes());
 		recipeHandlers.add(new SolderingRecipes());
-		recipeHandlers.add(new ChemplantRecipes());
 		recipeHandlers.add(new CombinationRecipes());
 		recipeHandlers.add(new CrucibleRecipes());
 		recipeHandlers.add(new CentrifugeRecipes());
@@ -72,7 +71,6 @@ public abstract class SerializableRecipe {
 		recipeHandlers.add(new PyroOvenRecipes());
 		recipeHandlers.add(new BreederRecipes());
 		recipeHandlers.add(new CyclotronRecipes());
-		recipeHandlers.add(new HadronRecipes());
 		recipeHandlers.add(new FuelPoolRecipes());
 		recipeHandlers.add(new MixerRecipes());
 		recipeHandlers.add(new OutgasserRecipes());
@@ -85,7 +83,6 @@ public abstract class SerializableRecipe {
 		recipeHandlers.add(new ExposureChamberRecipes());
 		recipeHandlers.add(new ParticleAcceleratorRecipes());
 		recipeHandlers.add(new AmmoPressRecipes());
-		recipeHandlers.add(new AssemblerRecipes());
 		//AFTER Assembler
 		recipeHandlers.add(new AnvilRecipes());
 		recipeHandlers.add(new PedestalRecipes());

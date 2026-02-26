@@ -1,10 +1,14 @@
 ## Changed
-* Updated russian localization
-* Removed T45 protections entirely
-* The ICF laser controller max output can now be adjusted in the config, both stats for the capacitors and turbochargers can be changed separately
+* Removed the legacy assemblers and chemical plants
+* Removed all legacy templates
+* Removed legacy particle collider blocks with the exception of the coils
+* Removed the unused anti proton and positron capsules
+* Removed some ancient test blocks
+* Removed the T-45 power armor completely
+* Removed the old redcoil items
+* Nuclear creepers now have an innate resistance to explosion damage (5/35%)
+* Reduced the resistance stats on the ballistic jackets
+* U233 and Pu241 are now custom nuke usable
 
 ## Fixed
-* Fixed NCRPA and taurun armor not having working gas masks
-* Refactored the armor system, stats like radiation and particle protection are no longer scattered over various registries, making future sets less likely to miss them
-* Fixed crucible smeling one too many items with no template installed, causing the gauge to exceed the boundaries
-* Potentially fixed another issue with artillery rocket targeting
+* Fixed size 15 boxcar not being craftable
